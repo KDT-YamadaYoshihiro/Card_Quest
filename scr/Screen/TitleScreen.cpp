@@ -1,17 +1,17 @@
-#include "TitleScreen.h"
+#include "TitleScene.h"
 
-void TitleScreen::Init()
+void TitleScene::Init()
 {
 }
 
-void TitleScreen::Update()
+void TitleScene::Update()
 {
 }
 
-void TitleScreen::Render()
+void TitleScene::Render()
 {
 }
 
-void TitleScreen::End()
+void TitleScene::End()
 {
 }

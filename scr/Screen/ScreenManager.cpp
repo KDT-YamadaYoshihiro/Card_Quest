@@ -1,51 +1,61 @@
-#include "ScreenManager.h"
-#include "TitleScreen.h"
+#include "SceneManager.h"
+#include "TitleScene.h"
 #include <iostream>
 
-ScreenManager::ScreenManager()
+SceneManager::SceneManager()
 {
-    ScreenManager::ChangeScreen<TitleScreen>();
+    SceneManager::ChangeScreen<TitleScene>();
+#ifdef  _DEBUG
     if (m_screen == nullptr) {
         std::cout << "m_screen‚ªnull‚Å‚·" << std::endl;
         return;
     }
+#endif //  _DEBUG
 
 }
 
-void ScreenManager::Init()
+void SceneManager::Init()
 {
+#ifdef  _DEBUG
     if (m_screen == nullptr) {
         std::cout << "m_screen‚ªnull‚Å‚·" << std::endl;
         return;
     }
+#endif //  _DEBUG
 
     m_screen->Init();
 }
 
-void ScreenManager::Update()
+void SceneManager::Update()
 {
+#ifdef  _DEBUG
     if (m_screen == nullptr) {
         std::cout << "m_screen‚ªnull‚Å‚·" << std::endl;
         return;
     }
+#endif //  _DEBUG
 
     m_screen->Update();
 }
 
-void ScreenManager::Render(sf::RenderWindow& window)
+void SceneManager::Render(sf::RenderWindow& window)
 {
+#ifdef  _DEBUG
     if (m_screen == nullptr) {
         std::cout << "m_screen‚ªnull‚Å‚·" << std::endl;
         return;
     }
+#endif //  _DEBUG
     m_screen->Render();
 }
 
-void ScreenManager::HandleEvent(const sf::Event& ev)
+void SceneManager::HandleEvent(const sf::Event& ev)
 {
+#ifdef  _DEBUG
     if (m_screen == nullptr) {
         std::cout << "m_screen‚ªnull‚Å‚·" << std::endl;
         return;
     }
+#endif //  _DEBUG
 }
 

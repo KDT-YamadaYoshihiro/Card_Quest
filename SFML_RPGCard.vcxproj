@@ -141,9 +141,9 @@
     <ClInclude Include="scr\GameMain\CameraManager.h" />
     <ClInclude Include="scr\GameMain\GameMain.h" />
     <ClInclude Include="scr\GameMain\WindowSetting.h" />
-    <ClInclude Include="scr\Screen\ScreenBase.h" />
-    <ClInclude Include="scr\Screen\ScreenManager.h" />
-    <ClInclude Include="scr\Screen\TitleScreen.h" />
+    <ClInclude Include="scr\Screen\SceneBase.h" />
+    <ClInclude Include="scr\Screen\SceneManager.h" />
+    <ClInclude Include="scr\Screen\TitleScene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

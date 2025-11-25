@@ -2,22 +2,22 @@
 #include <memory>
 #include <vector>
 #include <SFML/Graphics.hpp>
-#include "ScreenBase.h"
+#include "SceneBase.h"
 
-class ScreenManager {
+class SceneManager {
 
-    std::unique_ptr<ScreenBase> m_screen;
+    std::unique_ptr<SceneBase> m_screen;
 
-    ScreenManager();
-    virtual ~ScreenManager() = default;
+    SceneManager();
+    virtual ~SceneManager() = default;
 
 public:
 
     // コピー、代入禁止
-    ScreenManager(const ScreenManager&) = delete;
-    ScreenManager& operator = (const ScreenManager&) = delete;
-    static ScreenManager& Instance() {
-        static ScreenManager instance;
+    SceneManager(const SceneManager&) = delete;
+    SceneManager& operator = (const SceneManager&) = delete;
+    static SceneManager& Instance() {
+        static SceneManager instance;
         return instance;
     }
 

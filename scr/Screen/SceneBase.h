@@ -1,15 +1,13 @@
 #pragma once
 
 
-class ScreenBase
+class SceneBase
 {
-
-
 
 public:
 
-	ScreenBase() = default;
-	virtual ~ScreenBase() = default;
+	SceneBase() = default;
+	virtual ~SceneBase() = default;
 
 	virtual void Init() = 0;
 	virtual void Update() = 0;
