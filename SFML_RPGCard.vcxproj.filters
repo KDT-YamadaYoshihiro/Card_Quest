@@ -19,15 +19,48 @@
     <Filter Include="ヘッダー ファイル\GameMain">
       <UniqueIdentifier>{147884f1-645c-48ef-899e-639821f85b23}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Screen">
+      <UniqueIdentifier>{e0d76804-59e0-40f3-81bf-b8aecd876a4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Screen">
+      <UniqueIdentifier>{6532f721-a163-4af0-bcdb-0280a83397e1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="scr\GameMain\GameMain.cpp">
       <Filter>ソース ファイル\GameMain</Filter>
     </ClCompile>
+    <ClCompile Include="scr\GameMain\WindowSetting.cpp">
+      <Filter>ソース ファイル\GameMain</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\Screen\ScreenManager.cpp">
+      <Filter>ソース ファイル\Screen</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\GameMain\CameraManager.cpp">
+      <Filter>ソース ファイル\GameMain</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\Screen\TitleScreen.cpp">
+      <Filter>ソース ファイル\Screen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scr\GameMain\GameMain.h">
       <Filter>ヘッダー ファイル\GameMain</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\GameMain\WindowSetting.h">
+      <Filter>ヘッダー ファイル\GameMain</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Screen\ScreenManager.h">
+      <Filter>ヘッダー ファイル\Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Screen\ScreenBase.h">
+      <Filter>ヘッダー ファイル\Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\GameMain\CameraManager.h">
+      <Filter>ヘッダー ファイル\GameMain</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Screen\TitleScreen.h">
+      <Filter>ヘッダー ファイル\Screen</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
