@@ -5,6 +5,7 @@
 SceneManager::SceneManager()
 {
     SceneManager::ChangeScreen<TitleScene>();
+
     if (m_screen == nullptr) {
         std::cout << "m_screen‚ªnull‚Å‚·" << std::endl;
         return;
@@ -47,6 +48,5 @@ void SceneManager::HandleEvent(const sf::Event& ev)
         std::cout << "m_screen‚ªnull‚Å‚·" << std::endl;
         return;
     }
-    m_screen->
 }
 

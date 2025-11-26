@@ -1,13 +1,13 @@
 #pragma once
-#include "SceneBase.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "SceneBase.h"
 
 class TitleScene : public SceneBase
 {
 
-	sf::Font font;
-	sf::Text title;
+	//sf::Font font;
+	//sf::Text title;
 
 public:
 

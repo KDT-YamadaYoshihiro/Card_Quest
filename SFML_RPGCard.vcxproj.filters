@@ -51,17 +51,14 @@
     <ClCompile Include="scr\Screen\ScreenManager.cpp">
       <Filter>ソース ファイル\Screen</Filter>
     </ClCompile>
-    <ClCompile Include="scr\Screen\TitleScreen.cpp">
-      <Filter>ソース ファイル\Screen\Title</Filter>
-    </ClCompile>
     <ClCompile Include="scr\GameMain\CameraManager.cpp">
       <Filter>ソース ファイル\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="scr\Screen\TitleScreen.cpp">
+      <Filter>ソース ファイル\Screen\Title</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="scr\Screen\TitleScene.h">
-      <Filter>ソース ファイル\Screen\Title</Filter>
-    </ClInclude>
     <ClInclude Include="scr\Screen\SceneManager.h">
       <Filter>ソース ファイル\Screen</Filter>
     </ClInclude>
@@ -76,6 +73,9 @@
     </ClInclude>
     <ClInclude Include="scr\Screen\SceneBase.h">
       <Filter>ソース ファイル\Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Screen\TitleScene.h">
+      <Filter>ソース ファイル\Screen\Title</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
