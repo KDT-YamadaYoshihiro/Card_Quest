@@ -1,27 +1,60 @@
 #pragma once
 #include <string>
 
+// 座標
 struct Position {
 	int x;
 	int y;
 };
 
-struct CardId
+// ターゲットタイプ
+enum class TargetType
 {
-	int card1;
-	int card2;
-	int card3;
-	int card4;
+	ENEMY,
+	ENEMY_ALL,
+	SELF,
+	ALLY,
+	ALLY_ALL
 };
 
+// アクションタイプ
+enum class ActionType {
+	ATTCK,
+	MAGIC,
+	HEAL,
+	BUFF,
+	UTILITY
+
+};
+
+
+// カード情報
+struct Card
+{
+	int cardId;
+	std::string name;
+	ActionType actionType;
+	float power;
+	TargetType targetType;
+	int turn;
+	std::string description;
+};
+
+
+// キャラクターステータス
 struct CharacterData
 {
 	int charaId;
 	std::string name;
 	int hp;
 	int maxHp;
+	int mp;
 	int atk;
 	int def;
 	bool dead;
-	CardId cardId;
+
+	int cardId1;
+	int cardId2;
+	int cardId3;
+	int cardId4;
 };
