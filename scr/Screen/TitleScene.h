@@ -15,6 +15,7 @@ public:
 	virtual ~TitleScene() = default;
 
 	void Init() override;
+	void handleEvent(const sf::Event& event) override;
 	void Update() override;
 	void Render() override;
 	void End() override;

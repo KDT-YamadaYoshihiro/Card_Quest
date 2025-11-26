@@ -16,14 +16,29 @@
     <Filter Include="ソース ファイル\GameMain">
       <UniqueIdentifier>{d21f5eb6-2074-421c-be12-0da48d256aff}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\GameMain">
-      <UniqueIdentifier>{147884f1-645c-48ef-899e-639821f85b23}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\Screen">
-      <UniqueIdentifier>{e0d76804-59e0-40f3-81bf-b8aecd876a4b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Screen">
       <UniqueIdentifier>{6532f721-a163-4af0-bcdb-0280a83397e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Screen\Title">
+      <UniqueIdentifier>{f68eb3c3-44b0-4185-80cd-e468c7b92b15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Screen\Ingame">
+      <UniqueIdentifier>{48dc3898-e419-4f69-8599-aba21e84ff32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Screen\Result">
+      <UniqueIdentifier>{0406516f-437a-4e44-a639-dbde1f48af99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Camera">
+      <UniqueIdentifier>{0fe7d928-c5fd-4300-9b48-7a2d083e833c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Character">
+      <UniqueIdentifier>{1860fda7-6116-41b5-a652-5a499c3f1f1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Character\Player">
+      <UniqueIdentifier>{25b25b24-6441-47df-9df0-c8b0a0766291}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Character\Enemy">
+      <UniqueIdentifier>{46a1cecc-6707-4932-a484-e18913ee0b08}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -36,31 +51,31 @@
     <ClCompile Include="scr\Screen\ScreenManager.cpp">
       <Filter>ソース ファイル\Screen</Filter>
     </ClCompile>
-    <ClCompile Include="scr\GameMain\CameraManager.cpp">
-      <Filter>ソース ファイル\GameMain</Filter>
-    </ClCompile>
     <ClCompile Include="scr\Screen\TitleScreen.cpp">
-      <Filter>ソース ファイル\Screen</Filter>
+      <Filter>ソース ファイル\Screen\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\GameMain\CameraManager.cpp">
+      <Filter>ソース ファイル\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="scr\Screen\TitleScene.h">
+      <Filter>ソース ファイル\Screen\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Screen\SceneManager.h">
+      <Filter>ソース ファイル\Screen</Filter>
+    </ClInclude>
     <ClInclude Include="scr\GameMain\GameMain.h">
-      <Filter>ヘッダー ファイル\GameMain</Filter>
+      <Filter>ソース ファイル\GameMain</Filter>
     </ClInclude>
     <ClInclude Include="scr\GameMain\WindowSetting.h">
-      <Filter>ヘッダー ファイル\GameMain</Filter>
-    </ClInclude>
-    <ClInclude Include="scr\Screen\ScreenManager.h">
-      <Filter>ヘッダー ファイル\Screen</Filter>
-    </ClInclude>
-    <ClInclude Include="scr\Screen\ScreenBase.h">
-      <Filter>ヘッダー ファイル\Screen</Filter>
+      <Filter>ソース ファイル\GameMain</Filter>
     </ClInclude>
     <ClInclude Include="scr\GameMain\CameraManager.h">
-      <Filter>ヘッダー ファイル\GameMain</Filter>
+      <Filter>ソース ファイル\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="scr\Screen\TitleScreen.h">
-      <Filter>ヘッダー ファイル\Screen</Filter>
+    <ClInclude Include="scr\Screen\SceneBase.h">
+      <Filter>ソース ファイル\Screen</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

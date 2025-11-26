@@ -2,6 +2,12 @@
 
 void TitleScene::Init()
 {
+	// テクスチャロード
+}
+
+void TitleScene::handleEvent(const sf::Event& event)
+{
+	// 
 }
 
 void TitleScene::Update()
