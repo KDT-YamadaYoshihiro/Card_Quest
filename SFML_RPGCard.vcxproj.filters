@@ -40,6 +40,9 @@
     <Filter Include="ソース ファイル\Character\Enemy">
       <UniqueIdentifier>{46a1cecc-6707-4932-a484-e18913ee0b08}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Character\Factory">
+      <UniqueIdentifier>{e19d9655-bb80-4a3a-a01b-e367ea3e4492}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="scr\GameMain\GameMain.cpp">
@@ -56,6 +59,9 @@
     </ClCompile>
     <ClCompile Include="scr\Screen\TitleScreen.cpp">
       <Filter>ソース ファイル\Screen\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\Character\Player\Player.cpp">
+      <Filter>ソース ファイル\Character\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -76,6 +82,15 @@
     </ClInclude>
     <ClInclude Include="scr\Screen\TitleScene.h">
       <Filter>ソース ファイル\Screen\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Character\Character.h">
+      <Filter>ソース ファイル\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Character\CharacterData.h">
+      <Filter>ソース ファイル\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Character\Player\Player.h">
+      <Filter>ソース ファイル\Character\Player</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
