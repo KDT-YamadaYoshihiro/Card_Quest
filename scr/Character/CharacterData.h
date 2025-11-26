@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 
 // 座標
 struct Position {
@@ -29,7 +30,7 @@ enum class ActionType {
 
 
 // カード情報
-struct Card
+struct CardData
 {
 	int cardId;
 	std::string name;
@@ -52,9 +53,7 @@ struct CharacterData
 	int atk;
 	int def;
 	bool dead;
+	
+	std::vector<int> cardIds;
 
-	int cardId1;
-	int cardId2;
-	int cardId3;
-	int cardId4;
 };
