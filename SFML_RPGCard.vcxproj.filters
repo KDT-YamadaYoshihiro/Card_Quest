@@ -43,6 +43,15 @@
     <Filter Include="ソース ファイル\Character\Factory">
       <UniqueIdentifier>{e19d9655-bb80-4a3a-a01b-e367ea3e4492}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Character\CSVLoader">
+      <UniqueIdentifier>{4cae872e-d1bb-4839-aa91-c0e443f99b1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Textures">
+      <UniqueIdentifier>{490a5b13-ed36-4c24-9619-a54d7216e852}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\UI">
+      <UniqueIdentifier>{8d757894-259f-4140-bd60-fd30a95a8de7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="scr\GameMain\GameMain.cpp">
@@ -62,6 +71,15 @@
     </ClCompile>
     <ClCompile Include="scr\Character\Player\Player.cpp">
       <Filter>ソース ファイル\Character\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\Textures\TextureManager.cpp">
+      <Filter>ソース ファイル\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\Character\Character.cpp">
+      <Filter>ソース ファイル\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\Character\Enemy\Enemy.cpp">
+      <Filter>ソース ファイル\Character\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -91,6 +109,24 @@
     </ClInclude>
     <ClInclude Include="scr\Character\Player\Player.h">
       <Filter>ソース ファイル\Character\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Character\CSVLoad\CardLoader.h">
+      <Filter>ソース ファイル\Character\CSVLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Character\CSVLoad\CharacterLoader.h">
+      <Filter>ソース ファイル\Character\CSVLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Character\CSVLoad\CSVLoader.h">
+      <Filter>ソース ファイル\Character\CSVLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Textures\TextureManager.h">
+      <Filter>ソース ファイル\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\UI\UIManager.h">
+      <Filter>ソース ファイル\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Character\Enemy\Enemy.h">
+      <Filter>ソース ファイル\Character\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

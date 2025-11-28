@@ -27,13 +27,14 @@ public:
             CardData data;
             data.cardId = std::stoi(cols[0]);
             data.name = cols[1];
-            int actionTypeValue = std::stoi(cols[2]);
+            data.cost = std::stoi(cols[2]);
+            int actionTypeValue = std::stoi(cols[3]);
             data.actionType = static_cast<ActionType>(actionTypeValue);
-            data.power = std::stoi(cols[3]);
-            int targetTypeValue = std::stoi(cols[4]);
+            data.power = std::stoi(cols[4]);
+            int targetTypeValue = std::stoi(cols[5]);
             data.targetType = static_cast<TargetType>(targetTypeValue);
-            data.turn = std::stoi(cols[5]);
-            data.description = cols[6];
+            data.turn = std::stoi(cols[6]);
+            data.description = cols[7];
 
             m_cards[data.cardId] = data;
         }

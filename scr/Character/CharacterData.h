@@ -34,6 +34,7 @@ struct CardData
 {
 	int cardId;
 	std::string name;
+	int cost;
 	ActionType actionType;
 	float power;
 	TargetType targetType;
