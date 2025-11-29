@@ -5,7 +5,23 @@
 
 class CharacterLoader : public CSVLoader
 {
+
+    std::unordered_map<int, CharacterData> m_characters;
+
+    CharacterLoader() = default;
+    virtual ~CharacterLoader() = default;
+
 public:
+
+    // コピー代入禁止
+    CharacterLoader(const CharacterLoader&) = delete;
+    CharacterLoader& operator = (const CharacterLoader&) = delete;
+    static CharacterLoader& Instance()
+    {
+        static CharacterLoader instance;
+        return instance;
+    }
+
     bool Load(const std::string& path)
     {
         std::ifstream ifs(path);
@@ -45,6 +61,4 @@ public:
         return (it != m_characters.end()) ? &it->second : nullptr;
     }
 
-private:
-    std::unordered_map<int, CharacterData> m_characters;
 };

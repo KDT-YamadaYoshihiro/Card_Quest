@@ -128,5 +128,11 @@
     <ClInclude Include="scr\Character\Enemy\Enemy.h">
       <Filter>ソース ファイル\Character\Enemy</Filter>
     </ClInclude>
+    <ClInclude Include="scr\Character\Factory\ChracterFactory.h">
+      <Filter>ソース ファイル\Character\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Character\Factory\CharacterPool.h">
+      <Filter>ソース ファイル\Character\Factory</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

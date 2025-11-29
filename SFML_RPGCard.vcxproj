@@ -148,6 +148,8 @@
     <ClInclude Include="scr\Character\CSVLoad\CharacterLoader.h" />
     <ClInclude Include="scr\Character\CSVLoad\CSVLoader.h" />
     <ClInclude Include="scr\Character\Enemy\Enemy.h" />
+    <ClInclude Include="scr\Character\Factory\CharacterPool.h" />
+    <ClInclude Include="scr\Character\Factory\ChracterFactory.h" />
     <ClInclude Include="scr\Character\Player\Player.h" />
     <ClInclude Include="scr\GameMain\CameraManager.h" />
     <ClInclude Include="scr\GameMain\GameMain.h" />
