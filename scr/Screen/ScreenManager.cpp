@@ -4,6 +4,7 @@
 
 SceneManager::SceneManager()
 {
+
     SceneManager::ChangeScreen<TitleScene>();
 
     if (m_screen == nullptr) {

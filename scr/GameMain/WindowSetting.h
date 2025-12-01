@@ -4,8 +4,8 @@
 class WindowSetting
 {
     bool m_windowMode;          // true = windowed, false = fullscreen
-    int m_windowWidth;          // width
-    int m_windowHeight;         // height
+    float m_windowWidth;          // width
+    float m_windowHeight;         // height
     std::string m_windowTitle;  // window title
 
     WindowSetting() : m_windowMode(true), m_windowWidth(1280), m_windowHeight(720), m_windowTitle("Game") {}
@@ -27,8 +27,8 @@ public:
     bool GetWindowMode() const { return m_windowMode; }
 
     // ウィンドウサイズの取得
-    int GetWindowSizeW() const { return m_windowWidth; }
-    int GetWindowSizeH() const { return m_windowHeight; }
+    float GetWindowSizeW() const { return m_windowWidth; }
+    float GetWindowSizeH() const { return m_windowHeight; }
 
     // ウィンドウタイトルの取得
     const std::string& GetWindowTitle() const { return m_windowTitle; }

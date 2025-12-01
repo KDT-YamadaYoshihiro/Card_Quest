@@ -28,9 +28,6 @@
     <Filter Include="ソース ファイル\Screen\Result">
       <UniqueIdentifier>{0406516f-437a-4e44-a639-dbde1f48af99}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Camera">
-      <UniqueIdentifier>{0fe7d928-c5fd-4300-9b48-7a2d083e833c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Character">
       <UniqueIdentifier>{1860fda7-6116-41b5-a652-5a499c3f1f1c}</UniqueIdentifier>
     </Filter>
@@ -52,6 +49,9 @@
     <Filter Include="ソース ファイル\UI">
       <UniqueIdentifier>{8d757894-259f-4140-bd60-fd30a95a8de7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Render">
+      <UniqueIdentifier>{0fe7d928-c5fd-4300-9b48-7a2d083e833c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="scr\GameMain\GameMain.cpp">
@@ -62,9 +62,6 @@
     </ClCompile>
     <ClCompile Include="scr\Screen\ScreenManager.cpp">
       <Filter>ソース ファイル\Screen</Filter>
-    </ClCompile>
-    <ClCompile Include="scr\GameMain\CameraManager.cpp">
-      <Filter>ソース ファイル\Camera</Filter>
     </ClCompile>
     <ClCompile Include="scr\Screen\TitleScreen.cpp">
       <Filter>ソース ファイル\Screen\Title</Filter>
@@ -81,6 +78,12 @@
     <ClCompile Include="scr\Character\Enemy\Enemy.cpp">
       <Filter>ソース ファイル\Character\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="scr\Render\RenderManager.cpp">
+      <Filter>ソース ファイル\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\Render\CameraManager.cpp">
+      <Filter>ソース ファイル\Render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scr\Screen\SceneManager.h">
@@ -91,9 +94,6 @@
     </ClInclude>
     <ClInclude Include="scr\GameMain\WindowSetting.h">
       <Filter>ソース ファイル\GameMain</Filter>
-    </ClInclude>
-    <ClInclude Include="scr\GameMain\CameraManager.h">
-      <Filter>ソース ファイル\Camera</Filter>
     </ClInclude>
     <ClInclude Include="scr\Screen\SceneBase.h">
       <Filter>ソース ファイル\Screen</Filter>
@@ -133,6 +133,12 @@
     </ClInclude>
     <ClInclude Include="scr\Character\Factory\CharacterPool.h">
       <Filter>ソース ファイル\Character\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Render\RenderManager.h">
+      <Filter>ソース ファイル\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Render\CameraManager.h">
+      <Filter>ソース ファイル\Render</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
