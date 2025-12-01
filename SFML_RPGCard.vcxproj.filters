@@ -40,9 +40,6 @@
     <Filter Include="ソース ファイル\Character\Factory">
       <UniqueIdentifier>{e19d9655-bb80-4a3a-a01b-e367ea3e4492}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Character\CSVLoader">
-      <UniqueIdentifier>{4cae872e-d1bb-4839-aa91-c0e443f99b1a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Textures">
       <UniqueIdentifier>{490a5b13-ed36-4c24-9619-a54d7216e852}</UniqueIdentifier>
     </Filter>
@@ -51,6 +48,9 @@
     </Filter>
     <Filter Include="ソース ファイル\Render">
       <UniqueIdentifier>{0fe7d928-c5fd-4300-9b48-7a2d083e833c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\CSVLoader">
+      <UniqueIdentifier>{4cae872e-d1bb-4839-aa91-c0e443f99b1a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -110,15 +110,6 @@
     <ClInclude Include="scr\Character\Player\Player.h">
       <Filter>ソース ファイル\Character\Player</Filter>
     </ClInclude>
-    <ClInclude Include="scr\Character\CSVLoad\CardLoader.h">
-      <Filter>ソース ファイル\Character\CSVLoader</Filter>
-    </ClInclude>
-    <ClInclude Include="scr\Character\CSVLoad\CharacterLoader.h">
-      <Filter>ソース ファイル\Character\CSVLoader</Filter>
-    </ClInclude>
-    <ClInclude Include="scr\Character\CSVLoad\CSVLoader.h">
-      <Filter>ソース ファイル\Character\CSVLoader</Filter>
-    </ClInclude>
     <ClInclude Include="scr\Textures\TextureManager.h">
       <Filter>ソース ファイル\Textures</Filter>
     </ClInclude>
@@ -139,6 +130,15 @@
     </ClInclude>
     <ClInclude Include="scr\Render\CameraManager.h">
       <Filter>ソース ファイル\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\CSVLoad\CardLoader.h">
+      <Filter>ソース ファイル\CSVLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\CSVLoad\CharacterLoader.h">
+      <Filter>ソース ファイル\CSVLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\CSVLoad\CSVLoader.h">
+      <Filter>ソース ファイル\CSVLoader</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

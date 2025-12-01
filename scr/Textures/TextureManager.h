@@ -3,11 +3,12 @@
 #include <unordered_map>
 #include <string>
 #include <memory>
+#include "../CSVLoad/CSVLoader.h"
 
-class TextureManager
+class TextureManager : public CSVLoader
 {
 
-	std::unordered_map<std::string, std::unique_ptr<sf::Texture>> textures;
+	std::unordered_map<std::string, sf::Texture> m_textures;
 
 	TextureManager() = default;
 	virtual ~TextureManager() = default;
@@ -24,44 +25,20 @@ public:
 		return instance;
 	}
 
-	// テクスチャの読み込み
-	// return 成功：失敗
-	bool TexturLoad(const std::string& id, const std::string& filePath)
+	// CSV読込
+	bool Load(const std::string& path);
+
+	// テクスチャ取得
+	const sf::Texture* Get(const std::string& id) const
 	{
-
-		// すでに取得済みなら何もしない
-		if (textures.count(id) > 0)
-		{
-			return true;
-		}
-
-		//
-		auto tex = std::make_unique<sf::Texture>();
-		if (!tex->loadFromFile(filePath))
-		{
-			return false;
-		}
-
-		// 
-		textures[id] = std::move(tex);
-		return true;
-
-
+		auto it = m_textures.find(id);
+		return (it != m_textures.end()) ? &it->second : nullptr;
 	}
-
-
-	// テクスチャを取得
-	sf::Texture& GetTexture(const  std::string& id)
-	{
-		return *textures.at(id);
-
-	}
-
 
 	// 全削除
 	void TextureClear()
 	{
-		textures.clear();
+		m_textures.clear();
 	}
 
 
