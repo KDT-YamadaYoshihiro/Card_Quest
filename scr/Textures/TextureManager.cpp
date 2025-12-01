@@ -3,16 +3,19 @@
 
 bool TextureManager::Load(const std::string& path)
 {
+
+    // ファイルの確認
     std::ifstream file(path);
     if (!file.is_open())
     {
-        std::cerr << "TextureLoaderが見つかりません " << path << std::endl;
+        std::cerr << "指定したファイルが見つかりません : " << path << std::endl;
         return false;
     }
 
     std::string line;
     bool first = true;
 
+    // データ読み込み
     while (std::getline(file, line))
     {
         if (first) { first = false; continue; } // ヘッダスキップ
@@ -27,7 +30,7 @@ bool TextureManager::Load(const std::string& path)
         sf::Texture tex;
         if (!tex.loadFromFile(filePath))
         {
-            std::cerr << "Failed to load texture: " << filePath << std::endl;
+            std::cerr << "ファイルの読み込み失敗 : " << filePath << std::endl;
             continue;
         }
 
