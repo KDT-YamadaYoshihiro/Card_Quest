@@ -15,6 +15,7 @@ public:
 		if (!test.loadFromFile("data/Test/test.jpg", false, sf::IntRect({ 0, 0 }, { 210, 280 })))
 		{
 			// error...
+			std::cout << "error" << "\n";
 		}
 	};
 
