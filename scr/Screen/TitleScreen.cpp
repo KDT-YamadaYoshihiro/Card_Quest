@@ -6,7 +6,7 @@
 
 void TitleScene::Init()
 {
-
+    std::cout << "Title" << "\n";
 }
 
 void TitleScene::handleEvent()
@@ -32,8 +32,6 @@ void TitleScene::Render(sf::RenderWindow& window)
     sf::Sprite sprite(test);
     sprite.setPosition({ 10.0f, 50.0f }); 
     window.draw(sprite);
-
-    std::cout << "Title" << "\n";
 }
 
 void TitleScene::End()

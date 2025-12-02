@@ -12,7 +12,7 @@ public:
 
 	TitleScene()
 	{
-		if (!test.loadFromFile("data/Test/test.jpg", false, sf::IntRect({ 0, 0 }, { 210, 280 })))
+		if (!test.loadFromFile("data/Test/test.jpg"))
 		{
 			// error...
 			std::cout << "error" << "\n";
