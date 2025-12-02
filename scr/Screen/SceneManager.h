@@ -8,7 +8,7 @@ class SceneManager {
 
     std::unique_ptr<SceneBase> m_screen;
 
-    SceneManager();
+    SceneManager() = default;
     virtual ~SceneManager() = default;
 
 public:
@@ -26,7 +26,7 @@ public:
     void Init();
     void Update();
     void Render(sf::RenderWindow& window);
-    void HandleEvent(const sf::Event& ev);
+    void HandleEvent();
 
     template <typename T>
     void ChangeScreen()

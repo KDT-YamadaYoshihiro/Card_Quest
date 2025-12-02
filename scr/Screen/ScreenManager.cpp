@@ -2,20 +2,12 @@
 #include "TitleScene.h"
 #include <iostream>
 
-SceneManager::SceneManager()
-{
-
-    SceneManager::ChangeScreen<TitleScene>();
-
-    if (m_screen == nullptr) {
-        std::cout << "m_screenがnullです" << std::endl;
-        return;
-    }
-
-}
 
 void SceneManager::Init()
 {
+
+    SceneManager::Instance().ChangeScreen<TitleScene>();
+    // エラー確認
     if (m_screen == nullptr) {
         std::cout << "m_screenがnullです" << std::endl;
         return;
@@ -26,28 +18,16 @@ void SceneManager::Init()
 
 void SceneManager::Update()
 {
-    if (m_screen == nullptr) {
-        std::cout << "m_screenがnullです" << std::endl;
-        return;
-    }
-
     m_screen->Update();
 }
 
 void SceneManager::Render(sf::RenderWindow& window)
 {
-    if (m_screen == nullptr) {
-        std::cout << "m_screenがnullです" << std::endl;
-        return;
-    }
-    m_screen->Render();
+    m_screen->Render(window);
 }
 
-void SceneManager::HandleEvent(const sf::Event& ev)
+void SceneManager::HandleEvent()
 {
-    if (m_screen == nullptr) {
-        std::cout << "m_screenがnullです" << std::endl;
-        return;
-    }
+    m_screen->handleEvent();
 }
 

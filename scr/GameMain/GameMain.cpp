@@ -27,7 +27,8 @@ bool GameMain::Init()
     m_window.setFramerateLimit(60);
 
     SceneManager::Instance().Init();
-    CameraManager::Instance().ViewInit({ 0.0f, 0.0f }, { WindowSetting::Instance().GetWindowSizeW(), WindowSetting::Instance().GetWindowSizeH()});
+    CameraManager::Instance().ViewInit({ 0.0f, 0.0f }, 
+        { WindowSetting::Instance().GetWindowSizeW(), WindowSetting::Instance().GetWindowSizeH()});
 
     return true;
 }
@@ -50,8 +51,13 @@ void GameMain::ProcessEvents()
 {
     while (auto event = m_window.pollEvent())
     {
+
+        SceneManager::Instance().HandleEvent();
+
         if (event->is<sf::Event::Closed>())
+        {
             m_window.close();
+        }
     }
 }
 

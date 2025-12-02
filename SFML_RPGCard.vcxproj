@@ -138,6 +138,7 @@
     <ClCompile Include="scr\GameMain\WindowSetting.cpp" />
     <ClCompile Include="scr\Render\CameraManager.cpp" />
     <ClCompile Include="scr\Render\RenderManager.cpp" />
+    <ClCompile Include="scr\Screen\IngameScene.cpp" />
     <ClCompile Include="scr\Screen\ScreenManager.cpp" />
     <ClCompile Include="scr\Screen\TitleScreen.cpp" />
     <ClCompile Include="scr\Textures\TextureManager.cpp" />
@@ -156,6 +157,7 @@
     <ClInclude Include="scr\GameMain\WindowSetting.h" />
     <ClInclude Include="scr\Render\CameraManager.h" />
     <ClInclude Include="scr\Render\RenderManager.h" />
+    <ClInclude Include="scr\Screen\IngameScene.h" />
     <ClInclude Include="scr\Screen\SceneBase.h" />
     <ClInclude Include="scr\Screen\SceneManager.h" />
     <ClInclude Include="scr\Screen\TitleScene.h" />

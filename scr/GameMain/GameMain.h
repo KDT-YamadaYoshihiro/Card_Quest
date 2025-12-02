@@ -21,7 +21,7 @@ public:
     }
 
     bool Init();           // 初期化
-    void Run();             // メインループ開始
+    void Run();            // メインループ開始
     void ProcessEvents();  // イベント処理
     void Update(float dt); // ゲーム更新
     void Render();         // 描画

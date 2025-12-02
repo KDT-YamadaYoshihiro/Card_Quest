@@ -6,18 +6,25 @@
 class TitleScene : public SceneBase
 {
 
-	//sf::Font font;
-	//sf::Text title;
+	sf::Texture test;
 
 public:
 
-	TitleScene() = default;
+	TitleScene()
+	{
+		if (!test.loadFromFile("data/Test/test.jpg", false, sf::IntRect({ 0, 0 }, { 210, 280 })))
+		{
+			// error...
+		}
+	};
+
+
 	virtual ~TitleScene() = default;
 
 	void Init() override;
-	void handleEvent(const sf::Event& event) override;
+	void handleEvent() override;
 	void Update() override;
-	void Render() override;
+	void Render(sf::RenderWindow& window) override;
 	void End() override;
 
 
