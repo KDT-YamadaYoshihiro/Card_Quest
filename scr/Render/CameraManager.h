@@ -61,4 +61,5 @@ public:
 	void SetShake(float arg_power, float arg_time);
 	void ViewShake(float arg_dt);
 
+	sf::View& GetView() { return m_view; }
 };
