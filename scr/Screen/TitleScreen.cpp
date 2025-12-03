@@ -15,7 +15,7 @@ void TitleScene::handleEvent()
     // キーボード判定
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space))
     {
-        SceneManager::Instance().ChangeScreen<IngameScene>();
+        SceneManager::Instance().ChangeScreen<ResultScene>();
     }
     
 

@@ -1,14 +1,10 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include <iostream>
 #include "SceneBase.h"
+
 
 class ResultScene : public SceneBase
 {
-
-	//sf::Font m_font;
-	//sf::Text m_titleText;
-	//sf::Text m_startText;
 
 public:
 
