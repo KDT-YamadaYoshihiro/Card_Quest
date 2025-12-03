@@ -40,9 +40,6 @@
     <Filter Include="ソース ファイル\Character\Factory">
       <UniqueIdentifier>{e19d9655-bb80-4a3a-a01b-e367ea3e4492}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Textures">
-      <UniqueIdentifier>{490a5b13-ed36-4c24-9619-a54d7216e852}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\UI">
       <UniqueIdentifier>{8d757894-259f-4140-bd60-fd30a95a8de7}</UniqueIdentifier>
     </Filter>
@@ -51,6 +48,15 @@
     </Filter>
     <Filter Include="ソース ファイル\CSVLoader">
       <UniqueIdentifier>{4cae872e-d1bb-4839-aa91-c0e443f99b1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\CSVLoader\Textures">
+      <UniqueIdentifier>{490a5b13-ed36-4c24-9619-a54d7216e852}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Render\Animetion">
+      <UniqueIdentifier>{1c36afe1-5f41-4355-b395-f4fcf6c3ca9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Screen\Ingame\Battle">
+      <UniqueIdentifier>{18a503b7-bbe6-4812-a80d-2d01fd79acd6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -69,16 +75,13 @@
     <ClCompile Include="scr\Character\Player\Player.cpp">
       <Filter>ソース ファイル\Character\Player</Filter>
     </ClCompile>
-    <ClCompile Include="scr\Textures\TextureManager.cpp">
-      <Filter>ソース ファイル\Textures</Filter>
-    </ClCompile>
     <ClCompile Include="scr\Character\Character.cpp">
       <Filter>ソース ファイル\Character</Filter>
     </ClCompile>
     <ClCompile Include="scr\Character\Enemy\Enemy.cpp">
       <Filter>ソース ファイル\Character\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="scr\Render\RenderManager.cpp">
+    <ClCompile Include="scr\Render\RenderSystem.cpp">
       <Filter>ソース ファイル\Render</Filter>
     </ClCompile>
     <ClCompile Include="scr\Render\CameraManager.cpp">
@@ -86,6 +89,15 @@
     </ClCompile>
     <ClCompile Include="scr\Screen\IngameScene.cpp">
       <Filter>ソース ファイル\Screen\Ingame</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\CSVLoad\TextureLoader\TextureLoader.cpp">
+      <Filter>ソース ファイル\CSVLoader\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\Render\Animetion\Animation.cpp">
+      <Filter>ソース ファイル\Render\Animetion</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\Screen\ResultScene.cpp">
+      <Filter>ソース ファイル\Screen\Result</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -113,9 +125,6 @@
     <ClInclude Include="scr\Character\Player\Player.h">
       <Filter>ソース ファイル\Character\Player</Filter>
     </ClInclude>
-    <ClInclude Include="scr\Textures\TextureManager.h">
-      <Filter>ソース ファイル\Textures</Filter>
-    </ClInclude>
     <ClInclude Include="scr\UI\UIManager.h">
       <Filter>ソース ファイル\UI</Filter>
     </ClInclude>
@@ -128,7 +137,7 @@
     <ClInclude Include="scr\Character\Factory\CharacterPool.h">
       <Filter>ソース ファイル\Character\Factory</Filter>
     </ClInclude>
-    <ClInclude Include="scr\Render\RenderManager.h">
+    <ClInclude Include="scr\Render\RenderSystem.h">
       <Filter>ソース ファイル\Render</Filter>
     </ClInclude>
     <ClInclude Include="scr\Render\CameraManager.h">
@@ -145,6 +154,15 @@
     </ClInclude>
     <ClInclude Include="scr\Screen\IngameScene.h">
       <Filter>ソース ファイル\Screen\Ingame</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\CSVLoad\TextureLoader\TextureLoader.h">
+      <Filter>ソース ファイル\CSVLoader\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Render\Animetion\Animation.h">
+      <Filter>ソース ファイル\Render\Animetion</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Screen\ResultScene.h">
+      <Filter>ソース ファイル\Screen\Result</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

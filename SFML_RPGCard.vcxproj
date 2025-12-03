@@ -134,14 +134,16 @@
     <ClCompile Include="scr\Character\Character.cpp" />
     <ClCompile Include="scr\Character\Enemy\Enemy.cpp" />
     <ClCompile Include="scr\Character\Player\Player.cpp" />
+    <ClCompile Include="scr\CSVLoad\TextureLoader\TextureLoader.cpp" />
     <ClCompile Include="scr\GameMain\GameMain.cpp" />
     <ClCompile Include="scr\GameMain\WindowSetting.cpp" />
+    <ClCompile Include="scr\Render\Animetion\Animation.cpp" />
     <ClCompile Include="scr\Render\CameraManager.cpp" />
-    <ClCompile Include="scr\Render\RenderManager.cpp" />
+    <ClCompile Include="scr\Render\RenderSystem.cpp" />
     <ClCompile Include="scr\Screen\IngameScene.cpp" />
+    <ClCompile Include="scr\Screen\ResultScene.cpp" />
     <ClCompile Include="scr\Screen\ScreenManager.cpp" />
     <ClCompile Include="scr\Screen\TitleScreen.cpp" />
-    <ClCompile Include="scr\Textures\TextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scr\Character\Character.h" />
@@ -153,15 +155,17 @@
     <ClInclude Include="scr\CSVLoad\CardLoader.h" />
     <ClInclude Include="scr\CSVLoad\CharacterLoader.h" />
     <ClInclude Include="scr\CSVLoad\CSVLoader.h" />
+    <ClInclude Include="scr\CSVLoad\TextureLoader\TextureLoader.h" />
     <ClInclude Include="scr\GameMain\GameMain.h" />
     <ClInclude Include="scr\GameMain\WindowSetting.h" />
+    <ClInclude Include="scr\Render\Animetion\Animation.h" />
     <ClInclude Include="scr\Render\CameraManager.h" />
-    <ClInclude Include="scr\Render\RenderManager.h" />
+    <ClInclude Include="scr\Render\RenderSystem.h" />
     <ClInclude Include="scr\Screen\IngameScene.h" />
+    <ClInclude Include="scr\Screen\ResultScene.h" />
     <ClInclude Include="scr\Screen\SceneBase.h" />
     <ClInclude Include="scr\Screen\SceneManager.h" />
     <ClInclude Include="scr\Screen\TitleScene.h" />
-    <ClInclude Include="scr\Textures\TextureManager.h" />
     <ClInclude Include="scr\UI\UIManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
