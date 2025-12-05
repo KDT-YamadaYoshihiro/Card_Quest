@@ -146,6 +146,11 @@
     <ClCompile Include="scr\Screen\TitleScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="scr\Battle\Battle.h" />
+    <ClInclude Include="scr\Battle\Card.h" />
+    <ClInclude Include="scr\Battle\CostManager.h" />
+    <ClInclude Include="scr\Battle\Deck.h" />
+    <ClInclude Include="scr\Battle\Hand.h" />
     <ClInclude Include="scr\Character\Character.h" />
     <ClInclude Include="scr\Character\CharacterData.h" />
     <ClInclude Include="scr\Character\Enemy\Enemy.h" />

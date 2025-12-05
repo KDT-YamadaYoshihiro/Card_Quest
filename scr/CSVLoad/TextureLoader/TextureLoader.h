@@ -3,7 +3,7 @@
 #include <unordered_map>
 #include <string>
 #include <memory>
-#include "../CSVLoad/CSVLoader.h"
+#include "../CSVLoader.h"
 
 class TextureLoader : public CSVLoader
 {
