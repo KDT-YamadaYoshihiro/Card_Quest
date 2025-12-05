@@ -1,21 +1,21 @@
 #include "IngameScene.h"
 
-void ResultScene::Init()
+void IngameScene::Init()
 {
 }
 
-void ResultScene::handleEvent()
+void IngameScene::handleEvent()
 {
 }
 
-void ResultScene::Update()
+void IngameScene::Update()
 {
 }
 
-void ResultScene::Render(sf::RenderWindow& window)
+void IngameScene::Render(sf::RenderWindow& window)
 {
 }
 
-void ResultScene::End()
+void IngameScene::End()
 {
 }

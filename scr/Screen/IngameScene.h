@@ -3,7 +3,7 @@
 #include <iostream>
 #include "SceneBase.h"
 
-class ResultScene : public SceneBase
+class IngameScene : public SceneBase
 {
 
 	//sf::Font m_font;
@@ -12,8 +12,8 @@ class ResultScene : public SceneBase
 
 public:
 
-	ResultScene() = default;
-	virtual ~ResultScene() = default;
+	IngameScene() = default;
+	virtual ~IngameScene() = default;
 
 	void Init() override;
 	void handleEvent() override;
