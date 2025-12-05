@@ -7,7 +7,9 @@
 
 
 class Battle {
+
 public:
+
     enum class TurnPhase {
         PlayerTurn,
         EnemyTurn,

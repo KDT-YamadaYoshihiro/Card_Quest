@@ -2,8 +2,9 @@
 
 class CostManager {
 
-private:
+	// 現在のコスト
 	int m_currentCost;
+	// 最大コスト
 	const int m_maxCost = 10;
 
 public:

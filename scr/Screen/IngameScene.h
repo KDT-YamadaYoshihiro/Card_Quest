@@ -6,10 +6,6 @@
 class IngameScene : public SceneBase
 {
 
-	//sf::Font m_font;
-	//sf::Text m_titleText;
-	//sf::Text m_startText;
-
 public:
 
 	IngameScene() = default;

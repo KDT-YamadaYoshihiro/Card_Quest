@@ -1,6 +1,7 @@
 #include "RenderSystem.h"
 #include <SFML/Graphics.hpp>
 
+
 void RenderSystem::ApplyCamera()
 {
 	m_window.setView(CameraManager::Instance().GetView());

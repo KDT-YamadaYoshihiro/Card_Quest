@@ -2,11 +2,14 @@
 #include "../Character/Character.h"
 
 class Card {
-public:
+
+
     int cost;
     ActionType type;   // ダメージ、回復、バフなど
     int value;
     int ownerID;       // どのキャラのカードか
+
+public:
 
     void Execute(Character* target);
 };
