@@ -1,7 +1,7 @@
 #include "TextureLoader.h"
 #include <iostream>
 
-bool TextureLoader::Load(const std::string& path)
+bool TextureLoader::LoadTextures(const std::string& path)
 {
 
     // ファイルの確認

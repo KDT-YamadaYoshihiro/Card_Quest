@@ -1,8 +1,14 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "../Render/RenderSystem.h"
+#include "../CSVLoad/TextureLoader/TextureLoader.h"
 
 class SceneBase
 {
+
+protected:
+
+	//std::shared_ptr<RenderSystem> renderSystem = std::make_shared<RenderSystem>();
 
 public:
 

@@ -29,9 +29,15 @@ void TitleScene::Update()
 
 void TitleScene::Render(sf::RenderWindow& window)
 {
-    sf::Sprite sprite(test);
-    sprite.setPosition({ 10.0f, 50.0f }); 
-    window.draw(sprite);
+    auto tex = TextureLoader::Instance().GetTextureID("test");
+
+	if (tex)
+	{
+		sf::Sprite sprite(*tex);
+        sprite.setPosition({ 10.0f, 50.0f });
+        window.draw(sprite);
+		window.display();
+	}
 }
 
 void TitleScene::End()

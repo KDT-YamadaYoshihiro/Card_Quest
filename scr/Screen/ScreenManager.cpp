@@ -23,7 +23,9 @@ void SceneManager::Update()
 
 void SceneManager::Render(sf::RenderWindow& window)
 {
+	window.clear(sf::Color::Black);
     m_screen->Render(window);
+	window.display();
 }
 
 void SceneManager::HandleEvent()

@@ -5,6 +5,7 @@
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Sleep.hpp>
+#include "../CSVLoad/TextureLoader/TextureLoader.h"
 
 
 #ifdef _DEBUG
@@ -29,6 +30,8 @@ bool GameMain::Init()
     SceneManager::Instance().Init();
     CameraManager::Instance().ViewInit({ 0.0f, 0.0f }, 
         { WindowSetting::Instance().GetWindowSizeW(), WindowSetting::Instance().GetWindowSizeH()});
+
+	TextureLoader::Instance().LoadTextures("data/CSV/TextureData.csv");
 
     return true;
 }

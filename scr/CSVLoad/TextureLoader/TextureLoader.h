@@ -26,10 +26,10 @@ public:
 	}
 
 	// CSV読込
-	bool Load(const std::string& path);
+	bool LoadTextures(const std::string& path);
 
 	// テクスチャ取得
-	const sf::Texture* Get(const std::string& id) const
+	const sf::Texture* GetTextureID(const std::string& id) const
 	{
 		auto it = m_textures.find(id);
 		return (it != m_textures.end()) ? &it->second : nullptr;
