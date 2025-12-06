@@ -164,5 +164,20 @@
     <ClInclude Include="scr\Screen\ResultScene.h">
       <Filter>ソース ファイル\Screen\Result</Filter>
     </ClInclude>
+    <ClInclude Include="scr\Battle\Battle.h">
+      <Filter>ソース ファイル\Screen\Ingame\Battle</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Battle\Card.h">
+      <Filter>ソース ファイル\Screen\Ingame\Battle</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Battle\CostManager.h">
+      <Filter>ソース ファイル\Screen\Ingame\Battle</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Battle\Deck.h">
+      <Filter>ソース ファイル\Screen\Ingame\Battle</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Battle\Hand.h">
+      <Filter>ソース ファイル\Screen\Ingame\Battle</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
