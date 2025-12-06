@@ -36,7 +36,6 @@ void TitleScene::Render(sf::RenderWindow& window)
 		sf::Sprite sprite(*tex);
         sprite.setPosition({ 10.0f, 50.0f });
         window.draw(sprite);
-		window.display();
 	}
 }
 

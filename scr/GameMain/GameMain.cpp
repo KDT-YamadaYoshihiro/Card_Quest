@@ -73,13 +73,14 @@ void GameMain::Update(float dt)
 
 void GameMain::Render()
 {
+    m_window.clear(sf::Color::Black);
     SceneManager::Instance().Render(m_window);
+    m_window.display();
 }
 
 
 ENTRY_POINT{
 
-    GameMain::Instance().Init();
     GameMain::Instance().Run();
 
     return 0;
