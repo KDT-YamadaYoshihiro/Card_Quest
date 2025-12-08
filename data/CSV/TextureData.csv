@@ -1,2 +1,8 @@
 id,filePath
 test,data/Test/test.jpg
+アレス,data/Character/Player/player_0.png
+リュミエール,data/Character/Player/player_1.png
+グラント,data/Character/Player/player_2.png
+セラフィナ,data/Character/Player/player_3.png
+スライム,data/Character/Enemy/enemy_0.png
+ウィンドバード,data/Character/Enemy/enemy_1.png

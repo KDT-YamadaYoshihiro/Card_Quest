@@ -23,9 +23,7 @@ enum class ActionType {
 	ATTCK,
 	MAGIC,
 	HEAL,
-	BUFF,
-	UTILITY
-
+	BUFF
 };
 
 

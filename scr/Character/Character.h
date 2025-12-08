@@ -1,11 +1,15 @@
 #pragma once
 #include "CharacterData.h"
+#include "../Battle/Card/CardPool.h"
+
+class RenderSystem;
 
 class Character
 {
 	
 	CharacterData m_status;
 	Position m_pos;
+	CardPool m_cardPool;
 
 public:
 
@@ -21,7 +25,7 @@ public:
 	// 更新
 	virtual void Update() = 0;
 	// 描画
-	virtual void Render() = 0;
+	virtual void Render(RenderSystem& render) = 0;
 	// アクションメソッド
 	virtual void Action() = 0;
 
@@ -64,4 +68,5 @@ public:
 	CharacterData GetStatus() const { return m_status; }
 	// 座標の取得
 	Position GetPos() const { return m_pos; }
+	CardPool GetCardPool() const { return m_cardPool; }
 };

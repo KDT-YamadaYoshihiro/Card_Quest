@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 #include "../CharacterData.h"
-#include "../CSVLoad/CharacterLoader.h"
+#include "../../CSVLoad/CharacterLoader.h"
 
 class CharacterFactory
 {
@@ -13,7 +13,7 @@ public:
     }
 
     // IDから新しくキャラクターを生成
-    std::unique_ptr<CharacterData> CreateCharacter(int id)
+    std::shared_ptr<CharacterData> CreateCharacter(int id)
     {
         const CharacterData* src = CharacterLoader::Instance().Get(id);
         if (!src)
@@ -34,7 +34,7 @@ public:
         character->cardIds = src->cardIds;  // vectorコピー
 
         // ObjectPool 用フラグを使用するならここで初期化
-        character->dead = true;
+        character->dead = false;
 
         return character;
     }

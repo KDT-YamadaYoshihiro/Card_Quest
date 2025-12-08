@@ -1,11 +1,11 @@
 #include "GameMain.h"
+#include "../CSVLoad/TextureLoader/TextureLoader.h"
 #include "../Screen/SceneManager.h"
 #include "../Render/CameraManager.h"
 #include "WindowSetting.h"
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Sleep.hpp>
-#include "../CSVLoad/TextureLoader/TextureLoader.h"
 
 
 #ifdef _DEBUG

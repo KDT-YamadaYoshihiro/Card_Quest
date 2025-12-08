@@ -1,9 +1,9 @@
 #pragma once
 #include <vector>
 #include "../Character/Character.h"
-#include "Deck.h"
-#include "Hand.h"
-#include "CostManager.h"
+#include "../Battle/Card/Deck.h"
+#include "../Battle/Card/Hand.h"
+#include "../Battle/Cost/CostManager.h"
 
 
 class Battle {
@@ -11,28 +11,59 @@ class Battle {
 public:
 
     enum class TurnPhase {
+        StartTurn,
         PlayerTurn,
         EnemyTurn,
+        End
     };
 
 private:
-    std::vector<Character*> m_playerMembers;
-    std::vector<Character*> m_enemyMembers;
+    std::vector<std::shared_ptr<Character>> m_playerMembers;
+    std::vector<std::shared_ptr<Character>> m_enemyMembers;
 
-    Deck m_deck;             // 16枚の山札
-    Hand m_hand;             // 現在の手札
-    CostManager m_cost;      // コスト管理
+    // デッキ
+    std::shared_ptr<Deck> m_deck;
+    // 手札
+    Hand m_hand;
+    // コスト管理
+    std::shared_ptr<CostManager> m_cost;
 
     TurnPhase m_phase;
     int m_turnCount;
 
 public:
-    void Init();
+
+    void Init(const std::vector<std::shared_ptr<Character>>&,
+              const std::vector<std::shared_ptr<Character>>&,
+              const std::vector<Card>& allCards);
+
     void Update();
 
-    bool IsBattleEnd() const;
-    bool IsPlayerWin() const;
-    bool IsEnemyWin() const;
+    // プレイヤーの勝利
+    bool CheckWin() const {
+
+        for (auto e : m_enemyMembers) {
+            if (e->GetStatus().dead) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // プレイヤーの敗北
+    bool CheckLose() const {
+        for (auto p : m_playerMembers) {
+            if (p->GetStatus().dead)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    TurnPhase GetTurnPhase() const { return m_phase; }
+    const Hand& GetHand() const { return m_hand; }
+    int GetCost() const { return m_cost->GetCost(); }
 
 private:
     void StartTurn();

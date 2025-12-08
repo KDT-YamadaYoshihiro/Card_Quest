@@ -1,6 +1,8 @@
 #pragma once
 #include "../Character.h"
 
+class RenderSystem;
+
 class Enemy : public Character
 {
 
@@ -12,7 +14,7 @@ public:
 	}
 
 	void Update() override;
-	void Render() override;
+	void Render(RenderSystem& render) override;
 	void Action() override;
 
 };

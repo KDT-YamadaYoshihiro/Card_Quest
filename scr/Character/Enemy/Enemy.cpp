@@ -1,10 +1,11 @@
 #include "Enemy.h"
+#include "../../Render/Animetion/Animation.h"
 
 void Enemy::Update()
 {
 }
 
-void Enemy::Render()
+void Enemy::Render(RenderSystem& render)
 {
 }
 
