@@ -4,7 +4,7 @@
 
 void IngameScene::Init()
 {
-	battle->Init(m_players,m_enemies,m_card);
+	//battle->Init(m_players,m_enemies,m_card);
 }
 
 void IngameScene::handleEvent()

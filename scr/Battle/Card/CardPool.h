@@ -1,10 +1,11 @@
 #pragma once
 #include <vector>
-#include "Card.h"
+#include "../Card/Card.h"
 
 class CardPool
 {
 private:
+
     std::vector<Card> m_cards;
 
 public:

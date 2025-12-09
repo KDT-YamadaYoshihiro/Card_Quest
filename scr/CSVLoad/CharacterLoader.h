@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include <unordered_map>
-#include "../CharacterData.h"
+#include "../Character/CharacterData.h"
 #include "CSVLoader.h"
 
 class CharacterLoader : public CSVLoader

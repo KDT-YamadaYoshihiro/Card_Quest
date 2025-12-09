@@ -1,42 +1,39 @@
 #pragma once
 #include <memory>
-#include "../CharacterData.h"
+#include "../Character.h"
 #include "../../CSVLoad/CharacterLoader.h"
 
 class CharacterFactory
 {
 public:
+
     static CharacterFactory& Instance()
     {
         static CharacterFactory instance;
         return instance;
     }
 
-    // IDから新しくキャラクターを生成
-    std::shared_ptr<CharacterData> CreateCharacter(int id)
+    // ID から Character を生成
+    std::shared_ptr<Character> CreateCharacter(int id)
     {
         const CharacterData* src = CharacterLoader::Instance().Get(id);
         if (!src)
         {
-            return nullptr; // 存在しないID
+#ifdef _DEBUG
+            std::cout << id << "は存在しないIDです。" << std::endl;
+#endif // _DEBUG
+
+            return nullptr; // 存在しない ID
         }
 
-        // ディープコピーで新規作成
-        auto character = std::make_unique<CharacterData>();
+        // CharacterData の deep copy
+        CharacterData data = *src;
 
-        character->charaId = src->charaId;
-        character->name = src->name;
-        character->hp = src->hp;
-        character->maxHp = src->maxHp;
-        character->atk = src->atk;
-        character->mp = src->mp;
-        character->def = src->def;
-        character->cardIds = src->cardIds;  // vectorコピー
+        // dead フラグは必ず初期化
+        data.dead = false;
 
-        // ObjectPool 用フラグを使用するならここで初期化
-        character->dead = false;
-
-        return character;
+        // Character をヒープ上に生成して Shared_ptr に包む
+        return std::make_shared<Character>(data);
     }
 
 private:

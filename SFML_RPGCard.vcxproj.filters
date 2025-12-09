@@ -185,5 +185,8 @@
     <ClInclude Include="scr\Battle\Card\CardPool.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="scr\Battle\Card\CardDate.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

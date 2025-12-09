@@ -1,5 +1,8 @@
 #pragma once
-#include "../../Character/Character.h"
+#include "CardDate.h"
+
+class Character;
+
 
 class Card {
 

@@ -21,7 +21,7 @@ public:
 	{
 		battle = std::make_shared<Battle>();
 
-		for (int i = 1; i > 4; i++) {
+		for (int i = 1; i < 5; i++) {
 			m_players.push_back(CharacterFactory::Instance().CreateCharacter(i));
 		}
 

@@ -150,6 +150,7 @@
   <ItemGroup>
     <ClInclude Include="scr\Battle\Battle.h" />
     <ClInclude Include="scr\Battle\Card\Card.h" />
+    <ClInclude Include="scr\Battle\Card\CardDate.h" />
     <ClInclude Include="scr\Battle\Card\CardPool.h" />
     <ClInclude Include="scr\Battle\Cost\CostManager.h" />
     <ClInclude Include="scr\Battle\Card\Deck.h" />
