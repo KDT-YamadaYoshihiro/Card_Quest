@@ -1,6 +1,6 @@
 #include "IngameScene.h"
-#include "SceneManager.h"
-#include "ResultScene.h"
+#include "../SceneManager.h"
+#include "../ResultScene/ResultScene.h"
 
 void IngameScene::Init()
 {

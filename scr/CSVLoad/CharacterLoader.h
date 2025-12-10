@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <unordered_map>
+#include <iostream>
 #include "../Character/CharacterData.h"
 #include "CSVLoader.h"
 
@@ -25,8 +26,10 @@ public:
     bool Load(const std::string& path)
     {
         std::ifstream ifs(path);
-        if (!ifs.is_open()) return false;
-
+        if (!ifs.is_open()) {
+			std::cout << "指定するファイルが見つかりません: " << path << std::endl;
+            return false;
+        }
         std::string line;
         bool first = true;
         while (std::getline(ifs, line))
