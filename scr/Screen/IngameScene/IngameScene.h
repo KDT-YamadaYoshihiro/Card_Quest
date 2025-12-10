@@ -1,11 +1,11 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "SceneBase.h"
-#include "../Battle/Battle.h"
-#include "../Character/Character.h"
-#include "../Character/Factory/ChracterFactory.h"
-#include "../Battle/Card/Card.h"
+#include "../SceneBase.h"
+#include "../../Battle/Battle.h"
+#include "../../Character/Character.h"
+#include "../../Character/Factory/ChracterFactory.h"
+#include "../../Battle/Card/Card.h"
 
 class IngameScene : public SceneBase
 {

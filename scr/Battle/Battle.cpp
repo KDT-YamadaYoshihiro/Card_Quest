@@ -1,4 +1,13 @@
 #include "../Battle/Battle.h"
+#include "../Battle/Calculation/Calculation.h"
+
+Battle::Battle() :
+	m_deck(std::make_shared<Deck>()),
+	m_cost(std::make_shared<CostManager>()),
+	m_phase(TurnPhase::StartTurn),
+	m_turnCount(0)
+{
+}
 
 void Battle::Init(const std::vector<std::shared_ptr<Character>>& players, const std::vector<std::shared_ptr<Character>>& enemies, const std::vector<Card>& allCards)
 {
@@ -19,12 +28,14 @@ void Battle::Update()
 
     case TurnPhase::StartTurn:
 
+		// ターン開始処理
         StartTurn();
 
         break;
 
     case TurnPhase::PlayerTurn:
         
+		// プレイヤーアップデートを呼ぶ
         PlayerUpdate();
 
         break;
@@ -37,7 +48,10 @@ void Battle::Update()
         break;
 
     case TurnPhase::End:
+
+		// ターン終了処理
         EndTurn();
+        
         break;
 
     default:
@@ -55,6 +69,7 @@ void Battle::StartTurn()
     // コスト回復
     m_cost->ResetCost();
 
+	// フェーズをプレイヤーターンに変更
     m_phase = TurnPhase::PlayerTurn;
 }
 
@@ -70,10 +85,13 @@ void Battle::EnemyUpdate()
 
 void Battle::EndTurn()
 {
+	// ターン数を増やす
     m_turnCount++;
+	// フェーズを切り替える
     m_phase = (m_phase == TurnPhase::PlayerTurn)
         ? TurnPhase::EnemyTurn : TurnPhase::PlayerTurn;
 
+	// 次のターン開始処理
     if (m_phase == TurnPhase::PlayerTurn) {
         StartTurn();
     }

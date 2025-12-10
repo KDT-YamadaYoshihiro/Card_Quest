@@ -33,6 +33,9 @@ private:
 
 public:
 
+	Battle();
+	virtual ~Battle() = default;
+
     void Init(const std::vector<std::shared_ptr<Character>>&,
               const std::vector<std::shared_ptr<Character>>&,
               const std::vector<Card>& allCards);

@@ -69,7 +69,7 @@
     <ClCompile Include="scr\Screen\ScreenManager.cpp">
       <Filter>ソース ファイル\Screen</Filter>
     </ClCompile>
-    <ClCompile Include="scr\Screen\TitleScreen.cpp">
+    <ClCompile Include="scr\Screen\TitleScene\TitleScreen.cpp">
       <Filter>ソース ファイル\Screen\Title</Filter>
     </ClCompile>
     <ClCompile Include="scr\Character\Player\Player.cpp">
@@ -87,7 +87,7 @@
     <ClCompile Include="scr\Render\CameraManager.cpp">
       <Filter>ソース ファイル\Render</Filter>
     </ClCompile>
-    <ClCompile Include="scr\Screen\IngameScene.cpp">
+    <ClCompile Include="scr\Screen\IngameScene\IngameScene.cpp">
       <Filter>ソース ファイル\Screen\Ingame</Filter>
     </ClCompile>
     <ClCompile Include="scr\CSVLoad\TextureLoader\TextureLoader.cpp">
@@ -96,13 +96,16 @@
     <ClCompile Include="scr\Render\Animetion\Animation.cpp">
       <Filter>ソース ファイル\Render\Animetion</Filter>
     </ClCompile>
-    <ClCompile Include="scr\Screen\ResultScene.cpp">
+    <ClCompile Include="scr\Screen\ResultScene\ResultScene.cpp">
       <Filter>ソース ファイル\Screen\Result</Filter>
     </ClCompile>
     <ClCompile Include="scr\Battle\Battle.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="scr\Battle\Card\Card.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\Battle\Calculation\Calculation.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -119,7 +122,7 @@
     <ClInclude Include="scr\Screen\SceneBase.h">
       <Filter>ソース ファイル\Screen</Filter>
     </ClInclude>
-    <ClInclude Include="scr\Screen\TitleScene.h">
+    <ClInclude Include="scr\Screen\TitleScene\TitleScene.h">
       <Filter>ソース ファイル\Screen\Title</Filter>
     </ClInclude>
     <ClInclude Include="scr\Character\Character.h">
@@ -155,7 +158,7 @@
     <ClInclude Include="scr\CSVLoad\CSVLoader.h">
       <Filter>ソース ファイル\CSVLoader</Filter>
     </ClInclude>
-    <ClInclude Include="scr\Screen\IngameScene.h">
+    <ClInclude Include="scr\Screen\IngameScene\IngameScene.h">
       <Filter>ソース ファイル\Screen\Ingame</Filter>
     </ClInclude>
     <ClInclude Include="scr\CSVLoad\TextureLoader\TextureLoader.h">
@@ -164,7 +167,7 @@
     <ClInclude Include="scr\Render\Animetion\Animation.h">
       <Filter>ソース ファイル\Render\Animetion</Filter>
     </ClInclude>
-    <ClInclude Include="scr\Screen\ResultScene.h">
+    <ClInclude Include="scr\Screen\ResultScene\ResultScene.h">
       <Filter>ソース ファイル\Screen\Result</Filter>
     </ClInclude>
     <ClInclude Include="scr\Battle\Battle.h">
@@ -186,6 +189,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="scr\Battle\Card\CardDate.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Battle\Calculation\Calculation.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

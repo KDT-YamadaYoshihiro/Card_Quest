@@ -1,6 +1,8 @@
 #pragma once
 #include <memory>
 #include "../Character.h"
+#include "../Player/Player.h"
+#include "../Enemy/Enemy.h"
 #include "../../CSVLoad/CharacterLoader.h"
 
 class CharacterFactory
@@ -33,7 +35,20 @@ public:
         data.dead = false;
 
         // Character ‚ğƒq[ƒvã‚É¶¬‚µ‚Ä Shared_ptr ‚É•ï‚Ş
-        return std::make_shared<Character>(data);
+		// Player ‚© Enemy ‚©‚ğ”»’è‚µ‚Ä¶¬
+		if (data.charaId <= 4)
+		{
+			return std::make_shared<Player>(data);
+		}
+		else if (data.charaId > 4 && data.charaId <= 6)
+		{
+			return std::make_shared<Enemy>(data);
+        }
+        else {
+			// ‘¶İ‚µ‚È‚¢ID
+            return nullptr;
+        }
+
     }
 
 private:

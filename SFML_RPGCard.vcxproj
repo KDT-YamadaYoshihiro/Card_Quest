@@ -131,6 +131,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="scr\Battle\Calculation\Calculation.cpp" />
     <ClCompile Include="scr\Battle\Battle.cpp" />
     <ClCompile Include="scr\Battle\Card\Card.cpp" />
     <ClCompile Include="scr\Character\Character.cpp" />
@@ -142,12 +143,13 @@
     <ClCompile Include="scr\Render\Animetion\Animation.cpp" />
     <ClCompile Include="scr\Render\CameraManager.cpp" />
     <ClCompile Include="scr\Render\RenderSystem.cpp" />
-    <ClCompile Include="scr\Screen\IngameScene.cpp" />
-    <ClCompile Include="scr\Screen\ResultScene.cpp" />
+    <ClCompile Include="scr\Screen\IngameScene\IngameScene.cpp" />
+    <ClCompile Include="scr\Screen\ResultScene\ResultScene.cpp" />
     <ClCompile Include="scr\Screen\ScreenManager.cpp" />
-    <ClCompile Include="scr\Screen\TitleScreen.cpp" />
+    <ClCompile Include="scr\Screen\TitleScene\TitleScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="scr\Battle\Calculation\Calculation.h" />
     <ClInclude Include="scr\Battle\Battle.h" />
     <ClInclude Include="scr\Battle\Card\Card.h" />
     <ClInclude Include="scr\Battle\Card\CardDate.h" />
@@ -169,11 +171,11 @@
     <ClInclude Include="scr\Render\Animetion\Animation.h" />
     <ClInclude Include="scr\Render\CameraManager.h" />
     <ClInclude Include="scr\Render\RenderSystem.h" />
-    <ClInclude Include="scr\Screen\IngameScene.h" />
-    <ClInclude Include="scr\Screen\ResultScene.h" />
+    <ClInclude Include="scr\Screen\IngameScene\IngameScene.h" />
+    <ClInclude Include="scr\Screen\ResultScene\ResultScene.h" />
     <ClInclude Include="scr\Screen\SceneBase.h" />
     <ClInclude Include="scr\Screen\SceneManager.h" />
-    <ClInclude Include="scr\Screen\TitleScene.h" />
+    <ClInclude Include="scr\Screen\TitleScene\TitleScene.h" />
     <ClInclude Include="scr\UI\UIManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,6 +1,6 @@
 #include "TitleScene.h"
-#include "../Screen/SceneManager.h"
-#include "IngameScene.h"
+#include "../../Screen/SceneManager.h"
+#include "../IngameScene/IngameScene.h"
 #include <SFML/Graphics.hpp>
 
 
