@@ -7,8 +7,11 @@
 class CSVLoader
 {
 protected:
+
+	// ƒJƒ“ƒ}‹æØ‚è‚Å•ªŠ„
     std::vector<std::string> Split(const std::string& line)
     {
+		// Œ‹‰ÊŠi”[—p
         std::vector<std::string> result;
         std::stringstream ss(line);
         std::string item;
