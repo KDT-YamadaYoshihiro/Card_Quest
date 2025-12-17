@@ -9,7 +9,21 @@ class CardLoader : public CSVLoader
 
     std::unordered_map<int, CardData> m_cards;
 
+    CardLoader() = default;
+    virtual ~CardLoader() = default;
+
+
 public:
+
+    // ƒRƒs[‹ÖŽ~
+    CardLoader(const CardLoader&) = delete;
+    CardLoader& operator = (const CardLoader&) = delete;
+    static CardLoader& Instance()
+    {
+        static CardLoader instance;
+        return instance;
+    }
+
 
     bool Load(const std::string& path)
     {
@@ -45,7 +59,11 @@ public:
     const CardData* Get(int id) const
     {
         auto it = m_cards.find(id);
-        return (it != m_cards.end()) ? &it->second : nullptr;
+        if (it == m_cards.end())
+        {
+            return nullptr;
+        }
+        return &it->second;
     }
 
 };

@@ -13,7 +13,8 @@ protected:
     int m_ownerID;       // どのキャラのカードか
 
 public:
-
+    Card() = default;
+    // 初期化
     Card(CardData& data)
         :m_data(data),
         m_value(-1),
@@ -21,6 +22,9 @@ public:
     {
 
     }
+
+    // デストラクタ
+    virtual ~Card() = default;
 
     // カードの使用
     void UseCard(Character* target);

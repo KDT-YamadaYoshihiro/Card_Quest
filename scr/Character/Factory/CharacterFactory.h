@@ -7,6 +7,8 @@
 
 class CharacterFactory
 {
+
+
 public:
 
     static CharacterFactory& Instance()

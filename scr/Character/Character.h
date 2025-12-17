@@ -9,7 +9,6 @@ class Character
 	
 	CharacterData m_status;
 	Position m_pos;
-	CardPool m_cardPool;
 
 public:
 
@@ -68,5 +67,4 @@ public:
 	CharacterData GetStatus() const { return m_status; }
 	// À•W‚Ìæ“¾
 	Position GetPos() const { return m_pos; }
-	CardPool GetCardPool() const { return m_cardPool; }
 };

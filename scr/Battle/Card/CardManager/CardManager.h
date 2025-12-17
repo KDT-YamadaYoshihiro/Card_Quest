@@ -1,59 +1,69 @@
-#pragma once
-#include <memory>
-#include <vector>
-#include <random>
-#include <algorithm>
-#include "../Card.h"
+#pragma once  
+#include <memory>  
+#include <vector>  
+#include <random>  
+#include <algorithm>  
+#include "../Card.h"  
 
-class Character;
+class Character;  
 
-// カード管理
-class CardManager : public Card
-{
+// カード管理  
+class CardManager 
+{  
+   // デッキカード  
+   std::vector<std::unique_ptr<Card>> m_deck;  
 
-private:
+   // 手札カード  
+   std::vector<std::unique_ptr<Card>> m_hand;
 
-	// デッキカード
-	std::vector<Card> m_deck;
+   // 墓地カード  
+   std::vector<std::unique_ptr<Card>> m_cemetery;
 
-	// 手札カード
-	std::vector<Card> m_hand;
+   std::mt19937 m_rng{ std::random_device{}() };  
 
-	// 墓地カード
-	std::vector<Card> m_cemetery;
+   CardManager() = default;  
+   ~CardManager() = default;  
 
-	std::mt19937 m_rng{ std::random_device{}() };
+public:  
 
-public:
+   // コピー禁止  
+   CardManager(const CardManager&) = delete;  
+   CardManager& operator = (const CardManager&) = delete;  
 
-	// カードの追加（初期化）
-	void AddDeckCard(const std::vector<Card>& cards);
+   // シングルトンインスタンスの取得  
+   static CardManager& GetInstance()  
+   {  
+       static CardManager instance;  
+       return instance;  
+   }  
 
-	// デッキをシャッフル
-	void DeckShuffle();
+   // デッキの初期化  
+   void InitDeck(std::vector<std::unique_ptr<Card>>&& arg_cards);
 
-	// デッキから引数分手札に移動
-	void DeckToHand(int arg_drawnum);
+   // デッキカードの追加  
+   void AddDeckCard(std::vector<std::unique_ptr<Card>>&& cards);
 
-	// 手札からカードを使用
-	void UseCard(std::size_t arg_index,Character* arg_chara);
+   // デッキをシャッフル  
+   void DeckShuffle();  
 
-	// 使用したカードを墓地に移動
-	void AddCemeteryCard(Card arg_card);
+   // デッキから引数分手札に移動  
+   void DeckToHand(int arg_drawnum);  
 
-	// 墓地からデッキに戻す
-	void CemeteryToDeck();
+   // 手札からカードを使用  
+   void UseCard(std::size_t arg_index, Character* arg_chara);  
 
-	// デッキの残り枚数を取得
-	std::size_t GetDeckCount() const;
+   // 使用したカードを墓地に移動  
+   void AddCemeteryCard(std::unique_ptr<Card>&& arg_card);
 
-	// 手札カードを取得
-	std::size_t GetHandCard() const;
+   // 墓地からデッキに戻す  
+   void CemeteryToDeck();  
 
-	// 墓地にあるカードの確認	
-	std::size_t GetCemeteryCard() const;
+   // デッキの残り枚数を取得  
+   int GetDeckCount() const;  
 
+   // 手札カードを取得  
+   int GetHandCard() const;  
 
-
+   // 墓地にあるカードの確認  
+   int GetCemeteryCard() const;  
 };
-

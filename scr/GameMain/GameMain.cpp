@@ -1,6 +1,7 @@
 #include "GameMain.h"
 #include "../CSVLoad/TextureLoader/TextureLoader.h"
 #include "../CSVLoad/CharacterLoader.h"
+#include "../CSVLoad/CardLoader.h"
 #include "../Screen/SceneManager.h"
 #include "../Render/CameraManager.h"
 #include "WindowSetting.h"
@@ -34,6 +35,7 @@ bool GameMain::Init()
 
 	TextureLoader::Instance().LoadTextures("data/CSV/TextureData.csv");
 	CharacterLoader::Instance().Load("data/CSV/CharacterData.csv");
+    CardLoader::Instance().Load("data/CSV/CardData.csv");
 
     return true;
 }

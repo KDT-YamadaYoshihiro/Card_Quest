@@ -1,24 +1,27 @@
 #include "../Battle/Battle.h"
 #include "../Battle/Calculation/Calculation.h"
+#include "../Character/Factory/CharacterFactory.h"
+#include "../Character/Factory/CardFactory.h"
 
-Battle::Battle() :
-	m_cost(std::make_shared<CostManager>()),
-	m_phase(TurnPhase::StartTurn),
-	m_turnCount(0)
+// 初期化
+Battle::Battle()
+    :m_cost(std::make_unique<CostManager>()),
+    m_phase(TurnPhase::StartTurn),
+    m_turnCount(1)
 {
+    CreateEntity();
+    m_cost->Init(3);
+
 }
 
-void Battle::Init(const std::vector<std::shared_ptr<Character>>& players, const std::vector<std::shared_ptr<Character>>& enemies, const std::vector<Card>& allCards)
+void Battle::Init()
 {
-	m_playerMembers = players;
-	m_enemyMembers = enemies;
-	m_cost->Init(3);
 }
 
 void Battle::Update()
 {
     if (CheckWin() || CheckLose()) {
-        m_phase = TurnPhase::End;
+        m_phase = TurnPhase::EndTurn;
         return;
     }
 
@@ -26,14 +29,14 @@ void Battle::Update()
 
     case TurnPhase::StartTurn:
 
-		// ターン開始処理
+        // ターン開始処理
         StartTurn();
 
         break;
 
     case TurnPhase::PlayerTurn:
-        
-		// プレイヤーアップデートを呼ぶ
+
+        // プレイヤーアップデートを呼ぶ
         PlayerUpdate();
 
         break;
@@ -45,18 +48,40 @@ void Battle::Update()
 
         break;
 
-    case TurnPhase::End:
+    case TurnPhase::EndTurn:
 
-		// ターン終了処理
+        // ターン終了処理
         EndTurn();
-        
+
         break;
 
     default:
         break;
     }
+
 }
 
+void Battle::Render(RenderSystem& render)
+{
+
+
+}
+
+void Battle::CreateEntity()
+{
+
+    // プレイヤー、カード作成
+    for (int i = 1; i < 5; i++) {
+        auto player = CharacterFactory::Instance().CreateCharacter<Player>(i);
+        m_players.push_back(player);
+
+        const std::vector<int>& cardIds = player->GetStatus().cardIds;
+        auto cards = CardFactory::GetInstance().CreateDeck(cardIds);
+
+        CardManager::GetInstance().InitDeck(std::move(cards));
+    }
+
+}
 
 void Battle::StartTurn()
 {
@@ -75,7 +100,7 @@ void Battle::PlayerUpdate()
 
 
     // 選択したカードでプレイヤーがアクション
-    m_playerMembers[/*ここに選択カード者指定*/1]->Update();
+    m_players[/*ここに選択カード者指定*/1]->Update();
 
     
 
@@ -87,14 +112,14 @@ void Battle::PlayerUpdate()
 void Battle::EnemyUpdate()
 {
     // エネミーはカードをランダムで選択一回だけアクションを起こして終了
-    for (auto& e : m_enemyMembers)
+    for (auto& e : m_enemies)
     {
         e->Update();
     }
 
     // 終了時
     // メンバー全員がアクションを行ったら終了
-    m_phase = TurnPhase::End;
+    m_phase = TurnPhase::EndTurn;
 }
 
 void Battle::EndTurn()
@@ -103,8 +128,8 @@ void Battle::EndTurn()
     m_turnCount++;
 
     // 生存確認後続行か判定
-    for (auto& p : m_playerMembers) {
-        for (auto& e : m_enemyMembers) {
+    for (auto& p : m_players) {
+        for (auto& e : m_enemies) {
             if (p->GetStatus().dead && e->GetStatus().dead) {
 
                 p->UpdateBuff();

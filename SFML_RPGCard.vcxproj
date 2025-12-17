@@ -160,7 +160,8 @@
     <ClInclude Include="scr\Character\Character.h" />
     <ClInclude Include="scr\Character\CharacterData.h" />
     <ClInclude Include="scr\Character\Enemy\Enemy.h" />
-    <ClInclude Include="scr\Character\Factory\ChracterFactory.h" />
+    <ClInclude Include="scr\Character\Factory\CardFactory.h" />
+    <ClInclude Include="scr\Character\Factory\CharacterFactory.h" />
     <ClInclude Include="scr\Character\Player\Player.h" />
     <ClInclude Include="scr\CSVLoad\CardLoader.h" />
     <ClInclude Include="scr\CSVLoad\CharacterLoader.h" />

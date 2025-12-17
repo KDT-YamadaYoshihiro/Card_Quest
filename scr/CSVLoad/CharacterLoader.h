@@ -14,7 +14,7 @@ class CharacterLoader : public CSVLoader
 
 public:
 
-    // コピー代入禁止
+    // コピー禁止
     CharacterLoader(const CharacterLoader&) = delete;
     CharacterLoader& operator = (const CharacterLoader&) = delete;
     static CharacterLoader& Instance()
@@ -45,7 +45,7 @@ public:
             data.hp = std::stoi(cols[2]);
             data.maxHp = std::stoi(cols[2]);
             data.atk = std::stoi(cols[3]);
-            data.mp = std::stoi(cols[4]);
+            data.magicAtk = std::stoi(cols[4]);
             data.def = std::stoi(cols[5]);
 
             // cardId1〜4

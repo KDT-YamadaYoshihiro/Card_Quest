@@ -143,7 +143,7 @@
     <ClInclude Include="scr\Character\Enemy\Enemy.h">
       <Filter>ソース ファイル\Character\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="scr\Character\Factory\ChracterFactory.h">
+    <ClInclude Include="scr\Character\Factory\CharacterFactory.h">
       <Filter>ソース ファイル\Character\Factory</Filter>
     </ClInclude>
     <ClInclude Include="scr\Render\RenderSystem.h">
@@ -192,6 +192,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="scr\Battle\Card\CardManager\CardManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Character\Factory\CardFactory.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

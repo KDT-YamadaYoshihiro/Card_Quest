@@ -2,9 +2,10 @@
 #include "../SceneManager.h"
 #include "../ResultScene/ResultScene.h"
 
+
 void IngameScene::Init()
 {
-	//battle->Init(m_players,m_enemies,m_card);
+	battle->Init();
 }
 
 void IngameScene::handleEvent()
@@ -21,8 +22,7 @@ void IngameScene::Update()
 }
 
 void IngameScene::Render(sf::RenderWindow& window)
-{
-	
+{	
 }
 
 void IngameScene::End()
