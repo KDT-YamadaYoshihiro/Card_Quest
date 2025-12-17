@@ -75,24 +75,47 @@ void Battle::StartTurn()
 
 void Battle::PlayerUpdate()
 {
+    // カードを選択
 
 
+    // 選択したカードでプレイヤーがアクション
+    m_playerMembers[/*ここに選択カード者指定*/1]->Update();
+
+    
+
+    // 終了時
+    // ターン終了ボタンが押されたとき
+    m_phase = TurnPhase::EnemyTurn;
 }
 
 void Battle::EnemyUpdate()
 {
+    // エネミーはカードをランダムで選択一回だけアクションを起こして終了
+    for (auto& e : m_enemyMembers)
+    {
+        e->Update();
+    }
+
+    // 終了時
+    // メンバー全員がアクションを行ったら終了
+    m_phase = TurnPhase::End;
 }
 
 void Battle::EndTurn()
 {
 	// ターン数を増やす
     m_turnCount++;
-	// フェーズを切り替える
-    m_phase = (m_phase == TurnPhase::PlayerTurn)
-        ? TurnPhase::EnemyTurn : TurnPhase::PlayerTurn;
 
-	// 次のターン開始処理
-    if (m_phase == TurnPhase::PlayerTurn) {
-        StartTurn();
+    // 生存確認後続行か判定
+    for (auto& p : m_playerMembers) {
+        for (auto& e : m_enemyMembers) {
+            if (p->GetStatus().dead && e->GetStatus().dead) {
+
+                p->UpdateBuff();
+                e->UpdateBuff();
+
+                m_phase = TurnPhase::StartTurn;
+            }
+        }
     }
 }

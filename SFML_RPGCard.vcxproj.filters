@@ -108,6 +108,9 @@
     <ClCompile Include="scr\Battle\Calculation\Calculation.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="scr\Battle\Card\CardManager\CardManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scr\Screen\SceneManager.h">
@@ -179,12 +182,6 @@
     <ClInclude Include="scr\Battle\Cost\CostManager.h">
       <Filter>ソース ファイル\Screen\Ingame\Battle</Filter>
     </ClInclude>
-    <ClInclude Include="scr\Battle\Card\Deck.h">
-      <Filter>ソース ファイル\Screen\Ingame\Battle</Filter>
-    </ClInclude>
-    <ClInclude Include="scr\Battle\Card\Hand.h">
-      <Filter>ソース ファイル\Screen\Ingame\Battle</Filter>
-    </ClInclude>
     <ClInclude Include="scr\Battle\Card\CardPool.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -192,6 +189,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="scr\Battle\Calculation\Calculation.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Battle\Card\CardManager\CardManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

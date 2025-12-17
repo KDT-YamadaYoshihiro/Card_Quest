@@ -131,6 +131,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="scr\Battle\Card\CardManager\CardManager.cpp" />
     <ClCompile Include="scr\Battle\Calculation\Calculation.cpp" />
     <ClCompile Include="scr\Battle\Battle.cpp" />
     <ClCompile Include="scr\Battle\Card\Card.cpp" />
@@ -149,14 +150,13 @@
     <ClCompile Include="scr\Screen\TitleScene\TitleScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="scr\Battle\Card\CardManager\CardManager.h" />
     <ClInclude Include="scr\Battle\Calculation\Calculation.h" />
     <ClInclude Include="scr\Battle\Battle.h" />
     <ClInclude Include="scr\Battle\Card\Card.h" />
     <ClInclude Include="scr\Battle\Card\CardDate.h" />
     <ClInclude Include="scr\Battle\Card\CardPool.h" />
     <ClInclude Include="scr\Battle\Cost\CostManager.h" />
-    <ClInclude Include="scr\Battle\Card\Deck.h" />
-    <ClInclude Include="scr\Battle\Card\Hand.h" />
     <ClInclude Include="scr\Character\Character.h" />
     <ClInclude Include="scr\Character\CharacterData.h" />
     <ClInclude Include="scr\Character\Enemy\Enemy.h" />

@@ -8,19 +8,30 @@ struct Position {
 	int y;
 };
 
+struct BuffData
+{
+	float power;
+	int turn;
+};
+
 
 // キャラクターステータス
 struct CharacterData
 {
 	int charaId;
+	int lv;
 	std::string name;
 	int hp;
 	int maxHp;
-	int mp;
+	int magicAtk;
 	int atk;
 	int def;
+	int exp;
 	bool dead;
 	
+
+
+	BuffData buff;
 	std::vector<int> cardIds;
 
 };
