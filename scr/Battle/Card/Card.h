@@ -6,20 +6,25 @@ class Character;
 
 class Card {
 
-public:
+protected:
 
     CardData m_data;
-    int value;
-    int ownerID;       // どのキャラのカードか
+    int m_value;
+    int m_ownerID;       // どのキャラのカードか
 
+public:
 
     Card(CardData& data)
         :m_data(data),
-        value(-1),
-        ownerID(-1)
+        m_value(-1),
+        m_ownerID(-1)
     {
 
     }
 
-    void Execute(Character* target);
+    // カードの使用
+    void UseCard(Character* target);
+
+    // カードの削除
+
 };

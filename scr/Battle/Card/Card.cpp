@@ -1,7 +1,7 @@
 #include "Card.h"
 #include "../../Character/Character.h"
 
-void Card::Execute(Character* target)
+void Card::UseCard(Character* target)
 {
 
 	if (!target)
@@ -13,25 +13,25 @@ void Card::Execute(Character* target)
 
 	case ActionType::ATTCK:
 
-		target->TakeDamage(value);
+		target->TakeDamage(m_value);
 
 		break;
 
 	case ActionType::MAGIC:
 
-		target->TakeDamage(value);
+		target->TakeDamage(m_value);
 
 		break;
 
 	case ActionType::HEAL:
 
-		target->TakeHeal(value);
+		target->TakeHeal(m_value);
 
 		break;
 
 	case ActionType::BUFF:
 
-		target->TakeBuff(value);
+		target->TakeBuff(m_value);
 
 		break;
 
