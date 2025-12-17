@@ -2,7 +2,6 @@
 #include "../Battle/Calculation/Calculation.h"
 
 Battle::Battle() :
-	m_deck(std::make_shared<Deck>()),
 	m_cost(std::make_shared<CostManager>()),
 	m_phase(TurnPhase::StartTurn),
 	m_turnCount(0)
@@ -13,7 +12,6 @@ void Battle::Init(const std::vector<std::shared_ptr<Character>>& players, const 
 {
 	m_playerMembers = players;
 	m_enemyMembers = enemies;
-	m_deck->Init(allCards);
 	m_cost->Init(3);
 }
 
@@ -63,8 +61,6 @@ void Battle::Update()
 void Battle::StartTurn()
 {
     // ŽèŽD•â[
-    auto drawn = m_deck->Draw(5);
-    m_hand.Add(drawn);
 
     // ƒRƒXƒg‰ñ•œ
     m_cost->ResetCost();

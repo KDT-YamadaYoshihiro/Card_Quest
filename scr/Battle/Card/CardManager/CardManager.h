@@ -5,6 +5,8 @@
 #include <algorithm>
 #include "../Card.h"
 
+class Character;
+
 // カード管理
 class CardManager : public Card
 {
@@ -34,22 +36,22 @@ public:
 	void DeckToHand(int arg_drawnum);
 
 	// 手札からカードを使用
-	void UseCard();
+	void UseCard(std::size_t arg_index,Character* arg_chara);
 
 	// 使用したカードを墓地に移動
-	void AddCemeteryCard();
+	void AddCemeteryCard(Card arg_card);
 
 	// 墓地からデッキに戻す
 	void CemeteryToDeck();
 
 	// デッキの残り枚数を取得
-	std::vector<Card> GetDeckCount() const;
+	std::size_t GetDeckCount() const;
 
 	// 手札カードを取得
-	std::vector<Card> GetHandCard() const;
+	std::size_t GetHandCard() const;
 
 	// 墓地にあるカードの確認	
-	std::vector<Card> GetCemeteryCard() const;
+	std::size_t GetCemeteryCard() const;
 
 
 

@@ -16,6 +16,7 @@ public:
     }
 
     // ID から Character を生成
+    template <typename T>
     std::shared_ptr<Character> CreateCharacter(int id)
     {
         const CharacterData* src = CharacterLoader::Instance().Get(id);
@@ -34,21 +35,9 @@ public:
         // dead フラグは必ず初期化
         data.dead = false;
 
-        // Character をヒープ上に生成して Shared_ptr に包む
-		// Player か Enemy かを判定して生成
-		if (data.charaId <= 4)
-		{
-			return std::make_shared<Player>(data);
-		}
-		else if (data.charaId > 4 && data.charaId <= 6)
-		{
-			return std::make_shared<Enemy>(data);
+        if (data.charaId == id) {
+            return std::make_unique<T>(data);
         }
-        else {
-			// 存在しないID
-            return nullptr;
-        }
-
     }
 
 private:

@@ -1,8 +1,7 @@
 #pragma once
 #include <vector>
+#include <memory>
 #include "../Character/Character.h"
-#include "../Battle/Card/Deck.h"
-#include "../Battle/Card/Hand.h"
 #include "../Battle/Cost/CostManager.h"
 
 
@@ -21,10 +20,6 @@ private:
     std::vector<std::shared_ptr<Character>> m_playerMembers;
     std::vector<std::shared_ptr<Character>> m_enemyMembers;
 
-    // デッキ
-    std::shared_ptr<Deck> m_deck;
-    // 手札
-    Hand m_hand;
     // コスト管理
     std::shared_ptr<CostManager> m_cost;
 
@@ -65,7 +60,6 @@ public:
     }
 
     TurnPhase GetTurnPhase() const { return m_phase; }
-    const Hand& GetHand() const { return m_hand; }
     int GetCost() const { return m_cost->GetCost(); }
 
 private:

@@ -13,7 +13,6 @@ class IngameScene : public SceneBase
 	std::shared_ptr<Battle> battle;
 	std::vector<std::shared_ptr<Character>> m_players;
 	std::vector<std::shared_ptr<Character>> m_enemies;
-	std::vector<Card> m_card;
 
 public:
 
@@ -22,7 +21,7 @@ public:
 		battle = std::make_shared<Battle>();
 
 		for (int i = 1; i < 5; i++) {
-			m_players.push_back(CharacterFactory::Instance().CreateCharacter(i));
+			m_players.push_back(CharacterFactory::Instance().CreateCharacter<Player>(i));
 		}
 
 	};
