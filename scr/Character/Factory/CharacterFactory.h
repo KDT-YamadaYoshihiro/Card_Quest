@@ -38,6 +38,10 @@ public:
         data.dead = false;
 
         if (data.charaId == id) {
+#ifdef _DEBUG
+            std::cout << id << "‚ğ¶¬" << std::endl;
+#endif // _DEBUG
+
             return std::make_unique<T>(data);
         }
     }

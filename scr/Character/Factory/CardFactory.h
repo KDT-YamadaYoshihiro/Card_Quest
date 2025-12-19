@@ -33,7 +33,13 @@ public:
 		}
 
 		CardData data = *src;
-		return std::make_unique<Card>(data);
+		if (arg_id == data.cardId) {
+#ifdef _DEBUG
+			std::cout << data.cardId << "‚ğ¶¬" << std::endl;
+#endif // _DEBUG
+
+			return std::make_unique<Card>(data);
+		}
 	}
 
 	// •¡”¶¬

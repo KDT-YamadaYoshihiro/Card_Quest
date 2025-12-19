@@ -49,7 +49,7 @@ public:
             data.def = std::stoi(cols[5]);
 
             // cardId1〜4
-            for (int i = 5; i <= 8; i++) {
+            for (int i = 5; i <= 9; i++) {
                 data.cardIds.push_back(std::stoi(cols[i]));
             }
 
