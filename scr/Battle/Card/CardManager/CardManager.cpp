@@ -33,14 +33,19 @@ void CardManager::DeckToHand(int arg_drawnum)
 	
 }
 
-void CardManager::UseCard(std::size_t arg_handIndex, Character* arg_chara)
+CardUseResult CardManager::UseCard(std::size_t arg_handIndex)
 {
-	// カードを使用
-	m_hand[arg_handIndex]->UseCard(arg_chara);
-	// 墓地に移動
-	AddCemeteryCard(std::move(m_hand[arg_handIndex]));
-	// 手札から削除
+	auto& card = m_hand[arg_handIndex];
+
+	CardUseResult result;
+	result.effect = card->GetCardState();
+	result.ownerID = card->GetOwnerId();
+
+	AddCemeteryCard(std::move(card));
 	m_hand.erase(m_hand.begin() + arg_handIndex);
+
+	return result;
+
 }
 
 void CardManager::AddCemeteryCard(std::unique_ptr<Card>&& arg_card)

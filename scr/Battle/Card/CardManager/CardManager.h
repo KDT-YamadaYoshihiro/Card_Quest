@@ -7,6 +7,13 @@
 
 class Character;  
 
+// カード使用時
+struct CardUseResult
+{
+    CardData effect;
+    int ownerID;
+};
+
 // カード管理  
 class CardManager 
 {  
@@ -50,7 +57,7 @@ public:
    void DeckToHand(int arg_drawnum);  
 
    // 手札からカードを使用  
-   void UseCard(std::size_t arg_index, Character* arg_chara);  
+   CardUseResult UseCard(std::size_t arg_index);
 
    // 使用したカードを墓地に移動  
    void AddCemeteryCard(std::unique_ptr<Card>&& arg_card);

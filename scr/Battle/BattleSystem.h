@@ -6,7 +6,7 @@
 #include "../Battle/Card/CardManager/CardManager.h"
 
 
-class Battle {
+class BattleSystem {
 
 public:
     // フェーズ
@@ -31,8 +31,8 @@ private:
 
 public:
 
-	Battle();
-	virtual ~Battle() = default;
+	BattleSystem();
+	virtual ~BattleSystem() = default;
 
     /// <summary>
     /// 初期化
@@ -68,6 +68,11 @@ public:
         }
         return false;
     }
+
+    // カードとキャラクターの結びつけ
+    void OnUseCard(size_t arg_handIndex, size_t arg_targetIndex);
+
+    void ApplyCardAction(const CardUseResult& result, std::shared_ptr<Character> arg_owner, std::shared_ptr<Character> arg_target);
 
     // 現在のフェーズの取得
     TurnPhase GetTurnPhase() const { return m_phase; }

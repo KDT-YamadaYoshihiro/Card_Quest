@@ -1,10 +1,10 @@
-#include "../Battle/Battle.h"
+#include "../Battle/BattleSystem.h"
 #include "../Battle/Calculation/Calculation.h"
 #include "../Character/Factory/CharacterFactory.h"
 #include "../Character/Factory/CardFactory.h"
 
 // 初期化
-Battle::Battle()
+BattleSystem::BattleSystem()
     :m_cost(std::make_unique<CostManager>()),
     m_phase(TurnPhase::StartTurn),
     m_turnCount(1)
@@ -14,11 +14,11 @@ Battle::Battle()
 
 }
 
-void Battle::Init()
+void BattleSystem::Init()
 {
 }
 
-void Battle::Update()
+void BattleSystem::Update()
 {
     if (CheckWin() || CheckLose()) {
         m_phase = TurnPhase::EndTurn;
@@ -61,13 +61,58 @@ void Battle::Update()
 
 }
 
-void Battle::Render(RenderSystem& render)
+void BattleSystem::Render(RenderSystem& render)
 {
 
 
 }
 
-void Battle::CreateEntity()
+void BattleSystem::OnUseCard(size_t arg_handIndex,size_t arg_targetIndex)
+{
+    auto result = CardManager::GetInstance().UseCard(arg_handIndex);
+    auto& owner = m_players[result.ownerID];
+    auto& target = m_players[arg_targetIndex];
+    // フォーカス演出
+
+    // 効果適用
+    ApplyCardAction(result,owner,target);
+}
+
+void BattleSystem::ApplyCardAction(const CardUseResult& result, std::shared_ptr<Character> arg_owner, std::shared_ptr<Character> arg_target)
+{
+
+    switch (result.effect.actionType)
+    {
+
+    case ActionType::ATTCK:
+        /*arg_target->TakeDamage();*/
+        break;
+
+    case ActionType::MAGIC:
+
+        /*arg_target->TakeDamage();*/
+
+        break;
+
+    case ActionType::HEAL:
+        
+        /*arg_target->TakeHeal();*/
+
+        break;
+
+    case ActionType::BUFF:
+
+        //arg_target->TakeHeal();
+
+        break;
+
+    default:
+        break;
+    }
+
+}
+
+void BattleSystem::CreateEntity()
 {
 
     // プレイヤー、カード作成
@@ -83,7 +128,7 @@ void Battle::CreateEntity()
 
 }
 
-void Battle::StartTurn()
+void BattleSystem::StartTurn()
 {
     // 手札補充
 
@@ -94,7 +139,7 @@ void Battle::StartTurn()
     m_phase = TurnPhase::PlayerTurn;
 }
 
-void Battle::PlayerUpdate()
+void BattleSystem::PlayerUpdate()
 {
     // カードを選択
 
@@ -109,7 +154,7 @@ void Battle::PlayerUpdate()
     m_phase = TurnPhase::EnemyTurn;
 }
 
-void Battle::EnemyUpdate()
+void BattleSystem::EnemyUpdate()
 {
     // エネミーはカードをランダムで選択一回だけアクションを起こして終了
     for (auto& e : m_enemies)
@@ -122,7 +167,7 @@ void Battle::EnemyUpdate()
     m_phase = TurnPhase::EndTurn;
 }
 
-void Battle::EndTurn()
+void BattleSystem::EndTurn()
 {
 	// ターン数を増やす
     m_turnCount++;

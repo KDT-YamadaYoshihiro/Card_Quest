@@ -131,9 +131,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="scr\Battle\BattleView\BattleView.cpp" />
     <ClCompile Include="scr\Battle\Card\CardManager\CardManager.cpp" />
     <ClCompile Include="scr\Battle\Calculation\Calculation.cpp" />
-    <ClCompile Include="scr\Battle\Battle.cpp" />
+    <ClCompile Include="scr\Battle\BattleSystem.cpp" />
     <ClCompile Include="scr\Battle\Card\Card.cpp" />
     <ClCompile Include="scr\Character\Character.cpp" />
     <ClCompile Include="scr\Character\Enemy\Enemy.cpp" />
@@ -150,9 +151,10 @@
     <ClCompile Include="scr\Screen\TitleScene\TitleScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="scr\Battle\BattleView\BattleView.h" />
     <ClInclude Include="scr\Battle\Card\CardManager\CardManager.h" />
     <ClInclude Include="scr\Battle\Calculation\Calculation.h" />
-    <ClInclude Include="scr\Battle\Battle.h" />
+    <ClInclude Include="scr\Battle\BattleSystem.h" />
     <ClInclude Include="scr\Battle\Card\Card.h" />
     <ClInclude Include="scr\Battle\Card\CardDate.h" />
     <ClInclude Include="scr\Battle\Card\CardPool.h" />

@@ -99,7 +99,7 @@
     <ClCompile Include="scr\Screen\ResultScene\ResultScene.cpp">
       <Filter>ソース ファイル\Screen\Result</Filter>
     </ClCompile>
-    <ClCompile Include="scr\Battle\Battle.cpp">
+    <ClCompile Include="scr\Battle\BattleSystem.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="scr\Battle\Card\Card.cpp">
@@ -109,6 +109,9 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="scr\Battle\Card\CardManager\CardManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\Battle\BattleView\BattleView.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -173,7 +176,7 @@
     <ClInclude Include="scr\Screen\ResultScene\ResultScene.h">
       <Filter>ソース ファイル\Screen\Result</Filter>
     </ClInclude>
-    <ClInclude Include="scr\Battle\Battle.h">
+    <ClInclude Include="scr\Battle\BattleSystem.h">
       <Filter>ソース ファイル\Screen\Ingame\Battle</Filter>
     </ClInclude>
     <ClInclude Include="scr\Battle\Card\Card.h">
@@ -195,6 +198,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="scr\Character\Factory\CardFactory.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Battle\BattleView\BattleView.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

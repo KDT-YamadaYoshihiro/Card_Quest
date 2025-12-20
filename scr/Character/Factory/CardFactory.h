@@ -22,7 +22,7 @@ public:
 	}
 
 	// ’P‘Ì¶¬
-	std::unique_ptr<Card> Create(int arg_id)
+	std::unique_ptr<Card> Create(int arg_id, int arg_ownerId)
 	{
 		const CardData* src = CardLoader::Instance().Get(arg_id);
 
@@ -38,7 +38,7 @@ public:
 			std::cout << data.cardId << "‚ğ¶¬" << std::endl;
 #endif // _DEBUG
 
-			return std::make_unique<Card>(data);
+			return std::make_unique<Card>(data, arg_ownerId);
 		}
 	}
 
