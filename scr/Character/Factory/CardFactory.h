@@ -50,7 +50,7 @@ public:
 
 		for (int id : arg_id)
 		{
-			deck.emplace_back(Create(id));
+			deck.emplace_back(Create(id,id));
 		}
 
 		return deck;

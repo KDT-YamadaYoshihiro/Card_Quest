@@ -9,6 +9,7 @@
 class BattleSystem {
 
 public:
+
     // フェーズ
     enum class TurnPhase {
         StartTurn,
@@ -18,7 +19,7 @@ public:
     };
 
 private:
-
+    
     // キャラクター
     std::vector<std::shared_ptr<Character>> m_players;
     std::vector<std::shared_ptr<Character>> m_enemies;
