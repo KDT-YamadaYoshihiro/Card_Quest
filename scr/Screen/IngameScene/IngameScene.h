@@ -13,6 +13,7 @@ public:
 
 	IngameScene()
 	{
+		std::cout << "Ingame" << std::endl;
 		battle = std::make_shared<BattleSystem>();
 	};
 	virtual ~IngameScene() = default;

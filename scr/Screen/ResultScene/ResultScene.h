@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include <SFML/Graphics.hpp>
 #include "../SceneBase.h"
 
@@ -8,7 +9,10 @@ class ResultScene : public SceneBase
 
 public:
 
-	ResultScene() = default;
+	ResultScene()
+	{
+		std::cout << "Result" << std::endl;
+	}
 	virtual ~ResultScene() = default;
 
 	void Init() override;

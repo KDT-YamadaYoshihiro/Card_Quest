@@ -1,6 +1,7 @@
 #pragma once
-#include "../../Battle/Card/CardDate.h"
-#include "../../Battle/Card/Card.h"
+#include <iostream>
+#include "../CardDate.h"
+#include "../Card.h"
 #include "../../CSVLoad/CardLoader.h"
 
 class CardFactory
@@ -33,13 +34,13 @@ public:
 		}
 
 		CardData data = *src;
-		if (arg_id == data.cardId) {
+
 #ifdef _DEBUG
-			std::cout << data.cardId << "Çê∂ê¨" << std::endl;
+		std::cout << data.cardId << "Çê∂ê¨" << std::endl;
 #endif // _DEBUG
 
-			return std::make_unique<Card>(data, arg_ownerId);
-		}
+		return std::make_unique<Card>(data,CardZone::None, arg_ownerId);
+		
 	}
 
 	// ï°êîê∂ê¨
@@ -50,7 +51,10 @@ public:
 
 		for (int id : arg_id)
 		{
-			deck.emplace_back(Create(id,id));
+			auto card = Create(id, id);
+			if (card) {
+				deck.emplace_back(std::move(card));
+			}
 		}
 
 		return deck;

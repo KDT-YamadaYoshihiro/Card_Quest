@@ -1,5 +1,5 @@
 #include "Card.h"
-#include "../../Character/Character.h"
+#include "../Character/Character.h"
 
 void Card::UseCard(Character* target)
 {

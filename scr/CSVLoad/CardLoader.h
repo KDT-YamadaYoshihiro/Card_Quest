@@ -1,7 +1,7 @@
 #pragma once
 #include <unordered_map>
 #include "../Character/CharacterData.h"
-#include "../Battle/Card/CardDate.h"
+#include "../Card/CardDate.h"
 #include "CSVLoader.h"
 
 class CardLoader : public CSVLoader
@@ -37,7 +37,7 @@ public:
             if (first) { first = false; continue; } // ヘッダスキップ
 
             auto cols = Split(line);
-            if (cols.size() < 6) continue;
+            if (cols.size() < 8) continue;
 
             CardData data;
             data.cardId = std::stoi(cols[0]);

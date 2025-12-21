@@ -69,8 +69,18 @@ public:
    int GetDeckCount() const;  
 
    // 手札カードを取得  
-   int GetHandCard() const;  
+   int GetHandCount() const;  
 
    // 墓地にあるカードの確認  
-   int GetCemeteryCard() const;  
+   int GetCemeteryCount() const;  
+
+
+   // 各カードの取得
+   // 山札
+   const std::vector<std::unique_ptr<Card>>& GetDeckCard() const;
+   // 墓地
+   const std::vector<std::unique_ptr<Card>>& GetCemetyeryCard()const;
+   // 手札
+   const std::vector<std::unique_ptr<Card>>& GetHandCard()const;
+
 };

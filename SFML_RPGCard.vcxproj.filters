@@ -84,7 +84,7 @@
     <ClCompile Include="scr\Render\RenderSystem.cpp">
       <Filter>ソース ファイル\Render</Filter>
     </ClCompile>
-    <ClCompile Include="scr\Render\CameraManager.cpp">
+    <ClCompile Include="scr\CameraManager\CameraManager.cpp">
       <Filter>ソース ファイル\Render</Filter>
     </ClCompile>
     <ClCompile Include="scr\Screen\IngameScene\IngameScene.cpp">
@@ -102,16 +102,19 @@
     <ClCompile Include="scr\Battle\BattleSystem.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="scr\Battle\Card\Card.cpp">
+    <ClCompile Include="scr\Card\Card.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="scr\Battle\Calculation\Calculation.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="scr\Battle\Card\CardManager\CardManager.cpp">
+    <ClCompile Include="scr\Card\CardManager\CardManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="scr\Battle\BattleView\BattleView.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\Card\CardRenderer\CardRenderer.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -152,7 +155,7 @@
     <ClInclude Include="scr\Render\RenderSystem.h">
       <Filter>ソース ファイル\Render</Filter>
     </ClInclude>
-    <ClInclude Include="scr\Render\CameraManager.h">
+    <ClInclude Include="scr\CameraManager\CameraManager.h">
       <Filter>ソース ファイル\Render</Filter>
     </ClInclude>
     <ClInclude Include="scr\CSVLoad\CardLoader.h">
@@ -179,28 +182,31 @@
     <ClInclude Include="scr\Battle\BattleSystem.h">
       <Filter>ソース ファイル\Screen\Ingame\Battle</Filter>
     </ClInclude>
-    <ClInclude Include="scr\Battle\Card\Card.h">
+    <ClInclude Include="scr\Card\Card.h">
       <Filter>ソース ファイル\Screen\Ingame\Battle</Filter>
     </ClInclude>
     <ClInclude Include="scr\Battle\Cost\CostManager.h">
       <Filter>ソース ファイル\Screen\Ingame\Battle</Filter>
     </ClInclude>
-    <ClInclude Include="scr\Battle\Card\CardPool.h">
+    <ClInclude Include="scr\Card\CardPool.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="scr\Battle\Card\CardDate.h">
+    <ClInclude Include="scr\Card\CardDate.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="scr\Battle\Calculation\Calculation.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="scr\Battle\Card\CardManager\CardManager.h">
+    <ClInclude Include="scr\Card\CardManager\CardManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="scr\Character\Factory\CardFactory.h">
+    <ClInclude Include="scr\Card\CardFactory\CardFactory.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="scr\Battle\BattleView\BattleView.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Card\CardRenderer\CardRenderer.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

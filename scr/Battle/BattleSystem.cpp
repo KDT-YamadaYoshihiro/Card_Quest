@@ -1,7 +1,7 @@
 #include "../Battle/BattleSystem.h"
 #include "../Battle/Calculation/Calculation.h"
 #include "../Character/Factory/CharacterFactory.h"
-#include "../Character/Factory/CardFactory.h"
+#include "../Card/CardFactory/CardFactory.h"
 
 // 初期化
 BattleSystem::BattleSystem()
@@ -12,6 +12,13 @@ BattleSystem::BattleSystem()
     CreateEntity();
     m_cost->Init(3);
 
+    if (!m_font.openFromFile("data/Font/genkai-mincho.ttf"))
+    {
+        // エラー処理（assert / ログなど）
+        throw std::runtime_error("Font load failed");
+    }
+    m_renderer = std::make_unique<CardRenderer>();
+
 }
 
 void BattleSystem::Init()
@@ -20,10 +27,10 @@ void BattleSystem::Init()
 
 void BattleSystem::Update()
 {
-    if (CheckWin() || CheckLose()) {
-        m_phase = TurnPhase::EndTurn;
-        return;
-    }
+    //if (CheckWin() || CheckLose()) {
+    //    m_phase = TurnPhase::EndTurn;
+    //    return;
+    //}
 
     switch (m_phase) {
 
@@ -61,10 +68,22 @@ void BattleSystem::Update()
 
 }
 
-void BattleSystem::Render(RenderSystem& render)
+void BattleSystem::Render(sf::RenderWindow& window)
 {
 
+    // 山札
+    m_renderer->DrawDeck(m_font,window, { 50.0f,300.0f }, CardManager::GetInstance().GetDeckCount());
 
+    // 墓地
+    m_renderer->DrawGrave(m_font, window,{150.0f, 300.0f}, CardManager::GetInstance().GetCemeteryCount());
+
+    // 手札
+    float x = 300.0f;
+    for (const auto& card : CardManager::GetInstance().GetHandCard())
+    {
+        m_renderer->DrawHand(m_font, window, { x, 300.0f }, *card);
+        x += 110.0f;
+    }
 }
 
 void BattleSystem::OnUseCard(size_t arg_handIndex,size_t arg_targetIndex)
@@ -123,7 +142,13 @@ void BattleSystem::CreateEntity()
         const std::vector<int>& cardIds = player->GetStatus().cardIds;
         auto cards = CardFactory::GetInstance().CreateDeck(cardIds);
 
-        CardManager::GetInstance().InitDeck(std::move(cards));
+        if (i == 1) {
+            CardManager::GetInstance().InitDeck(std::move(cards));
+        }
+        else
+        {
+            CardManager::GetInstance().AddDeckCard(std::move(cards));
+        }
     }
 
 }
@@ -131,6 +156,7 @@ void BattleSystem::CreateEntity()
 void BattleSystem::StartTurn()
 {
     // 手札補充
+    CardManager::GetInstance().DeckToHand(5);
 
     // コスト回復
     m_cost->ResetCost();
@@ -175,7 +201,7 @@ void BattleSystem::EndTurn()
     // 生存確認後続行か判定
     for (auto& p : m_players) {
         for (auto& e : m_enemies) {
-            if (p->GetStatus().dead && e->GetStatus().dead) {
+            if (!p->GetStatus().dead && !e->GetStatus().dead) {
 
                 p->UpdateBuff();
                 e->UpdateBuff();

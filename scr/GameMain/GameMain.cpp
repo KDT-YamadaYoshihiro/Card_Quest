@@ -3,7 +3,7 @@
 #include "../CSVLoad/CharacterLoader.h"
 #include "../CSVLoad/CardLoader.h"
 #include "../Screen/SceneManager.h"
-#include "../Render/CameraManager.h"
+#include "../CameraManager/CameraManager.h"
 #include "WindowSetting.h"
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/Color.hpp>

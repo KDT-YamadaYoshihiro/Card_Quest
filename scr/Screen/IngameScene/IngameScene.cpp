@@ -10,10 +10,10 @@ void IngameScene::Init()
 
 void IngameScene::handleEvent()
 {
-	if(battle->CheckWin() || battle->CheckLose())
-	{
-		SceneManager::Instance().ChangeScreen<ResultScene>();
-	}
+	//if(battle->CheckWin() || battle->CheckLose())
+	//{
+	//	SceneManager::Instance().ChangeScreen<ResultScene>();
+	//}
 }
 
 void IngameScene::Update()
@@ -23,6 +23,7 @@ void IngameScene::Update()
 
 void IngameScene::Render(sf::RenderWindow& window)
 {	
+	battle->Render(window);
 }
 
 void IngameScene::End()

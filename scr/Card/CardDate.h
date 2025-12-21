@@ -1,6 +1,15 @@
 #pragma once
 #include <string>
 
+// カードの状態	
+enum class CardZone
+{
+	None,		// 無属性
+	Deck,		// 山札
+	Hand,		// 手札
+	Grave		// 墓地
+};
+
 // ターゲットタイプ
 enum class TargetType
 {

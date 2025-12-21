@@ -37,13 +37,12 @@ public:
         // dead ƒtƒ‰ƒO‚Í•K‚¸‰Šú‰»
         data.dead = false;
 
-        if (data.charaId == id) {
 #ifdef _DEBUG
-            std::cout << id << "‚ğ¶¬" << std::endl;
+        std::cout << id << "‚ğ¶¬" << std::endl;
 #endif // _DEBUG
 
-            return std::make_unique<T>(data);
-        }
+        return std::make_unique<T>(data);
+       
     }
 
 private:

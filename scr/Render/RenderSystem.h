@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <vector>
-#include "CameraManager.h"
+#include "../CameraManager/CameraManager.h"
 
 class RenderSystem
 {

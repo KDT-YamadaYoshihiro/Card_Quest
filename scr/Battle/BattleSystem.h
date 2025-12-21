@@ -1,9 +1,11 @@
 #pragma once
+#include <SFML/Graphics.hpp>
 #include <vector>
 #include <memory>
 #include "../Character/Character.h"
 #include "../Battle/Cost/CostManager.h"
-#include "../Battle/Card/CardManager/CardManager.h"
+#include "../Card/CardManager/CardManager.h"
+#include "../Card/CardRenderer/CardRenderer.h"
 
 
 class BattleSystem {
@@ -25,10 +27,15 @@ private:
     std::vector<std::shared_ptr<Character>> m_enemies;
     // コスト管理
     std::unique_ptr<CostManager> m_cost;
+    // カード描画
+    std::unique_ptr<CardRenderer> m_renderer;
     // フェーズ
     TurnPhase m_phase;
     // ターン数
     int m_turnCount;
+
+    sf::Font m_font;
+
 
 public:
 
@@ -46,28 +53,27 @@ public:
     void Update();
 
     // 描画
-    void Render(RenderSystem& render);
+    void Render(sf::RenderWindow& window);
 
     // プレイヤーの勝利確認
     bool CheckWin() const {
 
-        for (auto e : m_enemies) {
-            if (e->GetStatus().dead) {
-                return true;
-            }
+        for (auto& e : m_enemies) {
+            if (!e->GetStatus().dead)
+                return false;
         }
-        return false;
+        return true;
     }
 
     // プレイヤーの敗北確認
     bool CheckLose() const {
         for (auto p : m_players) {
-            if (p->GetStatus().dead)
+            if (!p->GetStatus().dead)
             {
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     // カードとキャラクターの結びつけ

@@ -1,6 +1,6 @@
 #pragma once
 #include "CharacterData.h"
-#include "../Battle/Card/CardPool.h"
+#include "../Card/CardPool.h"
 
 class RenderSystem;
 
