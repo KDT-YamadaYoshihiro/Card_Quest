@@ -34,7 +34,7 @@ private:
     // ƒ^[ƒ“”
     int m_turnCount;
 
-    sf::Font m_font;
+    //sf::Font m_font;
 
 
 public:

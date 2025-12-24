@@ -18,7 +18,7 @@ public:
     // ƒRƒs[‹Ö~
     CardLoader(const CardLoader&) = delete;
     CardLoader& operator = (const CardLoader&) = delete;
-    static CardLoader& Instance()
+    static CardLoader& GetInstance()
     {
         static CardLoader instance;
         return instance;

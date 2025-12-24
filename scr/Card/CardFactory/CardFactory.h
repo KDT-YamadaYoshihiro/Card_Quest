@@ -25,7 +25,7 @@ public:
 	// ’P‘Ì¶¬
 	std::unique_ptr<Card> Create(int arg_id, int arg_ownerId)
 	{
-		const CardData* src = CardLoader::Instance().Get(arg_id);
+		const CardData* src = CardLoader::GetInstance().Get(arg_id);
 
 		if (!src)
 		{

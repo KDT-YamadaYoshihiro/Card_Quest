@@ -5,6 +5,7 @@
 #include "../Screen/SceneManager.h"
 #include "../CameraManager/CameraManager.h"
 #include "WindowSetting.h"
+#include "../../View/Font/FontManager.h"
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Sleep.hpp>
@@ -29,13 +30,15 @@ bool GameMain::Init()
 
     m_window.setFramerateLimit(60);
 
-    SceneManager::Instance().Init();
-    CameraManager::Instance().ViewInit({ 0.0f, 0.0f }, 
-        { WindowSetting::Instance().GetWindowSizeW(), WindowSetting::Instance().GetWindowSizeH()});
+    SceneManager::GetInstance().Init();
+    CameraManager::GetInstance().ViewInit({ 0.0f, 0.0f }, 
+        { WindowSetting::GetInstance().GetWindowSizeW(), WindowSetting::GetInstance().GetWindowSizeH()});
 
-	TextureLoader::Instance().LoadTextures("data/CSV/TextureData.csv");
-	CharacterLoader::Instance().Load("data/CSV/CharacterData.csv");
-    CardLoader::Instance().Load("data/CSV/CardData.csv");
+	TextureLoader::GetInstance().LoadTextures("data/CSV/TextureData.csv");
+	CharacterLoader::GetInstance().Load("data/CSV/CharacterData.csv");
+    CardLoader::GetInstance().Load("data/CSV/CardData.csv");
+    FontManager::GetInstance().FontLoad();
+
 
     return true;
 }
@@ -59,7 +62,7 @@ void GameMain::ProcessEvents()
     while (auto event = m_window.pollEvent())
     {
 
-        SceneManager::Instance().HandleEvent();
+        SceneManager::GetInstance().HandleEvent();
 
         if (event->is<sf::Event::Closed>())
         {
@@ -70,15 +73,15 @@ void GameMain::ProcessEvents()
 
 void GameMain::Update(float dt)
 {
-    SceneManager::Instance().Update();
-    CameraManager::Instance().ViewUpdate(dt);
+    SceneManager::GetInstance().Update();
+    CameraManager::GetInstance().ViewUpdate(dt);
 }
 
 
 void GameMain::Render()
 {
     m_window.clear(sf::Color::Black);
-    SceneManager::Instance().Render(m_window);
+    SceneManager::GetInstance().Render(m_window);
     m_window.display();
 }
 

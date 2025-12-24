@@ -6,7 +6,7 @@
 void SceneManager::Init()
 {
 
-    SceneManager::Instance().ChangeScreen<TitleScene>();
+    SceneManager::GetInstance().ChangeScreen<TitleScene>();
     // エラー確認
     if (m_screen == nullptr) {
         std::cout << "m_screenがnullです" << std::endl;

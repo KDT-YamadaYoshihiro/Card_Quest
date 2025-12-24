@@ -4,7 +4,7 @@
 
 void RenderSystem::ApplyCamera()
 {
-	m_window.setView(CameraManager::Instance().GetView());
+	m_window.setView(CameraManager::GetInstance().GetView());
 }
 
 void RenderSystem::ResetCamera()

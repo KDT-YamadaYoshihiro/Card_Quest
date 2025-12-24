@@ -17,7 +17,7 @@ public:
     // コピー禁止
     CharacterLoader(const CharacterLoader&) = delete;
     CharacterLoader& operator = (const CharacterLoader&) = delete;
-    static CharacterLoader& Instance()
+    static CharacterLoader& GetInstance()
     {
         static CharacterLoader instance;
         return instance;

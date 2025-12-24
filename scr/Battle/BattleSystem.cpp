@@ -2,6 +2,10 @@
 #include "../Battle/Calculation/Calculation.h"
 #include "../Character/Factory/CharacterFactory.h"
 #include "../Card/CardFactory/CardFactory.h"
+#include "../../View/Font/FontManager.h"
+
+#define FontMgr FontManager::GetInstance()
+
 
 // 初期化
 BattleSystem::BattleSystem()
@@ -12,11 +16,11 @@ BattleSystem::BattleSystem()
     CreateEntity();
     m_cost->Init(3);
 
-    if (!m_font.openFromFile("data/Font/genkai-mincho.ttf"))
-    {
-        // エラー処理（assert / ログなど）
-        throw std::runtime_error("Font load failed");
-    }
+    //if (!m_font.openFromFile("data/Font/genkai-mincho.ttf"))
+    //{
+    //    // エラー処理（assert / ログなど）
+    //    throw std::runtime_error("Font load failed");
+    //}
     m_renderer = std::make_unique<CardRenderer>();
 
 }
@@ -72,17 +76,17 @@ void BattleSystem::Render(sf::RenderWindow& window)
 {
 
     // 山札
-    m_renderer->DrawDeck(m_font,window, { 50.0f,300.0f }, CardManager::GetInstance().GetDeckCount());
+    m_renderer->DrawDeck(FontMgr.GetFont(), window, {50.0f,300.0f}, CardManager::GetInstance().GetDeckCount());
 
     // 墓地
-    m_renderer->DrawGrave(m_font, window,{150.0f, 300.0f}, CardManager::GetInstance().GetCemeteryCount());
+    m_renderer->DrawGrave(FontMgr.GetFont(), window,{150.0f, 300.0f}, CardManager::GetInstance().GetCemeteryCount());
 
     // 手札
     float x = 300.0f;
     for (const auto& card : CardManager::GetInstance().GetHandCard())
     {
-        m_renderer->DrawHand(m_font, window, { x, 300.0f }, *card);
-        x += 110.0f;
+        m_renderer->DrawHand(FontMgr.GetFont(), window, { x, 300.0f }, *card);
+        x += 130.0f;
     }
 }
 

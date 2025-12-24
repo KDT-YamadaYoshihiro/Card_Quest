@@ -31,7 +31,7 @@ public:
 	// ‘ã“ü‹Ö~AƒRƒs[‹Ö~
 	CameraManager(const CameraManager&) = delete;
 	CameraManager& operator = (const CameraManager&) = delete;
-	static CameraManager& Instance()
+	static CameraManager& GetInstance()
 	{
 		static CameraManager instance;
 		return instance;

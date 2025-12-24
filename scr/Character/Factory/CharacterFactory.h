@@ -21,7 +21,7 @@ public:
     template <typename T>
     std::shared_ptr<Character> CreateCharacter(int id)
     {
-        const CharacterData* src = CharacterLoader::Instance().Get(id);
+        const CharacterData* src = CharacterLoader::GetInstance().Get(id);
         if (!src)
         {
 #ifdef _DEBUG

@@ -15,7 +15,7 @@ void TitleScene::handleEvent()
     // キーボード判定
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space))
     {
-        SceneManager::Instance().ChangeScreen<IngameScene>();
+        SceneManager::GetInstance().ChangeScreen<IngameScene>();
     }
     
 
@@ -29,7 +29,7 @@ void TitleScene::Update()
 
 void TitleScene::Render(sf::RenderWindow& window)
 {
-    auto tex = TextureLoader::Instance().GetTextureID("test");
+    auto tex = TextureLoader::GetInstance().GetTextureID("test");
 
 	if (tex)
 	{

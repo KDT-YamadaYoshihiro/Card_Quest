@@ -16,7 +16,7 @@ public:
     // コピー禁止、代入禁止
     WindowSetting(const WindowSetting&) = delete;
     WindowSetting& operator=(const WindowSetting&) = delete;
-    static WindowSetting& Instance()
+    static WindowSetting& GetInstance()
     {
         static WindowSetting instance;
         return instance;

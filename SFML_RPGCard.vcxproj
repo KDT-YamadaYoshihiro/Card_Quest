@@ -143,9 +143,9 @@
     <ClCompile Include="scr\CSVLoad\TextureLoader\TextureLoader.cpp" />
     <ClCompile Include="scr\GameMain\GameMain.cpp" />
     <ClCompile Include="scr\GameMain\WindowSetting.cpp" />
-    <ClCompile Include="scr\Render\Animetion\Animation.cpp" />
+    <ClCompile Include="View\Render\Animetion\Animation.cpp" />
     <ClCompile Include="scr\CameraManager\CameraManager.cpp" />
-    <ClCompile Include="scr\Render\RenderSystem.cpp" />
+    <ClCompile Include="View\Render\RenderSystem.cpp" />
     <ClCompile Include="scr\Screen\IngameScene\IngameScene.cpp" />
     <ClCompile Include="scr\Screen\ResultScene\ResultScene.cpp" />
     <ClCompile Include="scr\Screen\ScreenManager.cpp" />
@@ -173,15 +173,16 @@
     <ClInclude Include="scr\CSVLoad\TextureLoader\TextureLoader.h" />
     <ClInclude Include="scr\GameMain\GameMain.h" />
     <ClInclude Include="scr\GameMain\WindowSetting.h" />
-    <ClInclude Include="scr\Render\Animetion\Animation.h" />
+    <ClInclude Include="View\Render\Animetion\Animation.h" />
     <ClInclude Include="scr\CameraManager\CameraManager.h" />
-    <ClInclude Include="scr\Render\RenderSystem.h" />
+    <ClInclude Include="View\Render\RenderSystem.h" />
     <ClInclude Include="scr\Screen\IngameScene\IngameScene.h" />
     <ClInclude Include="scr\Screen\ResultScene\ResultScene.h" />
     <ClInclude Include="scr\Screen\SceneBase.h" />
     <ClInclude Include="scr\Screen\SceneManager.h" />
     <ClInclude Include="scr\Screen\TitleScene\TitleScene.h" />
     <ClInclude Include="scr\UI\UIManager.h" />
+    <ClInclude Include="View\Font\FontManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -16,7 +16,7 @@ public:
     // コピー、代入禁止
     SceneManager(const SceneManager&) = delete;
     SceneManager& operator = (const SceneManager&) = delete;
-    static SceneManager& Instance() {
+    static SceneManager& GetInstance() {
         static SceneManager instance;
         return instance;
     }

@@ -19,7 +19,7 @@ public:
 	// コピー、代入禁止
 	TextureLoader(const TextureLoader&) = delete;
 	TextureLoader& operator = (const TextureLoader) = delete;
-	static TextureLoader& Instance()
+	static TextureLoader& GetInstance()
 	{
 		static TextureLoader instance;
 		return instance;
