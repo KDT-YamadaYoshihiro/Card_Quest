@@ -21,7 +21,7 @@ public:
     };
 
 private:
-    
+
     // キャラクター
     std::vector<std::shared_ptr<Character>> m_players;
     std::vector<std::shared_ptr<Character>> m_enemies;
@@ -34,13 +34,13 @@ private:
     // ターン数
     int m_turnCount;
 
-    //sf::Font m_font;
-
+    // 選択中カードindex
+    int m_choiceCardIndex;
 
 public:
 
-	BattleSystem();
-	virtual ~BattleSystem() = default;
+    BattleSystem();
+    virtual ~BattleSystem() = default;
 
     /// <summary>
     /// 初期化
@@ -50,10 +50,10 @@ public:
     /// <summary>
     /// 更新処理
     /// </summary>
-    void Update();
+    void Update(sf::RenderWindow& arg_window);
 
     // 描画
-    void Render(sf::RenderWindow& window);
+    void Render(sf::RenderWindow& arg_window);
 
     // プレイヤーの勝利確認
     bool CheckWin() const {
@@ -89,9 +89,12 @@ public:
 private:
     // プレイヤー,カード生成
     void CreateEntity();
+    // クリック関数(Player用）
+    int GetClickHandIndex(sf::RenderWindow& arg_window);
+
 
     void StartTurn();
-    void PlayerUpdate();
+    void PlayerUpdate(sf::RenderWindow& arg_window);
     void EnemyUpdate();
     void EndTurn();
 };

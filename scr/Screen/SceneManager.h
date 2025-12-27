@@ -24,8 +24,8 @@ public:
 
     // 更新・描画・イベント
     void Init();
-    void Update();
-    void Render(sf::RenderWindow& window);
+    void Update(sf::RenderWindow& arg_window);
+    void Render(sf::RenderWindow& arg_window);
     void HandleEvent();
 
     template <typename T>

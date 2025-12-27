@@ -25,8 +25,8 @@ public:
 
 	void Init() override;
 	void handleEvent() override;
-	void Update() override;
-	void Render(sf::RenderWindow& window) override;
+	void Update(sf::RenderWindow& arg_window) override;
+	void Render(sf::RenderWindow& arg_window) override;
 	void End() override;
 
 

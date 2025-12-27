@@ -16,9 +16,9 @@ void SceneManager::Init()
     m_screen->Init();
 }
 
-void SceneManager::Update()
+void SceneManager::Update(sf::RenderWindow& arg_window)
 {
-    m_screen->Update();
+    m_screen->Update(arg_window);
 }
 
 void SceneManager::Render(sf::RenderWindow& window)

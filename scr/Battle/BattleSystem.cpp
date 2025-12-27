@@ -4,32 +4,30 @@
 #include "../Card/CardFactory/CardFactory.h"
 #include "../../View/Font/FontManager.h"
 
+// フォントのインスタンス取得省略
 #define FontMgr FontManager::GetInstance()
-
 
 // 初期化
 BattleSystem::BattleSystem()
     :m_cost(std::make_unique<CostManager>()),
     m_phase(TurnPhase::StartTurn),
-    m_turnCount(1)
+    m_turnCount(1),
+    m_choiceCardIndex(0)
 {
     CreateEntity();
     m_cost->Init(3);
 
-    //if (!m_font.openFromFile("data/Font/genkai-mincho.ttf"))
-    //{
-    //    // エラー処理（assert / ログなど）
-    //    throw std::runtime_error("Font load failed");
-    //}
     m_renderer = std::make_unique<CardRenderer>();
 
 }
 
+// 初期化
 void BattleSystem::Init()
 {
 }
 
-void BattleSystem::Update()
+// 更新
+void BattleSystem::Update(sf::RenderWindow& arg_window)
 {
     //if (CheckWin() || CheckLose()) {
     //    m_phase = TurnPhase::EndTurn;
@@ -48,7 +46,7 @@ void BattleSystem::Update()
     case TurnPhase::PlayerTurn:
 
         // プレイヤーアップデートを呼ぶ
-        PlayerUpdate();
+        PlayerUpdate(arg_window);
 
         break;
 
@@ -72,6 +70,7 @@ void BattleSystem::Update()
 
 }
 
+// 描画
 void BattleSystem::Render(sf::RenderWindow& window)
 {
 
@@ -82,14 +81,30 @@ void BattleSystem::Render(sf::RenderWindow& window)
     m_renderer->DrawGrave(FontMgr.GetFont(), window,{150.0f, 300.0f}, CardManager::GetInstance().GetCemeteryCount());
 
     // 手札
+    // ベース座標
     float x = 300.0f;
-    for (const auto& card : CardManager::GetInstance().GetHandCard())
+    float baseY = 300.0f;
+    // カード情報の取得
+    const auto& handCard = CardManager::GetInstance().GetHandCard();
+    // 個々のカード情報
+    for (size_t i = 0; i < handCard.size(); i++)
     {
-        m_renderer->DrawHand(FontMgr.GetFont(), window, { x, 300.0f }, *card);
+        // 座標の変更
+        float y = baseY;
+
+        if(static_cast<int>(i) == m_choiceCardIndex)
+        {
+            // 選択中カードを浮かす
+            y -= 30;
+        }
+        // 描画
+        m_renderer->DrawHand(FontMgr.GetFont(), window, { x, y }, *handCard[i]);
+        // 一枚ごとにx座標をずらす
         x += 130.0f;
     }
 }
 
+// カードの使用
 void BattleSystem::OnUseCard(size_t arg_handIndex,size_t arg_targetIndex)
 {
     auto result = CardManager::GetInstance().UseCard(arg_handIndex);
@@ -101,6 +116,7 @@ void BattleSystem::OnUseCard(size_t arg_handIndex,size_t arg_targetIndex)
     ApplyCardAction(result,owner,target);
 }
 
+// カード使用時の影響
 void BattleSystem::ApplyCardAction(const CardUseResult& result, std::shared_ptr<Character> arg_owner, std::shared_ptr<Character> arg_target)
 {
 
@@ -135,6 +151,7 @@ void BattleSystem::ApplyCardAction(const CardUseResult& result, std::shared_ptr<
 
 }
 
+// 生成関数
 void BattleSystem::CreateEntity()
 {
 
@@ -157,6 +174,43 @@ void BattleSystem::CreateEntity()
 
 }
 
+// クリック判定
+int BattleSystem::GetClickHandIndex(sf::RenderWindow& arrg_window)
+{
+    // カードのサイズ
+    constexpr float CARD_W = 120.0f;
+    constexpr float CARD_H = 160.0f;
+
+    // カードの描画開始地点
+    float startX = 300.0f;
+    float y = 300.0f;
+
+    // マウスの座標
+    auto mouse = sf::Mouse::getPosition(arrg_window);
+    sf::Vector2f mousePos(static_cast<float>(mouse.x), static_cast<float>(mouse.y));
+
+    // カード情報
+    const auto& hand = CardManager::GetInstance().GetHandCard();
+
+    // クリック判定
+    for (size_t i = 0; i < hand.size(); i++)
+    {
+        sf::FloatRect rect({ startX + i * 130.0f, y }, { CARD_W, CARD_H });
+    
+        if (rect.contains(mousePos))
+        {
+            // クリックしたインデックスを返す
+            return i;
+        }
+
+    }
+
+    // どれもクリックされていない
+    return -1;
+
+}
+
+// ターン開始時
 void BattleSystem::StartTurn()
 {
     // 手札補充
@@ -169,21 +223,35 @@ void BattleSystem::StartTurn()
     m_phase = TurnPhase::PlayerTurn;
 }
 
-void BattleSystem::PlayerUpdate()
+// プレイヤー更新
+void BattleSystem::PlayerUpdate(sf::RenderWindow& arg_window)
 {
     // カードを選択
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+    {
+        int index = GetClickHandIndex(arg_window);
 
+        if (index >= 0)
+        {
+            m_choiceCardIndex = index;
+            // ログ
+            std::cout << "クリックしたカード:" << index << std::endl;
+        }
+    }
 
-    // 選択したカードでプレイヤーがアクション
-    m_players[/*ここに選択カード者指定*/1]->Update();
-
+    // 決定ボタンを押したとき
     
+    //// 選択したカードでプレイヤーがアクション
+    //m_players[/*ここに選択カード者指定*/1]->Update();
 
-    // 終了時
-    // ターン終了ボタンが押されたとき
-    m_phase = TurnPhase::EnemyTurn;
+    //
+
+    //// 終了時
+    //// ターン終了ボタンが押されたとき
+    //m_phase = TurnPhase::EnemyTurn;
 }
 
+// エネミー更新
 void BattleSystem::EnemyUpdate()
 {
     // エネミーはカードをランダムで選択一回だけアクションを起こして終了
@@ -197,6 +265,7 @@ void BattleSystem::EnemyUpdate()
     m_phase = TurnPhase::EndTurn;
 }
 
+// ターン終了時
 void BattleSystem::EndTurn()
 {
 	// ターン数を増やす

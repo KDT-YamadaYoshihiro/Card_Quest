@@ -8,11 +8,11 @@ void ResultScene::handleEvent()
 {
 }
 
-void ResultScene::Update()
+void ResultScene::Update(sf::RenderWindow& arg_window)
 {
 }
 
-void ResultScene::Render(sf::RenderWindow& window)
+void ResultScene::Render(sf::RenderWindow& arg_window)
 {
 }
 

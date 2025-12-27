@@ -16,14 +16,14 @@ void IngameScene::handleEvent()
 	//}
 }
 
-void IngameScene::Update()
+void IngameScene::Update(sf::RenderWindow& arg_window)
 {
-	battle->Update();
+	battle->Update(arg_window);
 }
 
-void IngameScene::Render(sf::RenderWindow& window)
+void IngameScene::Render(sf::RenderWindow& arg_window)
 {	
-	battle->Render(window);
+	battle->Render(arg_window);
 }
 
 void IngameScene::End()

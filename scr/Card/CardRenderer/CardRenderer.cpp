@@ -73,6 +73,14 @@ void CardRenderer::DrawHand(const sf::Font& arg_font, sf::RenderWindow& window, 
 
 }
 
+/// <summary>
+/// 改行処理
+/// </summary>
+/// <param name="arg_src"></param>
+/// <param name="arg_font">フォント</param>
+/// <param name="arg_charSize"></param>
+/// <param name="arg_maxWidth"></param>
+/// <returns></returns>
 sf::String CardRenderer::WarpText(const sf::String& arg_src, const sf::Font& arg_font, unsigned int arg_charSize, float arg_maxWidth)
 {
     sf::String result;

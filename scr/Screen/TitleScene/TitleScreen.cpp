@@ -22,7 +22,7 @@ void TitleScene::handleEvent()
 
 }
 
-void TitleScene::Update()
+void TitleScene::Update(sf::RenderWindow& arg_window)
 {
 	
 }

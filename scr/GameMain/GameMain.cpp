@@ -73,7 +73,7 @@ void GameMain::ProcessEvents()
 
 void GameMain::Update(float dt)
 {
-    SceneManager::GetInstance().Update();
+    SceneManager::GetInstance().Update(m_window);
     CameraManager::GetInstance().ViewUpdate(dt);
 }
 
