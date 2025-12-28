@@ -9,13 +9,15 @@ class Character
 	
 	CharacterData m_status;
 	Position m_pos;
+	bool m_focused;
 
 public:
 
 	// 初期化
 	Character(CharacterData& arg_data)
 		:m_status(arg_data),
-		m_pos({0,0})
+		m_pos({ 0,0 }),
+		m_focused(false)
 	{
 
 	}
@@ -67,4 +69,8 @@ public:
 	CharacterData GetStatus() const { return m_status; }
 	// 座標の取得
 	Position GetPos() const { return m_pos; }
+
+	// フォーカス
+	void SetFocused(bool arg_focused) { m_focused = arg_focused; }
+	bool GetFocused() const { return m_focused; };
 };

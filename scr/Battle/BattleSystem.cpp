@@ -102,6 +102,11 @@ void BattleSystem::Render(sf::RenderWindow& window)
         // 一枚ごとにx座標をずらす
         x += 130.0f;
     }
+
+
+    // カード選択決定ボタン
+    
+
 }
 
 // カードの使用
@@ -210,6 +215,38 @@ int BattleSystem::GetClickHandIndex(sf::RenderWindow& arrg_window)
 
 }
 
+// カード選択時のキャラクターフォーカス
+void BattleSystem::UpdateCardOwnerFocus()
+{
+
+    // 全キャラクターのフォーカスを解除
+    for (auto& p : m_players)
+    {
+        p->SetFocused(false);
+    }
+
+    // カード未選択なら終了
+    if (m_choiceCardIndex < 0)
+    {
+        return;
+    }
+
+    const auto& hand = CardManager::GetInstance().GetHandCard();
+
+    if (m_choiceCardIndex >= static_cast<int>(hand.size()))
+    {
+        return;
+    }
+
+    int ownerID = hand[m_choiceCardIndex]->GetOwnerId();
+
+    if (ownerID >= 0 && ownerID < static_cast<int>(m_players.size()))
+    {
+        m_players[ownerID]->SetFocused(true);
+    }
+
+}
+
 // ターン開始時
 void BattleSystem::StartTurn()
 {
@@ -233,8 +270,13 @@ void BattleSystem::PlayerUpdate(sf::RenderWindow& arg_window)
 
         if (index >= 0)
         {
+            // 
             m_choiceCardIndex = index;
+            // フォーカス設定
+            UpdateCardOwnerFocus();
+
             // ログ
+            std::system("cls");
             std::cout << "クリックしたカード:" << index << std::endl;
         }
     }

@@ -91,7 +91,8 @@ private:
     void CreateEntity();
     // クリック関数(Player用）
     int GetClickHandIndex(sf::RenderWindow& arg_window);
-
+    // フォーカス
+    void UpdateCardOwnerFocus();
 
     void StartTurn();
     void PlayerUpdate(sf::RenderWindow& arg_window);
