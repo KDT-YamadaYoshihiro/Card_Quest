@@ -143,6 +143,7 @@
     <ClCompile Include="scr\CSVLoad\TextureLoader\TextureLoader.cpp" />
     <ClCompile Include="scr\GameMain\GameMain.cpp" />
     <ClCompile Include="scr\GameMain\WindowSetting.cpp" />
+    <ClCompile Include="scr\Battle\SelectTarget\TargetSelect.cpp" />
     <ClCompile Include="View\Render\Animetion\Animation.cpp" />
     <ClCompile Include="scr\CameraManager\CameraManager.cpp" />
     <ClCompile Include="View\Render\RenderSystem.cpp" />
@@ -173,6 +174,7 @@
     <ClInclude Include="scr\CSVLoad\TextureLoader\TextureLoader.h" />
     <ClInclude Include="scr\GameMain\GameMain.h" />
     <ClInclude Include="scr\GameMain\WindowSetting.h" />
+    <ClInclude Include="scr\Battle\SelectTarget\TargetSelect.h" />
     <ClInclude Include="View\Render\Animetion\Animation.h" />
     <ClInclude Include="scr\CameraManager\CameraManager.h" />
     <ClInclude Include="View\Render\RenderSystem.h" />

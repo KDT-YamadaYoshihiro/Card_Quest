@@ -35,3 +35,11 @@ struct CharacterData
 	std::vector<int> cardIds;
 
 };
+
+// ê∂ê¨å„Ç…égóp
+enum class Faction
+{
+	Player,
+	Enemy,
+	Neutral
+};

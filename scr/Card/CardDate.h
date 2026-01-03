@@ -13,8 +13,8 @@ enum class CardZone
 // ターゲットタイプ
 enum class TargetType
 {
-	ENEMY,
-	ENEMY_ALL,
+	OPPONENT,
+	OPPONENT_ALL,
 	SELF,
 	ALLY,
 	ALLY_ALL

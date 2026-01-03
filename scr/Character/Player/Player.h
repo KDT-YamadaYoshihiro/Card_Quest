@@ -12,7 +12,7 @@ public:
 
 	Player(CharacterData& arg_data) :Character(arg_data),animetion(nullptr)
 	{
-
+		m_faction = Faction::Player;
 	}
 
 	void Update() override;

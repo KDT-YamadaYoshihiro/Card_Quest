@@ -7,8 +7,11 @@ class RenderSystem;
 class Character
 {
 	
+protected:
+
 	CharacterData m_status;
 	Position m_pos;
+	Faction m_faction;
 	bool m_focused;
 
 public:
@@ -21,6 +24,9 @@ public:
 	{
 
 	}
+
+	bool IsPlayer() const { return m_faction == Faction::Player; }
+	bool IsEnemy()  const { return m_faction == Faction::Enemy; }
 
 
 	// 更新
@@ -69,6 +75,8 @@ public:
 	CharacterData GetStatus() const { return m_status; }
 	// 座標の取得
 	Position GetPos() const { return m_pos; }
+	// 選択時の当たり判定
+	virtual sf::FloatRect GetHitCircle() const = 0;
 
 	// フォーカス
 	void SetFocused(bool arg_focused) { m_focused = arg_focused; }

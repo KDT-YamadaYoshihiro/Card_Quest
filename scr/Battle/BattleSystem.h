@@ -93,6 +93,10 @@ private:
     int GetClickHandIndex(sf::RenderWindow& arg_window);
     // フォーカス
     void UpdateCardOwnerFocus();
+    // アクションキャラの取得
+    std::shared_ptr<Character> GetActionCharacterFromCard(const Card& arg_card);
+    // ターゲット候補作成
+    std::vector<std::shared_ptr<Character>> MakeTargetCandidates(const std::shared_ptr<Character>& arg_actionChara, TargetType arg_targetType);
 
     void StartTurn();
     void PlayerUpdate(sf::RenderWindow& arg_window);

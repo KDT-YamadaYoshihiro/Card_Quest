@@ -10,18 +10,18 @@ class Calculation
 public:
 
 	// 加法
-	float GetAddition(float arg_a, float arg_b);
+	static float GetAddition(float arg_a, float arg_b);
 
 	// 減法
-	float GetSubtraction(float arg_a, float arg_b);
+	static float GetSubtraction(float arg_a, float arg_b);
 
 	// 乗法
-	float GetMultiplicative(float arg_a, float arg_b);
+	static float GetMultiplicative(float arg_a, float arg_b);
 
 	// 除法
-	float GetDivision(float arg_a, float arg_b);
+	static float GetDivision(float arg_a, float arg_b);
 
 	// ダメージ計算
-	float GetDamage(float arg_atk, float arg_card, float arg_def);
+	static float GetDamage(float arg_atk, float arg_card, float arg_def);
 
 };

@@ -3,6 +3,7 @@
 #include "../Character/Factory/CharacterFactory.h"
 #include "../Card/CardFactory/CardFactory.h"
 #include "../../View/Font/FontManager.h"
+#include "../Battle/SelectTarget/TargetSelect.h"
 
 // フォントのインスタンス取得省略
 #define FontMgr FontManager::GetInstance()
@@ -114,39 +115,73 @@ void BattleSystem::OnUseCard(size_t arg_handIndex,size_t arg_targetIndex)
 {
     auto result = CardManager::GetInstance().UseCard(arg_handIndex);
     auto& owner = m_players[result.ownerID];
-    auto& target = m_players[arg_targetIndex];
-    // フォーカス演出
+    // ターゲットを選択したとき
+    if (hand[m_choiceCardIndex]->GetCardState().targetType == TargetType::OPPONENT ||
+        hand[m_choiceCardIndex]->GetCardState().targetType == TargetType::ALLY)
+    {
+        auto target = TargetSelect::SelectSingle(candidates, arg_window);
 
-    // 効果適用
-    ApplyCardAction(result,owner,target);
+        ApplyCardAction(result, owner, target);
+    }
+    else
+    {
+        auto targets = TargetSelect::SelectAll(candidates);
+
+        for (auto& t : targets) {
+            ApplyCardAction(result, owner, t);
+        }
+    }
+
 }
 
 // カード使用時の影響
 void BattleSystem::ApplyCardAction(const CardUseResult& result, std::shared_ptr<Character> arg_owner, std::shared_ptr<Character> arg_target)
 {
 
+    const CardData& data = result.effect;
+
     switch (result.effect.actionType)
     {
 
     case ActionType::ATTCK:
-        /*arg_target->TakeDamage();*/
+
+        // 物理攻撃：使用者ATK × カード威力
+        float damage = Calculation::GetDamage(
+            arg_owner->GetStatus().atk,
+            data.power,
+            arg_target->GetStatus().def
+        );
+
+        arg_target->TakeDamage(damage);
         break;
 
     case ActionType::MAGIC:
 
-        /*arg_target->TakeDamage();*/
+        float damage = Calculation::GetDamage(
+            arg_owner->GetStatus().magicAtk,
+            data.power,
+            arg_target->GetStatus().def
+        );
+
+        arg_target->TakeDamage(damage);
 
         break;
 
     case ActionType::HEAL:
         
-        /*arg_target->TakeHeal();*/
+        // 回復：カード威力分回復
+        float heal = Calculation::GetMultiplicative(
+            arg_owner->GetStatus().maxHp,
+            data.power
+        );
+
+        arg_target->TakeHeal(heal);
 
         break;
-
     case ActionType::BUFF:
 
-        //arg_target->TakeHeal();
+        // カードpower分を加算
+        arg_target->TakeBuff(data.power);
 
         break;
 
@@ -166,7 +201,7 @@ void BattleSystem::CreateEntity()
         m_players.push_back(player);
 
         const std::vector<int>& cardIds = player->GetStatus().cardIds;
-        auto cards = CardFactory::GetInstance().CreateDeck(cardIds);
+        auto cards = CardFactory::GetInstance().CreateDeck(cardIds,i);
 
         if (i == 1) {
             CardManager::GetInstance().InitDeck(std::move(cards));
@@ -231,6 +266,7 @@ void BattleSystem::UpdateCardOwnerFocus()
         return;
     }
 
+    // カード情報の取得
     const auto& hand = CardManager::GetInstance().GetHandCard();
 
     if (m_choiceCardIndex >= static_cast<int>(hand.size()))
@@ -238,12 +274,86 @@ void BattleSystem::UpdateCardOwnerFocus()
         return;
     }
 
-    int ownerID = hand[m_choiceCardIndex]->GetOwnerId();
-
-    if (ownerID >= 0 && ownerID < static_cast<int>(m_players.size()))
+    // 行動アクションを取得
+    auto actionChara = GetActionCharacterFromCard(*hand[m_choiceCardIndex]);
+    if (!actionChara)
     {
-        m_players[ownerID]->SetFocused(true);
+        return;
     }
+
+    actionChara->SetFocused(true);
+}
+
+// カード情報からリンクするキャラクターを取得する
+std::shared_ptr<Character> BattleSystem::GetActionCharacterFromCard(const Card& arg_card)
+{
+    int ownerId = arg_card.GetOwnerId();
+
+    if (ownerId < 0 || ownerId >= static_cast<int>(m_players.size()))
+    {
+        return nullptr;
+    }
+
+    return m_players[ownerId];
+}
+
+// ターゲット候補の作成
+std::vector<std::shared_ptr<Character>> BattleSystem::MakeTargetCandidates(const std::shared_ptr<Character>& arg_actionChara, TargetType arg_targetType)
+{
+
+    std::vector<std::shared_ptr<Character>> result;
+
+    auto pushAlive = [&](const std::vector<std::shared_ptr<Character>>& list)
+        {
+
+            for (const auto& c : list)
+            {
+                if (c && !c->GetStatus().dead)
+                {
+                    result.push_back(c);
+                }
+            }
+
+        };
+
+
+    switch (arg_targetType)
+    {
+    case TargetType::OPPONENT:
+    case TargetType::OPPONENT_ALL:
+
+        if (arg_actionChara->IsPlayer())
+        {
+            pushAlive(m_enemies);
+        }
+        else
+        {
+            pushAlive(m_players);
+        }
+
+        break;
+    case TargetType::SELF:
+
+        result.push_back(arg_actionChara);
+
+        break;
+    case TargetType::ALLY:
+    case TargetType::ALLY_ALL:
+
+        if (arg_actionChara->IsPlayer())
+        {
+            pushAlive(m_players);
+        }
+        else
+        {
+            pushAlive(m_enemies);
+        }
+
+        break;
+    default:
+        break;
+    }
+
 
 }
 
@@ -281,10 +391,32 @@ void BattleSystem::PlayerUpdate(sf::RenderWindow& arg_window)
         }
     }
 
-    // 決定ボタンを押したとき
-    
-    //// 選択したカードでプレイヤーがアクション
-    //m_players[/*ここに選択カード者指定*/1]->Update();
+    // 候補者を作成
+    auto& hand = CardManager::GetInstance().GetHandCard();
+    auto actionChara = GetActionCharacterFromCard(*hand[m_choiceCardIndex]);
+    auto candidates = MakeTargetCandidates(actionChara, hand[m_choiceCardIndex]->GetCardState().targetType);
+    CardUseResult result = { hand[m_choiceCardIndex]->GetCardState(),hand[m_choiceCardIndex]->GetOwnerId() };
+
+    // ターゲットを選択したとき
+    if (hand[m_choiceCardIndex]->GetCardState().targetType == TargetType::OPPONENT ||
+        hand[m_choiceCardIndex]->GetCardState().targetType == TargetType::ALLY)
+    {
+        auto target = TargetSelect::SelectSingle(candidates,arg_window);
+
+        ApplyCardAction(result, actionChar, target);
+    }
+    else
+    {
+        auto targets = TargetSelect::SelectAll(candidates);
+
+        for (auto& t : targets) {
+            ApplyCardAction(result, actionChar, t);
+        }
+    }
+    // カードの使用
+
+    // 選択したカード所持者のプレイヤーがアクション
+    //m_players[/*ここに選択カード者指定*/]->Update();
 
     //
 

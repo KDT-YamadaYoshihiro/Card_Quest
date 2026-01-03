@@ -10,7 +10,7 @@ public:
 
 	Enemy(CharacterData& arg_data) :Character(arg_data)
 	{
-
+		m_faction = Faction::Enemy;
 	}
 
 	void Update() override;

@@ -44,14 +44,14 @@ public:
 	}
 
 	// ï°êîê∂ê¨
-	std::vector<std::unique_ptr<Card>> CreateDeck(const std::vector<int>& arg_id) {
+	std::vector<std::unique_ptr<Card>> CreateDeck(const std::vector<int>& arg_id, int arg_ownerId) {
 
 		std::vector<std::unique_ptr<Card>> deck;
 		deck.reserve(arg_id.size());
 
 		for (int id : arg_id)
 		{
-			auto card = Create(id, id);
+			auto card = Create(id, arg_ownerId);
 			if (card) {
 				deck.emplace_back(std::move(card));
 			}
