@@ -214,42 +214,6 @@ void BattleSystem::CreateEntity()
 
 }
 
-// クリック判定
-int BattleSystem::GetClickHandIndex(sf::RenderWindow& arrg_window)
-{
-    // カードのサイズ
-    constexpr float CARD_W = 120.0f;
-    constexpr float CARD_H = 160.0f;
-
-    // カードの描画開始地点
-    float startX = 300.0f;
-    float y = 300.0f;
-
-    // マウスの座標
-    auto mouse = sf::Mouse::getPosition(arrg_window);
-    sf::Vector2f mousePos(static_cast<float>(mouse.x), static_cast<float>(mouse.y));
-
-    // カード情報
-    const auto& hand = CardManager::GetInstance().GetHandCard();
-
-    // クリック判定
-    for (size_t i = 0; i < hand.size(); i++)
-    {
-        sf::FloatRect rect({ startX + i * 130.0f, y }, { CARD_W, CARD_H });
-    
-        if (rect.contains(mousePos))
-        {
-            // クリックしたインデックスを返す
-            return i;
-        }
-
-    }
-
-    // どれもクリックされていない
-    return -1;
-
-}
-
 // カード選択時のキャラクターフォーカス
 void BattleSystem::UpdateCardOwnerFocus()
 {
@@ -373,23 +337,6 @@ void BattleSystem::StartTurn()
 // プレイヤー更新
 void BattleSystem::PlayerUpdate(sf::RenderWindow& arg_window)
 {
-    // カードを選択
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
-    {
-        int index = GetClickHandIndex(arg_window);
-
-        if (index >= 0)
-        {
-            // 
-            m_choiceCardIndex = index;
-            // フォーカス設定
-            UpdateCardOwnerFocus();
-
-            // ログ
-            std::system("cls");
-            std::cout << "クリックしたカード:" << index << std::endl;
-        }
-    }
 
     // 候補者を作成
     auto& hand = CardManager::GetInstance().GetHandCard();

@@ -89,8 +89,6 @@ public:
 private:
     // プレイヤー,カード生成
     void CreateEntity();
-    // クリック関数(Player用）
-    int GetClickHandIndex(sf::RenderWindow& arg_window);
     // フォーカス
     void UpdateCardOwnerFocus();
     // アクションキャラの取得
