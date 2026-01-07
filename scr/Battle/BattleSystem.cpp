@@ -346,13 +346,8 @@ void BattleSystem::PlayerUpdate(sf::RenderWindow& window)
 		// アクション適用
         ApplyAction(m_userController->PopAction());
 
-		// 次のプレイヤーへ
-        m_currentPlayerIndex++;
-        if (m_currentPlayerIndex >= m_players.size())
-        {
-            m_currentPlayerIndex = 0;
-            m_phase = TurnPhase::EnemyTurn;
-        }
+		// 終了ボタンが押されたらターン終了
+		
     }
 }
 
