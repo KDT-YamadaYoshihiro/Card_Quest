@@ -131,7 +131,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="scr\Battle\PlayerController\PlayerController.cpp" />
+    <ClCompile Include="scr\Battle\BattleContex\BattleContex.cpp" />
+    <ClCompile Include="scr\Battle\UserController\UserController.cpp" />
     <ClCompile Include="scr\Card\CardRenderer\CardRenderer.cpp" />
     <ClCompile Include="scr\Battle\BattleView\BattleView.cpp" />
     <ClCompile Include="scr\Card\CardManager\CardManager.cpp" />
@@ -154,8 +155,9 @@
     <ClCompile Include="scr\Screen\TitleScene\TitleScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="scr\Battle\PlayerController\ActionData.h" />
-    <ClInclude Include="scr\Battle\PlayerController\PlayerController.h" />
+    <ClInclude Include="scr\Battle\BattleContex\BattleContex.h" />
+    <ClInclude Include="scr\Battle\UserController\ActionData.h" />
+    <ClInclude Include="scr\Battle\UserController\UserController.h" />
     <ClInclude Include="scr\Card\CardRenderer\CardRenderer.h" />
     <ClInclude Include="scr\Battle\BattleView\BattleView.h" />
     <ClInclude Include="scr\Card\CardManager\CardManager.h" />

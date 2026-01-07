@@ -6,6 +6,7 @@
 #include "../Battle/Cost/CostManager.h"
 #include "../Card/CardManager/CardManager.h"
 #include "../Card/CardRenderer/CardRenderer.h"
+#include "../Battle/BattleContex/BattleContex.h"
 
 
 class BattleSystem {
@@ -15,7 +16,7 @@ public:
     // フェーズ
     enum class TurnPhase {
         StartTurn,
-        PlayerTurn,
+        UserTurn,
         EnemyTurn,
         EndTurn
     };
@@ -25,6 +26,8 @@ private:
     // キャラクター
     std::vector<std::shared_ptr<Character>> m_players;
     std::vector<std::shared_ptr<Character>> m_enemies;
+	// プレイヤーコントローラー
+    std::unique_ptr<UserController> m_userController;
     // コスト管理
     std::unique_ptr<CostManager> m_cost;
     // カード描画
@@ -34,6 +37,8 @@ private:
     // ターン数
     int m_turnCount;
 
+	// 現在のプレイヤーindex
+    size_t m_currentPlayerIndex = 0;
     // 選択中カードindex
     int m_choiceCardIndex;
 
@@ -79,7 +84,7 @@ public:
     // カードとキャラクターの結びつけ
     void OnUseCard(size_t arg_handIndex, size_t arg_targetIndex);
 
-    void ApplyCardAction(const CardUseResult& result, std::shared_ptr<Character> arg_owner, std::shared_ptr<Character> arg_target);
+    void ApplyAction(const Action& action);
 
     // 現在のフェーズの取得
     TurnPhase GetTurnPhase() const { return m_phase; }
@@ -94,8 +99,7 @@ private:
     // アクションキャラの取得
     std::shared_ptr<Character> GetActionCharacterFromCard(const Card& arg_card);
     // ターゲット候補作成
-    std::vector<std::shared_ptr<Character>> MakeTargetCandidates(const std::shared_ptr<Character>& arg_actionChara, TargetType arg_targetType);
-
+    std::vector<std::shared_ptr<Character>> MakeTargetCandidates(const std::shared_ptr<Character>& actionChara, TargetType targetType) const;
     void StartTurn();
     void PlayerUpdate(sf::RenderWindow& arg_window);
     void EnemyUpdate();

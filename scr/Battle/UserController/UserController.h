@@ -17,26 +17,34 @@ enum class PlayerSelectPhase
     CONFIRM
 };
 
-class PlayerController
+class UserController
 {
 public:
-    PlayerController(std::shared_ptr<Character> player);
 
+    // コンストラクタ
+    UserController();
+
+    // アクションキャラのセット
+    void SetActionCharacter(const std::shared_ptr<Character>& character);
+    // ターゲット候補のセット
+    void SetTargetCandidates(const std::vector<std::shared_ptr<Character>>& targets);
     // 更新
-    void Update();
+    void Update(sf::RenderWindow& window);
    
     bool HasAction() const;
     Action PopAction();
 
 private:
-    // プレイヤー
-    std::shared_ptr<Character> m_player;
     // 現在のフェーズ
     PlayerSelectPhase m_phase;
-    // 選択カードのindex
-    int m_selectedCardIndex = -1;
+    // アクションキャラ
+    std::shared_ptr<Character> m_actionCharacter;
     // 選択カード
     std::optional<CardData> m_selectedCard;
+    // 選択カードのindex
+    int m_selectedCardIndex = -1;
+    // ターゲット候補
+    std::vector<std::shared_ptr<Character>> m_targetCandidates;
     // 選択ターゲット
     std::vector<std::shared_ptr<Character>> m_selectedTargets;
     // アクションデータ
@@ -50,6 +58,6 @@ private:
     void SelectTarget(sf::RenderWindow& window);
     //  クリック判定
     int GetClickHandIndex(sf::RenderWindow& window) const;
-    // 
+    // 決定ボタンがクリックされたか
     bool IsDecisionButtonClicked(sf::RenderWindow& window) const;
 };

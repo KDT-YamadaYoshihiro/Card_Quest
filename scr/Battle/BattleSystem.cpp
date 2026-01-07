@@ -4,22 +4,24 @@
 #include "../Card/CardFactory/CardFactory.h"
 #include "../../View/Font/FontManager.h"
 #include "../Battle/SelectTarget/TargetSelect.h"
+#include "../Battle/UserController/UserController.h"
+#include "../Battle/UserController/ActionData.h"
 
 // フォントのインスタンス取得省略
 #define FontMgr FontManager::GetInstance()
 
 // 初期化
 BattleSystem::BattleSystem()
-    :m_cost(std::make_unique<CostManager>()),
+	:m_cost(std::make_unique<CostManager>()),
+	m_renderer(std::make_unique<CardRenderer>()),
     m_phase(TurnPhase::StartTurn),
     m_turnCount(1),
     m_choiceCardIndex(0)
 {
+	// エンティティ作成
     CreateEntity();
+	// コスト初期化
     m_cost->Init(3);
-
-    m_renderer = std::make_unique<CardRenderer>();
-
 }
 
 // 初期化
@@ -30,10 +32,10 @@ void BattleSystem::Init()
 // 更新
 void BattleSystem::Update(sf::RenderWindow& arg_window)
 {
-    //if (CheckWin() || CheckLose()) {
-    //    m_phase = TurnPhase::EndTurn;
-    //    return;
-    //}
+    if (CheckWin() || CheckLose()) {
+        m_phase = TurnPhase::EndTurn;
+        return;
+    }
 
     switch (m_phase) {
 
@@ -44,7 +46,7 @@ void BattleSystem::Update(sf::RenderWindow& arg_window)
 
         break;
 
-    case TurnPhase::PlayerTurn:
+    case TurnPhase::UserTurn:
 
         // プレイヤーアップデートを呼ぶ
         PlayerUpdate(arg_window);
@@ -113,82 +115,60 @@ void BattleSystem::Render(sf::RenderWindow& window)
 // カードの使用
 void BattleSystem::OnUseCard(size_t arg_handIndex,size_t arg_targetIndex)
 {
-    auto result = CardManager::GetInstance().UseCard(arg_handIndex);
-    auto& owner = m_players[result.ownerID];
-    // ターゲットを選択したとき
-    if (hand[m_choiceCardIndex]->GetCardState().targetType == TargetType::OPPONENT ||
-        hand[m_choiceCardIndex]->GetCardState().targetType == TargetType::ALLY)
-    {
-        auto target = TargetSelect::SelectSingle(candidates, arg_window);
+    //auto result = CardManager::GetInstance().UseCard(arg_handIndex);
+    //auto& owner = m_players[result.ownerID];
+    //// ターゲットを選択したとき
+    //if (hand[m_choiceCardIndex]->GetCardState().targetType == TargetType::OPPONENT ||
+    //    hand[m_choiceCardIndex]->GetCardState().targetType == TargetType::ALLY)
+    //{
+    //    auto target = TargetSelect::SelectSingle(candidates, arg_window);
 
-        ApplyCardAction(result, owner, target);
-    }
-    else
-    {
-        auto targets = TargetSelect::SelectAll(candidates);
+    //    ApplyCardAction(result, owner, target);
+    //}
+    //else
+    //{
+    //    auto targets = TargetSelect::SelectAll(candidates);
 
-        for (auto& t : targets) {
-            ApplyCardAction(result, owner, t);
-        }
-    }
+    //    for (auto& t : targets) {
+    //        ApplyCardAction(result, owner, t);
+    //    }
+    //}
 
 }
 
 // カード使用時の影響
-void BattleSystem::ApplyCardAction(const CardUseResult& result, std::shared_ptr<Character> arg_owner, std::shared_ptr<Character> arg_target)
+void BattleSystem::ApplyAction(const Action& action)
 {
-
-    const CardData& data = result.effect;
-
-    switch (result.effect.actionType)
+    for (auto& target : action.targets)
     {
+        if (!target || target->GetStatus().dead)
+            continue;
 
-    case ActionType::ATTCK:
+        switch (action.card.actionType)
+        {
+            case ActionType::ATTCK:
+        {
+            float dmg = Calculation::GetDamage(
+                action.user->GetStatus().atk,
+                action.card.power,
+                target->GetStatus().def
+            );
+            target->TakeDamage(dmg);
+            break;
+        }
+        case ActionType::MAGIC:
+            // 同様
+            break;
 
-        // 物理攻撃：使用者ATK × カード威力
-        float damage = Calculation::GetDamage(
-            arg_owner->GetStatus().atk,
-            data.power,
-            arg_target->GetStatus().def
-        );
+        case ActionType::HEAL:
+            target->TakeHeal(action.card.power);
+            break;
 
-        arg_target->TakeDamage(damage);
-        break;
-
-    case ActionType::MAGIC:
-
-        float damage = Calculation::GetDamage(
-            arg_owner->GetStatus().magicAtk,
-            data.power,
-            arg_target->GetStatus().def
-        );
-
-        arg_target->TakeDamage(damage);
-
-        break;
-
-    case ActionType::HEAL:
-        
-        // 回復：カード威力分回復
-        float heal = Calculation::GetMultiplicative(
-            arg_owner->GetStatus().maxHp,
-            data.power
-        );
-
-        arg_target->TakeHeal(heal);
-
-        break;
-    case ActionType::BUFF:
-
-        // カードpower分を加算
-        arg_target->TakeBuff(data.power);
-
-        break;
-
-    default:
-        break;
+        case ActionType::BUFF:
+            target->TakeBuff(action.card.power);
+            break;
+        }
     }
-
 }
 
 // 生成関数
@@ -197,6 +177,7 @@ void BattleSystem::CreateEntity()
 
     // プレイヤー、カード作成
     for (int i = 1; i < 5; i++) {
+
         auto player = CharacterFactory::Instance().CreateCharacter<Player>(i);
         m_players.push_back(player);
 
@@ -212,6 +193,15 @@ void BattleSystem::CreateEntity()
         }
     }
 
+	// コントローラー作成
+    m_userController = std::make_unique<UserController>();
+    
+
+	// エネミー作成
+    for (int i = 101; i < 102; i++) {
+        auto enemy = CharacterFactory::Instance().CreateCharacter<Enemy>(i);
+        m_enemies.push_back(enemy);
+	}
 }
 
 // カード選択時のキャラクターフォーカス
@@ -261,15 +251,14 @@ std::shared_ptr<Character> BattleSystem::GetActionCharacterFromCard(const Card& 
     return m_players[ownerId];
 }
 
-// ターゲット候補の作成
-std::vector<std::shared_ptr<Character>> BattleSystem::MakeTargetCandidates(const std::shared_ptr<Character>& arg_actionChara, TargetType arg_targetType)
+std::vector<std::shared_ptr<Character>> BattleSystem::MakeTargetCandidates(const std::shared_ptr<Character>& actionChara,TargetType targetType) const
 {
-
+	// ターゲット候補
     std::vector<std::shared_ptr<Character>> result;
 
+	// 生存者のみ追加するラムダ
     auto pushAlive = [&](const std::vector<std::shared_ptr<Character>>& list)
         {
-
             for (const auto& c : list)
             {
                 if (c && !c->GetStatus().dead)
@@ -277,17 +266,15 @@ std::vector<std::shared_ptr<Character>> BattleSystem::MakeTargetCandidates(const
                     result.push_back(c);
                 }
             }
-
         };
 
-
-    switch (arg_targetType)
+	// ターゲットタイプごとに候補を追加
+    switch (targetType)
     {
+		// --- 敵単体・全体 ---
     case TargetType::OPPONENT:
     case TargetType::OPPONENT_ALL:
-
-        if (arg_actionChara->IsPlayer())
-        {
+        if (actionChara->IsPlayer()) {
             pushAlive(m_enemies);
         }
         else
@@ -296,16 +283,11 @@ std::vector<std::shared_ptr<Character>> BattleSystem::MakeTargetCandidates(const
         }
 
         break;
-    case TargetType::SELF:
 
-        result.push_back(arg_actionChara);
-
-        break;
+		// --- 味方単体・全体 ---
     case TargetType::ALLY:
     case TargetType::ALLY_ALL:
-
-        if (arg_actionChara->IsPlayer())
-        {
+        if (actionChara->IsPlayer()) {
             pushAlive(m_players);
         }
         else
@@ -314,11 +296,19 @@ std::vector<std::shared_ptr<Character>> BattleSystem::MakeTargetCandidates(const
         }
 
         break;
+
+		// --- 自身 ---
+    case TargetType::SELF:
+        if (actionChara && !actionChara->GetStatus().dead) {
+            result.push_back(actionChara);
+        }
+        break;
+
     default:
         break;
     }
 
-
+    return result;
 }
 
 // ターン開始時
@@ -331,45 +321,39 @@ void BattleSystem::StartTurn()
     m_cost->ResetCost();
 
 	// フェーズをプレイヤーターンに変更
-    m_phase = TurnPhase::PlayerTurn;
+    m_phase = TurnPhase::UserTurn;
 }
 
 // プレイヤー更新
-void BattleSystem::PlayerUpdate(sf::RenderWindow& arg_window)
+void BattleSystem::PlayerUpdate(sf::RenderWindow& window)
 {
+    auto currentPlayer = m_players[m_currentPlayerIndex];
 
-    // 候補者を作成
-    auto& hand = CardManager::GetInstance().GetHandCard();
-    auto actionChara = GetActionCharacterFromCard(*hand[m_choiceCardIndex]);
-    auto candidates = MakeTargetCandidates(actionChara, hand[m_choiceCardIndex]->GetCardState().targetType);
-    CardUseResult result = { hand[m_choiceCardIndex]->GetCardState(),hand[m_choiceCardIndex]->GetOwnerId() };
+    m_userController->SetActionCharacter(currentPlayer);
 
-    // ターゲットを選択したとき
-    if (hand[m_choiceCardIndex]->GetCardState().targetType == TargetType::OPPONENT ||
-        hand[m_choiceCardIndex]->GetCardState().targetType == TargetType::ALLY)
+    // ターゲット候補生成
+    if (m_userController->HasAction() == false)
     {
-        auto target = TargetSelect::SelectSingle(candidates,arg_window);
-
-        ApplyCardAction(result, actionChar, target);
+        // 選択中カードがある前提で後段で渡される
     }
-    else
-    {
-        auto targets = TargetSelect::SelectAll(candidates);
 
-        for (auto& t : targets) {
-            ApplyCardAction(result, actionChar, t);
+	// 更新
+    m_userController->Update(window);
+
+	// アクションがあるなら実行
+    if (m_userController->HasAction())
+    {
+		// アクション適用
+        ApplyAction(m_userController->PopAction());
+
+		// 次のプレイヤーへ
+        m_currentPlayerIndex++;
+        if (m_currentPlayerIndex >= m_players.size())
+        {
+            m_currentPlayerIndex = 0;
+            m_phase = TurnPhase::EnemyTurn;
         }
     }
-    // カードの使用
-
-    // 選択したカード所持者のプレイヤーがアクション
-    //m_players[/*ここに選択カード者指定*/]->Update();
-
-    //
-
-    //// 終了時
-    //// ターン終了ボタンが押されたとき
-    //m_phase = TurnPhase::EnemyTurn;
 }
 
 // エネミー更新
