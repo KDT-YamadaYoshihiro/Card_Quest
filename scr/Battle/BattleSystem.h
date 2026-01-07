@@ -84,6 +84,7 @@ public:
     // カードとキャラクターの結びつけ
     void OnUseCard(size_t arg_handIndex, size_t arg_targetIndex);
 
+	// アクション適用
     void ApplyAction(const Action& action);
 
     // 現在のフェーズの取得
