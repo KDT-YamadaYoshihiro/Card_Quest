@@ -1,12 +1,10 @@
 #pragma once
-
 // 計算クラス
 class Calculation
 {
 	// 定数
-	const float K = 1.50f;		// 攻撃力補正値
-	const float D = 0.80f;		// 防御力補正値
-	
+	constexpr static float K = 1.5f; // ダメージ補正定数
+	constexpr static float D = 0.8f; // 防御補正定数
 public:
 
 	// 加法

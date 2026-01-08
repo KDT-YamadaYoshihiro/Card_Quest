@@ -12,3 +12,8 @@ void Enemy::Render(RenderSystem& render)
 void Enemy::Action()
 {
 }
+
+sf::FloatRect Enemy::GetHitCircle() const
+{
+	return sf::FloatRect();
+}

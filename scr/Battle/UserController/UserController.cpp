@@ -21,6 +21,14 @@ void UserController::SetTargetCandidates(const std::vector<std::shared_ptr<Chara
 // 更新
 void UserController::Update(sf::RenderWindow& window)
 {
+
+    // ターン終了ボタン
+    if (IsTurnEndButtonClicked(window))
+    {
+        m_requestTurnEnd = true;
+        return;
+    }
+
     switch (m_phase)
     {
     case PlayerSelectPhase::SELECT_CARD:
@@ -61,6 +69,16 @@ Action UserController::PopAction()
     return act;
 }
 
+bool UserController::IsTurnEndRequested() const
+{
+    return m_requestTurnEnd;
+}
+
+void UserController::ResetTurnEndRequest()
+{
+    m_requestTurnEnd = false;
+}
+
 // カード選択
 void UserController::SelectCard(sf::RenderWindow& window)
 {
@@ -74,10 +92,10 @@ void UserController::SelectCard(sf::RenderWindow& window)
             m_selectedCardIndex = index;
 
             const auto& hand = CardManager::GetInstance().GetHandCard();
-            m_selectedCard = hand[index]->GetCardState();
+            m_selectedCard = hand[m_selectedCardIndex]->GetCardState();
 
             // デバッグ
-            std::cout << "選択中カード index: " << index << std::endl;
+            std::cout << "選択中カード index: " << m_selectedCardIndex << std::endl;
         }
     }
 
@@ -122,8 +140,7 @@ void UserController::SelectTarget(sf::RenderWindow& window)
     // --- 自分 ---
     else if (m_selectedCard->targetType == TargetType::SELF)
     {
-        auto self =
-            TargetSelect::SelectSelf(m_player);
+        auto self = TargetSelect::SelectSelf(m_actionCharacter);
 
         if (self)
         {
@@ -184,5 +201,24 @@ bool UserController::IsDecisionButtonClicked(sf::RenderWindow& window) const
         sf::Vector2f pos(static_cast<float>(mouse.x), static_cast<float>(mouse.y));
         return decisionButton.contains(pos);
     }
+    return false;
+}
+
+bool UserController::IsTurnEndButtonClicked(sf::RenderWindow& window) const
+{
+	// 終了ボタン領域
+    constexpr sf::FloatRect endTurnButton(
+        { 900.f, 550.f },   // 座標
+        { 150.f, 50.f }     // サイズ
+    );
+
+	// 左クリック判定
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+    {
+        auto mouse = sf::Mouse::getPosition(window);
+        sf::Vector2f pos(static_cast<float>(mouse.x), static_cast<float>(mouse.y));
+        return endTurnButton.contains(pos);
+    }
+
     return false;
 }

@@ -16,5 +16,6 @@ public:
 	void Update() override;
 	void Render(RenderSystem& render) override;
 	void Action() override;
+	sf::FloatRect GetHitCircle() const override;
 
 };

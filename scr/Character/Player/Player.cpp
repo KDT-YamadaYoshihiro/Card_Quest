@@ -9,10 +9,14 @@ void Player::Update()
 // •`‰æ
 void Player::Render(RenderSystem& render)
 {
-	animetion->Draw(render);
 }
 
 // ƒAƒNƒVƒ‡ƒ“
 void Player::Action()
 {
+}
+
+sf::FloatRect Player::GetHitCircle() const
+{
+	return sf::FloatRect();
 }

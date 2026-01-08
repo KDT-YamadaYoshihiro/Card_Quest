@@ -7,6 +7,7 @@
 #include "../Card/CardManager/CardManager.h"
 #include "../Card/CardRenderer/CardRenderer.h"
 #include "../Battle/BattleContex/BattleContex.h"
+#include "../Battle/UserController/UserController.h"
 
 
 class BattleSystem {

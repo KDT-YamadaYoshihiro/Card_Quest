@@ -94,7 +94,7 @@ void BattleSystem::Render(sf::RenderWindow& window)
     {
         // 座標の変更
         float y = baseY;
-
+		m_choiceCardIndex = m_userController->GetSelectedCardIndex();
         if(static_cast<int>(i) == m_choiceCardIndex)
         {
             // 選択中カードを浮かす
@@ -198,7 +198,7 @@ void BattleSystem::CreateEntity()
     
 
 	// エネミー作成
-    for (int i = 101; i < 102; i++) {
+    for (int i = 5; i < 6; i++) {
         auto enemy = CharacterFactory::Instance().CreateCharacter<Enemy>(i);
         m_enemies.push_back(enemy);
 	}
@@ -319,7 +319,8 @@ void BattleSystem::StartTurn()
 
     // コスト回復
     m_cost->ResetCost();
-
+	// プレイヤーコントローラーのターン終了要求リセット
+    m_userController->ResetTurnEndRequest();
 	// フェーズをプレイヤーターンに変更
     m_phase = TurnPhase::UserTurn;
 }
@@ -327,27 +328,19 @@ void BattleSystem::StartTurn()
 // プレイヤー更新
 void BattleSystem::PlayerUpdate(sf::RenderWindow& window)
 {
-    auto currentPlayer = m_players[m_currentPlayerIndex];
-
-    m_userController->SetActionCharacter(currentPlayer);
-
-    // ターゲット候補生成
-    if (m_userController->HasAction() == false)
-    {
-        // 選択中カードがある前提で後段で渡される
-    }
-
-	// 更新
+    // ユーザー操作更新
     m_userController->Update(window);
 
-	// アクションがあるなら実行
+    // アクションが確定したら即適用
     if (m_userController->HasAction())
     {
-		// アクション適用
         ApplyAction(m_userController->PopAction());
+    }
 
-		// 終了ボタンが押されたらターン終了
-		
+    // ターン終了ボタンが押されたら EnemyTurn へ
+    if (m_userController->IsTurnEndRequested())
+    {
+        m_phase = TurnPhase::EnemyTurn;
     }
 }
 
