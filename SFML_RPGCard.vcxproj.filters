@@ -233,5 +233,8 @@
     <ClInclude Include="scr\Battle\BattleContex\BattleContex.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="scr\UI\CircleButton.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

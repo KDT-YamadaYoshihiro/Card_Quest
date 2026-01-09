@@ -108,32 +108,18 @@ void BattleSystem::Render(sf::RenderWindow& window)
 
 
     // カード選択決定ボタン
+	m_userController->Draw(window);
     
 
 }
 
 // カードの使用
-void BattleSystem::OnUseCard(size_t arg_handIndex,size_t arg_targetIndex)
+void BattleSystem::OnUseCard(const Action& action)
 {
-    //auto result = CardManager::GetInstance().UseCard(arg_handIndex);
-    //auto& owner = m_players[result.ownerID];
-    //// ターゲットを選択したとき
-    //if (hand[m_choiceCardIndex]->GetCardState().targetType == TargetType::OPPONENT ||
-    //    hand[m_choiceCardIndex]->GetCardState().targetType == TargetType::ALLY)
-    //{
-    //    auto target = TargetSelect::SelectSingle(candidates, arg_window);
-
-    //    ApplyCardAction(result, owner, target);
-    //}
-    //else
-    //{
-    //    auto targets = TargetSelect::SelectAll(candidates);
-
-    //    for (auto& t : targets) {
-    //        ApplyCardAction(result, owner, t);
-    //    }
-    //}
-
+    // カードの使用
+	CardManager::GetInstance().UseCard(action.card.cardId);
+	// 効果の適用
+	ApplyAction(action);
 }
 
 // カード使用時の影響
@@ -141,23 +127,22 @@ void BattleSystem::ApplyAction(const Action& action)
 {
     for (auto& target : action.targets)
     {
-        if (!target || target->GetStatus().dead)
+        if (!target || target->GetStatus().dead) {
             continue;
+        }
 
+        float dmg;
         switch (action.card.actionType)
         {
-            case ActionType::ATTCK:
-        {
-            float dmg = Calculation::GetDamage(
+        case ActionType::ATTCK:
+        case ActionType::MAGIC:
+            dmg = Calculation::GetDamage(
                 action.user->GetStatus().atk,
                 action.card.power,
                 target->GetStatus().def
             );
             target->TakeDamage(dmg);
-            break;
-        }
-        case ActionType::MAGIC:
-            // 同様
+
             break;
 
         case ActionType::HEAL:
@@ -251,6 +236,7 @@ std::shared_ptr<Character> BattleSystem::GetActionCharacterFromCard(const Card& 
     return m_players[ownerId];
 }
 
+// ターゲット候補作成
 std::vector<std::shared_ptr<Character>> BattleSystem::MakeTargetCandidates(const std::shared_ptr<Character>& actionChara,TargetType targetType) const
 {
 	// ターゲット候補
@@ -334,7 +320,7 @@ void BattleSystem::PlayerUpdate(sf::RenderWindow& window)
     // アクションが確定したら即適用
     if (m_userController->HasAction())
     {
-        ApplyAction(m_userController->PopAction());
+        OnUseCard(m_userController->PopAction());
     }
 
     // ターン終了ボタンが押されたら EnemyTurn へ

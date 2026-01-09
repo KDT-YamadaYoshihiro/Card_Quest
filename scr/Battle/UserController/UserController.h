@@ -8,6 +8,7 @@
 #include "../../Character/Character.h"
 #include "../../Card/Card.h"
 #include "../SelectTarget/TargetSelect.h"
+#include "../../UI/CircleButton.h"
 
 // プレイヤー選択フェーズ
 enum class PlayerSelectPhase
@@ -32,12 +33,17 @@ public:
 	int GetSelectedCardIndex() const { return m_selectedCardIndex; }
     // 更新
     void Update(sf::RenderWindow& window);
-    // 
+	// 描画
+    void Draw(sf::RenderWindow& window) const;
+	// アクションがあるか
     bool HasAction() const;
+	// アクションの取得とリセット
     Action PopAction();
     // ターン終了ボタン用
     bool IsTurnEndRequested() const;
+	// ターン終了要求リセット
     void ResetTurnEndRequest();
+
 private:
     // 現在のフェーズ
     PlayerSelectPhase m_phase;
@@ -53,8 +59,12 @@ private:
     std::vector<std::shared_ptr<Character>> m_selectedTargets;
     // アクションデータ
     std::optional<Action> m_action;
-    // ターン修了確認用
-    bool m_requestTurnEnd = false;
+	// 決定ボタン
+	CircleButton m_decisionButton;
+	// ターン終了ボタン
+	CircleButton m_turnEndButton;
+    // ターン終了確認用
+    bool m_requestTurnEnd;
 
 // 内部処理
     // カード選択

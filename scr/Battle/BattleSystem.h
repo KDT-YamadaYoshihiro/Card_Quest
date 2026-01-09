@@ -83,7 +83,7 @@ public:
     }
 
     // カードとキャラクターの結びつけ
-    void OnUseCard(size_t arg_handIndex, size_t arg_targetIndex);
+    void OnUseCard(const Action& action);
 
 	// アクション適用
     void ApplyAction(const Action& action);

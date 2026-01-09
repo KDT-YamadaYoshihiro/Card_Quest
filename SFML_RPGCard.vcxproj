@@ -180,6 +180,7 @@
     <ClInclude Include="scr\GameMain\GameMain.h" />
     <ClInclude Include="scr\GameMain\WindowSetting.h" />
     <ClInclude Include="scr\Battle\SelectTarget\TargetSelect.h" />
+    <ClInclude Include="scr\UI\CircleButton.h" />
     <ClInclude Include="View\Render\Animetion\Animation.h" />
     <ClInclude Include="scr\CameraManager\CameraManager.h" />
     <ClInclude Include="View\Render\RenderSystem.h" />

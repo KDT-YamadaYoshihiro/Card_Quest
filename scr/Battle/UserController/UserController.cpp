@@ -2,7 +2,10 @@
 #include "../../Card/CardManager/CardManager.h"
 
 UserController::UserController()
-	:m_phase(PlayerSelectPhase::SELECT_CARD)
+	:m_phase(PlayerSelectPhase::SELECT_CARD),
+	m_decisionButton(40.0f,{ 860.0f, 525.0f }),
+	m_turnEndButton(40.0f, { 1000.0f, 525.0f }),
+	m_requestTurnEnd(false)
 {
 }
 
@@ -49,6 +52,15 @@ void UserController::Update(sf::RenderWindow& window)
         break;
     }
 }
+
+void UserController::Draw(sf::RenderWindow& window) const
+{
+	// 決定ボタン描画
+	m_decisionButton.Draw(window);
+	// ターン終了ボタン描画
+	m_turnEndButton.Draw(window);
+}
+
 
 // アクションがあるか
 bool UserController::HasAction() const
@@ -100,7 +112,9 @@ void UserController::SelectCard(sf::RenderWindow& window)
     }
 
     // 決定ボタン
-    if (IsDecisionButtonClicked(window) && m_selectedCard.has_value())
+    sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+    bool leftClick = sf::Mouse::isButtonPressed(sf::Mouse::Button::Left);
+    if (m_decisionButton.IsClicked(mousePos, leftClick) && m_selectedCard.has_value())
     {
         m_phase = PlayerSelectPhase::SELECT_TARGET;
     }
@@ -204,21 +218,19 @@ bool UserController::IsDecisionButtonClicked(sf::RenderWindow& window) const
     return false;
 }
 
+// 終了ボタンが押されているか確認
 bool UserController::IsTurnEndButtonClicked(sf::RenderWindow& window) const
 {
-	// 終了ボタン領域
-    constexpr sf::FloatRect endTurnButton(
-        { 900.f, 550.f },   // 座標
-        { 150.f, 50.f }     // サイズ
-    );
-
-	// 左クリック判定
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+	// マウス座標取得
+    sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+    bool leftClick = sf::Mouse::isButtonPressed(sf::Mouse::Button::Left);
+	// ターン終了ボタンクリック判定
+    if (m_turnEndButton.IsClicked(mousePos, leftClick))
     {
-        auto mouse = sf::Mouse::getPosition(window);
-        sf::Vector2f pos(static_cast<float>(mouse.x), static_cast<float>(mouse.y));
-        return endTurnButton.contains(pos);
+		return true;
+    }
+    else {
+		return false;
     }
 
-    return false;
 }
