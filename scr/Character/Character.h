@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "CharacterData.h"
 #include "../Card/CardPool.h"
+#include  "../../View/Render/Animetion/Animation.h"
 
 class RenderSystem;
 
@@ -14,6 +15,8 @@ protected:
 	Position m_pos;
 	Faction m_faction;
 	bool m_focused;
+	sf::Vector2f m_postion;
+	std::shared_ptr<Animation> m_animation;
 
 public:
 
@@ -21,19 +24,34 @@ public:
 	Character(CharacterData& arg_data)
 		:m_status(arg_data),
 		m_pos({ 0,0 }),
-		m_focused(false)
+		m_focused(false),
+		m_postion({ 0.0f,0.0f })
 	{
-
+		m_animation = std::make_shared<Animation>();
 	}
-
+	
+	// プレイヤーかエネミーか
 	bool IsPlayer() const { return m_faction == Faction::Player; }
 	bool IsEnemy()  const { return m_faction == Faction::Enemy; }
 
-
 	// 更新
-	virtual void Update() = 0;
+	virtual void Update(float dt)
+	{
+		m_animation->Update(dt);
+	};
 	// 描画
-	virtual void Render(RenderSystem& render) = 0;
+	virtual void Render(RenderSystem& render)
+	{
+		m_animation->Draw(render);
+	};
+
+	// 座標設定
+	void SetPosition(const sf::Vector2f& arg_pos)
+	{
+		m_postion = arg_pos;
+		m_animation->SetPosition(arg_pos);
+	}
+
 	// アクションメソッド
 	virtual void Action() = 0;
 

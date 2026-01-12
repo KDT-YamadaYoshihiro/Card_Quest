@@ -13,11 +13,13 @@ public:
         m_shape.setFillColor(sf::Color(200, 200, 200));
     }
 
+	// 描画
     void Draw(sf::RenderWindow& window) const
     {
         window.draw(m_shape);
     }
 
+	// ホバーしているか
     bool IsHovered(sf::Vector2f mousePos) const
     {
         sf::Vector2f diff = mousePos - m_shape.getPosition();
@@ -25,11 +27,13 @@ public:
             <= m_shape.getRadius() * m_shape.getRadius();
     }
 
+	// クリックされたか
     bool IsClicked(sf::Vector2f mousePos, bool mousePressed) const
     {
         return mousePressed && IsHovered(mousePos);
     }
 
 private:
+	// 円形の形状
     sf::CircleShape m_shape;
 };

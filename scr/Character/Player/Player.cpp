@@ -2,7 +2,7 @@
 #include "../../View/Render/Animetion/Animation.h"
 
 // XV
-void Player::Update()
+void Player::Update(float dt)
 {
 }
 
@@ -16,6 +16,7 @@ void Player::Action()
 {
 }
 
+// “–‚½‚è”»’èæ“¾
 sf::FloatRect Player::GetHitCircle() const
 {
 	return sf::FloatRect();
