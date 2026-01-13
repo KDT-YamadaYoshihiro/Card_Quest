@@ -1,8 +1,18 @@
 #include "Player.h"
 #include "../../View/Render/Animetion/Animation.h"
 
-// 更新
-void Player::Update(float dt)
+void Player::Init(const std::vector<sf::Texture>& arg_textures, const sf::Vector2f& arg_startPos)
+{
+	// アニメーションにフレームを追加
+	for (const auto& tex : arg_textures)
+	{
+		m_animation->AddFrame(tex);
+	}
+	// 初期位置設定
+	SetPosition(arg_startPos);
+}
+
+void Player::Update()
 {
 }
 

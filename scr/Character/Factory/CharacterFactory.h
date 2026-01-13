@@ -41,7 +41,7 @@ public:
         std::cout << id << "‚ğ¶¬" << std::endl;
 #endif // _DEBUG
 
-        return std::make_unique<T>(data);
+        return std::shared_ptr<T>(data);
        
     }
 

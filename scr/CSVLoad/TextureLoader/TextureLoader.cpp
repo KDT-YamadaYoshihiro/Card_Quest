@@ -36,4 +36,6 @@ bool TextureLoader::LoadTextures(const std::string& path)
 
         m_textures[id] = std::move(tex);
     }
+
+    return true;
 }

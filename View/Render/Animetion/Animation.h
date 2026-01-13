@@ -22,6 +22,18 @@ class Animation
 
 public:
 
+	// ‰Šú‰»
+	Animation(const sf::Texture& firstTexture)
+		:m_sprite(firstTexture),
+		m_frameTiem(0.1f),
+		m_timer(0.0f),
+		m_index(0)
+	{
+		m_frames.push_back(firstTexture);
+	};
+
+	virtual ~Animation() = default;
+
 	// ƒtƒŒ[ƒ€’Ç‰Á
 	void AddFrame(const sf::Texture& arg_texture);
 	// ˆÊ’uİ’è

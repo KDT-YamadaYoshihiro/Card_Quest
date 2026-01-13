@@ -8,13 +8,14 @@ class Enemy : public Character
 
 public:
 
-	Enemy(CharacterData& arg_data) :Character(arg_data)
+	Enemy(const CharacterData& arg_data) :Character(arg_data)
 	{
 		m_faction = Faction::Enemy;
 	}
-
-	// 更新
-	void Update(float dt) override;
+	// 初期化
+	void Init(const std::vector<sf::Texture>& arg_textures, const sf::Vector2f& arg_startPos);
+	// 状態更新
+	void Update() override;
 	// 描画
 	void Render(RenderSystem& render) override;
 	// アクション

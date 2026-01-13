@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <memory>
+#include "../../View/Render/RenderSystem.h"
 #include "../Character/Character.h"
 #include "../Battle/Cost/CostManager.h"
 #include "../Card/CardManager/CardManager.h"
@@ -24,6 +25,8 @@ public:
 
 private:
 
+	// 描画システム
+	std::unique_ptr<RenderSystem> m_renderSystem;
     // キャラクター
     std::vector<std::shared_ptr<Character>> m_players;
     std::vector<std::shared_ptr<Character>> m_enemies;
@@ -32,7 +35,7 @@ private:
     // コスト管理
     std::unique_ptr<CostManager> m_cost;
     // カード描画
-    std::unique_ptr<CardRenderer> m_renderer;
+    std::unique_ptr<CardRenderer> m_cardRenderer;
     // フェーズ
     TurnPhase m_phase;
     // ターン数
@@ -45,7 +48,7 @@ private:
 
 public:
 
-    BattleSystem();
+    BattleSystem(sf::RenderWindow& window);
     virtual ~BattleSystem() = default;
 
     /// <summary>
@@ -57,7 +60,7 @@ public:
     /// 更新処理
     /// </summary>
     void Update(sf::RenderWindow& arg_window);
-
+	void AnimationUpdate(float dt);
     // 描画
     void Render(sf::RenderWindow& arg_window);
 
@@ -95,7 +98,7 @@ public:
 
 private:
     // プレイヤー,カード生成
-    void CreateEntity();
+    void CreateEntity(sf::RenderWindow& window);
     // フォーカス
     void UpdateCardOwnerFocus();
     // アクションキャラの取得

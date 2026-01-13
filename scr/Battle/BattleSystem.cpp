@@ -11,15 +11,14 @@
 #define FontMgr FontManager::GetInstance()
 
 // 初期化
-BattleSystem::BattleSystem()
-	:m_cost(std::make_unique<CostManager>()),
-	m_renderer(std::make_unique<CardRenderer>()),
+BattleSystem::BattleSystem(sf::RenderWindow& window)
+	:
     m_phase(TurnPhase::StartTurn),
     m_turnCount(1),
     m_choiceCardIndex(0)
 {
 	// エンティティ作成
-    CreateEntity();
+    CreateEntity(window);
 	// コスト初期化
     m_cost->Init(3);
 }
@@ -32,11 +31,12 @@ void BattleSystem::Init()
 // 更新
 void BattleSystem::Update(sf::RenderWindow& arg_window)
 {
+    // 勝敗判定
     if (CheckWin() || CheckLose()) {
         m_phase = TurnPhase::EndTurn;
         return;
     }
-
+	// バトルフェーズごとの処理
     switch (m_phase) {
 
     case TurnPhase::StartTurn:
@@ -73,15 +73,42 @@ void BattleSystem::Update(sf::RenderWindow& arg_window)
 
 }
 
+void BattleSystem::AnimationUpdate(float dt)
+{
+	// キャラクターのアニメーション更新
+	for (auto& p : m_players)
+	{
+		p->AnimationUpdate(dt);
+	}
+	for (auto& e : m_enemies)
+	{
+		e->AnimationUpdate(dt);
+	}
+}
+
 // 描画
 void BattleSystem::Render(sf::RenderWindow& window)
 {
+    // カメラ影響あり
+    m_renderSystem->ApplyCamera();
 
+    // キャラクターの描画
+	for (auto& p : m_players)
+	{
+		p->Render(*m_renderSystem);
+	}
+    for (auto& e : m_enemies)
+    {
+		e->Render(*m_renderSystem);
+    }
+
+    // カメラの影響解除
+    m_renderSystem->ResetCamera();
     // 山札
-    m_renderer->DrawDeck(FontMgr.GetFont(), window, {50.0f,300.0f}, CardManager::GetInstance().GetDeckCount());
+    m_cardRenderer->DrawDeck(FontMgr.GetFont(), window, {50.0f,300.0f}, CardManager::GetInstance().GetDeckCount());
 
     // 墓地
-    m_renderer->DrawGrave(FontMgr.GetFont(), window,{150.0f, 300.0f}, CardManager::GetInstance().GetCemeteryCount());
+    m_cardRenderer->DrawGrave(FontMgr.GetFont(), window,{150.0f, 300.0f}, CardManager::GetInstance().GetCemeteryCount());
 
     // 手札
     // ベース座標
@@ -101,7 +128,7 @@ void BattleSystem::Render(sf::RenderWindow& window)
             y -= 30;
         }
         // 描画
-        m_renderer->DrawHand(FontMgr.GetFont(), window, { x, y }, *handCard[i]);
+        m_cardRenderer->DrawHand(FontMgr.GetFont(), window, { x, y }, *handCard[i]);
         // 一枚ごとにx座標をずらす
         x += 130.0f;
     }
@@ -157,8 +184,14 @@ void BattleSystem::ApplyAction(const Action& action)
 }
 
 // 生成関数
-void BattleSystem::CreateEntity()
+void BattleSystem::CreateEntity(sf::RenderWindow& window)
 {
+	// カメラ機能付き描画システム作成
+	m_renderSystem = std::make_unique<RenderSystem>(window);
+	// コスト管理
+    m_cost = std::make_unique<CostManager>();
+	// カード描画
+    m_cardRenderer = std::make_unique<CardRenderer>();
 
     // プレイヤー、カード作成
     for (int i = 1; i < 5; i++) {
@@ -336,7 +369,6 @@ void BattleSystem::EnemyUpdate()
     // エネミーはカードをランダムで選択一回だけアクションを起こして終了
     for (auto& e : m_enemies)
     {
-        e->Update();
     }
 
     // 終了時

@@ -3,6 +3,7 @@
 #include "CharacterData.h"
 #include "../Card/CardPool.h"
 #include  "../../View/Render/Animetion/Animation.h"
+#include "../CSVLoad/TextureLoader/TextureLoader.h"
 
 class RenderSystem;
 
@@ -21,24 +22,33 @@ protected:
 public:
 
 	// 初期化
-	Character(CharacterData& arg_data)
+	Character() = delete;
+	Character(const CharacterData& arg_data)
 		:m_status(arg_data),
 		m_pos({ 0,0 }),
 		m_focused(false),
 		m_postion({ 0.0f,0.0f })
 	{
-		m_animation = std::make_shared<Animation>();
+		CreateAnimetion();
 	}
 	
 	// プレイヤーかエネミーか
 	bool IsPlayer() const { return m_faction == Faction::Player; }
 	bool IsEnemy()  const { return m_faction == Faction::Enemy; }
-
-	// 更新
-	virtual void Update(float dt)
+	// アニメーション初期化
+	void CreateAnimetion()
+	{
+		const sf::Texture* tex = TextureLoader::GetInstance().GetTextureID(m_status.textureKey);
+		assert(tex);
+		m_animation = std::make_shared<Animation>(*tex);
+	}
+	// アニメーション更新
+	virtual void AnimationUpdate(float dt)
 	{
 		m_animation->Update(dt);
 	};
+	// 状態更新
+	virtual void Update() = 0;
 	// 描画
 	virtual void Render(RenderSystem& render)
 	{
@@ -91,7 +101,7 @@ public:
 	}
 
 	// ステータス取得
-	CharacterData GetStatus() const { return m_status; }
+	const CharacterData GetStatus() const { return m_status; }
 	// 座標の取得
 	Position GetPos() const { return m_pos; }
 	// 選択時の当たり判定

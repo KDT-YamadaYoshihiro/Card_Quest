@@ -21,6 +21,7 @@ struct CharacterData
 	int charaId;
 	int lv;
 	std::string name;
+	std::string textureKey;
 	int hp;
 	int maxHp;
 	int magicAtk;

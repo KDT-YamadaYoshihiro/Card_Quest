@@ -1,8 +1,16 @@
 #include "Enemy.h"
 #include "../../View/Render/Animetion/Animation.h"
 
-// çXêV
-void Enemy::Update(float dt)
+void Enemy::Init(const std::vector<sf::Texture>& arg_textures, const sf::Vector2f& arg_startPos)
+{
+    for (const auto& tex : arg_textures)
+    {
+        m_animation->AddFrame(tex);
+    }
+    SetPosition(arg_startPos);
+}
+
+void Enemy::Update()
 {
 }
 
