@@ -23,7 +23,7 @@ public:
 
 
     // 更新・描画・イベント
-    void Init();
+    void Init(sf::RenderWindow& arg_window);
     void Update(sf::RenderWindow& arg_window);
     void Render(sf::RenderWindow& arg_window);
     void HandleEvent();

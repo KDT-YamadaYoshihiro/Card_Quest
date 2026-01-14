@@ -30,7 +30,7 @@ bool GameMain::Init()
 
     m_window.setFramerateLimit(60);
 
-    SceneManager::GetInstance().Init();
+    SceneManager::GetInstance().Init(m_window);
     CameraManager::GetInstance().ViewInit({ 0.0f, 0.0f }, 
         { WindowSetting::GetInstance().GetWindowSizeW(), WindowSetting::GetInstance().GetWindowSizeH()});
 

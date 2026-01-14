@@ -1,6 +1,6 @@
 #include "ResultScene.h"
 
-void ResultScene::Init()
+void ResultScene::Init(sf::RenderWindow& arg_window)
 {
 }
 

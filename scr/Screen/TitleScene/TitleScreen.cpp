@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 
 
-void TitleScene::Init()
+void TitleScene::Init(sf::RenderWindow& arg_window)
 {
     std::cout << "Title" << "\n";
 }

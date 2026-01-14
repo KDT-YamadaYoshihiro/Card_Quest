@@ -3,7 +3,7 @@
 #include <iostream>
 
 
-void SceneManager::Init()
+void SceneManager::Init(sf::RenderWindow& arg_window)
 {
 
     SceneManager::GetInstance().ChangeScreen<TitleScene>();
@@ -13,7 +13,7 @@ void SceneManager::Init()
         return;
     }
 
-    m_screen->Init();
+    m_screen->Init(arg_window);
 }
 
 void SceneManager::Update(sf::RenderWindow& arg_window)

@@ -48,13 +48,13 @@ private:
 
 public:
 
-    BattleSystem(sf::RenderWindow& window);
+    BattleSystem();
     virtual ~BattleSystem() = default;
 
     /// <summary>
     /// ‰Šú‰»
     /// </summary>
-    void Init();
+    void Init(sf::RenderWindow& arg_window);
 
     /// <summary>
     /// XVˆ—

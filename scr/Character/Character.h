@@ -29,7 +29,6 @@ public:
 		m_focused(false),
 		m_postion({ 0.0f,0.0f })
 	{
-		CreateAnimetion();
 	}
 	
 	// プレイヤーかエネミーか

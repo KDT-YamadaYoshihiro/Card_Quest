@@ -11,21 +11,37 @@
 #define FontMgr FontManager::GetInstance()
 
 // 初期化
-BattleSystem::BattleSystem(sf::RenderWindow& window)
+BattleSystem::BattleSystem()
 	:
     m_phase(TurnPhase::StartTurn),
     m_turnCount(1),
     m_choiceCardIndex(0)
 {
-	// エンティティ作成
-    CreateEntity(window);
-	// コスト初期化
-    m_cost->Init(3);
+    // コスト管理
+    m_cost = std::make_unique<CostManager>();
+    // カード描画
+    m_cardRenderer = std::make_unique<CardRenderer>();
+    // コントローラー作成
+    m_userController = std::make_unique<UserController>();
+
 }
 
 // 初期化
-void BattleSystem::Init()
+void BattleSystem::Init(sf::RenderWindow& arg_window)
 {
+    for (auto& p : m_players)
+    {
+        p->CreateAnimetion();
+    }
+    for (auto& e : m_enemies)
+    {
+        e->CreateAnimetion();
+    }
+    // エンティティ作成
+    CreateEntity(arg_window);
+    // コスト初期化
+    m_cost->Init(3);
+
 }
 
 // 更新
@@ -89,8 +105,8 @@ void BattleSystem::AnimationUpdate(float dt)
 // 描画
 void BattleSystem::Render(sf::RenderWindow& window)
 {
-    // カメラ影響あり
-    m_renderSystem->ApplyCamera();
+    //// カメラ影響あり
+    //m_renderSystem->ApplyCamera();
 
     // キャラクターの描画
 	for (auto& p : m_players)
@@ -102,8 +118,9 @@ void BattleSystem::Render(sf::RenderWindow& window)
 		e->Render(*m_renderSystem);
     }
 
-    // カメラの影響解除
-    m_renderSystem->ResetCamera();
+    //// カメラの影響解除
+    //m_renderSystem->ResetCamera();
+    
     // 山札
     m_cardRenderer->DrawDeck(FontMgr.GetFont(), window, {50.0f,300.0f}, CardManager::GetInstance().GetDeckCount());
 
@@ -132,7 +149,6 @@ void BattleSystem::Render(sf::RenderWindow& window)
         // 一枚ごとにx座標をずらす
         x += 130.0f;
     }
-
 
     // カード選択決定ボタン
 	m_userController->Draw(window);
@@ -186,12 +202,8 @@ void BattleSystem::ApplyAction(const Action& action)
 // 生成関数
 void BattleSystem::CreateEntity(sf::RenderWindow& window)
 {
-	// カメラ機能付き描画システム作成
-	m_renderSystem = std::make_unique<RenderSystem>(window);
-	// コスト管理
-    m_cost = std::make_unique<CostManager>();
-	// カード描画
-    m_cardRenderer = std::make_unique<CardRenderer>();
+    // カメラ機能付き描画システム作成
+    m_renderSystem = std::make_unique<RenderSystem>(window);
 
     // プレイヤー、カード作成
     for (int i = 1; i < 5; i++) {
@@ -210,9 +222,6 @@ void BattleSystem::CreateEntity(sf::RenderWindow& window)
             CardManager::GetInstance().AddDeckCard(std::move(cards));
         }
     }
-
-	// コントローラー作成
-    m_userController = std::make_unique<UserController>();
     
 
 	// エネミー作成

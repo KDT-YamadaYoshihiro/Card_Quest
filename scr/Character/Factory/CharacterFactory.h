@@ -7,8 +7,6 @@
 
 class CharacterFactory
 {
-
-
 public:
 
     static CharacterFactory& Instance()
@@ -41,7 +39,7 @@ public:
         std::cout << id << "‚ð¶¬" << std::endl;
 #endif // _DEBUG
 
-        return std::shared_ptr<T>(data);
+        return std::make_shared<T>(data);
        
     }
 

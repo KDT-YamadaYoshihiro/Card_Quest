@@ -3,9 +3,9 @@
 #include "../ResultScene/ResultScene.h"
 
 
-void IngameScene::Init()
+void IngameScene::Init(sf::RenderWindow& arg_window)
 {
-	battle->Init();
+	battle->Init(arg_window);
 }
 
 void IngameScene::handleEvent()

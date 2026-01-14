@@ -42,11 +42,12 @@ public:
             CharacterData data;
             data.charaId = std::stoi(cols[0]);
             data.name = cols[1];
-            data.hp = std::stoi(cols[2]);
-            data.maxHp = std::stoi(cols[2]);
-            data.atk = std::stoi(cols[3]);
-            data.magicAtk = std::stoi(cols[4]);
-            data.def = std::stoi(cols[5]);
+            data.textureKey = cols[2];
+            data.hp = std::stoi(cols[3]);
+            data.maxHp = std::stoi(cols[4]);
+            data.atk = std::stoi(cols[5]);
+            data.magicAtk = std::stoi(cols[6]);
+            data.def = std::stoi(cols[7]);
 
             // cardId1〜4
             for (int i = 5; i <= 9; i++) {

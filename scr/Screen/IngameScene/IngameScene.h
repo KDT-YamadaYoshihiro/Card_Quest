@@ -19,7 +19,7 @@ public:
 	virtual ~IngameScene() = default;
 
 
-	void Init() override;
+	void Init(sf::RenderWindow& arg_window) override;
 	void handleEvent() override;
 	void Update(sf::RenderWindow& arg_window) override;
 	void Render(sf::RenderWindow& arg_window) override;
