@@ -1,6 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "../../View/Render/RenderSystem.h"
+#include "../View/Render/RenderSystem.h"
 #include "../CSVLoad/TextureLoader/TextureLoader.h"
 
 class SceneBase
@@ -12,7 +12,7 @@ protected:
 
 public:
 
-	SceneBase() = default;
+	SceneBase(sf::RenderWindow& arg_window) {};
 	virtual ~SceneBase() = default;
 
 	virtual void Init(sf::RenderWindow& arg_window) = 0;

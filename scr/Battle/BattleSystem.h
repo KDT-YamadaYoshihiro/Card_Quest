@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <memory>
-#include "../../View/Render/RenderSystem.h"
+#include "../View/Render/RenderSystem.h"
 #include "../Character/Character.h"
 #include "../Battle/Cost/CostManager.h"
 #include "../Card/CardManager/CardManager.h"
@@ -48,7 +48,7 @@ private:
 
 public:
 
-    BattleSystem();
+    BattleSystem(sf::RenderWindow& arg_window);
     virtual ~BattleSystem() = default;
 
     /// <summary>
@@ -60,7 +60,6 @@ public:
     /// XVˆ—
     /// </summary>
     void Update(sf::RenderWindow& arg_window);
-	void AnimationUpdate(float dt);
     // •`‰æ
     void Render(sf::RenderWindow& arg_window);
 

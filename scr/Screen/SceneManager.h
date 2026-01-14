@@ -29,9 +29,9 @@ public:
     void HandleEvent();
 
     template <typename T>
-    void ChangeScreen()
+    void ChangeScreen(sf::RenderWindow& arg_window)
     {
-        m_screen = std::make_unique<T>();
+        m_screen = std::make_unique<T>(arg_window);
     }
 
 };

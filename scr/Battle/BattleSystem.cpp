@@ -2,7 +2,7 @@
 #include "../Battle/Calculation/Calculation.h"
 #include "../Character/Factory/CharacterFactory.h"
 #include "../Card/CardFactory/CardFactory.h"
-#include "../../View/Font/FontManager.h"
+#include "../View/Font/FontManager.h"
 #include "../Battle/SelectTarget/TargetSelect.h"
 #include "../Battle/UserController/UserController.h"
 #include "../Battle/UserController/ActionData.h"
@@ -11,7 +11,7 @@
 #define FontMgr FontManager::GetInstance()
 
 // 初期化
-BattleSystem::BattleSystem()
+BattleSystem::BattleSystem(sf::RenderWindow& arg_window)
 	:
     m_phase(TurnPhase::StartTurn),
     m_turnCount(1),
@@ -24,19 +24,12 @@ BattleSystem::BattleSystem()
     // コントローラー作成
     m_userController = std::make_unique<UserController>();
 
+    Init(arg_window);
 }
 
 // 初期化
 void BattleSystem::Init(sf::RenderWindow& arg_window)
 {
-    for (auto& p : m_players)
-    {
-        p->CreateAnimetion();
-    }
-    for (auto& e : m_enemies)
-    {
-        e->CreateAnimetion();
-    }
     // エンティティ作成
     CreateEntity(arg_window);
     // コスト初期化
@@ -89,24 +82,12 @@ void BattleSystem::Update(sf::RenderWindow& arg_window)
 
 }
 
-void BattleSystem::AnimationUpdate(float dt)
-{
-	// キャラクターのアニメーション更新
-	for (auto& p : m_players)
-	{
-		p->AnimationUpdate(dt);
-	}
-	for (auto& e : m_enemies)
-	{
-		e->AnimationUpdate(dt);
-	}
-}
 
 // 描画
 void BattleSystem::Render(sf::RenderWindow& window)
 {
-    //// カメラ影響あり
-    //m_renderSystem->ApplyCamera();
+    // カメラ影響あり
+    m_renderSystem->ApplyCamera();
 
     // キャラクターの描画
 	for (auto& p : m_players)
@@ -118,8 +99,8 @@ void BattleSystem::Render(sf::RenderWindow& window)
 		e->Render(*m_renderSystem);
     }
 
-    //// カメラの影響解除
-    //m_renderSystem->ResetCamera();
+    // カメラの影響解除
+    m_renderSystem->ResetCamera();
     
     // 山札
     m_cardRenderer->DrawDeck(FontMgr.GetFont(), window, {50.0f,300.0f}, CardManager::GetInstance().GetDeckCount());
@@ -204,11 +185,11 @@ void BattleSystem::CreateEntity(sf::RenderWindow& window)
 {
     // カメラ機能付き描画システム作成
     m_renderSystem = std::make_unique<RenderSystem>(window);
-
     // プレイヤー、カード作成
     for (int i = 1; i < 5; i++) {
 
         auto player = CharacterFactory::Instance().CreateCharacter<Player>(i);
+		player->SetPosition({ 100.0f, static_cast<float>(i * 50) });
         m_players.push_back(player);
 
         const std::vector<int>& cardIds = player->GetStatus().cardIds;
@@ -227,6 +208,7 @@ void BattleSystem::CreateEntity(sf::RenderWindow& window)
 	// エネミー作成
     for (int i = 5; i < 6; i++) {
         auto enemy = CharacterFactory::Instance().CreateCharacter<Enemy>(i);
+		enemy->SetPosition({ 500.0f, static_cast<float>(i * 100) });
         m_enemies.push_back(enemy);
 	}
 }

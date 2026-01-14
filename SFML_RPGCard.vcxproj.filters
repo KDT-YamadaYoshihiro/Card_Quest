@@ -81,7 +81,7 @@
     <ClCompile Include="scr\Character\Enemy\Enemy.cpp">
       <Filter>ソース ファイル\Character\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="View\Render\RenderSystem.cpp">
+    <ClCompile Include="scr\View\Render\RenderSystem.cpp">
       <Filter>ソース ファイル\Render</Filter>
     </ClCompile>
     <ClCompile Include="scr\CameraManager\CameraManager.cpp">
@@ -93,7 +93,7 @@
     <ClCompile Include="scr\CSVLoad\TextureLoader\TextureLoader.cpp">
       <Filter>ソース ファイル\CSVLoader\Textures</Filter>
     </ClCompile>
-    <ClCompile Include="View\Render\Animetion\Animation.cpp">
+    <ClCompile Include="scr\View\Render\Animetion\Animation.cpp">
       <Filter>ソース ファイル\Render\Animetion</Filter>
     </ClCompile>
     <ClCompile Include="scr\Screen\ResultScene\ResultScene.cpp">
@@ -161,7 +161,7 @@
     <ClInclude Include="scr\Character\Factory\CharacterFactory.h">
       <Filter>ソース ファイル\Character\Factory</Filter>
     </ClInclude>
-    <ClInclude Include="View\Render\RenderSystem.h">
+    <ClInclude Include="scr\View\Render\RenderSystem.h">
       <Filter>ソース ファイル\Render</Filter>
     </ClInclude>
     <ClInclude Include="scr\CameraManager\CameraManager.h">
@@ -182,7 +182,7 @@
     <ClInclude Include="scr\CSVLoad\TextureLoader\TextureLoader.h">
       <Filter>ソース ファイル\CSVLoader\Textures</Filter>
     </ClInclude>
-    <ClInclude Include="View\Render\Animetion\Animation.h">
+    <ClInclude Include="scr\View\Render\Animetion\Animation.h">
       <Filter>ソース ファイル\Render\Animetion</Filter>
     </ClInclude>
     <ClInclude Include="scr\Screen\ResultScene\ResultScene.h">
@@ -218,7 +218,7 @@
     <ClInclude Include="scr\Card\CardRenderer\CardRenderer.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="View\Font\FontManager.h">
+    <ClInclude Include="scr\View\Font\FontManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="scr\Battle\SelectTarget\TargetSelect.h">

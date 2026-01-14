@@ -1,8 +1,9 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <iostream>
 #include "CharacterData.h"
 #include "../Card/CardPool.h"
-#include  "../../View/Render/Animetion/Animation.h"
+#include  "../View/Render/RenderSystem.h"
 #include "../CSVLoad/TextureLoader/TextureLoader.h"
 
 class RenderSystem;
@@ -17,7 +18,6 @@ protected:
 	Faction m_faction;
 	bool m_focused;
 	sf::Vector2f m_postion;
-	std::shared_ptr<Animation> m_animation;
 
 public:
 
@@ -29,36 +29,20 @@ public:
 		m_focused(false),
 		m_postion({ 0.0f,0.0f })
 	{
+		
 	}
 	
 	// プレイヤーかエネミーか
 	bool IsPlayer() const { return m_faction == Faction::Player; }
 	bool IsEnemy()  const { return m_faction == Faction::Enemy; }
-	// アニメーション初期化
-	void CreateAnimetion()
-	{
-		const sf::Texture* tex = TextureLoader::GetInstance().GetTextureID(m_status.textureKey);
-		assert(tex);
-		m_animation = std::make_shared<Animation>(*tex);
-	}
-	// アニメーション更新
-	virtual void AnimationUpdate(float dt)
-	{
-		m_animation->Update(dt);
-	};
 	// 状態更新
 	virtual void Update() = 0;
 	// 描画
-	virtual void Render(RenderSystem& render)
-	{
-		m_animation->Draw(render);
-	};
-
+	virtual void Render(RenderSystem& render) = 0;
 	// 座標設定
 	void SetPosition(const sf::Vector2f& arg_pos)
 	{
 		m_postion = arg_pos;
-		m_animation->SetPosition(arg_pos);
 	}
 
 	// アクションメソッド

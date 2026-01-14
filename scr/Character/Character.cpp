@@ -1,5 +1,6 @@
 #include "character.h"
 
+
 // ダメージを与える。
 void Character::TakeDamage(int damage)
 {

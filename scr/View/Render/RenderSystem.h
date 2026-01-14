@@ -14,6 +14,9 @@ public:
 	RenderSystem(sf::RenderWindow& arg_window)
 		:m_window(arg_window)
 	{
+		CameraManager::GetInstance().ViewInit(
+			{ 0.0f, 0.0f },
+			{ static_cast<float>(arg_window.getSize().x), static_cast<float>(arg_window.getSize().y) });
 	}
 
 	// •`‰æŠÖ˜A

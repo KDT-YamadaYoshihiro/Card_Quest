@@ -11,10 +11,10 @@ class IngameScene : public SceneBase
 
 public:
 
-	IngameScene()
+	IngameScene(sf::RenderWindow& arg_window):SceneBase(arg_window)
 	{
 		std::cout << "Ingame" << std::endl;
-		battle = std::make_shared<BattleSystem>();
+		battle = std::make_shared<BattleSystem>(arg_window);
 	};
 	virtual ~IngameScene() = default;
 

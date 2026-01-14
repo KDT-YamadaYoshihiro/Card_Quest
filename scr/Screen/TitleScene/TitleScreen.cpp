@@ -11,20 +11,16 @@ void TitleScene::Init(sf::RenderWindow& arg_window)
 
 void TitleScene::handleEvent()
 {
-	
-    // キーボード判定
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space))
-    {
-        SceneManager::GetInstance().ChangeScreen<IngameScene>();
-    }
-    
-
-
 }
 
 void TitleScene::Update(sf::RenderWindow& arg_window)
 {
-	
+    // キーボード判定
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space))
+    {
+        SceneManager::GetInstance().ChangeScreen<IngameScene>(arg_window);
+    }
+
 }
 
 void TitleScene::Render(sf::RenderWindow& window)

@@ -2,8 +2,8 @@
 
 void CameraManager::ViewInit(const sf::Vector2f& center, const sf::Vector2f& size)
 {
-	m_view.setCenter(center);
 	m_view.setSize(size);
+	m_view.setCenter(size * 0.5f);
 	m_moveTarget = center;
 }
 

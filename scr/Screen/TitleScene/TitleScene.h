@@ -7,17 +7,17 @@
 class TitleScene : public SceneBase
 {
 
-	sf::Texture test;
+	//sf::Texture test;
 
 public:
 
-	TitleScene()
+	TitleScene(sf::RenderWindow& arg_window):SceneBase(arg_window)
 	{
-		if (!test.loadFromFile("data/Test/test.jpg"))
-		{
-			// error...
-			std::cout << "error" << "\n";
-		}
+		//if (!test.loadFromFile("data/Test/test.jpg"))
+		//{
+		//	// error...
+		//	std::cout << "error" << "\n";
+		//}
 	};
 
 
