@@ -23,6 +23,15 @@ public:
         EndTurn
     };
 
+    // プレイヤー選択フェーズ
+    enum class PlayerSelectPhase
+    {
+        SELECT_CARD,
+        SELECT_TARGET,
+        CONFIRM
+    };
+
+
 private:
 
 	// 描画システム
@@ -38,6 +47,9 @@ private:
     std::unique_ptr<CardRenderer> m_cardRenderer;
     // フェーズ
     TurnPhase m_phase;
+	// プレイヤーターンフェーズ
+	PlayerSelectPhase m_playerPhase;
+
     // ターン数
     int m_turnCount;
 

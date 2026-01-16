@@ -2,56 +2,13 @@
 #include "../../Card/CardManager/CardManager.h"
 
 UserController::UserController()
-	:m_phase(PlayerSelectPhase::SELECT_CARD),
-	m_decisionButton(40.0f,{ 860.0f, 525.0f }),
+	:m_decisionButton(40.0f,{ 860.0f, 525.0f }),
 	m_turnEndButton(40.0f, { 1000.0f, 525.0f }),
 	m_requestTurnEnd(false)
 {
 }
 
-// アクションキャラのセット
-void UserController::SetActionCharacter(const std::shared_ptr<Character>& character)
-{
-    m_actionCharacter = character;
-}
 
-// ターゲット候補のセット
-void UserController::SetTargetCandidates(const std::vector<std::shared_ptr<Character>>& targets)
-{
-    m_targetCandidates = targets;
-}
-
-// 更新
-void UserController::Update(sf::RenderWindow& window)
-{
-
-    // ターン終了ボタン
-    if (IsTurnEndButtonClicked(window))
-    {
-        m_requestTurnEnd = true;
-        return;
-    }
-
-    switch (m_phase)
-    {
-    case PlayerSelectPhase::SELECT_CARD:
-        SelectCard(window);
-        break;
-
-    case PlayerSelectPhase::SELECT_TARGET:
-        SelectTarget(window);
-        break;
-
-    case PlayerSelectPhase::CONFIRM:
-        // アクション作成
-        m_action = Action{
-            m_actionCharacter,
-            m_selectedTargets,
-            *m_selectedCard,
-        };
-        break;
-    }
-}
 
 void UserController::Draw(sf::RenderWindow& window) const
 {
@@ -66,19 +23,6 @@ void UserController::Draw(sf::RenderWindow& window) const
 bool UserController::HasAction() const
 {
     return m_action.has_value();
-}
-
-// アクションを取り出す
-Action UserController::PopAction()
-{
-    Action act = *m_action;
-    m_action.reset();
-
-    m_selectedTargets.clear();
-    m_selectedCard.reset();
-    m_phase = PlayerSelectPhase::SELECT_CARD;
-
-    return act;
 }
 
 bool UserController::IsTurnEndRequested() const

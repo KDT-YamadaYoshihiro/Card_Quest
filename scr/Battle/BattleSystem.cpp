@@ -14,6 +14,7 @@
 BattleSystem::BattleSystem(sf::RenderWindow& arg_window)
 	:
     m_phase(TurnPhase::StartTurn),
+	m_playerPhase(PlayerSelectPhase::SELECT_CARD),
     m_turnCount(1),
     m_choiceCardIndex(0)
 {
@@ -186,9 +187,9 @@ void BattleSystem::CreateEntity(sf::RenderWindow& window)
     // カメラ機能付き描画システム作成
     m_renderSystem = std::make_unique<RenderSystem>(window);
     // プレイヤー、カード作成
-    for (int i = 1; i < 5; i++) {
+    for (int i = 0; i < 4; i++) {
 
-        auto player = CharacterFactory::Instance().CreateCharacter<Player>(i);
+        auto player = CharacterFactory::Instance().CreateCharacter<Player>(i + 1);
 		player->SetPosition({ 100.0f, static_cast<float>(i * 50) });
         m_players.push_back(player);
 
@@ -265,6 +266,11 @@ std::vector<std::shared_ptr<Character>> BattleSystem::MakeTargetCandidates(const
 {
 	// ターゲット候補
     std::vector<std::shared_ptr<Character>> result;
+    if (!actionChara)
+    {
+        std::cout << "アクションキャラクターが存在しません:" << std::endl;
+        return result;
+    }
 
 	// 生存者のみ追加するラムダ
     auto pushAlive = [&](const std::vector<std::shared_ptr<Character>>& list)
@@ -338,9 +344,31 @@ void BattleSystem::StartTurn()
 // プレイヤー更新
 void BattleSystem::PlayerUpdate(sf::RenderWindow& window)
 {
+
+    switch (m_playerPhase)
+    {
+    case BattleSystem::PlayerSelectPhase::SELECT_CARD:
+		m_userController->SelectCard(window);
+        break;
+    case BattleSystem::PlayerSelectPhase::SELECT_TARGET:
+		m_userController->SelectTarget(window);
+        break;
+    case BattleSystem::PlayerSelectPhase::CONFIRM:
+        break;
+    default:
+        break;
+    }
     // ユーザー操作更新
     m_userController->Update(window);
 
+     if (m_userController->IsCardSelected())
+    {
+        const Card& card = m_userController->GetSelectedCard();
+        auto user = GetActionCharacterFromCard(card);
+
+        auto targets = MakeTargetCandidates(user, card.GetCardState().targetType);
+        m_userController->SetTargetCandidates(targets);
+    }
     // アクションが確定したら即適用
     if (m_userController->HasAction())
     {

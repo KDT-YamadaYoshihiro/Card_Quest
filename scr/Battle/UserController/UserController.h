@@ -10,14 +10,6 @@
 #include "../SelectTarget/TargetSelect.h"
 #include "../../UI/CircleButton.h"
 
-// プレイヤー選択フェーズ
-enum class PlayerSelectPhase
-{
-    SELECT_CARD,
-    SELECT_TARGET,
-    CONFIRM
-};
-
 class UserController
 {
 public:
@@ -25,38 +17,19 @@ public:
     // コンストラクタ
     UserController();
 
-    // アクションキャラのセット
-    void SetActionCharacter(const std::shared_ptr<Character>& character);
-    // ターゲット候補のセット
-    void SetTargetCandidates(const std::vector<std::shared_ptr<Character>>& targets);
-    // 選択カードインデックスの取得
-	int GetSelectedCardIndex() const { return m_selectedCardIndex; }
-    // 更新
-    void Update(sf::RenderWindow& window);
 	// 描画
     void Draw(sf::RenderWindow& window) const;
 	// アクションがあるか
     bool HasAction() const;
-	// アクションの取得とリセット
-    Action PopAction();
     // ターン終了ボタン用
     bool IsTurnEndRequested() const;
 	// ターン終了要求リセット
     void ResetTurnEndRequest();
 
 private:
-    // 現在のフェーズ
-    PlayerSelectPhase m_phase;
-    // アクションキャラ
-    std::shared_ptr<Character> m_actionCharacter;
+
     // 選択カード
-    std::optional<CardData> m_selectedCard;
-    // 選択カードのindex
-    int m_selectedCardIndex = -1;
-    // ターゲット候補
-    std::vector<std::shared_ptr<Character>> m_targetCandidates;
-    // 選択ターゲット
-    std::vector<std::shared_ptr<Character>> m_selectedTargets;
+	std::shared_ptr<Card> m_selectedCard;
     // アクションデータ
     std::optional<Action> m_action;
 	// 決定ボタン
@@ -68,9 +41,9 @@ private:
 
 // 内部処理
     // カード選択
-    void SelectCard(sf::RenderWindow& window);
+    void SelectCard(sf::RenderWindow& window,const std::vector<Card> arg_hand);
     // ターゲット選択
-    void SelectTarget(sf::RenderWindow& window);
+    void SelectTarget(sf::RenderWindow& window, const std::vector<std::shared_ptr<Character>> arg_target);
     //  クリック判定
     int GetClickHandIndex(sf::RenderWindow& window) const;
     // 決定ボタンがクリックされたか
