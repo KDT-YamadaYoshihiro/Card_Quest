@@ -1,6 +1,7 @@
 #include "UserController.h"
 #include "../../Card/CardManager/CardManager.h"
 
+// コンストラクタ
 UserController::UserController()
 	:m_decisionButton(40.0f,{ 860.0f, 525.0f }),
 	m_turnEndButton(40.0f, { 1000.0f, 525.0f }),
@@ -8,8 +9,7 @@ UserController::UserController()
 {
 }
 
-
-
+// 描画
 void UserController::Draw(sf::RenderWindow& window) const
 {
 	// 決定ボタン描画
@@ -18,96 +18,110 @@ void UserController::Draw(sf::RenderWindow& window) const
 	m_turnEndButton.Draw(window);
 }
 
-
-// アクションがあるか
-bool UserController::HasAction() const
+// カード選択
+std::optional<CardData> UserController::SelectCard(sf::RenderWindow& window, const std::vector<std::unique_ptr<Card>> arg_hand)
 {
-    return m_action.has_value();
+
+	// 左クリック
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+    {
+        int index = GetClickHandIndex(window);
+        if (index >= 0)
+        {
+			// 選択カード更新
+			m_selectedCardIndex = index;
+            m_selectedCard = arg_hand[index]->GetCardState();
+        }
+	}
+
+	// 決定ボタン
+	sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+	bool leftClick = sf::Mouse::isButtonPressed(sf::Mouse::Button::Left);
+    if (m_decisionButton.IsClicked(mousePos, leftClick) && m_selectedCard.has_value())
+    {
+		// 選択済みカードを返す
+		return m_selectedCard;
+    }
+
+	// 未選択
+    return std::nullopt;
 }
 
+// ターゲット選択
+std::optional<std::vector<std::shared_ptr<Character>>> UserController::SelectTarget(sf::RenderWindow& window, const std::vector<std::shared_ptr<Character>>& arg_target, const CardData& arg_card, const std::shared_ptr<Character>& arg_actionChara)
+{
+
+	// ターゲット候補保存
+	std::vector<std::shared_ptr<Character>> result;
+    // ターゲット単体
+	std::shared_ptr<Character> target;
+
+	// ターゲットタイプ別処理
+    switch (arg_card.targetType)
+    {
+	case TargetType::OPPONENT:
+	case TargetType::ALLY:
+
+		// 単体選択
+		target = TargetSelect::SelectSingle(arg_target, window);
+		// 選択されたら確定
+        if (target)
+        {
+			result.push_back(target);
+            return result;
+        }
+
+        break;
+
+	case TargetType::OPPONENT_ALL:
+	case TargetType::ALLY_ALL:
+
+		// 全体選択は誰かをクリックしたら確定
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+        {
+            result = TargetSelect::SelectAll(arg_target);
+			return result;
+        }
+
+        break;
+
+	case TargetType::SELF:
+
+		// 自分自身を選択
+		result.push_back(TargetSelect::SelectSelf(arg_actionChara));
+        return result;
+
+    default:
+        break;
+    }
+
+	// 未選択
+	return std::nullopt;
+}
+
+// 選択カードindex取得
+int UserController::GetSelectedCardIndex() const
+{
+    return m_selectedCardIndex; 
+}
+
+// ターン終了ボタン用
 bool UserController::IsTurnEndRequested() const
 {
     return m_requestTurnEnd;
 }
 
+// ターン終了要求リセット
 void UserController::ResetTurnEndRequest()
 {
     m_requestTurnEnd = false;
 }
 
-// カード選択
-void UserController::SelectCard(sf::RenderWindow& window)
+// コントローラーのリセット
+void UserController::Reset()
 {
-    // 左クリック
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
-    {
-        int index = GetClickHandIndex(window);
-
-        if (index >= 0)
-        {
-            m_selectedCardIndex = index;
-
-            const auto& hand = CardManager::GetInstance().GetHandCard();
-            m_selectedCard = hand[m_selectedCardIndex]->GetCardState();
-
-            // デバッグ
-            std::cout << "選択中カード index: " << m_selectedCardIndex << std::endl;
-        }
-    }
-
-    // 決定ボタン
-    sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-    bool leftClick = sf::Mouse::isButtonPressed(sf::Mouse::Button::Left);
-    if (m_decisionButton.IsClicked(mousePos, leftClick) && m_selectedCard.has_value())
-    {
-        m_phase = PlayerSelectPhase::SELECT_TARGET;
-    }
-}
-
-// ターゲット選択
-void UserController::SelectTarget(sf::RenderWindow& window)
-{
-
-    // --- 単体選択 ---
-    if (m_selectedCard->targetType == TargetType::OPPONENT ||
-        m_selectedCard->targetType == TargetType::ALLY)
-    {
-        auto target = TargetSelect::SelectSingle(m_targetCandidates, window);
-
-        if (target)
-        {
-            m_selectedTargets.clear();
-            m_selectedTargets.push_back(target);
-
-            m_phase = PlayerSelectPhase::CONFIRM;
-        }
-    }
-    // --- 全体 ---
-    else if (m_selectedCard->targetType == TargetType::OPPONENT_ALL ||
-        m_selectedCard->targetType == TargetType::ALLY_ALL)
-    {
-        // 誰かをクリックしたら確定、という仕様
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
-        {
-            m_selectedTargets =
-                TargetSelect::SelectAll(m_targetCandidates);
-
-            m_phase = PlayerSelectPhase::CONFIRM;
-        }
-    }
-    // --- 自分 ---
-    else if (m_selectedCard->targetType == TargetType::SELF)
-    {
-        auto self = TargetSelect::SelectSelf(m_actionCharacter);
-
-        if (self)
-        {
-            m_selectedTargets.clear();
-            m_selectedTargets.push_back(self);
-
-            m_phase = PlayerSelectPhase::CONFIRM;
-        }
-    }
+    m_selectedCard.reset();
+    m_selectedCardIndex = -1;
 }
 
 // クリックされた手札のインデックス取得

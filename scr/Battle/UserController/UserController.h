@@ -19,19 +19,25 @@ public:
 
 	// 描画
     void Draw(sf::RenderWindow& window) const;
-	// アクションがあるか
-    bool HasAction() const;
+    // カード選択
+    std::optional<CardData> SelectCard(sf::RenderWindow& window, const std::vector<std::unique_ptr<Card>> arg_hand);
+    // ターゲット選択
+    std::optional<std::vector<std::shared_ptr<Character>>> SelectTarget(sf::RenderWindow& window, const std::vector<std::shared_ptr<Character>>& arg_target, const CardData& arg_card, const std::shared_ptr<Character>& arg_actionChara);
+	// 選択カードindex取得
+    int GetSelectedCardIndex() const;
     // ターン終了ボタン用
     bool IsTurnEndRequested() const;
 	// ターン終了要求リセット
     void ResetTurnEndRequest();
+    // コントローラーのリセット
+    void Reset();
 
 private:
 
     // 選択カード
-	std::shared_ptr<Card> m_selectedCard;
-    // アクションデータ
-    std::optional<Action> m_action;
+	std::optional<CardData> m_selectedCard;
+	// 選択カードインデックス
+	int m_selectedCardIndex;
 	// 決定ボタン
 	CircleButton m_decisionButton;
 	// ターン終了ボタン
@@ -40,10 +46,6 @@ private:
     bool m_requestTurnEnd;
 
 // 内部処理
-    // カード選択
-    void SelectCard(sf::RenderWindow& window,const std::vector<Card> arg_hand);
-    // ターゲット選択
-    void SelectTarget(sf::RenderWindow& window, const std::vector<std::shared_ptr<Character>> arg_target);
     //  クリック判定
     int GetClickHandIndex(sf::RenderWindow& window) const;
     // 決定ボタンがクリックされたか

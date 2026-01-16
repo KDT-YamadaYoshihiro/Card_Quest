@@ -27,6 +27,7 @@ public:
     enum class PlayerSelectPhase
     {
         SELECT_CARD,
+		CREATE_TARGET_CANDIDATES,
         SELECT_TARGET,
         CONFIRM
     };
@@ -39,6 +40,13 @@ private:
     // キャラクター
     std::vector<std::shared_ptr<Character>> m_players;
     std::vector<std::shared_ptr<Character>> m_enemies;
+    // アクションキャラクター
+    std::shared_ptr<Character> m_actionCharacter;
+	// ターゲット候補と選択ターゲット
+    std::vector<std::shared_ptr<Character>> m_targetCandidates;
+    std::vector<std::shared_ptr<Character>> m_selectedTargets;
+	// 選択中カード
+	std::optional<CardData> m_selectedCard;
 	// プレイヤーコントローラー
     std::unique_ptr<UserController> m_userController;
     // コスト管理
@@ -48,7 +56,7 @@ private:
     // フェーズ
     TurnPhase m_phase;
 	// プレイヤーターンフェーズ
-	PlayerSelectPhase m_playerPhase;
+	PlayerSelectPhase m_userPhase;
 
     // ターン数
     int m_turnCount;
@@ -116,8 +124,14 @@ private:
     std::shared_ptr<Character> GetActionCharacterFromCard(const Card& arg_card);
     // ターゲット候補作成
     std::vector<std::shared_ptr<Character>> MakeTargetCandidates(const std::shared_ptr<Character>& actionChara, TargetType targetType) const;
+    // ユーザーターンの初期化
+    void ResetUserTurn();
+	// ターン開始時
     void StartTurn();
-    void PlayerUpdate(sf::RenderWindow& arg_window);
+	// ユーザー更新
+    void UserUpdate(sf::RenderWindow& arg_window);
+	// エネミー更新
     void EnemyUpdate();
+	// ターン終了時
     void EndTurn();
 };

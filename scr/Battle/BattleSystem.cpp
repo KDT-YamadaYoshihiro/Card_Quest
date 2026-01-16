@@ -14,7 +14,7 @@
 BattleSystem::BattleSystem(sf::RenderWindow& arg_window)
 	:
     m_phase(TurnPhase::StartTurn),
-	m_playerPhase(PlayerSelectPhase::SELECT_CARD),
+	m_userPhase(PlayerSelectPhase::SELECT_CARD),
     m_turnCount(1),
     m_choiceCardIndex(0)
 {
@@ -59,7 +59,7 @@ void BattleSystem::Update(sf::RenderWindow& arg_window)
     case TurnPhase::UserTurn:
 
         // プレイヤーアップデートを呼ぶ
-        PlayerUpdate(arg_window);
+        UserUpdate(arg_window);
 
         break;
 
@@ -327,6 +327,27 @@ std::vector<std::shared_ptr<Character>> BattleSystem::MakeTargetCandidates(const
     return result;
 }
 
+// ユーザーターンの初期化
+void BattleSystem::ResetUserTurn()
+{
+
+    // フェーズ初期化
+	m_userPhase = PlayerSelectPhase::SELECT_CARD;
+
+    // 行動キャラ解除
+	m_actionCharacter.reset();
+
+	// 選択中カード解除
+	m_selectedCard.reset();
+
+	// 選択ターゲット解除
+	m_selectedTargets.clear();
+
+	// ユーザーコントローラーのリセット
+	m_userController->Reset();
+
+}
+
 // ターン開始時
 void BattleSystem::StartTurn()
 {
@@ -342,44 +363,84 @@ void BattleSystem::StartTurn()
 }
 
 // プレイヤー更新
-void BattleSystem::PlayerUpdate(sf::RenderWindow& window)
+void BattleSystem::UserUpdate(sf::RenderWindow& window)
 {
+	// 選択中カードデータ
+    static std::optional<CardData> selectedCard;
 
-    switch (m_playerPhase)
+    // ターン終了
+	if (m_userController->IsTurnEndRequested())
+    {
+		m_phase = TurnPhase::EnemyTurn;
+        m_userController.reset();
+		return;
+    }   
+    
+	// 選択ターゲット
+    std::optional<std::vector<std::shared_ptr<Character>>> targets;
+	// アクションデータ
+    Action action;
+    // 手札
+	auto handCard = CardManager::GetInstance().GetHandCard();
+
+	// プレイヤー選択フェーズごとの処理
+    switch (m_userPhase)
     {
     case BattleSystem::PlayerSelectPhase::SELECT_CARD:
-		m_userController->SelectCard(window);
+
+        selectedCard = m_userController->SelectCard(window,CardManager::GetInstance().GetHandCard());
+        
+        if (selectedCard)
+        {
+			m_selectedCard = selectedCard;
+            // 行動キャラ
+			m_actionCharacter = m_players[handCard[m_choiceCardIndex]->GetOwnerId()];
+			// ターゲット候補作成フェーズへ
+			m_userPhase = BattleSystem::PlayerSelectPhase::SELECT_TARGET;
+        }
+
         break;
+
+	case BattleSystem::PlayerSelectPhase::CREATE_TARGET_CANDIDATES:
+
+		// ターゲット候補作成
+        m_targetCandidates = MakeTargetCandidates(m_actionCharacter, m_selectedCard->targetType);
+
+		// 次のフェーズへ
+		m_userPhase = BattleSystem::PlayerSelectPhase::SELECT_TARGET;
+
+        break;
+
     case BattleSystem::PlayerSelectPhase::SELECT_TARGET:
-		m_userController->SelectTarget(window);
+
+		// ターゲット選択
+		targets = m_userController->SelectTarget(window, m_targetCandidates, *m_selectedCard, m_actionCharacter);
+		
+		// ターゲットが選択されたら次のフェーズへ
+        if (targets)
+        {
+            m_selectedTargets = *targets;
+			m_userPhase = BattleSystem::PlayerSelectPhase::CONFIRM;
+        }
+
         break;
     case BattleSystem::PlayerSelectPhase::CONFIRM:
+
+		// アクションデータ作成
+		action.user = m_actionCharacter;
+        action.targets = m_selectedTargets;
+        action.card = *m_selectedCard;
+		
+        // カードの使用
+		OnUseCard(action);
+
+		// ユーザーコントローラーのリセット
+        ResetUserTurn();
+
+
         break;
-    default:
-        break;
-    }
-    // ユーザー操作更新
-    m_userController->Update(window);
-
-     if (m_userController->IsCardSelected())
-    {
-        const Card& card = m_userController->GetSelectedCard();
-        auto user = GetActionCharacterFromCard(card);
-
-        auto targets = MakeTargetCandidates(user, card.GetCardState().targetType);
-        m_userController->SetTargetCandidates(targets);
-    }
-    // アクションが確定したら即適用
-    if (m_userController->HasAction())
-    {
-        OnUseCard(m_userController->PopAction());
     }
 
-    // ターン終了ボタンが押されたら EnemyTurn へ
-    if (m_userController->IsTurnEndRequested())
-    {
-        m_phase = TurnPhase::EnemyTurn;
-    }
 }
 
 // エネミー更新
