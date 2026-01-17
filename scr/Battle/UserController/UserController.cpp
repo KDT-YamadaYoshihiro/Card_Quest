@@ -1,5 +1,6 @@
 #include "UserController.h"
 #include "../../Card/CardManager/CardManager.h"
+#include "../../System/InPutManager/InPutManager.h"
 
 // コンストラクタ
 UserController::UserController()
@@ -24,7 +25,7 @@ std::optional<CardData> UserController::SelectCard(sf::RenderWindow& window, con
 {
 
 	// 左クリック
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+    if (InputManager::GetInstance().IsLeftClicked())
     {
         int index = GetClickHandIndex(window);
         if (index >= 0)
@@ -63,6 +64,11 @@ std::optional<std::vector<std::shared_ptr<Character>>> UserController::SelectTar
 	case TargetType::OPPONENT:
 	case TargetType::ALLY:
 
+        if (!InputManager::GetInstance().IsLeftClicked())
+        {
+            return std::nullopt;
+        }
+
 		// 単体選択
 		target = TargetSelect::SelectSingle(arg_target, window);
 		// 選択されたら確定
@@ -78,7 +84,7 @@ std::optional<std::vector<std::shared_ptr<Character>>> UserController::SelectTar
 	case TargetType::ALLY_ALL:
 
 		// 全体選択は誰かをクリックしたら確定
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+        if (InputManager::GetInstance().IsLeftClicked())
         {
             result = TargetSelect::SelectAll(arg_target);
 			return result;

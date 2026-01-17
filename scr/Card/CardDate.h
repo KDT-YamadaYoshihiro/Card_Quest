@@ -33,10 +33,11 @@ struct CardData
 {
     int cardId;
     std::string name;
-    int cost;
+    int actionPlus;
     ActionType actionType;
     float power;
     TargetType targetType;
     int turn;
+	int createMax;
     std::string description;
 };

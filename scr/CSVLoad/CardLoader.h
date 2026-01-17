@@ -42,14 +42,15 @@ public:
             CardData data;
             data.cardId = std::stoi(cols[0]);
             data.name = cols[1];
-            data.cost = std::stoi(cols[2]);
+            data.actionPlus = std::stoi(cols[2]);
             int actionTypeValue = std::stoi(cols[3]);
             data.actionType = static_cast<ActionType>(actionTypeValue);
             data.power = std::stof(cols[4]);
             int targetTypeValue = std::stoi(cols[5]);
             data.targetType = static_cast<TargetType>(targetTypeValue);
             data.turn = std::stoi(cols[6]);
-            data.description = cols[7];
+            data.createMax = std::stoi(cols[7]);
+            data.description = cols[8];
 
             m_cards[data.cardId] = data;
         }

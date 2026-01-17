@@ -2,7 +2,6 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "CharacterData.h"
-#include "../Card/CardPool.h"
 #include  "../View/Render/RenderSystem.h"
 #include "../CSVLoad/TextureLoader/TextureLoader.h"
 

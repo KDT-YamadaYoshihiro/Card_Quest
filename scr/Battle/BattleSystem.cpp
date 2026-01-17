@@ -6,6 +6,7 @@
 #include "../Battle/SelectTarget/TargetSelect.h"
 #include "../Battle/UserController/UserController.h"
 #include "../Battle/UserController/ActionData.h"
+#include "../System/InPutManager/InPutManager.h"
 
 // フォントのインスタンス取得省略
 #define FontMgr FontManager::GetInstance()
@@ -46,11 +47,15 @@ void BattleSystem::Update(sf::RenderWindow& arg_window)
         m_phase = TurnPhase::EndTurn;
         return;
     }
+
+    InputManager::GetInstance().Update();
+
 	// バトルフェーズごとの処理
     switch (m_phase) {
 
     case TurnPhase::StartTurn:
 
+        std::cout << "ターン開始" << std::endl;
         // ターン開始処理
         StartTurn();
 
@@ -58,6 +63,7 @@ void BattleSystem::Update(sf::RenderWindow& arg_window)
 
     case TurnPhase::UserTurn:
 
+        std::cout << "プレイヤーターン" << std::endl;
         // プレイヤーアップデートを呼ぶ
         UserUpdate(arg_window);
 
@@ -65,6 +71,7 @@ void BattleSystem::Update(sf::RenderWindow& arg_window)
 
     case TurnPhase::EnemyTurn:
 
+        std::cout << "エネミーターン" << std::endl;
         // エネミーアップデートを呼ぶ
         EnemyUpdate();
 
@@ -72,6 +79,7 @@ void BattleSystem::Update(sf::RenderWindow& arg_window)
 
     case TurnPhase::EndTurn:
 
+        std::cout << "ターン終了" << std::endl;
         // ターン終了処理
         EndTurn();
 
@@ -197,7 +205,7 @@ void BattleSystem::CreateEntity(sf::RenderWindow& window)
         const std::vector<int>& cardIds = player->GetStatus().cardIds;
         auto cards = CardFactory::GetInstance().CreateDeck(cardIds,i);
 
-        if (i == 1) {
+        if (i == 0) {
             CardManager::GetInstance().InitDeck(std::move(cards));
         }
         else
@@ -387,6 +395,9 @@ void BattleSystem::UserUpdate(sf::RenderWindow& window)
     {
     case BattleSystem::PlayerSelectPhase::SELECT_CARD:
 
+        // ログ
+        std::cout << "カード選択中" << std::endl;
+
         selectedCard = m_userController->SelectCard(window,CardManager::GetInstance().GetHandCard());
         
         if (selectedCard)
@@ -402,6 +413,8 @@ void BattleSystem::UserUpdate(sf::RenderWindow& window)
 
 	case BattleSystem::PlayerSelectPhase::CREATE_TARGET_CANDIDATES:
 
+        std::cout << "ターゲット候補作成" << std::endl;
+
 		// ターゲット候補作成
         m_targetCandidates = MakeTargetCandidates(m_actionCharacter, m_selectedCard->targetType);
 
@@ -411,6 +424,8 @@ void BattleSystem::UserUpdate(sf::RenderWindow& window)
         break;
 
     case BattleSystem::PlayerSelectPhase::SELECT_TARGET:
+
+        std::cout << "ターゲット選択" << std::endl;
 
 		// ターゲット選択
 		targets = m_userController->SelectTarget(window, m_targetCandidates, *m_selectedCard, m_actionCharacter);
@@ -424,6 +439,8 @@ void BattleSystem::UserUpdate(sf::RenderWindow& window)
 
         break;
     case BattleSystem::PlayerSelectPhase::CONFIRM:
+
+        std::cout << "アクション" << std::endl;
 
 		// アクションデータ作成
         Action action{
