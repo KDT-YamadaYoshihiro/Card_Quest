@@ -20,7 +20,7 @@ public:
 	// 描画
     void Draw(sf::RenderWindow& window) const;
     // カード選択
-    std::optional<CardData> SelectCard(sf::RenderWindow& window, const std::vector<std::unique_ptr<Card>> arg_hand);
+    std::optional<CardData> SelectCard(sf::RenderWindow& window, const std::vector<std::unique_ptr<Card>>& arg_hand);
     // ターゲット選択
     std::optional<std::vector<std::shared_ptr<Character>>> SelectTarget(sf::RenderWindow& window, const std::vector<std::shared_ptr<Character>>& arg_target, const CardData& arg_card, const std::shared_ptr<Character>& arg_actionChara);
 	// 選択カードindex取得

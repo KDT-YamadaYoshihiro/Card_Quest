@@ -186,6 +186,7 @@ void BattleSystem::CreateEntity(sf::RenderWindow& window)
 {
     // カメラ機能付き描画システム作成
     m_renderSystem = std::make_unique<RenderSystem>(window);
+
     // プレイヤー、カード作成
     for (int i = 0; i < 4; i++) {
 
@@ -372,16 +373,14 @@ void BattleSystem::UserUpdate(sf::RenderWindow& window)
 	if (m_userController->IsTurnEndRequested())
     {
 		m_phase = TurnPhase::EnemyTurn;
-        m_userController.reset();
+        m_userController->Reset();
 		return;
     }   
     
 	// 選択ターゲット
     std::optional<std::vector<std::shared_ptr<Character>>> targets;
-	// アクションデータ
-    Action action;
     // 手札
-	auto handCard = CardManager::GetInstance().GetHandCard();
+	auto& handCard = CardManager::GetInstance().GetHandCard();
 
 	// プレイヤー選択フェーズごとの処理
     switch (m_userPhase)
@@ -427,16 +426,17 @@ void BattleSystem::UserUpdate(sf::RenderWindow& window)
     case BattleSystem::PlayerSelectPhase::CONFIRM:
 
 		// アクションデータ作成
-		action.user = m_actionCharacter;
-        action.targets = m_selectedTargets;
-        action.card = *m_selectedCard;
-		
+        Action action{
+            m_actionCharacter,
+            m_selectedTargets,
+            *m_selectedCard
+        };
+
         // カードの使用
 		OnUseCard(action);
 
 		// ユーザーコントローラーのリセット
         ResetUserTurn();
-
 
         break;
     }

@@ -3,7 +3,8 @@
 
 // コンストラクタ
 UserController::UserController()
-	:m_decisionButton(40.0f,{ 860.0f, 525.0f }),
+	:m_selectedCardIndex(-1),
+    m_decisionButton(40.0f,{ 860.0f, 525.0f }),
 	m_turnEndButton(40.0f, { 1000.0f, 525.0f }),
 	m_requestTurnEnd(false)
 {
@@ -19,7 +20,7 @@ void UserController::Draw(sf::RenderWindow& window) const
 }
 
 // カード選択
-std::optional<CardData> UserController::SelectCard(sf::RenderWindow& window, const std::vector<std::unique_ptr<Card>> arg_hand)
+std::optional<CardData> UserController::SelectCard(sf::RenderWindow& window, const std::vector<std::unique_ptr<Card>>& arg_hand)
 {
 
 	// 左クリック
