@@ -131,8 +131,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="scr\Card\DeckBuildSystem\DeckBuildSystem.cpp" />
+    <ClCompile Include="scr\Screen\DeckBuildingScene\DeckBuildingScene.cpp" />
+    <ClCompile Include="scr\Card\CardBuildPool\CardBuildPool.cpp" />
     <ClCompile Include="scr\Battle\BattleContex\BattleContex.cpp" />
     <ClCompile Include="scr\Battle\UserController\UserController.cpp" />
+    <ClCompile Include="scr\Card\CardFactory\CardFactory.cpp" />
     <ClCompile Include="scr\Card\CardRenderer\CardRenderer.cpp" />
     <ClCompile Include="scr\Battle\BattleView\BattleView.cpp" />
     <ClCompile Include="scr\Card\CardManager\CardManager.cpp" />
@@ -155,6 +159,9 @@
     <ClCompile Include="scr\Screen\TitleScene\TitleScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="scr\Card\DeckBuildSystem\DeckBuildSystem.h" />
+    <ClInclude Include="scr\Screen\DeckBuildingScene\DeckBuildingScene.h" />
+    <ClInclude Include="scr\Card\CardBuildPool\CardBuildPool.h" />
     <ClInclude Include="scr\Battle\BattleContex\BattleContex.h" />
     <ClInclude Include="scr\Battle\UserController\ActionData.h" />
     <ClInclude Include="scr\Battle\UserController\UserController.h" />
@@ -165,7 +172,6 @@
     <ClInclude Include="scr\Battle\BattleSystem.h" />
     <ClInclude Include="scr\Card\Card.h" />
     <ClInclude Include="scr\Card\CardDate.h" />
-    <ClInclude Include="scr\Card\CardPool.h" />
     <ClInclude Include="scr\Battle\Cost\CostManager.h" />
     <ClInclude Include="scr\Character\Character.h" />
     <ClInclude Include="scr\Character\CharacterData.h" />

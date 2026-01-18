@@ -1,12 +1,12 @@
 #include "TitleScene.h"
 #include "../../Screen/SceneManager.h"
-#include "../IngameScene/IngameScene.h"
+#include "../DeckBuildingScene/DeckBuildingScene.h"
 #include <SFML/Graphics.hpp>
 
 
 void TitleScene::Init(sf::RenderWindow& arg_window)
 {
-    std::cout << "Title" << "\n";
+    std::cout << "Title" << std::endl;
 }
 
 void TitleScene::handleEvent()
@@ -18,7 +18,7 @@ void TitleScene::Update(sf::RenderWindow& arg_window)
     // キーボード判定
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space))
     {
-        SceneManager::GetInstance().ChangeScreen<IngameScene>(arg_window);
+        SceneManager::GetInstance().ChangeScreen<DeckBuildingScene>(arg_window);
     }
 
 }

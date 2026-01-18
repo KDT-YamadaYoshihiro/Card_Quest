@@ -22,41 +22,8 @@ public:
 		return instance;
 	}
 
-	// ’P‘Ì¶¬
-	std::unique_ptr<Card> Create(int arg_id, int arg_ownerId)
-	{
-		const CardData* src = CardLoader::GetInstance().Get(arg_id);
+	std::unique_ptr<Card> CreateCard(int cardId);
 
-		if (!src)
-		{
-			// ƒGƒ‰[ˆ—
-			return nullptr;
-		}
+	std::vector<std::unique_ptr<Card>> CreateBuildCards(int cardId);
 
-		CardData data = *src;
-
-#ifdef _DEBUG
-		std::cout << data.cardId << "‚ğ¶¬" << std::endl;
-#endif // _DEBUG
-
-		return std::make_unique<Card>(data,CardZone::None, arg_ownerId);
-		
-	}
-
-	// •¡”¶¬
-	std::vector<std::unique_ptr<Card>> CreateDeck(const std::vector<int>& arg_id, int arg_ownerId) {
-
-		std::vector<std::unique_ptr<Card>> deck;
-		deck.reserve(arg_id.size());
-
-		for (int id : arg_id)
-		{
-			auto card = Create(id, arg_ownerId);
-			if (card) {
-				deck.emplace_back(std::move(card));
-			}
-		}
-
-		return deck;
-	}
 };

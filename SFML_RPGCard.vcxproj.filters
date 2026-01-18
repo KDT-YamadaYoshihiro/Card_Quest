@@ -126,6 +126,18 @@
     <ClCompile Include="scr\Battle\BattleContex\BattleContex.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="scr\Card\CardFactory\CardFactory.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\Card\CardBuildPool\CardBuildPool.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\Screen\DeckBuildingScene\DeckBuildingScene.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\Card\DeckBuildSystem\DeckBuildSystem.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scr\Screen\SceneManager.h">
@@ -197,9 +209,6 @@
     <ClInclude Include="scr\Battle\Cost\CostManager.h">
       <Filter>ソース ファイル\Screen\Ingame\Battle</Filter>
     </ClInclude>
-    <ClInclude Include="scr\Card\CardPool.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="scr\Card\CardDate.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -234,6 +243,15 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="scr\UI\CircleButton.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Card\CardBuildPool\CardBuildPool.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Screen\DeckBuildingScene\DeckBuildingScene.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Card\DeckBuildSystem\DeckBuildSystem.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

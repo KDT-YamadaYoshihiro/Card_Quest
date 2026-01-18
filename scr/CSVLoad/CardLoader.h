@@ -67,4 +67,9 @@ public:
         return &it->second;
     }
 
+    const std::unordered_map<int, CardData>& GetAll() const
+    {
+        return m_cards;
+	}
+
 };
