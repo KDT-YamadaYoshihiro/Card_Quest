@@ -1,25 +1,66 @@
 #include "DeckBuildingScene.h"
+#include "../SceneManager.h"
 #include "../IngameScene/IngameScene.h"
+#include "../../Card/CardBuildPool/CardBuildPool.h"
+#include "../../Card/CardManager/CardManager.h"
+#include "../../System/InPutManager/InPutManager.h"
+#include "../../View/Font/FontManager.h"
 
 DeckBuildingScene::DeckBuildingScene(sf::RenderWindow& arg_window)
+	:SceneBase(arg_window),
+    m_completeButton(50.0f, { 700.0f, 500.0f })
 {
-
+	std::cout << "デッキ編成シーン" << std::endl;
+	// カードプール構築
+	CardBuildPool::GetInstance().Build();
+    m_deckBuildSystem.Init();
 }
 
 void DeckBuildingScene::Init(sf::RenderWindow& arg_window)
 {
 }
 
-void DeckBuildingScene::handleEvent()
+void DeckBuildingScene::handleEvent(const sf::Event& event)
 {
+    InputManager::GetInstance().HandleEvent(event);
 }
 
 void DeckBuildingScene::Update(sf::RenderWindow& arg_window)
 {
+
+	// 入力更新
+    auto& input = InputManager::GetInstance();
+    input.Update();
+
+	// マウス座標取得
+    sf::Vector2f mousePos(static_cast<float>(sf::Mouse::getPosition(arg_window).x),static_cast<float>(sf::Mouse::getPosition(arg_window).y));
+
+    float wheel = input.GetWheelDelta();
+
+	// デッキ編成システム更新
+    m_deckBuildSystem.Update(mousePos, input.IsLeftClicked(), wheel);
+
+    // 編成完了ボタン
+    if (m_completeButton.IsClicked(mousePos, input.IsLeftClicked()))
+    {
+        if (m_deckBuildSystem.IsComplete())
+        {
+			// CardManager にデッキをセット
+            CardManager::GetInstance().InitDeck(m_deckBuildSystem.TakeDeck());
+			// シーン切り替え
+			SceneManager::GetInstance().ChangeScreen<IngameScene>(arg_window);
+        }
+        // else: 30枚未満 → 何もしない or SE
+    }
 }
 
 void DeckBuildingScene::Render(sf::RenderWindow& arg_window)
 {
+    // --- デッキ & プール描画 ---
+	m_deckBuildSystem.Draw(arg_window, FontManager::GetInstance().GetFont());
+
+  // --- 完了ボタン ---
+    m_completeButton.Draw(arg_window);
 }
 
 void DeckBuildingScene::End()

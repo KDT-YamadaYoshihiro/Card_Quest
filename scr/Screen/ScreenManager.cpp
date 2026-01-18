@@ -26,8 +26,8 @@ void SceneManager::Render(sf::RenderWindow& window)
     m_screen->Render(window);
 }
 
-void SceneManager::HandleEvent()
+void SceneManager::HandleEvent(const sf::Event& event)
 {
-    m_screen->handleEvent();
+    m_screen->handleEvent(event);
 }
 

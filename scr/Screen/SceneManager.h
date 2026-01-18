@@ -26,7 +26,7 @@ public:
     void Init(sf::RenderWindow& arg_window);
     void Update(sf::RenderWindow& arg_window);
     void Render(sf::RenderWindow& arg_window);
-    void HandleEvent();
+    void HandleEvent(const sf::Event& event);
 
     template <typename T>
     void ChangeScreen(sf::RenderWindow& arg_window)

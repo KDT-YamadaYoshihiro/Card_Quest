@@ -1,18 +1,63 @@
 #pragma once
+#include <SFML/Graphics.hpp>
 #include <vector>
 #include <memory>
 #include "../../Card/Card.h"
+#include "../../Card/CardRenderer/CardRenderer.h"
 
 
 class DeckBuildSystem
 {
+	// 表示用カード構造体
+	struct DisplayCard
+	{
+		std::unique_ptr<Card> card;
+		int count;
+		size_t poolIndex;
+	};
 
 	// デッキ編成上限枚数
 	static const int MAX_DECK_SIZE = 30;
 	// デッキ内カード
 	std::vector<std::unique_ptr<Card>> m_deckCards;
+	// プール内表示用カード
+	std::vector<DisplayCard> m_displayPool;
+	// カード描画
+	std::shared_ptr<CardRenderer> m_renderer;
+	// 描画位置
+	sf::Vector2f m_deckStartPos;
+	sf::Vector2f m_poolStartPos;
+	// カード間隔
+	float m_cardSpacing;
+	// スクロール関連
+	float m_poolScrollX;
+	float m_poolScrollSpeed;
 
 public:
+
+	DeckBuildSystem()
+		:m_renderer(std::make_shared<CardRenderer>()),
+		m_deckStartPos({ 50.f, 50.f }),
+		m_poolStartPos({ 50.f, 300.f }),
+		m_cardSpacing(130.f),
+		m_poolScrollX(0.0f),
+		m_poolScrollSpeed(40.0f)
+	{
+		RebuildDisplayPool();
+	}
+
+	// 初期化
+	void Init();
+
+	// 更新
+	void Update(sf::Vector2f mousePos, bool isClick,float weelDelta);
+
+	// スクロール更新
+	void UpdateScroll(int wheelDelta);
+
+	// 描画
+	void Draw(sf::RenderWindow& window, const sf::Font& font);
+
 
 	// プールからデッキに追加
 	bool AddFromPool(int poolIndex);
@@ -30,7 +75,18 @@ public:
 	int GetMaxDeckSize() const;
 
 	// デッキ編成完了判定
-	bool IsComlete() const;
+	bool IsComplete() const;
+
+	std::vector<std::unique_ptr<Card>> TakeDeck();
+
+private:
+	
+	// プールクリック処理
+	bool HandlePoolClick(sf::Vector2f mousePos);
+	// デッキクリック処理
+	bool HandleDeckClick(sf::Vector2f mousePos);
+	// プール再構築
+	void RebuildDisplayPool();
 
 };
 

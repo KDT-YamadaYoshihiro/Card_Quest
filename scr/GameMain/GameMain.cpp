@@ -59,12 +59,12 @@ void GameMain::Run()
 
 void GameMain::ProcessEvents()
 {
-    while (auto event = m_window.pollEvent())
+    while (auto optevent = m_window.pollEvent())
     {
+		const sf::Event& event = *optevent;
+        SceneManager::GetInstance().HandleEvent(event);
 
-        SceneManager::GetInstance().HandleEvent();
-
-        if (event->is<sf::Event::Closed>())
+        if (optevent->is<sf::Event::Closed>())
         {
             m_window.close();
         }

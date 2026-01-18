@@ -51,7 +51,6 @@ CardUseResult CardManager::UseCard(std::size_t arg_handIndex)
 
 	CardUseResult result;
 	result.effect = card->GetCardState();
-	result.ownerID = card->GetOwnerId();
 
 	AddCemeteryCard(std::move(card));
 	m_hand.erase(m_hand.begin() + arg_handIndex);

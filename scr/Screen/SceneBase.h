@@ -16,7 +16,7 @@ public:
 	virtual ~SceneBase() = default;
 
 	virtual void Init(sf::RenderWindow& arg_window) = 0;
-	virtual void handleEvent() = 0;
+	virtual void handleEvent(const sf::Event& event) = 0;
 	virtual void Update(sf::RenderWindow& arg_window) = 0;
 	virtual void Render(sf::RenderWindow& arg_window) = 0;
 	virtual void End() = 0;

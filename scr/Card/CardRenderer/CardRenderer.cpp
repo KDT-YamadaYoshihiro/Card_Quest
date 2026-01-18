@@ -70,8 +70,8 @@ void CardRenderer::DrawHand(const sf::Font& arg_font, sf::RenderWindow& window, 
     descText.setFillColor(sf::Color::Black);
     descText.setPosition({ pos.x + 5.0f, pos.y + 30.0f });
     window.draw(descText);
-
 }
+
 
 /// <summary>
 /// ‰üsˆ—

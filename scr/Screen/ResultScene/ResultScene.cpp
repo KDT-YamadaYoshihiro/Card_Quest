@@ -4,7 +4,7 @@ void ResultScene::Init(sf::RenderWindow& arg_window)
 {
 }
 
-void ResultScene::handleEvent()
+void ResultScene::handleEvent(const sf::Event& event)
 {
 }
 

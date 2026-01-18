@@ -5,10 +5,10 @@
 
 void IngameScene::Init(sf::RenderWindow& arg_window)
 {
-	battle->Init(arg_window);
+	//battle->Init(arg_window);
 }
 
-void IngameScene::handleEvent()
+void IngameScene::handleEvent(const sf::Event& event)
 {
 	//if(battle->CheckWin() || battle->CheckLose())
 	//{
@@ -18,12 +18,12 @@ void IngameScene::handleEvent()
 
 void IngameScene::Update(sf::RenderWindow& arg_window)
 {
-	battle->Update(arg_window);
+	//battle->Update(arg_window);
 }
 
 void IngameScene::Render(sf::RenderWindow& arg_window)
 {	
-	battle->Render(arg_window);
+	//battle->Render(arg_window);
 }
 
 void IngameScene::End()
