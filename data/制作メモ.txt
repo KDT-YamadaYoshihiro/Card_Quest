@@ -365,3 +365,10 @@ bool UserController::IsTurnEndButtonClicked(sf::RenderWindow& window) const
     }
 
 }
+
+
+2026/01/19
+デッキ編成画面の実装
+
+次回の予定
+残りカード枚数を「×ｎ枚」と表示
