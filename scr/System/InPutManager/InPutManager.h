@@ -11,11 +11,42 @@ public:
         return instance;
     }
 
-    void Update()
+    void Update(const sf::RenderWindow& window)
     {
         m_prev = m_current;
         m_current = sf::Mouse::isButtonPressed(sf::Mouse::Button::Left);
-        // 毎フレームリセット
+
+        sf::Vector2f mousePos(
+            static_cast<float>(sf::Mouse::getPosition(window).x),
+            static_cast<float>(sf::Mouse::getPosition(window).y)
+        );
+
+        // 押した瞬間
+        if (m_current && !m_prev)
+        {
+            m_pressPos = mousePos;
+            m_dragging = false;
+        }
+
+        // 押している間 → 移動量でドラッグ判定
+        if (m_current && m_prev)
+        {
+            const float DRAG_THRESHOLD = 5.0f;
+            float dx = std::abs(mousePos.x - m_pressPos.x);
+            float dy = std::abs(mousePos.y - m_pressPos.y);
+
+            if (dx + dy > DRAG_THRESHOLD)
+            {
+                m_dragging = true;
+            }
+        }
+
+        // 離した瞬間
+        if (!m_current && m_prev)
+        {
+            m_dragging = false;
+        }
+
         m_wheelDelta = 0.f;
     }
 
@@ -33,18 +64,26 @@ public:
         return m_current && !m_prev;
     }
 
-    bool IsLeftPressed() const
+    bool IsDragging() const
     {
-        return m_current;
+        return m_dragging;
+    }
+
+    bool IsLeftReleased() const
+    {
+        return !m_current && m_prev;
     }
 
     float GetWheelDelta() const
     {
         return m_wheelDelta;
 	}
+
 private:
     bool m_prev = false;
     bool m_current = false;
+    bool m_dragging = false;
+    sf::Vector2f m_pressPos;
     float m_wheelDelta = 0.f;
 };
 

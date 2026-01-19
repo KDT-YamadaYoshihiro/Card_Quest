@@ -13,7 +13,6 @@ class DeckBuildSystem
 	{
 		std::unique_ptr<Card> card;
 		int count;
-		size_t poolIndex;
 	};
 
 	// デッキ編成上限枚数
@@ -27,21 +26,39 @@ class DeckBuildSystem
 	// 描画位置
 	sf::Vector2f m_deckStartPos;
 	sf::Vector2f m_poolStartPos;
+	// クリック開始位置
+	sf::Vector2f m_mouseDownPos;
 	// カード間隔
 	float m_cardSpacing;
 	// スクロール関連
-	float m_poolScrollX;
-	float m_poolScrollSpeed;
 
+	float m_poolScrollX;
+	bool  m_poolDragging;
+	float m_poolDragStartX;
+
+	float m_deckScrollX;
+	bool  m_deckDragging;
+	float m_deckDragStartX;
+
+	float m_lastMouseX;
+	// ドラッグ状態管理
+	bool  m_prevClick = false;
+	bool m_dragStarted = false;
 public:
 
 	DeckBuildSystem()
 		:m_renderer(std::make_shared<CardRenderer>()),
 		m_deckStartPos({ 50.f, 50.f }),
 		m_poolStartPos({ 50.f, 300.f }),
+		m_mouseDownPos({ 0.f, 0.f }),
 		m_cardSpacing(130.f),
 		m_poolScrollX(0.0f),
-		m_poolScrollSpeed(40.0f)
+		m_poolDragging(false),
+		m_poolDragStartX(0.0f),
+		m_deckScrollX(0.0f),
+		m_deckDragging(false),
+		m_deckDragStartX(0.0f),
+		m_lastMouseX(0.0f)
 	{
 		RebuildDisplayPool();
 	}
@@ -50,10 +67,7 @@ public:
 	void Init();
 
 	// 更新
-	void Update(sf::Vector2f mousePos, bool isClick,float weelDelta);
-
-	// スクロール更新
-	void UpdateScroll(int wheelDelta);
+	void Update(sf::Vector2f mousePos, bool isClick,bool isDragging, bool released,float weelDelta);
 
 	// 描画
 	void Draw(sf::RenderWindow& window, const sf::Font& font);
@@ -85,8 +99,12 @@ private:
 	bool HandlePoolClick(sf::Vector2f mousePos);
 	// デッキクリック処理
 	bool HandleDeckClick(sf::Vector2f mousePos);
+	// ドラッグ処理
+	void HandleDrag(sf::Vector2f mousePos, bool isClick);
 	// プール再構築
 	void RebuildDisplayPool();
-
+	// スクロール制限
+	void ClampPoolScroll();
+	void ClampDeckScroll();
 };
 

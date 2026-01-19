@@ -33,7 +33,7 @@ public:
 	const std::vector<std::unique_ptr<Card>>& GetPoolCards() const;
 
 	// 指定indexのカードを取り出す
-	std::unique_ptr<Card> TakeCard(size_t index);
+	std::unique_ptr<Card> TakeCard(int id);
 
 	// カードをプールに戻す
 	void ReturnCard(std::unique_ptr<Card>&& card);

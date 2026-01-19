@@ -30,7 +30,7 @@ void DeckBuildingScene::Update(sf::RenderWindow& arg_window)
 
 	// 入力更新
     auto& input = InputManager::GetInstance();
-    input.Update();
+    input.Update(arg_window);
 
 	// マウス座標取得
     sf::Vector2f mousePos(static_cast<float>(sf::Mouse::getPosition(arg_window).x),static_cast<float>(sf::Mouse::getPosition(arg_window).y));
@@ -38,8 +38,7 @@ void DeckBuildingScene::Update(sf::RenderWindow& arg_window)
     float wheel = input.GetWheelDelta();
 
 	// デッキ編成システム更新
-    m_deckBuildSystem.Update(mousePos, input.IsLeftClicked(), wheel);
-
+    m_deckBuildSystem.Update(mousePos, input.IsLeftClicked(),input.IsDragging(),input.IsLeftReleased(), wheel);
     // 編成完了ボタン
     if (m_completeButton.IsClicked(mousePos, input.IsLeftClicked()))
     {

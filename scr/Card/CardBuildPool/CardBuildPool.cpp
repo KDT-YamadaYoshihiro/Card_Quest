@@ -48,19 +48,19 @@ const std::vector<std::unique_ptr<Card>>& CardBuildPool::GetPoolCards() const
 }
 
 //　指定indexのカードを取り出す
-std::unique_ptr<Card> CardBuildPool::TakeCard(size_t index)
+std::unique_ptr<Card> CardBuildPool::TakeCard(int id)
 {
-    if (index >= m_poolCards.size())
+    for (size_t i = 0; i < m_poolCards.size(); ++i)
     {
-		std::cout << "指定indexが範囲外です:" << index << std::endl;
-        return nullptr;
+        if (m_poolCards[i]->GetCardState().cardId == id)
+        {
+            auto card = std::move(m_poolCards[i]);
+            m_poolCards.erase(m_poolCards.begin() + i);
+            return card;
+        }
     }
-
-    auto card = std::move(m_poolCards[index]);
-
-    m_poolCards.erase(m_poolCards.begin() + index);
-
-    return card;
+	std::cout << "指定されたIDのカードはプールに存在しません: " << id << std::endl;
+    return nullptr;
 }
 
 // カードプールに戻す
