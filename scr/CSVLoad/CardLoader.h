@@ -36,6 +36,14 @@ public:
         {
             if (first) { first = false; continue; } // ヘッダスキップ
 
+            // もし行の中にダブルクォート付き改行がある場合、閉じるまで読み続ける
+            while (std::count(line.begin(), line.end(), '"') % 2 != 0)
+            {
+                std::string nextLine;
+                if (!std::getline(ifs, nextLine)) break; // EOF
+                line += "\n" + nextLine; // 改行を含めて結合
+            }
+
             auto cols = Split(line);
             if (cols.size() < 8) continue;
 
@@ -50,8 +58,21 @@ public:
             data.targetType = static_cast<TargetType>(targetTypeValue);
             data.turn = std::stoi(cols[6]);
             data.createMax = std::stoi(cols[7]);
-            data.description = cols[8];
 
+           std::string desc = cols[8];
+            if (!desc.empty() && desc.front() == '"' && desc.back() == '"')
+            {
+                desc = desc.substr(1, desc.size() - 2);
+            }
+
+            // \n を本当の改行に置換する場合
+            size_t pos = 0;
+            while ((pos = desc.find("\\n", pos)) != std::string::npos)
+            {
+                desc.replace(pos, 2, "\n");
+            }
+
+            data.description = desc;
             m_cards[data.cardId] = data;
         }
         return true;
