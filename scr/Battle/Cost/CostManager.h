@@ -6,7 +6,7 @@ class CostManager
     // コスト
     int m_cost = 0;
     // 最大コスト
-    int m_maxCost = 5;
+    int m_maxCost = 1;
 
 public:
 

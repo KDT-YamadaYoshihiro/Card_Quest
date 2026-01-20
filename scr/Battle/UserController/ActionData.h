@@ -6,7 +6,8 @@
 
 struct Action
 {
-    std::shared_ptr<Character> user;
+    // s“®Ò
+    std::shared_ptr<Character> actor;
+    std::shared_ptr<Card> card;
     std::vector<std::shared_ptr<Character>> targets;
-    CardData card;
 };

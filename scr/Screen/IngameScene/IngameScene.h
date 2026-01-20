@@ -7,14 +7,14 @@
 class IngameScene : public SceneBase
 {
 
-	//std::shared_ptr<BattleSystem> battle;
+	std::shared_ptr<BattleSystem> m_battle;
 
 public:
 
 	IngameScene(sf::RenderWindow& arg_window):SceneBase(arg_window)
 	{
 		std::cout << "Ingame" << std::endl;
-		//battle = std::make_shared<BattleSystem>(arg_window);
+		m_battle = std::make_shared<BattleSystem>(arg_window);
 	};
 	virtual ~IngameScene() = default;
 

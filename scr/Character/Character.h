@@ -25,6 +25,7 @@ public:
 	Character(const CharacterData& arg_data)
 		:m_status(arg_data),
 		m_pos({ 0,0 }),
+		m_faction(Faction::Neutral),
 		m_focused(false),
 		m_postion({ 0.0f,0.0f })
 	{

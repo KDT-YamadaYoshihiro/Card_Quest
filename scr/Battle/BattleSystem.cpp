@@ -1,3 +1,4 @@
+#include "BattleSystem.h"
 //#include "../Battle/BattleSystem.h"
 //#include "../Battle/Calculation/Calculation.h"
 //#include "../Character/Factory/CharacterFactory.h"
@@ -492,3 +493,127 @@
 //        }
 //    }
 //}
+
+/// <summary>
+/// 終了処理
+/// </summary>
+BattleSystem::BattleSystem(sf::RenderWindow& arg_window)
+	:m_phase(TurnPhase::StartTurn),
+	m_turnCount(0)
+{
+	// 生成・初期化
+	Init();
+}
+
+/// <summary>
+/// 生成
+/// </summary>
+/// <returns>成功：失敗</returns>
+bool BattleSystem::Init()
+{
+
+	m_context = std::make_unique<BattleContext>();
+	if (!m_context) {
+		std::cout << "BattleSystem/m_context:nullptr" << std::endl;
+		return false;
+	}
+	m_userController = std::make_unique<UserController>();
+	if (!m_userController)
+	{
+		std::cout << "BattleSystem/m_userController:nullptr" << std::endl;
+		return false;
+	}
+	m_costManager = std::make_unique<CostManager>();
+	if (!m_costManager)
+	{
+		std::cout << "BattleSystem/m_costManager:nullptr" << std::endl;;
+		return false;
+	}
+
+	return true;
+}
+
+/// <summary>
+///	更新処理
+/// </summary>
+void BattleSystem::Update()
+{
+	// フェーズ進行
+	switch (m_phase)
+	{
+	case BattleSystem::TurnPhase::StartTurn:
+		StartTurn();
+		break;
+	case BattleSystem::TurnPhase::UserTurn:
+		UserTurn();
+		break;
+	case BattleSystem::TurnPhase::EnemyTurn:
+		EnemyTurn();
+		break;
+	case BattleSystem::TurnPhase::EndTurn:
+		EndTurn();
+		break;
+	default:
+		break;
+	}
+
+}
+
+/// <summary>
+/// バトル終了判定
+/// </summary>
+/// <returns></returns>
+bool BattleSystem::IsBattleEnd() const
+{
+	return false;
+}
+
+/// <summary>
+/// ユーザーの勝利か
+/// </summary>
+/// <returns></returns>
+bool BattleSystem::IsUserWin() const
+{
+	return false;
+}
+
+/// <summary>
+/// ターン開始
+/// </summary>
+void BattleSystem::StartTurn()
+{
+
+	// 行動数の初期化
+	m_costManager->ResetCost();
+
+	// カードの配布
+
+	// 次のフェーズへ
+	m_phase = TurnPhase::UserTurn;
+
+}
+
+/// <summary>
+/// ユーザーターン
+/// </summary>
+void BattleSystem::UserTurn()
+{
+}
+
+/// <summary>
+/// エネミーターン
+/// </summary>
+void BattleSystem::EnemyTurn()
+{
+}
+
+/// <summary>
+/// ターン終了
+/// </summary>
+void BattleSystem::EndTurn()
+{
+	// ターン数増加
+	m_turnCount++;
+	// スタートに戻る
+	m_phase = TurnPhase::StartTurn;
+}
