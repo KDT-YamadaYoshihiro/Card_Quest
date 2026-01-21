@@ -1,105 +1,62 @@
 #pragma once
-#include<SFML/Graphics.hpp>
-#include <iostream>
-#include <memory>
 #include <vector>
 #include <optional>
 #include "ActionData.h"
-#include "../../Battle/BattleContex/BattleContex.h"
-#include "../../Character/Character.h"
-#include "../../Card/Card.h"
-#include "../SelectTarget/TargetSelect.h"
-#include "../../UI/CircleButton.h"
+#include "../../Card/CardDate.h"
+
 
 class UserController
 {
+public:
+    // 初期化
+    UserController();
+
+    // ターン制御
+    void ResetTurn();
+    void Update();          // 入力状態更新
+    void HandleInput();     // UI/選択処理
+
+// 入力
+	// キャラクター選択
+    void SelectCharacter(int characterId);
+	// カード選択（保持スロット）
+    void SelectCard(int cardSlotIndex);
+	// ターゲット選択
+    void SelectTarget(int targetId);
+	// 確定・キャンセル
+    void Confirm();
+    void Cancel();
+
+// 状態取得
+	// 現在フェーズ取得
+    PlayerSelectPhase GetPhase() const;
+	// 確定アクションの有無
+    bool HasConfirmedAction() const;
+	// 確定アクション取得（消費）
+    UserAction ConsumeAction();
+	// 選択キャラクター取得
+    int GetSelectedCharacter() const;
+	// 選択カードスロット取得
+    int GetSelectedCardSlot() const;
+	// 選択ターゲット取得
+    const std::vector<int>& GetSelectedTargets() const;
+
 private:
 
-	// コンテックス
-	BattleContext* m_context = nullptr;
+	// 現在フェーズ
+    PlayerSelectPhase m_phase;
+	// 選択キャラクターID
+    std::optional<int> m_selectedCharacterId;
+	// 選択カードスロット
+    std::optional<int> m_selectedCardSlot;
+	// 選択ターゲットIDリスト
+    std::vector<int> m_selectedTargets;
 
-	// 選択した行動キャラ
-	std::shared_ptr<Character> m_selectedActor;
+	// 確定アクション
+    std::optional<UserAction> m_confirmedAction;
 
-	// 選択したターゲット
-	std::vector<std::shared_ptr<Character>> m_selectedTargets;
+private:
 
-	// 選択確定フラグ
-	bool m_actionConfimed = false;
-
-public:
-
-	/// <summary>
-	/// 初期化
-	/// </summary>
-	/// <param name="arg_context"></param>
-	/// <returns>成功：失敗</returns>
-	bool Init(BattleContext* arg_context);
-
-	/// <summary>
-	/// 更新
-	/// </summary>
-	void Update();
-
-	/// <summary>
-	/// 行動確定確認
-	/// </summary>
-	/// <returns></returns>
-	bool IsActionConfirmed()const;
-
-	/// <summary>
-	/// 行動確定取得
-	/// </summary>
-	/// <returns></returns>
-	Action TakeConfirmedAction();
-
-	/// <summary>
-	/// リセット
-	/// </summary>
-	void Reset();
-
+	// 選択情報クリア
+    void ClearSelections();
 };
-
-//class UserController
-//{
-//public:
-//
-//    // コンストラクタ
-//    UserController();
-//
-//	// 描画
-//    void Draw(sf::RenderWindow& window) const;
-//    // カード選択
-//    std::optional<CardData> SelectCard(sf::RenderWindow& window, const std::vector<std::unique_ptr<Card>>& arg_hand);
-//    // ターゲット選択
-//    std::optional<std::vector<std::shared_ptr<Character>>> SelectTarget(sf::RenderWindow& window, const std::vector<std::shared_ptr<Character>>& arg_target, const CardData& arg_card, const std::shared_ptr<Character>& arg_actionChara);
-//	// 選択カードindex取得
-//    int GetSelectedCardIndex() const;
-//    // ターン終了ボタン用
-//    bool IsTurnEndRequested() const;
-//	// ターン終了要求リセット
-//    void ResetTurnEndRequest();
-//    // コントローラーのリセット
-//    void Reset();
-//
-//private:
-//
-//    // 選択カード
-//	std::optional<CardData> m_selectedCard;
-//	// 選択カードインデックス
-//	int m_selectedCardIndex;
-//	// 決定ボタン
-//	CircleButton m_decisionButton;
-//	// ターン終了ボタン
-//	CircleButton m_turnEndButton;
-//    // ターン終了確認用
-//    bool m_requestTurnEnd;
-//
-//// 内部処理
-//    //  クリック判定
-//    int GetClickHandIndex(sf::RenderWindow& window) const;
-//    // 決定ボタンがクリックされたか
-//    bool IsDecisionButtonClicked(sf::RenderWindow& window) const;
-//    // 終了ボタンが押されているか確認
-//    bool IsTurnEndButtonClicked(sf::RenderWindow& window) const;
-//};

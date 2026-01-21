@@ -1,86 +1,51 @@
-#pragma once  
-#include <memory>  
-#include <vector>  
-#include <random>  
-#include <algorithm>  
-#include "../Card.h"  
+#pragma once
+#include <unordered_map>
+#include <vector>
+#include <random>
+#include <algorithm>
+#include "../CardDate.h"
 
-class Character;  
+class Character;
 
-// カード使用時
-struct CardUseResult
+// カード管理（IDベース）
+class CardManager
 {
-    CardData effect;
-    int ownerID;
-};
+private:
+    CardManager();
 
-// カード管理  
-class CardManager 
-{  
-   // デッキカード  
-   std::vector<std::unique_ptr<Card>> m_deck;  
+public:
+    CardManager(const CardManager&) = delete;
+    CardManager& operator=(const CardManager&) = delete;
 
-   // 手札カード  
-   std::vector<std::unique_ptr<Card>> m_hand;
+    static CardManager& GetInstance()
+    {
+        static CardManager instance;
+        return instance;
+    }
 
-   // 墓地カード  
-   std::vector<std::unique_ptr<Card>> m_cemetery;
+    // 初期化
+    void InitCardMaster(const std::unordered_map<int, CardData>& cards);
+    void InitDeck(const std::vector<int>& deckCardIds);
 
-   std::mt19937 m_rng{ std::random_device{}() };  
+    // デッキ操作
+    void ShuffleDeck();
+    bool DrawCard(Character& character);
 
-   CardManager() = default;  
-   ~CardManager() = default;  
+    // 墓地操作
+    void SendCardIdToCemetery(int cardId);
+    void RecycleCemeteryToDeck();
 
-public:  
+    // 参照
+    const CardData& GetCardData(int cardId) const;
 
-   // コピー禁止  
-   CardManager(const CardManager&) = delete;  
-   CardManager& operator = (const CardManager&) = delete;  
+    // 取得
+    int GetDeckCount() const;
+    int GetCemeteryCount() const;
 
-   // シングルトンインスタンスの取得  
-   static CardManager& GetInstance()  
-   {  
-       static CardManager instance;  
-       return instance;  
-   }  
+private:
+    std::unordered_map<int, CardData> m_cardMaster;
+    std::vector<int> m_deck;
+    std::vector<int> m_cemetery;
 
-   // デッキの初期化  
-   void InitDeck(std::vector<std::unique_ptr<Card>>&& arg_cards);
-
-   // デッキカードの追加  
-   void AddDeckCard(std::vector<std::unique_ptr<Card>>&& cards);
-
-   // デッキをシャッフル  
-   void DeckShuffle();  
-
-   // デッキから引数分手札に移動  
-   void DeckToHand(int arg_drawnum);  
-
-   // 手札からカードを使用  
-   CardUseResult UseCard(std::size_t arg_index);
-
-   // 使用したカードを墓地に移動  
-   void AddCemeteryCard(std::unique_ptr<Card>&& arg_card);
-
-   // 墓地からデッキに戻す  
-   void CemeteryToDeck();  
-
-   // デッキの残り枚数を取得  
-   int GetDeckCount() const;  
-
-   // 手札カードを取得  
-   int GetHandCount() const;  
-
-   // 墓地にあるカードの確認  
-   int GetCemeteryCount() const;  
-
-
-   // 各カードの取得
-   // 山札
-   const std::vector<std::unique_ptr<Card>>& GetDeckCard() const;
-   // 墓地
-   const std::vector<std::unique_ptr<Card>>& GetCemetyeryCard()const;
-   // 手札
-   const std::vector<std::unique_ptr<Card>>& GetHandCard()const;
-
+    std::mt19937 m_rng;
 };

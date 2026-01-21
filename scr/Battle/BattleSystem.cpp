@@ -8,491 +8,6 @@
 //#include "../Battle/UserController/UserController.h"
 //#include "../Battle/UserController/ActionData.h"
 //#include "../System/InPutManager/InPutManager.h"
-//
-//// フォントのインスタンス取得省略
-//#define FontMgr FontManager::GetInstance()
-//
-//// 初期化
-//BattleSystem::BattleSystem(sf::RenderWindow& arg_window)
-//	:
-//    m_phase(TurnPhase::StartTurn),
-//	m_userPhase(PlayerSelectPhase::SELECT_CARD),
-//    m_turnCount(1),
-//    m_choiceCardIndex(0)
-//{
-//    // コスト管理
-//    m_cost = std::make_unique<CostManager>();
-//    // カード描画
-//    m_cardRenderer = std::make_unique<CardRenderer>();
-//    // コントローラー作成
-//    m_userController = std::make_unique<UserController>();
-//
-//    Init(arg_window);
-//}
-//
-//// 初期化
-//void BattleSystem::Init(sf::RenderWindow& arg_window)
-//{
-//    // エンティティ作成
-//    CreateEntity(arg_window);
-//    // コスト初期化
-//    m_cost->Init(3);
-//
-//}
-//
-//// 更新
-//void BattleSystem::Update(sf::RenderWindow& arg_window)
-//{
-//    // 勝敗判定
-//    if (CheckWin() || CheckLose()) {
-//        m_phase = TurnPhase::EndTurn;
-//        return;
-//    }
-//
-//    InputManager::GetInstance().Update();
-//
-//	// バトルフェーズごとの処理
-//    switch (m_phase) {
-//
-//    case TurnPhase::StartTurn:
-//
-//        std::cout << "ターン開始" << std::endl;
-//        // ターン開始処理
-//        StartTurn();
-//
-//        break;
-//
-//    case TurnPhase::UserTurn:
-//
-//        std::cout << "プレイヤーターン" << std::endl;
-//        // プレイヤーアップデートを呼ぶ
-//        UserUpdate(arg_window);
-//
-//        break;
-//
-//    case TurnPhase::EnemyTurn:
-//
-//        std::cout << "エネミーターン" << std::endl;
-//        // エネミーアップデートを呼ぶ
-//        EnemyUpdate();
-//
-//        break;
-//
-//    case TurnPhase::EndTurn:
-//
-//        std::cout << "ターン終了" << std::endl;
-//        // ターン終了処理
-//        EndTurn();
-//
-//        break;
-//
-//    default:
-//        break;
-//    }
-//
-//}
-//
-//
-//// 描画
-//void BattleSystem::Render(sf::RenderWindow& window)
-//{
-//    // カメラ影響あり
-//    m_renderSystem->ApplyCamera();
-//
-//    // キャラクターの描画
-//	for (auto& p : m_players)
-//	{
-//		p->Render(*m_renderSystem);
-//	}
-//    for (auto& e : m_enemies)
-//    {
-//		e->Render(*m_renderSystem);
-//    }
-//
-//    // カメラの影響解除
-//    m_renderSystem->ResetCamera();
-//    
-//    // 山札
-//    m_cardRenderer->DrawDeck(FontMgr.GetFont(), window, {50.0f,300.0f}, CardManager::GetInstance().GetDeckCount());
-//
-//    // 墓地
-//    m_cardRenderer->DrawGrave(FontMgr.GetFont(), window,{150.0f, 300.0f}, CardManager::GetInstance().GetCemeteryCount());
-//
-//    // 手札
-//    // ベース座標
-//    float x = 300.0f;
-//    float baseY = 300.0f;
-//    // カード情報の取得
-//    const auto& handCard = CardManager::GetInstance().GetHandCard();
-//    // 個々のカード情報
-//    for (size_t i = 0; i < handCard.size(); i++)
-//    {
-//        // 座標の変更
-//        float y = baseY;
-//		m_choiceCardIndex = m_userController->GetSelectedCardIndex();
-//        if(static_cast<int>(i) == m_choiceCardIndex)
-//        {
-//            // 選択中カードを浮かす
-//            y -= 30;
-//        }
-//        // 描画
-//        m_cardRenderer->DrawHand(FontMgr.GetFont(), window, { x, y }, *handCard[i]);
-//        // 一枚ごとにx座標をずらす
-//        x += 130.0f;
-//    }
-//
-//    // カード選択決定ボタン
-//	m_userController->Draw(window);
-//    
-//
-//}
-//
-//// カードの使用
-//void BattleSystem::OnUseCard(const Action& action)
-//{
-//    // カードの使用
-//	CardManager::GetInstance().UseCard(action.card.cardId);
-//	// 効果の適用
-//	ApplyAction(action);
-//}
-//
-//// カード使用時の影響
-//void BattleSystem::ApplyAction(const Action& action)
-//{
-//    for (auto& target : action.targets)
-//    {
-//        if (!target || target->GetStatus().dead) {
-//            continue;
-//        }
-//
-//        float dmg;
-//        switch (action.card.actionType)
-//        {
-//        case ActionType::ATTCK:
-//        case ActionType::MAGIC:
-//            dmg = Calculation::GetDamage(
-//                action.user->GetStatus().atk,
-//                action.card.power,
-//                target->GetStatus().def
-//            );
-//            target->TakeDamage(dmg);
-//
-//            break;
-//
-//        case ActionType::HEAL:
-//            target->TakeHeal(action.card.power);
-//            break;
-//
-//        case ActionType::BUFF:
-//            target->TakeBuff(action.card.power);
-//            break;
-//        }
-//    }
-//}
-//
-//// 生成関数
-//void BattleSystem::CreateEntity(sf::RenderWindow& window)
-//{
-//    // カメラ機能付き描画システム作成
-//    m_renderSystem = std::make_unique<RenderSystem>(window);
-//
-//    // プレイヤー、カード作成
-//    for (int i = 0; i < 4; i++) {
-//
-//        auto player = CharacterFactory::Instance().CreateCharacter<Player>(i + 1);
-//		player->SetPosition({ 100.0f, static_cast<float>(i * 50) });
-//        m_players.push_back(player);
-//
-//        const std::vector<int>& cardIds = player->GetStatus().cardIds;
-//        auto cards = CardFactory::GetInstance().CreateDeck(cardIds,i);
-//
-//        if (i == 0) {
-//            CardManager::GetInstance().InitDeck(std::move(cards));
-//        }
-//        else
-//        {
-//            CardManager::GetInstance().AddDeckCard(std::move(cards));
-//        }
-//    }
-//    
-//
-//	// エネミー作成
-//    for (int i = 5; i < 6; i++) {
-//        auto enemy = CharacterFactory::Instance().CreateCharacter<Enemy>(i);
-//		enemy->SetPosition({ 500.0f, static_cast<float>(i * 100) });
-//        m_enemies.push_back(enemy);
-//	}
-//}
-//
-//// カード選択時のキャラクターフォーカス
-//void BattleSystem::UpdateCardOwnerFocus()
-//{
-//
-//    // 全キャラクターのフォーカスを解除
-//    for (auto& p : m_players)
-//    {
-//        p->SetFocused(false);
-//    }
-//
-//    // カード未選択なら終了
-//    if (m_choiceCardIndex < 0)
-//    {
-//        return;
-//    }
-//
-//    // カード情報の取得
-//    const auto& hand = CardManager::GetInstance().GetHandCard();
-//
-//    if (m_choiceCardIndex >= static_cast<int>(hand.size()))
-//    {
-//        return;
-//    }
-//
-//    // 行動アクションを取得
-//    auto actionChara = GetActionCharacterFromCard(*hand[m_choiceCardIndex]);
-//    if (!actionChara)
-//    {
-//        return;
-//    }
-//
-//    actionChara->SetFocused(true);
-//}
-//
-//// カード情報からリンクするキャラクターを取得する
-//std::shared_ptr<Character> BattleSystem::GetActionCharacterFromCard(const Card& arg_card)
-//{
-//    int ownerId = arg_card.GetOwnerId();
-//
-//    if (ownerId < 0 || ownerId >= static_cast<int>(m_players.size()))
-//    {
-//        return nullptr;
-//    }
-//
-//    return m_players[ownerId];
-//}
-//
-//// ターゲット候補作成
-//std::vector<std::shared_ptr<Character>> BattleSystem::MakeTargetCandidates(const std::shared_ptr<Character>& actionChara,TargetType targetType) const
-//{
-//	// ターゲット候補
-//    std::vector<std::shared_ptr<Character>> result;
-//    if (!actionChara)
-//    {
-//        std::cout << "アクションキャラクターが存在しません:" << std::endl;
-//        return result;
-//    }
-//
-//	// 生存者のみ追加するラムダ
-//    auto pushAlive = [&](const std::vector<std::shared_ptr<Character>>& list)
-//        {
-//            for (const auto& c : list)
-//            {
-//                if (c && !c->GetStatus().dead)
-//                {
-//                    result.push_back(c);
-//                }
-//            }
-//        };
-//
-//	// ターゲットタイプごとに候補を追加
-//    switch (targetType)
-//    {
-//		// --- 敵単体・全体 ---
-//    case TargetType::OPPONENT:
-//    case TargetType::OPPONENT_ALL:
-//        if (actionChara->IsPlayer()) {
-//            pushAlive(m_enemies);
-//        }
-//        else
-//        {
-//            pushAlive(m_players);
-//        }
-//
-//        break;
-//
-//		// --- 味方単体・全体 ---
-//    case TargetType::ALLY:
-//    case TargetType::ALLY_ALL:
-//        if (actionChara->IsPlayer()) {
-//            pushAlive(m_players);
-//        }
-//        else
-//        {
-//            pushAlive(m_enemies);
-//        }
-//
-//        break;
-//
-//		// --- 自身 ---
-//    case TargetType::SELF:
-//        if (actionChara && !actionChara->GetStatus().dead) {
-//            result.push_back(actionChara);
-//        }
-//        break;
-//
-//    default:
-//        break;
-//    }
-//
-//    return result;
-//}
-//
-//// ユーザーターンの初期化
-//void BattleSystem::ResetUserTurn()
-//{
-//
-//    // フェーズ初期化
-//	m_userPhase = PlayerSelectPhase::SELECT_CARD;
-//
-//    // 行動キャラ解除
-//	m_actionCharacter.reset();
-//
-//	// 選択中カード解除
-//	m_selectedCard.reset();
-//
-//	// 選択ターゲット解除
-//	m_selectedTargets.clear();
-//
-//	// ユーザーコントローラーのリセット
-//	m_userController->Reset();
-//
-//}
-//
-//// ターン開始時
-//void BattleSystem::StartTurn()
-//{
-//    // 手札補充
-//    CardManager::GetInstance().DeckToHand(5);
-//
-//    // コスト回復
-//    m_cost->ResetCost();
-//	// プレイヤーコントローラーのターン終了要求リセット
-//    m_userController->ResetTurnEndRequest();
-//	// フェーズをプレイヤーターンに変更
-//    m_phase = TurnPhase::UserTurn;
-//}
-//
-//// プレイヤー更新
-//void BattleSystem::UserUpdate(sf::RenderWindow& window)
-//{
-//	// 選択中カードデータ
-//    static std::optional<CardData> selectedCard;
-//
-//    // ターン終了
-//	if (m_userController->IsTurnEndRequested())
-//    {
-//		m_phase = TurnPhase::EnemyTurn;
-//        m_userController->Reset();
-//		return;
-//    }   
-//    
-//	// 選択ターゲット
-//    std::optional<std::vector<std::shared_ptr<Character>>> targets;
-//    // 手札
-//	auto& handCard = CardManager::GetInstance().GetHandCard();
-//
-//	// プレイヤー選択フェーズごとの処理
-//    switch (m_userPhase)
-//    {
-//    case BattleSystem::PlayerSelectPhase::SELECT_CARD:
-//
-//        // ログ
-//        std::cout << "カード選択中" << std::endl;
-//
-//        selectedCard = m_userController->SelectCard(window,CardManager::GetInstance().GetHandCard());
-//        
-//        if (selectedCard)
-//        {
-//			m_selectedCard = selectedCard;
-//            // 行動キャラ
-//			m_actionCharacter = m_players[handCard[m_choiceCardIndex]->GetOwnerId()];
-//			// ターゲット候補作成フェーズへ
-//			m_userPhase = BattleSystem::PlayerSelectPhase::SELECT_TARGET;
-//        }
-//
-//        break;
-//
-//	case BattleSystem::PlayerSelectPhase::CREATE_TARGET_CANDIDATES:
-//
-//        std::cout << "ターゲット候補作成" << std::endl;
-//
-//		// ターゲット候補作成
-//        m_targetCandidates = MakeTargetCandidates(m_actionCharacter, m_selectedCard->targetType);
-//
-//		// 次のフェーズへ
-//		m_userPhase = BattleSystem::PlayerSelectPhase::SELECT_TARGET;
-//
-//        break;
-//
-//    case BattleSystem::PlayerSelectPhase::SELECT_TARGET:
-//
-//        std::cout << "ターゲット選択" << std::endl;
-//
-//		// ターゲット選択
-//		targets = m_userController->SelectTarget(window, m_targetCandidates, *m_selectedCard, m_actionCharacter);
-//		
-//		// ターゲットが選択されたら次のフェーズへ
-//        if (targets)
-//        {
-//            m_selectedTargets = *targets;
-//			m_userPhase = BattleSystem::PlayerSelectPhase::CONFIRM;
-//        }
-//
-//        break;
-//    case BattleSystem::PlayerSelectPhase::CONFIRM:
-//
-//        std::cout << "アクション" << std::endl;
-//
-//		// アクションデータ作成
-//        Action action{
-//            m_actionCharacter,
-//            m_selectedTargets,
-//            *m_selectedCard
-//        };
-//
-//        // カードの使用
-//		OnUseCard(action);
-//
-//		// ユーザーコントローラーのリセット
-//        ResetUserTurn();
-//
-//        break;
-//    }
-//
-//}
-//
-//// エネミー更新
-//void BattleSystem::EnemyUpdate()
-//{
-//    // エネミーはカードをランダムで選択一回だけアクションを起こして終了
-//    for (auto& e : m_enemies)
-//    {
-//    }
-//
-//    // 終了時
-//    // メンバー全員がアクションを行ったら終了
-//    m_phase = TurnPhase::EndTurn;
-//}
-//
-//// ターン終了時
-//void BattleSystem::EndTurn()
-//{
-//	// ターン数を増やす
-//    m_turnCount++;
-//
-//    // 生存確認後続行か判定
-//    for (auto& p : m_players) {
-//        for (auto& e : m_enemies) {
-//            if (!p->GetStatus().dead && !e->GetStatus().dead) {
-//
-//                p->UpdateBuff();
-//                e->UpdateBuff();
-//
-//                m_phase = TurnPhase::StartTurn;
-//            }
-//        }
-//    }
-//}
 
 /// <summary>
 /// 終了処理
@@ -565,7 +80,7 @@ void BattleSystem::Update()
 /// <returns></returns>
 bool BattleSystem::IsBattleEnd() const
 {
-	return false;
+	return m_context->IsPlayerAllDead() || m_context->IsEnemyAllDead();
 }
 
 /// <summary>
@@ -574,7 +89,7 @@ bool BattleSystem::IsBattleEnd() const
 /// <returns></returns>
 bool BattleSystem::IsUserWin() const
 {
-	return false;
+	return m_context->IsEnemyAllDead() && !m_context->IsPlayerAllDead();
 }
 
 /// <summary>
@@ -583,14 +98,16 @@ bool BattleSystem::IsUserWin() const
 void BattleSystem::StartTurn()
 {
 
-	// 行動数の初期化
 	m_costManager->ResetCost();
+	m_userController->ResetTurn();
 
-	// カードの配布
+	// 各プレイヤーにカード配布
+	for (auto& p : m_context->GetAlivePlayers())
+	{
+		p->DrawCard(); // Character責務
+	}
 
-	// 次のフェーズへ
 	m_phase = TurnPhase::UserTurn;
-
 }
 
 /// <summary>
@@ -598,6 +115,71 @@ void BattleSystem::StartTurn()
 /// </summary>
 void BattleSystem::UserTurn()
 {
+
+	// ユーザー入力更新
+	m_userController->Update();
+
+	// 行動が確定したか？
+	if (!m_userController->HasConfirmedAction())
+	{
+		return;
+	}
+
+	// 確定アクション取得
+	UserAction action = m_userController->ConsumeAction();
+
+	// コスト不足なら無効
+	if (!m_costManager->CanConsume(1))
+	{
+		return;
+	}
+
+	// コスト消費
+	m_costManager->Consume(1);
+
+	// 行動キャラ取得
+	auto actor = action.actor;
+
+	if (!actor || actor->IsDead())
+	{
+		return;
+	}
+
+	// 使用カード取得（キャラ保持カード）
+	const CardData& card = actor->GetCard(action.cardId);
+
+	// ターゲット候補生成
+	auto targets = m_context->CreateTargetCandidates(card.targetType, *actor);
+
+	// 単体/全体補完
+	std::vector<std::shared_ptr<Character>> finalTargets;
+
+	if (card.targetType == TargetType::SELF)	// 自分自身
+	{
+		finalTargets.push_back(actor);
+	}
+	else if (card.targetType == TargetType::OPPONENT || card.targetType == TargetType::ALLY)	// 単体
+	{
+		finalTargets.push_back(targets[action.targetIds[0]]);
+	}
+	else
+	{
+		// 全体
+		finalTargets = targets;
+	}
+
+	// アクション適用
+	ApplyAction(actor, finalTargets, card);
+
+	// 使用カード破棄
+	int discardedId = actor->DiscardCard(action.cardId);
+	CardManager::GetInstance().SendCardIdToCemetery(discardedId);
+
+	// 行動数が尽きたらエネミーターン
+	if (m_costManager->IsEmpty())
+	{
+		m_phase = TurnPhase::EnemyTurn;
+	}
 }
 
 /// <summary>
@@ -605,6 +187,50 @@ void BattleSystem::UserTurn()
 /// </summary>
 void BattleSystem::EnemyTurn()
 {
+	for (auto& enemy : m_context->GetAliveEnemies())
+	{
+		// 
+		if (enemy->GetCardCount() == 0)
+		{
+			continue;
+		}
+
+		// 
+		int cardIndex = enemy->DecideActionCardIndex();
+		int cardId = enemy->GetHeldCardId(cardIndex);
+		const CardData& card = CardManager::GetInstance().GetCardData(cardId);
+
+		auto targets = m_context->CreateTargetCandidates(card.targetType, *enemy);
+
+		if (targets.empty()) 
+		{
+			continue;
+		}
+
+		std::vector<std::shared_ptr<Character>> finalTargets;
+
+		// 
+		if (card.targetType == TargetType::OPPONENT ||
+			card.targetType == TargetType::ALLY)
+		{
+			int targetIndex = enemy->DecideTargetIndex(
+				reinterpret_cast<std::vector<Character*>&>(targets));
+			finalTargets.push_back(targets[targetIndex]);
+		}
+		else
+		{
+			finalTargets = targets;
+		}
+
+		// 
+		ApplyAction(enemy, finalTargets, card);
+
+		// 
+		int discardedId = enemy->DiscardCard(cardIndex);
+		CardManager::GetInstance().SendCardIdToCemetery(discardedId);
+	}
+
+	m_phase = TurnPhase::EndTurn;
 }
 
 /// <summary>
@@ -614,6 +240,57 @@ void BattleSystem::EndTurn()
 {
 	// ターン数増加
 	m_turnCount++;
-	// スタートに戻る
+
+	// バフ更新
+	for (auto& c : m_context->GetAlivePlayers())
+	{
+		c->UpdateBuff();
+	}
+
+	for (auto& e : m_context->GetAliveEnemies())
+	{
+		e->UpdateBuff();
+	}
+	// 次ターンへ
 	m_phase = TurnPhase::StartTurn;
+}
+
+//	カード使用時効果
+void BattleSystem::ApplyAction(const std::shared_ptr<Character>& actor, const std::vector<std::shared_ptr<Character>>& targets, const CardData& card)
+{
+	if (!actor)
+	{
+		return;
+	}
+
+	for (auto& target : targets)
+	{
+		if (!target || target->IsDead())
+			continue;
+
+		switch (card.actionType)
+		{
+		case ActionType::ATTCK:
+		case ActionType::MAGIC:
+		{
+			int damage =
+				static_cast<int>(
+					actor->GetData().atk *
+					card.power *
+					actor->GetData().buff.power
+					);
+
+			target->TakeDamage(damage);
+			break;
+		}
+
+		case ActionType::HEAL:
+			target->TakeHeal(static_cast<int>(card.power));
+			break;
+
+		case ActionType::BUFF:
+			target->TakeBuff(card.power);
+			break;
+		}
+	}
 }

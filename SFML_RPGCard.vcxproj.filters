@@ -123,7 +123,7 @@
     <ClCompile Include="scr\Battle\UserController\UserController.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="scr\Battle\BattleContex\BattleContex.cpp">
+    <ClCompile Include="scr\Battle\BattleContex\BattleContext.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="scr\Card\CardFactory\CardFactory.cpp">
@@ -242,7 +242,7 @@
     <ClInclude Include="scr\Battle\UserController\ActionData.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="scr\Battle\BattleContex\BattleContex.h">
+    <ClInclude Include="scr\Battle\BattleContex\BattleContext.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="scr\UI\CircleButton.h">

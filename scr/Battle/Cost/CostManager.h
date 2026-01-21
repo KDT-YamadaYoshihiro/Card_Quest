@@ -2,48 +2,63 @@
 
 class CostManager
 {
-    
-    // コスト
-    int m_cost = 0;
-    // 最大コスト
+private:
+    int m_currentCost = 0;
     int m_maxCost = 1;
 
 public:
-
     // 初期化
-    void Init(int maxCost) {
+    void Init(int maxCost)
+    {
         m_maxCost = maxCost;
-        m_cost = maxCost;
+        m_currentCost = maxCost;
     }
 
-    // リセット
+    // ターン開始時
     void ResetCost()
     {
-        m_cost = m_maxCost;
+        m_currentCost = m_maxCost;
     }
 
-    // 使用
-    bool Use(int cost) {
+    // 判定
+    bool CanConsume(int cost) const
+    {
+        return m_currentCost >= cost;
+    }
 
-        // コストチェック
-        if (m_cost < cost) {
-            // コスト不足
+    bool IsEmpty() const
+    {
+        return m_currentCost <= 0;
+    }
+
+    // 消費
+    bool Consume(int cost)
+    {
+        if (!CanConsume(cost))
             return false;
-        }
-        // コスト消費
-        m_cost -= cost;
+
+        m_currentCost -= cost;
         return true;
     }
 
-    // 追加
-    void Refill(int amount) {
-        m_cost += amount;
-        if (m_cost > m_maxCost) m_cost = m_maxCost;
-    }
-    bool CanUse(int cost) const
+    // カード効果用
+    void AddCost(int amount)
     {
-        return m_cost >= cost;
+        m_currentCost += amount;
+        if (m_currentCost > m_maxCost)
+        {
+            m_currentCost = m_maxCost;
+        }
     }
-    // 現在のコストを取得
-    int GetCost() const { return m_cost; }
+
+	// 最大コスト増加
+    void IncreaseMaxCost(int amount)
+    {
+        m_maxCost += amount;
+        m_currentCost += amount;
+    }
+
+    // 取得
+    int GetCurrentCost() const { return m_currentCost; }
+    int GetMaxCost() const { return m_maxCost; }
 };

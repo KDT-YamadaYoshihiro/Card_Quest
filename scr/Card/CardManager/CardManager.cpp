@@ -1,114 +1,80 @@
 #include "CardManager.h"
 #include "../../Character/Character.h"
+#include <cassert>
 
-// 初期追加
-void CardManager::InitDeck(std::vector<std::unique_ptr<Card>>&& arg_cards)
+// 初期化
+CardManager::CardManager()
 {
-	m_deck = std::move(arg_cards);
+    std::random_device rd;
+    m_rng.seed(rd());
 }
 
-// デッキにカードを追加
-void CardManager::AddDeckCard(std::vector<std::unique_ptr<Card>>&& cards)
+// カードマスタ登録
+void CardManager::InitCardMaster(const std::unordered_map<int, CardData>& cards)
 {
-	for (auto& card : cards)
-	{
-		// 状態変更
-		card->SetZone(CardZone::Deck);
-		// 山札に移動
-		m_deck.push_back(std::move(card));
-	}
+    m_cardMaster = cards;
 }
 
-// デッキをシャッフルする
-void CardManager::DeckShuffle()
+// デッキ初期化
+void CardManager::InitDeck(const std::vector<int>& deckCardIds)
 {
-	std::shuffle(m_deck.begin(), m_deck.end(), m_rng);
+    m_deck = deckCardIds;
+    ShuffleDeck();
 }
 
-// デッキから手札に
-void CardManager::DeckToHand(int arg_drawnum)
+// シャッフル
+void CardManager::ShuffleDeck()
 {
-	// ドローできる環境かチェック
-	if (m_deck.empty()) {
-		CemeteryToDeck();
-		DeckShuffle();
-	}
-	
-	// 状態変化とドロー
-	for (int i = 0; i < 5; i++) {
-		auto card = std::move(m_deck.back());
-		m_deck.pop_back();
-
-		card->SetZone(CardZone::Hand);
-		m_hand.push_back(std::move(card));
-	}
+    std::shuffle(m_deck.begin(), m_deck.end(), m_rng);
 }
 
-// カードの使用
-CardUseResult CardManager::UseCard(std::size_t arg_handIndex)
+// ドロー
+bool CardManager::DrawCard(Character& character)
 {
-	auto& card = m_hand[arg_handIndex];
+    if (m_deck.empty())
+    {
+        RecycleCemeteryToDeck();
+        if (m_deck.empty()) return false;
+    }
 
-	CardUseResult result;
-	result.effect = card->GetCardState();
+    int cardId = m_deck.back();
+    m_deck.pop_back();
 
-	AddCemeteryCard(std::move(card));
-	m_hand.erase(m_hand.begin() + arg_handIndex);
-
-	return result;
-
+    character.AddCard(cardId);
+    return true;
 }
 
-// 墓地にカードの移動
-void CardManager::AddCemeteryCard(std::unique_ptr<Card>&& arg_card)
+// 墓地送り
+void CardManager::SendCardIdToCemetery(int cardId)
 {
-	// 状態変更
-	arg_card->SetZone(CardZone::Grave);
-	// 墓地に移動する
-	m_cemetery.push_back(std::move(arg_card));
+    m_cemetery.push_back(cardId);
 }
 
-// 墓地からデッキに移動
-void CardManager::CemeteryToDeck()
+// 墓地 → デッキ
+void CardManager::RecycleCemeteryToDeck()
 {
-	// 墓地からデッキに移動
-	AddDeckCard(std::move(m_cemetery));
-	// クリアする
-	m_cemetery.clear();
+    if (m_cemetery.empty()) return;
+
+    m_deck.insert(m_deck.end(), m_cemetery.begin(), m_cemetery.end());
+    m_cemetery.clear();
+    ShuffleDeck();
 }
 
-// デッキ枚数の取得
+// CardData 取得
+const CardData& CardManager::GetCardData(int cardId) const
+{
+    auto it = m_cardMaster.find(cardId);
+    assert(it != m_cardMaster.end());
+    return it->second;
+}
+
+// 枚数取得
 int CardManager::GetDeckCount() const
 {
-	return m_deck.size();
+    return static_cast<int>(m_deck.size());
 }
 
-// 手札枚数の取得
-int CardManager::GetHandCount() const
-{
-	return m_hand.size();
-}
-
-// 墓地枚数の取得
 int CardManager::GetCemeteryCount() const
 {
-	return m_cemetery.size();
-}
-
-// デッキカードの取得
-const std::vector<std::unique_ptr<Card>>& CardManager::GetDeckCard() const
-{
-	return m_deck;
-}
-
-// 墓地カードを取得
-const std::vector<std::unique_ptr<Card>>& CardManager::GetCemetyeryCard() const
-{
-	return m_cemetery;
-}
-
-// 手札カードを取得
-const std::vector<std::unique_ptr<Card>>& CardManager::GetHandCard() const
-{
-	return m_hand;
+    return static_cast<int>(m_cemetery.size());
 }

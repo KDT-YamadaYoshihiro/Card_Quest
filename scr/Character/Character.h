@@ -4,93 +4,98 @@
 #include "CharacterData.h"
 #include  "../View/Render/RenderSystem.h"
 #include "../CSVLoad/TextureLoader/TextureLoader.h"
+#include "../Card/CardDate.h"
 
 class RenderSystem;
 
 class Character
 {
-	
-protected:
-
-	CharacterData m_status;
-	Position m_pos;
-	Faction m_faction;
-	bool m_focused;
-	sf::Vector2f m_postion;
-
 public:
+	virtual ~Character() = default;
 
-	// 初期化
-	Character() = delete;
-	Character(const CharacterData& arg_data)
-		:m_status(arg_data),
-		m_pos({ 0,0 }),
-		m_faction(Faction::Neutral),
-		m_focused(false),
-		m_postion({ 0.0f,0.0f })
-	{
-		
-	}
-	
-	// プレイヤーかエネミーか
-	bool IsPlayer() const { return m_faction == Faction::Player; }
-	bool IsEnemy()  const { return m_faction == Faction::Enemy; }
-	// 状態更新
+	// 更新
 	virtual void Update() = 0;
 	// 描画
 	virtual void Render(RenderSystem& render) = 0;
-	// 座標設定
-	void SetPosition(const sf::Vector2f& arg_pos)
-	{
-		m_postion = arg_pos;
-	}
 
-	// アクションメソッド
-	virtual void Action() = 0;
+	// データ参照
+	CharacterData& GetData() { return m_data; }
+	const CharacterData& GetData() const { return m_data; }
 
-	// 死亡
-	void CharaDead() {
-		// ０以上ならreturnする
-		if (m_status.hp > 0)
-		{
-			return;
-		}
-		// 死亡
-		m_status.dead = true;
-	}
+	// プレイヤーかエネミーか
+	Faction GetFaction() const { return m_faction; }
 
-	// ダメージを与える。
+	// 生存判定
+	bool IsDead() const { return m_data.dead || m_data.hp <= 0; }
+
+	// ===== カード管理 =====
+
+	   // 所持カード数
+	int GetCardCount() const;
+
+	// cardId 取得（index指定）
+	int GetHeldCardId(int index) const;
+
+	// CardData 取得（index指定）
+	const CardData& GetCard(int index) const;
+
+	// カード追加
+	void AddCard(int cardId);
+
+	// カード破棄（index指定）
+	// 破棄した cardId を返す
+	int DiscardCard(int index);
+
+	// 全破棄
+	void ClearCards();
+
+	// カードドロー
+	bool DrawCard();
+
+	// 所持カードを cardId で取得
+	int GetHeldCardById(int cardId) const;
+
+	// 行動判断
+	virtual int DecideActionCardIndex() = 0;
+	virtual int DecideTargetIndex(const std::vector<Character*>& targets) = 0;
+
+	// 座標管理
+	void SetPosition(const Position& pos) { m_pos = pos; }
+	Position GetPosition() const { return m_pos; }
+
+	// フォーカス管理
+	void SetFocused(bool focused) { m_focused = focused; }
+	bool IsFocused() const { return m_focused; }
+
+	// ダメージを受ける
 	void TakeDamage(int damage);
-
-	// 回復する。
-	void TakeHeal(float arg_heal);
-
-	// バフ
-	void TakeBuff(float arg_power);
-
+	// 回復する
+	void TakeHeal(int heal);
+	// バフを受ける
+	void TakeBuff(float power);
 	// バフ更新
 	void UpdateBuff();
-
 	// バフリセット
 	void ResetBuff();
-
 	// レベルアップ
 	void LevelUp();
+	// バトル開始ステータスリセット
+	void ResetBattleStatus();
 
-	// バトル開始ステータス
-	void StartStatus() {
-		m_status.hp = m_status.maxHp;
-		ResetBuff();
-	}
+protected:
+	
+	// 初期化
+	Character(CharacterData& data, Faction faction, int maxCardSlot);
 
-	// ステータス取得
-	const CharacterData GetStatus() const { return m_status; }
-	// 座標の取得
-	Position GetPos() const { return m_pos; }
-	// 選択時の当たり判定
-	virtual sf::FloatRect GetHitCircle() const = 0;
-
-	// フォーカス
-	void SetFocused(bool arg_focused) { m_focused = arg_focused; }
-	bool GetFocused() const { return m_focused; };
+	// データ
+	CharacterData& m_data;
+	Faction m_faction;
+	// カードスロット数
+	int m_maxCardSlot;
+	// 所持カードIDリスト
+	std::vector<int> m_cardIds;
+	// 座標
+	Position m_pos;
+	// フォーカス状態
+	bool m_focused;
 };

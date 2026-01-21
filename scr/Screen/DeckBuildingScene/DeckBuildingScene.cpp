@@ -45,7 +45,7 @@ void DeckBuildingScene::Update(sf::RenderWindow& arg_window)
         if (m_deckBuildSystem.IsComplete())
         {
 			// CardManager にデッキをセット
-            CardManager::GetInstance().InitDeck(m_deckBuildSystem.TakeDeck());
+            CardManager::GetInstance().InitBattleDeck(m_deckBuildSystem.TakeDeck());
 			// シーン切り替え
 			SceneManager::GetInstance().ChangeScreen<IngameScene>(arg_window);
         }

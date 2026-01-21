@@ -33,7 +33,6 @@ struct CharacterData
 
 
 	BuffData buff;
-	std::vector<int> cardIds;
 
 };
 
