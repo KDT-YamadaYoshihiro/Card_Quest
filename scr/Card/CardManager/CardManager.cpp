@@ -29,18 +29,17 @@ void CardManager::ShuffleDeck()
 }
 
 // ÉhÉçÅ[
-bool CardManager::DrawCard(Character& character)
+bool CardManager::DrawCard(int& cardId)
 {
     if (m_deck.empty())
     {
         RecycleCemeteryToDeck();
-        if (m_deck.empty()) return false;
+        if (m_deck.empty())
+            return false;
     }
 
-    int cardId = m_deck.back();
+    cardId = m_deck.back();
     m_deck.pop_back();
-
-    character.AddCard(cardId);
     return true;
 }
 

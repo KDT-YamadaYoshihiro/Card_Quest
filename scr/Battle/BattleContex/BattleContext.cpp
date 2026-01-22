@@ -80,25 +80,43 @@ bool BattleContext::IsEnemyAllDead() const
     return true;
 }
 
-std::vector<std::shared_ptr<Character>> BattleContext::CreateTargetCandidates(TargetType type,const Character& requester) const
+std::vector<std::shared_ptr<Character>> BattleContext::CreateTargetCandidates(TargetType targetType, Faction actorFaction, const std::shared_ptr<Character>& actor) const
 {
-    const bool isPlayer = requester.GetFaction() == Faction::Player;
+    std::vector<std::shared_ptr<Character>> result;
 
-    switch (type)
+    auto pushAlive = [&](const std::vector<std::shared_ptr<Character>>& list)
+        {
+            for (auto& c : list)
+            {
+                if (c && !c->IsDead())
+                    result.push_back(c);
+            }
+        };
+
+    switch (targetType)
     {
     case TargetType::SELF:
-        // ŒÄ‚Ño‚µ‘¤‚Å requester ‚ðŽg‚¤
-        return {};
+        if (actor && !actor->IsDead())
+            result.push_back(actor);
+        break;
 
     case TargetType::ALLY:
     case TargetType::ALLY_ALL:
-        return isPlayer ? GetAlivePlayers() : GetAliveEnemies();
+        if (actorFaction == Faction::Player)
+            pushAlive(m_players);
+        else
+            pushAlive(m_enemies);
+        break;
 
     case TargetType::OPPONENT:
     case TargetType::OPPONENT_ALL:
-        return isPlayer ? GetAliveEnemies() : GetAlivePlayers();
-
-    default:
-        return {};
+        if (actorFaction == Faction::Player)
+            pushAlive(m_enemies);
+        else
+            pushAlive(m_players);
+        break;
     }
+
+    return result;
 }
+

@@ -377,3 +377,19 @@ bool UserController::IsTurnEndButtonClicked(sf::RenderWindow& window) const
 バトルシステムの構築
 
 新仕様の詳細はエクセル参照
+
+
+2026/01/23
+ユーザーコントローラーの実装
+
+次の作業
+
+battleSystemの完全実装
+　ユーザーコントローラーとの接続
+　コスト実装
+　描画
+
+キャラクターファクトリーの修正
+キャラクターCSVの修正
+
+cardManagerにカードID一覧所持実装（メソッドはある）

@@ -29,7 +29,7 @@ public:
 
     // デッキ操作
     void ShuffleDeck();
-    bool DrawCard(Character& character);
+    bool DrawCard(int& cardId);
 
     // 墓地操作
     void SendCardIdToCemetery(int cardId);

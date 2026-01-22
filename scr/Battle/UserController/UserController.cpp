@@ -1,148 +1,262 @@
 #include "UserController.h"
+#include "../../System/InPutManager/InPutManager.h"
+#include "../BattleContex/BattleContext.h"
+#include "../../Character/Character.h"
+#include "../../Card/Card.h"
+#include "../../Card/CardManager/CardManager.h"
 
-// 初期化
-UserController::UserController()
+namespace
 {
-    ResetTurn();
+    constexpr float CHAR_W = 165.f;
+    constexpr float CHAR_H = 150.f;
+
+    constexpr float CARD_W = 120.f;
+    constexpr float CARD_H = 160.f;
+
+    constexpr sf::Vector2f HAND_START{ 300.f, 520.f };
+    constexpr float HAND_SPACING = 140.f;
 }
 
-// ターン初期化
-void UserController::ResetTurn()
-{
-    m_phase = PlayerSelectPhase::SELECT_CHARACTER;
-    ClearSelections();
-    m_confirmedAction.reset();
-}
-
-// 更新
-void UserController::Update()
+UserController::UserController(BattleContext& context)
+    : m_context(context)
 {
 }
 
-// 入力
-void UserController::HandleInput()
+void UserController::Update(sf::RenderWindow& window)
 {
-}
+    InputManager::GetInstance().Update(window);
 
-// キャラクター選択
-void UserController::SelectCharacter(int characterId)
-{
-    if (m_phase != PlayerSelectPhase::SELECT_CHARACTER)
-        return;
-
-    m_selectedCharacterId = characterId;
-    m_phase = PlayerSelectPhase::SELECT_CARD;
-}
-
-// カード選択（保持スロット）
-void UserController::SelectCard(int cardSlotIndex)
-{
-    if (m_phase != PlayerSelectPhase::SELECT_CARD)
-        return;
-
-    m_selectedCardSlot = cardSlotIndex;
-    m_selectedTargets.clear();
-    m_phase = PlayerSelectPhase::SELECT_TARGET;
-}
-
-// ターゲット選択
-void UserController::SelectTarget(int targetId)
-{
-    if (m_phase != PlayerSelectPhase::SELECT_TARGET)
-        return;
-
-    m_selectedTargets.clear();
-    m_selectedTargets.push_back(targetId);
-    m_phase = PlayerSelectPhase::CONFIRM;
-}
-
-// 確定
-void UserController::Confirm()
-{
-    if (m_phase != PlayerSelectPhase::CONFIRM)
-        return;
-
-    if (!m_selectedCharacterId || !m_selectedCardSlot)
-        return;
-
-    m_confirmedAction = UserAction{
-        *m_selectedCharacterId,
-        *m_selectedCardSlot,
-        m_selectedTargets
-    };
-
-    m_phase = PlayerSelectPhase::NONE;
-}
-
-// キャンセル
-void UserController::Cancel()
-{
     switch (m_phase)
     {
+    case PlayerSelectPhase::SELECT_PLAYER:
+        UpdateSelectPlayer(window);
+        break;
     case PlayerSelectPhase::SELECT_CARD:
-        m_selectedCharacterId.reset();
-        m_phase = PlayerSelectPhase::SELECT_CHARACTER;
+        UpdateSelectCard(window);
         break;
-
+    case PlayerSelectPhase::CREATE_TARGETS:
+        UpdateCreateTargets();
+        break;
     case PlayerSelectPhase::SELECT_TARGET:
-        m_selectedCardSlot.reset();
-        m_phase = PlayerSelectPhase::SELECT_CARD;
+        UpdateSelectTarget(window);
         break;
-
-    case PlayerSelectPhase::CONFIRM:
-        m_selectedTargets.clear();
-        m_phase = PlayerSelectPhase::SELECT_TARGET;
-        break;
-
-    default:
+    case PlayerSelectPhase::DONE:
         break;
     }
 }
 
-// ===== 状態取得 =====
-
-// 現在フェーズ取得
-PlayerSelectPhase UserController::GetPhase() const
-{
-    return m_phase;
-}
-
-// 確定アクションの有無
 bool UserController::HasConfirmedAction() const
 {
     return m_confirmedAction.has_value();
 }
 
-// 確定アクション取得（消費）
 UserAction UserController::ConsumeAction()
 {
-    UserAction action = *m_confirmedAction;
+    UserAction result = *m_confirmedAction;
     m_confirmedAction.reset();
-    return action;
+
+    // 次の入力に備えてリセット
+    m_phase = PlayerSelectPhase::SELECT_PLAYER;
+    m_selectedActor.reset();
+    m_selectedCardIndex = -1;
+    m_selectedTargetIndices.clear();
+    m_targetCandidates.clear();
+
+    return result;
 }
 
-// 選択情報取得
-int UserController::GetSelectedCharacter() const
+// ================= 選択処理 =================
+
+void UserController::UpdateSelectPlayer(sf::RenderWindow& window)
 {
-    return m_selectedCharacterId.value_or(-1);
+    const auto& players = m_context.GetPlayers();
+    UpdateCharacterRects(players);
+
+    if (!InputManager::GetInstance().IsLeftClicked())
+        return;
+
+    int index = HitTestCharacter(GetMousePos(window), players);
+    if (index < 0) return;
+
+    m_selectedActor = players[index];
+    m_phase = PlayerSelectPhase::SELECT_CARD;
 }
 
-// 選択カードスロット取得
-int UserController::GetSelectedCardSlot() const
+void UserController::UpdateSelectCard(sf::RenderWindow& window)
 {
-    return m_selectedCardSlot.value_or(-1);
+    
+    UpdateHandCardRects(*m_selectedActor);
+
+    if (!InputManager::GetInstance().IsLeftClicked())
+    {
+        return;
+    }
+    int index = HitTestHandCard(GetMousePos(window));
+
+    if (index < 0)
+    {
+        return;
+    }
+
+    m_selectedCardIndex = index;
+    m_phase = PlayerSelectPhase::CREATE_TARGETS;
 }
 
-// 選択ターゲット取得
-const std::vector<int>& UserController::GetSelectedTargets() const
+void UserController::UpdateCreateTargets()
 {
-    return m_selectedTargets;
+    // カードID、情報の取得
+    int cardId = m_selectedActor->GetHeldCardId(m_selectedCardIndex);
+    const CardData& card =CardManager::GetInstance().GetCardData(cardId);
+
+    // ターゲット候補の取得
+    m_targetCandidates = m_context.CreateTargetCandidates(card.targetType,m_selectedActor->GetFaction(),m_selectedActor);
+
+    m_selectedTargetIndices.clear();
+
+    if (card.targetType == TargetType::ALLY_ALL || card.targetType == TargetType::OPPONENT_ALL)
+    {
+        for (size_t i = 0; i < m_targetCandidates.size(); ++i)
+        {
+            m_selectedTargetIndices.push_back(static_cast<int>(i));
+        }
+
+        UserAction action;
+        action.actor = m_selectedActor;
+        action.cardId = cardId;
+        action.targetIds = m_selectedTargetIndices;
+
+        m_confirmedAction = action;
+        m_phase = PlayerSelectPhase::DONE;
+    }
+    else
+    {
+        m_phase = PlayerSelectPhase::SELECT_TARGET;
+    }
 }
 
-// 内部処理
-void UserController::ClearSelections()
+void UserController::UpdateSelectTarget(sf::RenderWindow& window)
 {
-    m_selectedCharacterId.reset();
-    m_selectedCardSlot.reset();
-    m_selectedTargets.clear();
+    UpdateCharacterRects(m_targetCandidates);
+
+    if (!InputManager::GetInstance().IsLeftClicked())
+    {
+        return;
+    }
+
+    int index = HitTestCharacter(GetMousePos(window), m_targetCandidates);
+    if (index < 0)
+    {
+        return;
+    }
+
+    m_selectedTargetIndices.push_back(index);
+    m_phase = PlayerSelectPhase::CONFIRM;
+
+    int cardId = m_selectedActor->GetHeldCardId(m_selectedCardIndex);
+
+    // 確定
+    UserAction action;
+    action.actor = m_selectedActor;
+    action.cardId = cardId;
+    action.targetIds = m_selectedTargetIndices;
+
+    m_confirmedAction = action;
+    m_phase = PlayerSelectPhase::DONE;
+}
+
+// ================= HitTest =================
+
+int UserController::HitTestCharacter(
+    const sf::Vector2f& mousePos,
+    const std::vector<std::shared_ptr<Character>>& list) const
+{
+    for (size_t i = 0; i < m_characterRects.size(); ++i)
+    {
+        if (m_characterRects[i].contains(mousePos))
+        {
+            return static_cast<int>(i);
+        }
+    }
+    return -1;
+}
+
+int UserController::HitTestHandCard(const sf::Vector2f& mousePos) const
+{
+    for (size_t i = 0; i < m_handCardRects.size(); ++i)
+    {
+        if (m_handCardRects[i].contains(mousePos))
+        {
+            return static_cast<int>(i);
+        }
+    }
+    return -1;
+}
+
+// ================= Rect 更新 =================
+
+void UserController::UpdateCharacterRects(
+    const std::vector<std::shared_ptr<Character>>& list)
+{
+    m_characterRects.clear();
+
+    for (auto& c : list)
+    {
+        sf::Vector2f pos = c->GetPosition();
+        m_characterRects.emplace_back(pos.x - CHAR_W * 0.5f,pos.y - CHAR_H * 0.5f,CHAR_W,CHAR_H);
+    }
+}
+
+void UserController::UpdateHandCardRects(const Character& actor)
+{
+    m_handCardRects.clear();
+
+    const int cardCount = actor.GetCardCount();
+
+    const float cardWidth = 120.f;
+    const float cardHeight = 160.f;
+    const float spacing = 20.f;
+
+    sf::Vector2f startPos(300.f, 500.f);
+
+    for (int i = 0; i < cardCount; ++i)
+    {
+        sf::FloatRect rect(
+            sf::Vector2f(startPos.x + i * (cardWidth + spacing),startPos.y),
+            sf::Vector2f(cardWidth, cardHeight)
+        );
+
+        m_handCardRects.push_back(rect);
+    }
+}
+
+// ================= 補助 =================
+
+sf::Vector2f UserController::GetMousePos(sf::RenderWindow& window) const
+{
+    auto pos = sf::Mouse::getPosition(window);
+    return { static_cast<float>(pos.x), static_cast<float>(pos.y) };
+}
+
+// デバッグ用（必要なければ削除可）
+void UserController::DrawDebug(sf::RenderWindow& window)
+{
+    sf::RectangleShape r;
+    r.setFillColor(sf::Color::Transparent);
+    r.setOutlineColor(sf::Color::Green);
+    r.setOutlineThickness(2.f);
+
+    for (auto& rect : m_characterRects)
+    {
+        r.setPosition({ rect.position.x, rect.position.y });
+        r.setSize({ rect.size.x, rect.size.y });
+        window.draw(r);
+    }
+
+    r.setOutlineColor(sf::Color::Blue);
+    for (auto& rect : m_handCardRects)
+    {
+        r.setPosition({ rect.position.x, rect.position.y });
+        r.setSize({ rect.size.x, rect.size.y });
+        window.draw(r);
+    }
 }

@@ -14,9 +14,23 @@ struct UserAction
 
 enum class PlayerSelectPhase
 {
-    SELECT_CHARACTER,
+    SELECT_PLAYER,
     SELECT_CARD,
+    CREATE_TARGETS,
     SELECT_TARGET,
     CONFIRM,
-    NONE
+    DONE
+};
+
+// クリック判定用
+struct HitRect
+{
+    sf::FloatRect rect;
+    int index;
+};
+
+struct HandCardRect
+{
+    sf::FloatRect rect;
+    int cardIndex;   // 手札配列の index
 };

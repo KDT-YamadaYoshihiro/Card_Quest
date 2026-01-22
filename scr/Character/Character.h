@@ -42,8 +42,7 @@ public:
 	// カード追加
 	void AddCard(int cardId);
 
-	// カード破棄（index指定）
-	// 破棄した cardId を返す
+	// カードの仕様
 	int DiscardCard(int index);
 
 	// 全破棄
@@ -60,8 +59,8 @@ public:
 	virtual int DecideTargetIndex(const std::vector<Character*>& targets) = 0;
 
 	// 座標管理
-	void SetPosition(const Position& pos) { m_pos = pos; }
-	Position GetPosition() const { return m_pos; }
+	void SetPosition(const sf::Vector2f& pos) { m_pos = pos; }
+	sf::Vector2f GetPosition() const { return m_pos; }
 
 	// フォーカス管理
 	void SetFocused(bool focused) { m_focused = focused; }
@@ -95,7 +94,7 @@ protected:
 	// 所持カードIDリスト
 	std::vector<int> m_cardIds;
 	// 座標
-	Position m_pos;
+	sf::Vector2f m_pos;
 	// フォーカス状態
 	bool m_focused;
 };

@@ -31,5 +31,6 @@ public:
     bool IsEnemyAllDead() const;
 
     // ターゲット候補作作成
-    std::vector<std::shared_ptr<Character>> CreateTargetCandidates(TargetType type, const Character& requester) const;
+    std::vector<std::shared_ptr<Character>> CreateTargetCandidates(TargetType targetType, Faction actorFaction, const std::shared_ptr<Character>& actor) const;
+
 };

@@ -24,7 +24,7 @@ std::shared_ptr<Character> TargetSelect::SelectSingle(const std::vector<std::sha
 	for (const auto& target : arg_targetChara)
 	{
 
-		if (!target || target->GetStatus().dead)
+		if (!target || target->GetData().dead)
 		{
 			continue;
 		}
@@ -32,7 +32,7 @@ std::shared_ptr<Character> TargetSelect::SelectSingle(const std::vector<std::sha
 		if (target->GetHitCircle().contains(mouseWoeldPos))
 		{
 			// ログ
-			std::cout << target->GetStatus().name << "を選択" << std::endl;
+			std::cout << target->GetData().name << "を選択" << std::endl;
 			return target;
 		}
 
@@ -70,7 +70,7 @@ std::vector<std::shared_ptr<Character>> TargetSelect::SelectAll(const std::vecto
 std::shared_ptr<Character> TargetSelect::SelectSelf(const std::shared_ptr<Character>& arg_actionChara)
 {
 	// 念のためnullptrでないか、生きているか判定する
-	if (arg_actionChara && !arg_actionChara->GetStatus().dead)
+	if (arg_actionChara && !arg_actionChara->GetData().dead)
 	{
 		// 自分自身なのでそのまま引数を返す。
 		return arg_actionChara;

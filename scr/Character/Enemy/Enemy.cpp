@@ -36,7 +36,9 @@ void EnemyCharacter::Render(RenderSystem& render)
 int EnemyCharacter::DecideActionCardIndex()
 {
     if (m_cardIds.empty())
+    {
         return -1;
+    }
 
     std::uniform_int_distribution<int> dist(0, static_cast<int>(m_cardIds.size()) - 1);
     return dist(m_rng);
@@ -46,8 +48,9 @@ int EnemyCharacter::DecideActionCardIndex()
 int EnemyCharacter::DecideTargetIndex(const std::vector<Character*>& targets)
 {
     if (targets.empty())
+    {
         return -1;
+    }
 
-    std::uniform_int_distribution<int> dist(0, static_cast<int>(targets.size()) - 1);
-    return dist(m_rng);
+    return std::rand() % targets.size();
 }

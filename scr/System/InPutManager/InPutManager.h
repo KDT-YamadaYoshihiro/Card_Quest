@@ -50,6 +50,7 @@ public:
         m_wheelDelta = 0.f;
     }
 
+
     void HandleEvent(const sf::Event& event)
     {
         if (event.is<sf::Event::MouseWheelScrolled>())
@@ -79,6 +80,29 @@ public:
         return m_wheelDelta;
 	}
 
+    sf::Vector2f GetMousePosition(const sf::RenderWindow& window) const
+    {
+        return sf::Vector2f(
+            static_cast<float>(sf::Mouse::getPosition(window).x),
+            static_cast<float>(sf::Mouse::getPosition(window).y)
+        );
+    }
+
+    bool IsLeftClickConfirmed() const
+    {
+        return IsLeftClicked() && !IsDragging();
+    }
+
+    bool IsCancelTriggered() const
+    {
+        return sf::Mouse::isButtonPressed(sf::Mouse::Button::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape);
+    }
+
+    bool IsConfirmTriggered() const
+    {
+        return sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter) || IsLeftClickConfirmed();
+    }
+
 private:
     bool m_prev = false;
     bool m_current = false;
@@ -86,5 +110,6 @@ private:
     sf::Vector2f m_pressPos;
     float m_wheelDelta = 0.f;
 };
+
 
 

@@ -58,7 +58,13 @@ void Character::ClearCards()
 
 bool Character::DrawCard()
 {
-    return CardManager::GetInstance().DealCardToCharacter(*this);
+
+    int cardId;
+    if (!CardManager::GetInstance().DrawCard(cardId))
+        return false;
+
+    AddCard(cardId);
+    return true;
 }
 
 int Character::GetHeldCardById(int cardId) const

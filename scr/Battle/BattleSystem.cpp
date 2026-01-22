@@ -149,7 +149,7 @@ void BattleSystem::UserTurn()
 	const CardData& card = actor->GetCard(action.cardId);
 
 	// ターゲット候補生成
-	auto targets = m_context->CreateTargetCandidates(card.targetType, *actor);
+	auto targets = m_context->CreateTargetCandidates(card.targetType,actor->GetFaction(), actor);
 
 	// 単体/全体補完
 	std::vector<std::shared_ptr<Character>> finalTargets;
@@ -200,7 +200,7 @@ void BattleSystem::EnemyTurn()
 		int cardId = enemy->GetHeldCardId(cardIndex);
 		const CardData& card = CardManager::GetInstance().GetCardData(cardId);
 
-		auto targets = m_context->CreateTargetCandidates(card.targetType, *enemy);
+		auto targets = m_context->CreateTargetCandidates(card.targetType,enemy->GetFaction(), enemy);
 
 		if (targets.empty()) 
 		{
@@ -210,12 +210,23 @@ void BattleSystem::EnemyTurn()
 		std::vector<std::shared_ptr<Character>> finalTargets;
 
 		// 
-		if (card.targetType == TargetType::OPPONENT ||
-			card.targetType == TargetType::ALLY)
+		if (card.targetType == TargetType::SELF)
 		{
-			int targetIndex = enemy->DecideTargetIndex(
-				reinterpret_cast<std::vector<Character*>&>(targets));
-			finalTargets.push_back(targets[targetIndex]);
+			finalTargets.push_back(enemy);
+		}
+		else if (card.targetType == TargetType::OPPONENT || card.targetType == TargetType::ALLY)
+		{
+			std::vector<Character*> rawTargets;
+			for (auto& t : targets) 
+			{
+				rawTargets.push_back(t.get());
+			}
+			int targetIndex = enemy->DecideTargetIndex(rawTargets);
+
+			if (targetIndex >= 0)
+			{
+				finalTargets.push_back(targets[targetIndex]);
+			}
 		}
 		else
 		{
@@ -266,19 +277,16 @@ void BattleSystem::ApplyAction(const std::shared_ptr<Character>& actor, const st
 	for (auto& target : targets)
 	{
 		if (!target || target->IsDead())
+		{
 			continue;
+		}
 
 		switch (card.actionType)
 		{
 		case ActionType::ATTCK:
 		case ActionType::MAGIC:
 		{
-			int damage =
-				static_cast<int>(
-					actor->GetData().atk *
-					card.power *
-					actor->GetData().buff.power
-					);
+			int damage = static_cast<int>(actor->GetData().atk * card.power * actor->GetData().buff.power);
 
 			target->TakeDamage(damage);
 			break;
