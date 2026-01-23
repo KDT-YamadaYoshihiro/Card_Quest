@@ -12,7 +12,7 @@ protected:
 
 public:
 
-	SceneBase(sf::RenderWindow& arg_window) {};
+	SceneBase() {};
 	virtual ~SceneBase() = default;
 
 	virtual void Init(sf::RenderWindow& arg_window) = 0;

@@ -202,7 +202,7 @@ void UserController::UpdateCharacterRects(
     for (auto& c : list)
     {
         sf::Vector2f pos = c->GetPosition();
-        m_characterRects.emplace_back(pos.x - CHAR_W * 0.5f,pos.y - CHAR_H * 0.5f,CHAR_W,CHAR_H);
+        m_characterRects.emplace_back(sf::Vector2f{ pos.x - CHAR_W * 0.5f,pos.y - CHAR_H * 0.5f }, sf::Vector2f{ CHAR_W, CHAR_H });
     }
 }
 

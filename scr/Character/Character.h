@@ -37,7 +37,7 @@ public:
 	int GetHeldCardId(int index) const;
 
 	// CardData 取得（index指定）
-	const CardData& GetCard(int index) const;
+	const CardData& GetCardData(int index) const;
 
 	// カード追加
 	void AddCard(int cardId);

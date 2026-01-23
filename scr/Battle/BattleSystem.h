@@ -58,7 +58,13 @@ public:
 	/// <summary>
 	///	更新処理
 	/// </summary>
-	void Update();
+	void Update(sf::RenderWindow& window);
+
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="window"></param>
+	void Render(sf::RenderWindow& window);
 
 	/// <summary>
 	/// バトル終了判定
@@ -82,7 +88,7 @@ private:
 	/// <summary>
 	/// ユーザーターン
 	/// </summary>
-	void UserTurn();
+	void UserTurn(sf::RenderWindow& window);
 
 	/// <summary>
 	/// エネミーターン

@@ -10,20 +10,20 @@ void IngameScene::Init(sf::RenderWindow& arg_window)
 
 void IngameScene::handleEvent(const sf::Event& event)
 {
-	//if(battle->CheckWin() || battle->CheckLose())
-	//{
-	//	SceneManager::Instance().ChangeScreen<ResultScene>();
-	//}
+	if(m_battle->IsBattleEnd())
+	{
+		SceneManager::GetInstance().ChangeScreen<ResultScene>();
+	}
 }
 
 void IngameScene::Update(sf::RenderWindow& arg_window)
 {
-	//battle->Update(arg_window);
+	m_battle->Update(arg_window);
 }
 
 void IngameScene::Render(sf::RenderWindow& arg_window)
 {	
-	//battle->Render(arg_window);
+
 }
 
 void IngameScene::End()

@@ -49,11 +49,6 @@ public:
             data.magicAtk = std::stoi(cols[6]);
             data.def = std::stoi(cols[7]);
 
-            // cardId1〜4
-            for (int i = 5; i <= 9; i++) {
-                data.cardIds.push_back(std::stoi(cols[i]));
-            }
-
             m_characters[data.charaId] = data;
         }
         return true;

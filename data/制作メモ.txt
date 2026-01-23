@@ -384,7 +384,7 @@ bool UserController::IsTurnEndButtonClicked(sf::RenderWindow& window) const
 
 次の作業
 
-battleSystemの完全実装
+battleSystemの実装
 　ユーザーコントローラーとの接続
 　コスト実装
 　描画
@@ -393,3 +393,13 @@ battleSystemの完全実装
 キャラクターCSVの修正
 
 cardManagerにカードID一覧所持実装（メソッドはある）
+
+
+2026/01/23
+
+battleSystemの実装
+　ユーザーコントローラーとの接続
+　コスト実装
+
+キャラクターファクトリーの修正
+キャラクターCSVの修正

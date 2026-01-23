@@ -91,7 +91,7 @@ public:
 	// ƒfƒbƒL•Ò¬Š®—¹”»’è
 	bool IsComplete() const;
 
-	std::vector<std::unique_ptr<Card>> TakeDeck();
+	std::vector<int> TakeDeck();
 
 private:
 	

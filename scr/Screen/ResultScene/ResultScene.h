@@ -9,7 +9,7 @@ class ResultScene : public SceneBase
 
 public:
 
-	ResultScene(sf::RenderWindow& arg_window):SceneBase(arg_window)
+	ResultScene():SceneBase()
 	{
 		std::cout << "Result" << std::endl;
 	}

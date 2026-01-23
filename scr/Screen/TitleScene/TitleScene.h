@@ -11,7 +11,7 @@ class TitleScene : public SceneBase
 
 public:
 
-	TitleScene(sf::RenderWindow& arg_window):SceneBase(arg_window)
+	TitleScene():SceneBase()
 	{
 		//if (!test.loadFromFile("data/Test/test.jpg"))
 		//{

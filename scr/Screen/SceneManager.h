@@ -28,10 +28,10 @@ public:
     void Render(sf::RenderWindow& arg_window);
     void HandleEvent(const sf::Event& event);
 
-    template <typename T>
-    void ChangeScreen(sf::RenderWindow& arg_window)
+    template <typename T,  typename... Args>
+    void ChangeScreen(Args&&... args)
     {
-        m_screen = std::make_unique<T>(arg_window);
+        m_screen = std::make_unique<T>(std::forward<Args>(args)...);
     }
 
 };

@@ -29,12 +29,12 @@ std::shared_ptr<Character> TargetSelect::SelectSingle(const std::vector<std::sha
 			continue;
 		}
 
-		if (target->GetHitCircle().contains(mouseWoeldPos))
-		{
-			// ログ
-			std::cout << target->GetData().name << "を選択" << std::endl;
-			return target;
-		}
+		//if (target->GetHitCircle().contains(mouseWoeldPos))
+		//{
+		//	// ログ
+		//	std::cout << target->GetData().name << "を選択" << std::endl;
+		//	return target;
+		//}
 
 	}
 

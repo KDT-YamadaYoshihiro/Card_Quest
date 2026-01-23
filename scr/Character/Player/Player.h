@@ -5,9 +5,7 @@
 class PlayerCharacter : public Character
 {
 public:
-    PlayerCharacter(CharacterData& data, int maxCardSlot = 1)
-        : Character(data, Faction::Player, maxCardSlot) {
-    }
+	PlayerCharacter(CharacterData& data, int maxCardSlot);
 
 	// XV
 	void Update() override;

@@ -17,7 +17,7 @@ class DeckBuildingScene : public SceneBase
 public:
 
 	// ‰Šú‰»
-	DeckBuildingScene(sf::RenderWindow& arg_window);
+	DeckBuildingScene();
 	virtual ~DeckBuildingScene() = default;
 	// ƒV[ƒ“Šî–{ŠÖ”
 	virtual void Init(sf::RenderWindow& arg_window) override;

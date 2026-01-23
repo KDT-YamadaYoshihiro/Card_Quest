@@ -19,7 +19,7 @@ int Character::GetHeldCardId(int index) const
 }
 
 // CardData Žæ“¾
-const CardData& Character::GetCard(int index) const
+const CardData& Character::GetCardData(int index) const
 {
     int cardId = GetHeldCardId(index);
     return CardManager::GetInstance().GetCardData(cardId);

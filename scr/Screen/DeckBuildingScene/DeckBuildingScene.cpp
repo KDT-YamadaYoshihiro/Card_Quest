@@ -6,8 +6,8 @@
 #include "../../System/InPutManager/InPutManager.h"
 #include "../../View/Font/FontManager.h"
 
-DeckBuildingScene::DeckBuildingScene(sf::RenderWindow& arg_window)
-	:SceneBase(arg_window),
+DeckBuildingScene::DeckBuildingScene()
+    :SceneBase(),
     m_completeButton(50.0f, { 700.0f, 500.0f })
 {
 	std::cout << "デッキ編成シーン" << std::endl;
@@ -45,7 +45,7 @@ void DeckBuildingScene::Update(sf::RenderWindow& arg_window)
         if (m_deckBuildSystem.IsComplete())
         {
 			// CardManager にデッキをセット
-            CardManager::GetInstance().InitBattleDeck(m_deckBuildSystem.TakeDeck());
+            CardManager::GetInstance().InitDeck(m_deckBuildSystem.TakeDeck());
 			// シーン切り替え
 			SceneManager::GetInstance().ChangeScreen<IngameScene>(arg_window);
         }

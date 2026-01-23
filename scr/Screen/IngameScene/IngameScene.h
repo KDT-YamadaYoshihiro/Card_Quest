@@ -11,7 +11,7 @@ class IngameScene : public SceneBase
 
 public:
 
-	IngameScene(sf::RenderWindow& arg_window):SceneBase(arg_window)
+	IngameScene(sf::RenderWindow& arg_window):SceneBase()
 	{
 		std::cout << "Ingame" << std::endl;
 		m_battle = std::make_shared<BattleSystem>(arg_window);

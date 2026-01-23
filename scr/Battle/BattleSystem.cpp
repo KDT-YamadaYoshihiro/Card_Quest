@@ -1,10 +1,7 @@
 #include "BattleSystem.h"
-//#include "../Battle/BattleSystem.h"
 //#include "../Battle/Calculation/Calculation.h"
 //#include "../Character/Factory/CharacterFactory.h"
-//#include "../Card/CardFactory/CardFactory.h"
 //#include "../View/Font/FontManager.h"
-//#include "../Battle/SelectTarget/TargetSelect.h"
 //#include "../Battle/UserController/UserController.h"
 //#include "../Battle/UserController/ActionData.h"
 //#include "../System/InPutManager/InPutManager.h"
@@ -27,17 +24,20 @@ BattleSystem::BattleSystem(sf::RenderWindow& arg_window)
 bool BattleSystem::Init()
 {
 
+	// コンテックス
 	m_context = std::make_unique<BattleContext>();
 	if (!m_context) {
 		std::cout << "BattleSystem/m_context:nullptr" << std::endl;
 		return false;
 	}
-	m_userController = std::make_unique<UserController>();
+	// コントローラー
+	m_userController = std::make_unique<UserController>(*m_context);
 	if (!m_userController)
 	{
 		std::cout << "BattleSystem/m_userController:nullptr" << std::endl;
 		return false;
 	}
+	// コスト
 	m_costManager = std::make_unique<CostManager>();
 	if (!m_costManager)
 	{
@@ -51,7 +51,7 @@ bool BattleSystem::Init()
 /// <summary>
 ///	更新処理
 /// </summary>
-void BattleSystem::Update()
+void BattleSystem::Update(sf::RenderWindow& window)
 {
 	// フェーズ進行
 	switch (m_phase)
@@ -60,7 +60,7 @@ void BattleSystem::Update()
 		StartTurn();
 		break;
 	case BattleSystem::TurnPhase::UserTurn:
-		UserTurn();
+		UserTurn(window);
 		break;
 	case BattleSystem::TurnPhase::EnemyTurn:
 		EnemyTurn();
@@ -72,6 +72,14 @@ void BattleSystem::Update()
 		break;
 	}
 
+}
+
+/// <summary>
+/// 描画
+/// </summary>
+/// <param name="window"></param>
+void BattleSystem::Render(sf::RenderWindow& window)
+{
 }
 
 /// <summary>
@@ -98,8 +106,8 @@ bool BattleSystem::IsUserWin() const
 void BattleSystem::StartTurn()
 {
 
+	// コスト回復
 	m_costManager->ResetCost();
-	m_userController->ResetTurn();
 
 	// 各プレイヤーにカード配布
 	for (auto& p : m_context->GetAlivePlayers())
@@ -107,17 +115,18 @@ void BattleSystem::StartTurn()
 		p->DrawCard(); // Character責務
 	}
 
+	// 次のフェーズ
 	m_phase = TurnPhase::UserTurn;
 }
 
 /// <summary>
 /// ユーザーターン
 /// </summary>
-void BattleSystem::UserTurn()
+void BattleSystem::UserTurn(sf::RenderWindow& window)
 {
 
 	// ユーザー入力更新
-	m_userController->Update();
+	m_userController->Update(window);
 
 	// 行動が確定したか？
 	if (!m_userController->HasConfirmedAction())
@@ -146,7 +155,7 @@ void BattleSystem::UserTurn()
 	}
 
 	// 使用カード取得（キャラ保持カード）
-	const CardData& card = actor->GetCard(action.cardId);
+	const CardData& card = actor->GetCardData(action.cardId);
 
 	// ターゲット候補生成
 	auto targets = m_context->CreateTargetCandidates(card.targetType,actor->GetFaction(), actor);

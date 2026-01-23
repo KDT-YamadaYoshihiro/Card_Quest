@@ -194,9 +194,14 @@ bool DeckBuildSystem::IsComplete() const
 }
 
 // デッキを引き渡す
-std::vector<std::unique_ptr<Card>> DeckBuildSystem::TakeDeck()
+std::vector<int> DeckBuildSystem::TakeDeck()
 {
-    return std::move(m_deckCards);
+    std::vector<int> result;
+    for (auto& card : m_deckCards)
+    {
+        result.push_back(card->GetCardState().cardId);
+    }
+    return result;
 }
 
 // プールクリック処理
