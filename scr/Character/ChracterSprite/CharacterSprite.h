@@ -25,7 +25,8 @@ class CharacterSprite
 
 public:
 
-	CharacterSprite() = default;
+	// ‰Šú‰»
+	CharacterSprite(const std::string& arg_textureKey);
 
 	/// <summary>
 	/// ‰Šú‰»

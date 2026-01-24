@@ -1,8 +1,11 @@
-ï»¿id,filePath
-test,data/Test/test.jpg
-ã‚¢ãƒ¬ã‚¹,data/Character/Player/player_0.png
-ãƒªãƒ¥ãƒŸã‚¨ãƒ¼ãƒ«,data/Character/Player/player_1.png
-ã‚°ãƒ©ãƒ³ãƒˆ,data/Character/Player/player_2.png
-ã‚»ãƒ©ãƒ•ã‚£ãƒŠ,data/Character/Player/player_3.png
-ã‚¹ãƒ©ã‚¤ãƒ ,data/Character/Enemy/enemy_0.png
-ã‚¦ã‚£ãƒ³ãƒ‰ãƒãƒ¼ãƒ‰,data/Character/Enemy/enemy_1.png
+id,filePath
+test,data/Bg/BG.png
+ƒAƒŒƒX,data/Character/Player/player_0.png
+ƒŠƒ…ƒ~ƒG[ƒ‹,data/Character/Player/player_1.png
+ƒOƒ‰ƒ“ƒg,data/Character/Player/player_2.png
+ƒZƒ‰ƒtƒBƒi,data/Character/Player/player_3.png
+ƒGƒCƒ‹,data/Character/Player/player_4.png
+ƒ‹ƒ`ƒA,data/Character/Player/player_5.png
+ƒXƒ‰ƒCƒ€,data/Character/Enemy/enemy_0.png
+ƒEƒBƒ“ƒhƒo[ƒh,data/Character/Enemy/enemy_1.png
+ƒŠƒgƒ‹ƒhƒ‰ƒSƒ“,data/Character/Enemy/enemy_2.png

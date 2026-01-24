@@ -51,11 +51,6 @@ public:
             data.def = std::stoi(cols[7]);
             data.exp = std::stoi(cols[8]);
 
-            for (size_t i = 0; i < cols.size(); ++i)
-            {
-                std::cout << i << ": [" << cols[i] << "]" << std::endl;
-            }
-
             m_characters[data.charaId] = data;
 
 #ifdef _DEBUG

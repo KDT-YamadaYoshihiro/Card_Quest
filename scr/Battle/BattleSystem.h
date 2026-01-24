@@ -35,6 +35,8 @@ private:
 	// キャラクター
 	std::vector<std::shared_ptr<Character>> m_players;
 	std::vector<std::shared_ptr<Character>> m_enemies;
+	// 描画システム
+	std::unique_ptr<RenderSystem> m_render;
 
 	// ターンフェーズ
 	TurnPhase m_phase;
@@ -56,7 +58,7 @@ public:
 	/// 生成
 	/// </summary>
 	/// <returns>成功：失敗</returns>
-	bool Init();
+	bool Init(sf::RenderWindow& arg_window);
 
 	/// <summary>
 	///	更新処理

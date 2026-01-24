@@ -7,14 +7,14 @@
 //#include "../System/InPutManager/InPutManager.h"
 
 /// <summary>
-/// 終了処理
+/// 初期化処理
 /// </summary>
 BattleSystem::BattleSystem(sf::RenderWindow& arg_window)
 	:m_phase(TurnPhase::StartTurn),
 	m_turnCount(0)
 {
 	// 生成・初期化
-	if (!Init())
+	if (!Init(arg_window))
 	{
 		std::cout << "BattleSystem/Init():false" << std::endl;
 	}
@@ -24,7 +24,7 @@ BattleSystem::BattleSystem(sf::RenderWindow& arg_window)
 /// 生成
 /// </summary>
 /// <returns>成功：失敗</returns>
-bool BattleSystem::Init()
+bool BattleSystem::Init(sf::RenderWindow& arg_window)
 {
 
 	// コンテックス
@@ -78,6 +78,15 @@ bool BattleSystem::Init()
 		return false;
 	}
 
+	// 描画
+	m_render = std::make_unique<RenderSystem>(arg_window);
+	if(!m_render)
+	{ 
+		std::cout << "BattleSysytem/m_render:nullptr" << std::endl;
+		return false;
+	}
+
+	std::cout << "BattleSystem/Init():成功" << std::endl;
 	return true;
 }
 
@@ -113,6 +122,14 @@ void BattleSystem::Update(sf::RenderWindow& window)
 /// <param name="window"></param>
 void BattleSystem::Render(sf::RenderWindow& window)
 {
+	for (auto& p : m_players)
+	{
+		p->Render(*m_render);
+	}
+	for (auto& e : m_enemies)
+	{
+		e->Render(*m_render);
+	}
 }
 
 /// <summary>

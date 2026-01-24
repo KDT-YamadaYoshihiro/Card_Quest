@@ -1,5 +1,10 @@
 #include "CharacterSprite.h"
 
+CharacterSprite::CharacterSprite(const std::string& arg_textureKey)
+    :m_sprite(*TextureLoader::GetInstance().GetTextureID(arg_textureKey))
+{
+}
+
 /// <summary>
 /// ‰Šú‰»
 /// </summary>

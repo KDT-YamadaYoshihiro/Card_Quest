@@ -9,6 +9,8 @@
 PlayerCharacter::PlayerCharacter(CharacterData& data, int maxCardSlot)
 	: Character(data, Faction::Player, maxCardSlot)
 {
+	m_sprite = std::make_shared<CharacterSprite>(data.textureKey);
+	m_sprite->Init(data.textureKey);
 }
 
 /// <summary>
@@ -16,6 +18,14 @@ PlayerCharacter::PlayerCharacter(CharacterData& data, int maxCardSlot)
 /// </summary>
 void PlayerCharacter::Update()
 {
+	if (IsDead())
+	{
+		m_sprite->SetState(CharacterAnimState::DEAD);
+	}
+	else
+	{
+		m_sprite->SetState(CharacterAnimState::WAIT);
+	}
 }
 
 /// <summary>
@@ -24,20 +34,6 @@ void PlayerCharacter::Update()
 /// <param name="render"></param>
 void PlayerCharacter::Render(RenderSystem& render)
 {
-	auto tex = TextureLoader::GetInstance().GetTextureID(m_data.textureKey);
-
-	if (tex)
-	{
-		sf::Sprite sprite(*tex);
-		sprite.setPosition({ m_pos.x, m_pos.y });
-		render.Draw(sprite);
-	}
-	else
-	{
-#ifdef _DEBUG
-		// テクスチャがない場合は何もしない
-		std::cout << "テクスチャーが見つかりません：" << m_data.textureKey << std::endl; 
-#endif // _DEBUG
-	}
-
+	m_sprite->SetPosition(m_pos);
+	m_sprite->Draw(render);
 }

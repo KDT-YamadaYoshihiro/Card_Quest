@@ -1,6 +1,6 @@
 #pragma once
 #include "../Character.h"
-#include "../../View/Render/Animetion/Animation.h"
+#include "../ChracterSprite/CharacterSprite.h"
 
 class PlayerCharacter : public Character
 {
@@ -15,4 +15,10 @@ public:
 
     int DecideActionCardIndex() override { return 0; }
     int DecideTargetIndex(const std::vector<Character*>&) override { return 0; }
+
+private:
+
+	// 
+	std::shared_ptr<CharacterSprite> m_sprite;
+
 };
