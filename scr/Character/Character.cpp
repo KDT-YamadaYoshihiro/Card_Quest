@@ -104,18 +104,18 @@ void Character::TakeHeal(int heal)
 // バフ
 void Character::TakeBuff(float power)
 {
-    m_data.buff.power += power;
+    m_buff.power += power;
 }
 
 // バフ更新
 void Character::UpdateBuff()
 {
-    if (m_data.buff.turn > 0)
+    if (m_buff.turn > 0)
     {
-        m_data.buff.turn--;
-        if (m_data.buff.turn <= 0)
+        m_buff.turn--;
+        if (m_buff.turn <= 0)
         {
-            m_data.buff.power = 1.0f;
+            m_buff.power = 1.0f;
         }
     }
 }
@@ -123,8 +123,8 @@ void Character::UpdateBuff()
 // バフリセット
 void Character::ResetBuff()
 {
-    m_data.buff.power = 1.0f;
-    m_data.buff.turn = 0;
+    m_buff.power = 1.0f;
+    m_buff.turn = 0;
 }
 
 // レベルアップ
@@ -150,6 +150,7 @@ void Character::ResetBattleStatus()
 // 初期化
 Character::Character(CharacterData& data, Faction faction, int maxCardSlot)
     : m_data(data),
+    m_buff(1.0f,0),
     m_faction(faction),
     m_maxCardSlot(maxCardSlot)
 {

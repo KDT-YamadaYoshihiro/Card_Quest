@@ -131,6 +131,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="scr\Character\ChracterSprite\CharacterSprite.cpp" />
     <ClCompile Include="scr\Card\DeckBuildSystem\DeckBuildSystem.cpp" />
     <ClCompile Include="scr\Screen\DeckBuildingScene\DeckBuildingScene.cpp" />
     <ClCompile Include="scr\Card\CardBuildPool\CardBuildPool.cpp" />
@@ -160,6 +161,7 @@
     <ClCompile Include="scr\Screen\TitleScene\TitleScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="scr\Character\ChracterSprite\CharacterSprite.h" />
     <ClInclude Include="scr\Card\DeckBuildSystem\DeckBuildSystem.h" />
     <ClInclude Include="scr\Screen\DeckBuildingScene\DeckBuildingScene.h" />
     <ClInclude Include="scr\Card\CardBuildPool\CardBuildPool.h" />

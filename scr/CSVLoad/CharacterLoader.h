@@ -41,22 +41,34 @@ public:
 
             CharacterData data;
             data.charaId = std::stoi(cols[0]);
-            data.name = cols[1];
-            data.textureKey = cols[2];
-            data.hp = std::stoi(cols[3]);
+            data.lv = std::stoi(cols[1]);
+            data.name = cols[2];
+            data.textureKey = cols[3];
+            data.hp = std::stoi(cols[4]);
             data.maxHp = std::stoi(cols[4]);
             data.atk = std::stoi(cols[5]);
             data.magicAtk = std::stoi(cols[6]);
             data.def = std::stoi(cols[7]);
+            data.exp = std::stoi(cols[8]);
+
+            for (size_t i = 0; i < cols.size(); ++i)
+            {
+                std::cout << i << ": [" << cols[i] << "]" << std::endl;
+            }
 
             m_characters[data.charaId] = data;
+
+#ifdef _DEBUG
+            std::cout << "Loaded Character ID: " << data.charaId << std::endl;
+#endif
         }
         return true;
     }
 
-    const CharacterData* Get(int id) const
+    const CharacterData* GetData(int id) const
     {
         auto it = m_characters.find(id);
+
         return (it != m_characters.end()) ? &it->second : nullptr;
     }
 

@@ -9,7 +9,7 @@ class CharacterFactory
 {
 public:
 
-    static CharacterFactory& Instance()
+    static CharacterFactory& GetInstance()
     {
         static CharacterFactory instance;
         return instance;
@@ -17,9 +17,9 @@ public:
 
     // ID Ç©ÇÁ Character Çê∂ê¨
     template <typename T>
-    std::shared_ptr<Character> CreateCharacter(int id)
+    std::shared_ptr<Character> CreateCharacter(int id,int maxCardSlot)
     {
-        const CharacterData* src = CharacterLoader::GetInstance().Get(id);
+        const CharacterData* src = CharacterLoader::GetInstance().GetData(id);
         if (!src)
         {
 #ifdef _DEBUG
@@ -39,7 +39,7 @@ public:
         std::cout << id << "Çê∂ê¨" << std::endl;
 #endif // _DEBUG
 
-        return std::make_shared<T>(data);
+        return std::make_shared<T>(data, maxCardSlot);
        
     }
 

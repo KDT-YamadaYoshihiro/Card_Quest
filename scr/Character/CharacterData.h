@@ -29,11 +29,6 @@ struct CharacterData
 	int def;
 	int exp;
 	bool dead;
-	
-
-
-	BuffData buff;
-
 };
 
 // ê∂ê¨å„Ç…égóp

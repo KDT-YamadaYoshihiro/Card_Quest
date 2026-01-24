@@ -1,6 +1,6 @@
 #include "BattleSystem.h"
 //#include "../Battle/Calculation/Calculation.h"
-//#include "../Character/Factory/CharacterFactory.h"
+#include "../Character/Factory/CharacterFactory.h"
 //#include "../View/Font/FontManager.h"
 //#include "../Battle/UserController/UserController.h"
 //#include "../Battle/UserController/ActionData.h"
@@ -14,7 +14,10 @@ BattleSystem::BattleSystem(sf::RenderWindow& arg_window)
 	m_turnCount(0)
 {
 	// 生成・初期化
-	Init();
+	if (!Init())
+	{
+		std::cout << "BattleSystem/Init():false" << std::endl;
+	}
 }
 
 /// <summary>
@@ -30,18 +33,48 @@ bool BattleSystem::Init()
 		std::cout << "BattleSystem/m_context:nullptr" << std::endl;
 		return false;
 	}
-	// コントローラー
-	m_userController = std::make_unique<UserController>(*m_context);
-	if (!m_userController)
-	{
-		std::cout << "BattleSystem/m_userController:nullptr" << std::endl;
-		return false;
-	}
 	// コスト
 	m_costManager = std::make_unique<CostManager>();
 	if (!m_costManager)
 	{
 		std::cout << "BattleSystem/m_costManager:nullptr" << std::endl;;
+		return false;
+	}
+	// キャラクターの作成
+	for (int i = 1; i < 7; i++)
+	{
+		auto player = CharacterFactory::GetInstance().CreateCharacter<PlayerCharacter>(i,1);
+		m_players.push_back(player);
+	}
+	for (int i = 0; i < 3; i++) 
+	{
+		auto enemy = CharacterFactory::GetInstance().CreateCharacter<EnemyCharacter>(7,1);
+		m_enemies.push_back(enemy);
+	}
+
+	// 生成確認
+	if (m_players.empty()) {
+		std::cout << "BattleSystem/m_players:empty" << std::endl;
+		return false;
+	}
+	if (m_enemies.empty())
+	{
+		std::cout << "BattleSysyte/m_enemis:empty" << std::endl;
+		return false;
+	}
+
+	// コンテックスの初期化
+	if (!m_context->Init(m_players, m_enemies))
+	{
+		std::cout << "BattleSystem/m_context->Init() : false" << std::endl;
+		return false;
+	}
+
+	// コントローラー
+	m_userController = std::make_unique<UserController>(*m_context);
+	if (!m_userController)
+	{
+		std::cout << "BattleSystem/m_userController:nullptr" << std::endl;
 		return false;
 	}
 
@@ -295,7 +328,7 @@ void BattleSystem::ApplyAction(const std::shared_ptr<Character>& actor, const st
 		case ActionType::ATTCK:
 		case ActionType::MAGIC:
 		{
-			int damage = static_cast<int>(actor->GetData().atk * card.power * actor->GetData().buff.power);
+			int damage = static_cast<int>(actor->GetData().atk * card.power * actor->GetBuffData().power);
 
 			target->TakeDamage(damage);
 			break;

@@ -11,7 +11,7 @@ bool BattleContext::Init(const std::vector<std::shared_ptr<Character>>& players,
     {
         if (!p)
         {
-            std::cout << "BattleContext: player nullptr\n";
+            std::cout << "BattleContext: player nullptr" << std::endl;
             return false;
         }
     }
@@ -20,7 +20,7 @@ bool BattleContext::Init(const std::vector<std::shared_ptr<Character>>& players,
     {
         if (!e)
         {
-            std::cout << "BattleContext: enemy nullptr\n";
+            std::cout << "BattleContext: enemy nullptr" << std::endl;
             return false;
         }
     }
@@ -65,7 +65,9 @@ bool BattleContext::IsPlayerAllDead() const
     for (const auto& p : m_players)
     {
         if (!p->GetData().dead)
+        {
             return false;
+        }
     }
     return true;
 }

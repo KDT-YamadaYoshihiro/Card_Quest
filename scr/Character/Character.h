@@ -21,6 +21,8 @@ public:
 	// データ参照
 	CharacterData& GetData() { return m_data; }
 	const CharacterData& GetData() const { return m_data; }
+	BuffData& GetBuffData() { return m_buff; }
+	const BuffData& GetBuffData() const { return m_buff; }
 
 	// プレイヤーかエネミーか
 	Faction GetFaction() const { return m_faction; }
@@ -87,7 +89,8 @@ protected:
 	Character(CharacterData& data, Faction faction, int maxCardSlot);
 
 	// データ
-	CharacterData& m_data;
+	CharacterData m_data;
+	BuffData m_buff;
 	Faction m_faction;
 	// カードスロット数
 	int m_maxCardSlot;

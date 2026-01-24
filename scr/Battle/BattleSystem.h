@@ -32,6 +32,9 @@ private:
 	std::unique_ptr<UserController> m_userController;
 	// コスト管理
 	std::unique_ptr<CostManager> m_costManager;
+	// キャラクター
+	std::vector<std::shared_ptr<Character>> m_players;
+	std::vector<std::shared_ptr<Character>> m_enemies;
 
 	// ターンフェーズ
 	TurnPhase m_phase;
