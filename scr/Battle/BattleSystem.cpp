@@ -18,6 +18,9 @@ BattleSystem::BattleSystem(sf::RenderWindow& arg_window)
 	{
 		std::cout << "BattleSystem/Init():false" << std::endl;
 	}
+
+	// 座標の初期化
+	InitPosition();
 }
 
 /// <summary>
@@ -114,6 +117,16 @@ void BattleSystem::Update(sf::RenderWindow& window)
 		break;
 	}
 
+	// キャラクター系の更新
+	for (auto& p : m_players)
+	{
+		p->Update();
+	}
+	for (auto& e : m_enemies)
+	{
+		e->Update();
+	}
+
 }
 
 /// <summary>
@@ -122,6 +135,8 @@ void BattleSystem::Update(sf::RenderWindow& window)
 /// <param name="window"></param>
 void BattleSystem::Render(sf::RenderWindow& window)
 {
+
+	// 描画
 	for (auto& p : m_players)
 	{
 		p->Render(*m_render);
@@ -148,6 +163,21 @@ bool BattleSystem::IsBattleEnd() const
 bool BattleSystem::IsUserWin() const
 {
 	return m_context->IsEnemyAllDead() && !m_context->IsPlayerAllDead();
+}
+
+void BattleSystem::InitPosition()
+{
+	for (int i = 0; i < m_players.size(); i++)
+	{
+		sf::Vector2f pos({ 200.0f,200.0f + i * 150.0f });
+		m_players[i]->SetPosition(sf::Vector2f(pos));
+	}
+	for (int i = 0; i < m_enemies.size(); i++)
+	{
+		sf::Vector2f pos({ 600.0f + i * 165.0f,200.0f });
+		m_enemies[i]->SetPosition(pos);
+	}
+
 }
 
 /// <summary>

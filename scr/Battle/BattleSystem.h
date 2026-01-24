@@ -86,6 +86,11 @@ public:
 private:
 
 	/// <summary>
+	/// 座標の初期化
+	/// </summary>
+	void InitPosition();
+
+	/// <summary>
 	/// ターン開始
 	/// </summary>
 	void StartTurn();

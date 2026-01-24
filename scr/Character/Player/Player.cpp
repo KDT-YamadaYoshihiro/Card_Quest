@@ -1,5 +1,4 @@
 #include "Player.h"
-#include "../../View/Render/Animetion/Animation.h"
 
 /// <summary>
 /// ‰Šú‰»

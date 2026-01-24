@@ -1,5 +1,6 @@
 #pragma once
 #include "../Character.h"
+#include "../ChracterSprite/CharacterSprite.h"
 #include <random>
 
 class EnemyCharacter : public Character
@@ -20,4 +21,5 @@ public:
 
 private:
     std::mt19937 m_rng;
+    std::shared_ptr<CharacterSprite> m_sprite;
 };
