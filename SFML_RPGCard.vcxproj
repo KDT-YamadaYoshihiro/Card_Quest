@@ -149,9 +149,7 @@
     <ClCompile Include="scr\Character\Player\Player.cpp" />
     <ClCompile Include="scr\CSVLoad\TextureLoader\TextureLoader.cpp" />
     <ClCompile Include="scr\GameMain\GameMain.cpp" />
-    <ClCompile Include="scr\GameMain\WindowSetting.cpp" />
     <ClCompile Include="scr\Battle\SelectTarget\TargetSelect.cpp" />
-    <ClCompile Include="scr\System\InPutManager\InPutManager.cpp" />
     <ClCompile Include="scr\View\Render\Animetion\Animation.cpp" />
     <ClCompile Include="scr\CameraManager\CameraManager.cpp" />
     <ClCompile Include="scr\View\Render\RenderSystem.cpp" />
@@ -189,7 +187,7 @@
     <ClInclude Include="scr\GameMain\GameMain.h" />
     <ClInclude Include="scr\GameMain\WindowSetting.h" />
     <ClInclude Include="scr\Battle\SelectTarget\TargetSelect.h" />
-    <ClInclude Include="scr\System\InPutManager\InPutManager.h" />
+    <ClInclude Include="scr\System\InPutManager\InPutMouseManager.h" />
     <ClInclude Include="scr\UI\CircleButton.h" />
     <ClInclude Include="scr\View\Render\Animetion\Animation.h" />
     <ClInclude Include="scr\CameraManager\CameraManager.h" />

@@ -40,7 +40,7 @@ void CardRenderer::DrawGrave(const sf::Font& arg_font, sf::RenderWindow& window,
 /// <param name="window"></param>
 /// <param name="pos">座標</param>
 /// <param name="card">カード</param>
-void CardRenderer::DrawHand(const sf::Font& arg_font, sf::RenderWindow& window, sf::Vector2f pos, const Card& card)
+void CardRenderer::DrawHand(const sf::Font& arg_font, sf::RenderWindow& window, sf::Vector2f pos, const CardData& cardData)
 {
     // カードのベース（白地）
     sf::RectangleShape rect({ 120.f, 160.f });
@@ -50,18 +50,16 @@ void CardRenderer::DrawHand(const sf::Font& arg_font, sf::RenderWindow& window, 
     rect.setPosition(pos);
     window.draw(rect);
 
-    // カードのステータスの取得
-    const auto& data = card.GetCardState();
 
     // 技名
-    sf::Text nameText(arg_font, sf::String::fromUtf8(data.name.begin(),data.name.end()));
+    sf::Text nameText(arg_font, sf::String::fromUtf8(cardData.name.begin(), cardData.name.end()));
     nameText.setCharacterSize(14);
     nameText.setFillColor(sf::Color::Black);
     nameText.setPosition({ pos.x + 5.0f, pos.y + 5.0f });
     window.draw(nameText);
 
     // 説明
-    sf::String desc = sf::String::fromUtf8(data.description.begin(), data.description.end());
+    sf::String desc = sf::String::fromUtf8(cardData.description.begin(), cardData.description.end());
     // 改行処理
     desc = WarpText(desc, arg_font, 12, 100.0f);
 

@@ -6,7 +6,6 @@
 
 void TitleScene::Init(sf::RenderWindow& arg_window)
 {
-    std::cout << "Title" << std::endl;
 }
 
 void TitleScene::handleEvent(const sf::Event& event)

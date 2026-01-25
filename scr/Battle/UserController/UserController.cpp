@@ -1,5 +1,5 @@
 #include "UserController.h"
-#include "../../System/InPutManager/InPutManager.h"
+#include "../../System/InPutManager/InPutMouseManager.h"
 #include "../BattleContex/BattleContext.h"
 #include "../../Character/Character.h"
 #include "../../Card/Card.h"
@@ -24,20 +24,24 @@ UserController::UserController(BattleContext& context)
 
 void UserController::Update(sf::RenderWindow& window)
 {
-    InputManager::GetInstance().Update(window);
+    InPutMouseManager::GetInstance().Update(window);
 
     switch (m_phase)
     {
     case PlayerSelectPhase::SELECT_PLAYER:
+        std::cout << "キャラクター選択中" << std::endl;
         UpdateSelectPlayer(window);
         break;
     case PlayerSelectPhase::SELECT_CARD:
+        std::cout << "カード選択中" << std::endl;
         UpdateSelectCard(window);
         break;
     case PlayerSelectPhase::CREATE_TARGETS:
+        std::cout << "ターゲット候補作成" << std::endl;
         UpdateCreateTargets();
         break;
     case PlayerSelectPhase::SELECT_TARGET:
+        std::cout << "ターゲット選択中" << std::endl;
         UpdateSelectTarget(window);
         break;
     case PlayerSelectPhase::DONE:
@@ -72,13 +76,18 @@ void UserController::UpdateSelectPlayer(sf::RenderWindow& window)
     const auto& players = m_context.GetPlayers();
     UpdateCharacterRects(players);
 
-    if (!InputManager::GetInstance().IsLeftClicked())
+    if (!InPutMouseManager::GetInstance().IsLeftClicked())
+    {
         return;
-
+    }
     int index = HitTestCharacter(GetMousePos(window), players);
-    if (index < 0) return;
+    if (index < 0)
+    {
+        return;
+    }
 
     m_selectedActor = players[index];
+    std::cout << "選択キャラ:" << players[index]->GetData().name << std::endl;
     m_phase = PlayerSelectPhase::SELECT_CARD;
 }
 
@@ -87,7 +96,7 @@ void UserController::UpdateSelectCard(sf::RenderWindow& window)
     
     UpdateHandCardRects(*m_selectedActor);
 
-    if (!InputManager::GetInstance().IsLeftClicked())
+    if (!InPutMouseManager::GetInstance().IsLeftClicked())
     {
         return;
     }
@@ -99,6 +108,7 @@ void UserController::UpdateSelectCard(sf::RenderWindow& window)
     }
 
     m_selectedCardIndex = index;
+    std::cout << "選択カード:" << index << std::endl;
     m_phase = PlayerSelectPhase::CREATE_TARGETS;
 }
 
@@ -123,7 +133,7 @@ void UserController::UpdateCreateTargets()
         UserAction action;
         action.actor = m_selectedActor;
         action.cardId = cardId;
-        action.targetIds = m_selectedTargetIndices;
+        action.targets = m_targetCandidates;
 
         m_confirmedAction = action;
         m_phase = PlayerSelectPhase::DONE;
@@ -138,7 +148,7 @@ void UserController::UpdateSelectTarget(sf::RenderWindow& window)
 {
     UpdateCharacterRects(m_targetCandidates);
 
-    if (!InputManager::GetInstance().IsLeftClicked())
+    if (!InPutMouseManager::GetInstance().IsLeftClicked())
     {
         return;
     }
@@ -153,12 +163,21 @@ void UserController::UpdateSelectTarget(sf::RenderWindow& window)
     m_phase = PlayerSelectPhase::CONFIRM;
 
     int cardId = m_selectedActor->GetHeldCardId(m_selectedCardIndex);
+    const CardData& card = CardManager::GetInstance().GetCardData(cardId);
 
     // 確定
     UserAction action;
     action.actor = m_selectedActor;
     action.cardId = cardId;
-    action.targetIds = m_selectedTargetIndices;
+
+    if (card.targetType == TargetType::ALLY_ALL || card.targetType == TargetType::OPPONENT_ALL)
+    {
+        action.targets = m_targetCandidates;
+    }
+    else
+    {
+        action.targets.push_back(m_targetCandidates[index]);
+    }
 
     m_confirmedAction = action;
     m_phase = PlayerSelectPhase::DONE;

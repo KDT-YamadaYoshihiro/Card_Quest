@@ -31,19 +31,22 @@ class DeckBuildSystem
 	// カード間隔
 	float m_cardSpacing;
 	// スクロール関連
-
+	// プール座標
 	float m_poolScrollX;
 	bool  m_poolDragging;
 	float m_poolDragStartX;
-
+	// デッキ座標
 	float m_deckScrollX;
 	bool  m_deckDragging;
 	float m_deckDragStartX;
 
+	// 
 	float m_lastMouseX;
+
 	// ドラッグ状態管理
 	bool  m_prevClick = false;
 	bool m_dragStarted = false;
+
 public:
 
 	DeckBuildSystem()

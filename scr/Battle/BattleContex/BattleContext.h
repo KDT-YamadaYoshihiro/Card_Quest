@@ -9,8 +9,11 @@
 class BattleContext
 {
 private:
+
+    // キャラクター
     std::vector<std::shared_ptr<Character>> m_players;
     std::vector<std::shared_ptr<Character>> m_enemies;
+    
 
 public:
 
@@ -26,11 +29,13 @@ public:
     std::vector<std::shared_ptr<Character>> GetAlivePlayers() const;
     std::vector<std::shared_ptr<Character>> GetAliveEnemies() const;
 
+
     // 全滅判定
     bool IsPlayerAllDead() const;
     bool IsEnemyAllDead() const;
 
     // ターゲット候補作作成
     std::vector<std::shared_ptr<Character>> CreateTargetCandidates(TargetType targetType, Faction actorFaction, const std::shared_ptr<Character>& actor) const;
+
 
 };

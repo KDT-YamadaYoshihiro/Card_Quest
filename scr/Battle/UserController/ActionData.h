@@ -9,7 +9,7 @@ struct UserAction
     // s“®Ò
     std::shared_ptr<Character> actor;
     int cardId;
-    std::vector<int> targetIds;
+    std::vector<std::shared_ptr<Character>> targets;
 };
 
 enum class PlayerSelectPhase

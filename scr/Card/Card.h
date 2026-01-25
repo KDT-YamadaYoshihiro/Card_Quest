@@ -36,6 +36,5 @@ public:
     // カードの使用
     void UseCard(Character* target);
 
-    // カードの削除
 
 };

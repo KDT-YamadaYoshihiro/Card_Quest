@@ -8,7 +8,6 @@ class SceneBase
 
 protected:
 
-	//std::shared_ptr<RenderSystem> renderSystem = std::make_shared<RenderSystem>();
 
 public:
 

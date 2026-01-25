@@ -7,6 +7,13 @@
 
 class CharacterFactory
 {
+private:
+    CharacterFactory() = default;
+    ~CharacterFactory() = default;
+
+    CharacterFactory(const CharacterFactory&) = delete;
+    CharacterFactory& operator=(const CharacterFactory&) = delete;
+
 public:
 
     static CharacterFactory& GetInstance()
@@ -43,10 +50,4 @@ public:
        
     }
 
-private:
-    CharacterFactory() = default;
-    ~CharacterFactory() = default;
-
-    CharacterFactory(const CharacterFactory&) = delete;
-    CharacterFactory& operator=(const CharacterFactory&) = delete;
 };

@@ -10,6 +10,24 @@ class RenderSystem;
 
 class Character
 {
+protected:
+
+	// 初期化
+	Character(CharacterData& data, Faction faction, int maxCardSlot);
+
+	// データ
+	CharacterData m_data;
+	BuffData m_buff;
+	Faction m_faction;
+	// カードスロット数
+	int m_maxCardSlot;
+	// 所持カードIDリスト
+	std::vector<int> m_cardIds;
+	// 座標
+	sf::Vector2f m_pos;
+	// フォーカス状態
+	bool m_focused;
+
 public:
 	virtual ~Character() = default;
 
@@ -83,21 +101,4 @@ public:
 	// バトル開始ステータスリセット
 	void ResetBattleStatus();
 
-protected:
-	
-	// 初期化
-	Character(CharacterData& data, Faction faction, int maxCardSlot);
-
-	// データ
-	CharacterData m_data;
-	BuffData m_buff;
-	Faction m_faction;
-	// カードスロット数
-	int m_maxCardSlot;
-	// 所持カードIDリスト
-	std::vector<int> m_cardIds;
-	// 座標
-	sf::Vector2f m_pos;
-	// フォーカス状態
-	bool m_focused;
 };

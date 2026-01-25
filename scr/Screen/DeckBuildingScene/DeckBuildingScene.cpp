@@ -3,7 +3,7 @@
 #include "../IngameScene/IngameScene.h"
 #include "../../Card/CardBuildPool/CardBuildPool.h"
 #include "../../Card/CardManager/CardManager.h"
-#include "../../System/InPutManager/InPutManager.h"
+#include "../../System/InPutManager/InPutMouseManager.h"
 #include "../../View/Font/FontManager.h"
 
 DeckBuildingScene::DeckBuildingScene()
@@ -22,14 +22,14 @@ void DeckBuildingScene::Init(sf::RenderWindow& arg_window)
 
 void DeckBuildingScene::handleEvent(const sf::Event& event)
 {
-    InputManager::GetInstance().HandleEvent(event);
+    InPutMouseManager::GetInstance().HandleEvent(event);
 }
 
 void DeckBuildingScene::Update(sf::RenderWindow& arg_window)
 {
 
 	// 入力更新
-    auto& input = InputManager::GetInstance();
+    auto& input = InPutMouseManager::GetInstance();
     input.Update(arg_window);
 
 	// マウス座標取得

@@ -5,6 +5,10 @@
 
 class EnemyCharacter : public Character
 {
+private:
+    std::mt19937 m_rng;
+    std::shared_ptr<CharacterSprite> m_sprite;
+
 public:
 
     // ‰Šú‰»
@@ -19,7 +23,4 @@ public:
     int DecideActionCardIndex() override;
     int DecideTargetIndex(const std::vector<Character*>& targets) override;
 
-private:
-    std::mt19937 m_rng;
-    std::shared_ptr<CharacterSprite> m_sprite;
 };

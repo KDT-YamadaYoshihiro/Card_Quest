@@ -11,6 +11,12 @@ class Character;
 class CardManager
 {
 private:
+    std::unordered_map<int, CardData> m_cardMaster;
+    std::vector<int> m_deck;
+    std::vector<int> m_cemetery;
+
+    std::mt19937 m_rng;
+
     CardManager();
 
 public:
@@ -42,10 +48,4 @@ public:
     int GetDeckCount() const;
     int GetCemeteryCount() const;
 
-private:
-    std::unordered_map<int, CardData> m_cardMaster;
-    std::vector<int> m_deck;
-    std::vector<int> m_cemetery;
-
-    std::mt19937 m_rng;
 };

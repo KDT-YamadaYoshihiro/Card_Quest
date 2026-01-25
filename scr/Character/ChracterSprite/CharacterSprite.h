@@ -22,6 +22,13 @@ struct  AnimRect
 
 class CharacterSprite
 {
+private:
+
+	sf::Sprite m_sprite;
+	std::string m_textureKey;
+
+	CharacterAnimState m_currentState{ CharacterAnimState::WAIT };
+	std::unordered_map<CharacterAnimState, sf::IntRect> m_rectTable;
 
 public:
 
@@ -52,13 +59,6 @@ public:
 	/// <param name="arg_render">レンダーシステム</param>
 	void Draw(RenderSystem& arg_render);
 
-private:
-
-	sf::Sprite m_sprite;
-	std::string m_textureKey;
-
-	CharacterAnimState m_currentState{ CharacterAnimState::WAIT };
-	std::unordered_map<CharacterAnimState, sf::IntRect> m_rectTable;
 
 
 };

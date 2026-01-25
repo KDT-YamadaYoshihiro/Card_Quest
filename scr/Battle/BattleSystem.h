@@ -9,6 +9,7 @@
 #include "../Card/CardRenderer/CardRenderer.h"
 #include "../Battle/BattleContex/BattleContext.h"
 #include "../Battle/UserController/UserController.h"
+#include "../Battle/BattleView/BattleView.h"
 
 class BattleSystem
 {
@@ -37,7 +38,9 @@ private:
 	std::vector<std::shared_ptr<Character>> m_enemies;
 	// 描画システム
 	std::unique_ptr<RenderSystem> m_render;
-
+	// バトル描画
+	std::unique_ptr<BattleView> m_battleView;
+	
 	// ターンフェーズ
 	TurnPhase m_phase;
 	// ターン数

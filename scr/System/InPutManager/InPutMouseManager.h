@@ -1,13 +1,20 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-class InputManager
+class InPutMouseManager
 {
+private:
+    bool m_prev = false;
+    bool m_current = false;
+    bool m_dragging = false;
+    sf::Vector2f m_pressPos;
+    float m_wheelDelta = 0.f;
+
 public:
 
-    static InputManager& GetInstance()
+    static InPutMouseManager& GetInstance()
     {
-        static InputManager instance;
+        static InPutMouseManager instance;
         return instance;
     }
 
@@ -103,12 +110,6 @@ public:
         return sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter) || IsLeftClickConfirmed();
     }
 
-private:
-    bool m_prev = false;
-    bool m_current = false;
-    bool m_dragging = false;
-    sf::Vector2f m_pressPos;
-    float m_wheelDelta = 0.f;
 };
 
 

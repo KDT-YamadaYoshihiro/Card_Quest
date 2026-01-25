@@ -19,7 +19,7 @@
 #endif // _DEBUG
 
 GameMain::GameMain() :
-    m_window(sf::VideoMode({ 1280, 720 }),"Game")
+    m_window(sf::VideoMode({ 1280, 720 }),"Card Quest")
 {
 
 }

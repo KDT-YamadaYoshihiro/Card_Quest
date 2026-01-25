@@ -1,6 +1,7 @@
 #include "BattleSystem.h"
 //#include "../Battle/Calculation/Calculation.h"
 #include "../Character/Factory/CharacterFactory.h"
+#include "../CSVLoad/CardLoader.h"
 //#include "../View/Font/FontManager.h"
 //#include "../Battle/UserController/UserController.h"
 //#include "../Battle/UserController/ActionData.h"
@@ -13,6 +14,9 @@ BattleSystem::BattleSystem(sf::RenderWindow& arg_window)
 	:m_phase(TurnPhase::StartTurn),
 	m_turnCount(0)
 {
+
+	CardManager::GetInstance().InitCardMaster(CardLoader::GetInstance().GetAll());
+
 	// 生成・初期化
 	if (!Init(arg_window))
 	{
@@ -89,6 +93,13 @@ bool BattleSystem::Init(sf::RenderWindow& arg_window)
 		return false;
 	}
 
+	m_battleView = std::make_unique<BattleView>(*m_context,*m_render);
+	if (!m_battleView)
+	{
+		std::cout << "BattleSysytem/m_battleView:nullptr" << std::endl;
+		return false;
+	}
+
 	std::cout << "BattleSystem/Init():成功" << std::endl;
 	return true;
 }
@@ -135,16 +146,7 @@ void BattleSystem::Update(sf::RenderWindow& window)
 /// <param name="window"></param>
 void BattleSystem::Render(sf::RenderWindow& window)
 {
-
-	// 描画
-	for (auto& p : m_players)
-	{
-		p->Render(*m_render);
-	}
-	for (auto& e : m_enemies)
-	{
-		e->Render(*m_render);
-	}
+	m_battleView->Render(window);
 }
 
 /// <summary>
@@ -165,6 +167,9 @@ bool BattleSystem::IsUserWin() const
 	return m_context->IsEnemyAllDead() && !m_context->IsPlayerAllDead();
 }
 
+/// <summary>
+/// キャラクターの座標設定
+/// </summary>
 void BattleSystem::InitPosition()
 {
 	for (int i = 0; i < m_players.size(); i++)
@@ -205,66 +210,36 @@ void BattleSystem::StartTurn()
 void BattleSystem::UserTurn(sf::RenderWindow& window)
 {
 
-	// ユーザー入力更新
 	m_userController->Update(window);
 
-	// 行動が確定したか？
 	if (!m_userController->HasConfirmedAction())
 	{
 		return;
 	}
 
-	// 確定アクション取得
 	UserAction action = m_userController->ConsumeAction();
 
-	// コスト不足なら無効
+	// View 同期
+	m_battleView->SetSelectedActor(action.actor);
+	m_battleView->SetTargetIndices(action.targets);
+
 	if (!m_costManager->CanConsume(1))
 	{
 		return;
 	}
 
-	// コスト消費
 	m_costManager->Consume(1);
 
-	// 行動キャラ取得
-	auto actor = action.actor;
+	const CardData& card = CardManager::GetInstance().GetCardData(action.cardId);
 
-	if (!actor || actor->IsDead())
-	{
-		return;
-	}
+	ApplyAction(action.actor, action.targets, card);
 
-	// 使用カード取得（キャラ保持カード）
-	const CardData& card = actor->GetCardData(action.cardId);
+	m_costManager->AddCost(card.actionPlus);
+	m_battleView->ShowCostGain(card.actionPlus);
 
-	// ターゲット候補生成
-	auto targets = m_context->CreateTargetCandidates(card.targetType,actor->GetFaction(), actor);
+	int discardId = action.actor->DiscardCard(action.actor->GetHeldCardById(action.cardId));
+	CardManager::GetInstance().SendCardIdToCemetery(discardId);
 
-	// 単体/全体補完
-	std::vector<std::shared_ptr<Character>> finalTargets;
-
-	if (card.targetType == TargetType::SELF)	// 自分自身
-	{
-		finalTargets.push_back(actor);
-	}
-	else if (card.targetType == TargetType::OPPONENT || card.targetType == TargetType::ALLY)	// 単体
-	{
-		finalTargets.push_back(targets[action.targetIds[0]]);
-	}
-	else
-	{
-		// 全体
-		finalTargets = targets;
-	}
-
-	// アクション適用
-	ApplyAction(actor, finalTargets, card);
-
-	// 使用カード破棄
-	int discardedId = actor->DiscardCard(action.cardId);
-	CardManager::GetInstance().SendCardIdToCemetery(discardedId);
-
-	// 行動数が尽きたらエネミーターン
 	if (m_costManager->IsEmpty())
 	{
 		m_phase = TurnPhase::EnemyTurn;
@@ -278,32 +253,35 @@ void BattleSystem::EnemyTurn()
 {
 	for (auto& enemy : m_context->GetAliveEnemies())
 	{
-		// 
+		// エネミーの手札確認
 		if (enemy->GetCardCount() == 0)
 		{
 			continue;
 		}
 
-		// 
+		// カードデータの取得
 		int cardIndex = enemy->DecideActionCardIndex();
 		int cardId = enemy->GetHeldCardId(cardIndex);
 		const CardData& card = CardManager::GetInstance().GetCardData(cardId);
 
+		// ターゲット候補の取得
 		auto targets = m_context->CreateTargetCandidates(card.targetType,enemy->GetFaction(), enemy);
 
+		// ターゲット候補がからでないことを確認
 		if (targets.empty()) 
 		{
 			continue;
 		}
 
+		// ターゲット確定枠
 		std::vector<std::shared_ptr<Character>> finalTargets;
 
-		// 
-		if (card.targetType == TargetType::SELF)
+		// カードのタイプに合わせてアクション
+		if (card.targetType == TargetType::SELF)	// セルフ
 		{
 			finalTargets.push_back(enemy);
 		}
-		else if (card.targetType == TargetType::OPPONENT || card.targetType == TargetType::ALLY)
+		else if (card.targetType == TargetType::OPPONENT || card.targetType == TargetType::ALLY)	// 単体
 		{
 			std::vector<Character*> rawTargets;
 			for (auto& t : targets) 
@@ -317,17 +295,16 @@ void BattleSystem::EnemyTurn()
 				finalTargets.push_back(targets[targetIndex]);
 			}
 		}
-		else
+		else																						// 全体
 		{
 			finalTargets = targets;
 		}
 
-		// 
+		// アクション
 		ApplyAction(enemy, finalTargets, card);
 
-		// 
-		int discardedId = enemy->DiscardCard(cardIndex);
-		CardManager::GetInstance().SendCardIdToCemetery(discardedId);
+		// エネミーはカード破棄しない
+
 	}
 
 	m_phase = TurnPhase::EndTurn;
@@ -363,6 +340,7 @@ void BattleSystem::ApplyAction(const std::shared_ptr<Character>& actor, const st
 		return;
 	}
 
+	// アクション効果
 	for (auto& target : targets)
 	{
 		if (!target || target->IsDead())
@@ -376,7 +354,6 @@ void BattleSystem::ApplyAction(const std::shared_ptr<Character>& actor, const st
 		case ActionType::MAGIC:
 		{
 			int damage = static_cast<int>(actor->GetData().atk * card.power * actor->GetBuffData().power);
-
 			target->TakeDamage(damage);
 			break;
 		}

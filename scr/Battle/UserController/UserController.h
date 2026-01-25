@@ -9,6 +9,25 @@ class Character;
 
 class UserController
 {
+
+private:
+    BattleContext& m_context;
+
+    PlayerSelectPhase m_phase = PlayerSelectPhase::SELECT_PLAYER;
+
+    // Rect 管理
+    std::vector<sf::FloatRect> m_characterRects;
+    std::vector<sf::FloatRect> m_handCardRects;
+
+    // 選択状態
+    std::shared_ptr<Character> m_selectedActor;
+    int m_selectedCardIndex = -1;
+    std::vector<std::shared_ptr<Character>> m_targetCandidates;
+    std::vector<int> m_selectedTargetIndices;
+
+    // 確定行動
+    std::optional<UserAction> m_confirmedAction;
+
 public:
 
     UserController(BattleContext& context);
@@ -39,21 +58,4 @@ private:
     // ===== 補助 =====
     sf::Vector2f GetMousePos(sf::RenderWindow& window) const;
 
-private:
-    BattleContext& m_context;
-
-    PlayerSelectPhase m_phase = PlayerSelectPhase::SELECT_PLAYER;
-
-    // Rect 管理
-    std::vector<sf::FloatRect> m_characterRects;
-    std::vector<sf::FloatRect> m_handCardRects;
-
-    // 選択状態
-    std::shared_ptr<Character> m_selectedActor;
-    int m_selectedCardIndex = -1;
-    std::vector<std::shared_ptr<Character>> m_targetCandidates;
-    std::vector<int> m_selectedTargetIndices;
-
-    // 確定行動
-    std::optional<UserAction> m_confirmedAction;
 };

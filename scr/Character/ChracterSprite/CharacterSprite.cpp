@@ -1,5 +1,13 @@
 #include "CharacterSprite.h"
 
+
+namespace
+{
+    constexpr int W = 165;
+    constexpr int H = 150;
+}
+
+
 CharacterSprite::CharacterSprite(const std::string& arg_textureKey)
     :m_sprite(*TextureLoader::GetInstance().GetTextureID(arg_textureKey))
 {
@@ -23,12 +31,12 @@ void CharacterSprite::Init(const std::string& arg_textureKey)
     // Å¶ êîílÇÕÅuç∂è„ x, y, â°, ècÅv
     // é¿ç€ÇÃâÊëúÇ…çáÇÌÇπÇƒí≤êÆÇµÇƒOK
 
-    m_rectTable[CharacterAnimState::WAIT] = sf::IntRect(sf::Vector2i{ 0, 0 }, sf::Vector2i{ 165, 150 });
-    m_rectTable[CharacterAnimState::ATTACK] = sf::IntRect(sf::Vector2i{ 495, 0 }, sf::Vector2i{ 165, 150 });
-    m_rectTable[CharacterAnimState::MAGIC] = sf::IntRect(sf::Vector2i{ 495, 450 }, sf::Vector2i{ 165, 150 });
-    m_rectTable[CharacterAnimState::DAMAGE] = sf::IntRect(sf::Vector2i{ 0, 600 }, sf::Vector2i{ 165, 150 });
-    m_rectTable[CharacterAnimState::DEAD] = sf::IntRect(sf::Vector2i{ 990, 450 }, sf::Vector2i{ 165, 150 });
-    m_rectTable[CharacterAnimState::WIN] = sf::IntRect(sf::Vector2i{990,300}, sf::Vector2i{ 165, 150 });
+    m_rectTable[CharacterAnimState::WAIT] = sf::IntRect(sf::Vector2i{ W*0, H*0 }, sf::Vector2i{ W, H });
+    m_rectTable[CharacterAnimState::ATTACK] = sf::IntRect(sf::Vector2i{ W*3, H*0 }, sf::Vector2i{ W, H });
+    m_rectTable[CharacterAnimState::MAGIC] = sf::IntRect(sf::Vector2i{ W*3, H*3 }, sf::Vector2i{ W, H });
+    m_rectTable[CharacterAnimState::DAMAGE] = sf::IntRect(sf::Vector2i{ W*0, H*4 }, sf::Vector2i{ W, H });
+    m_rectTable[CharacterAnimState::DEAD] = sf::IntRect(sf::Vector2i{ W*6, H*3 }, sf::Vector2i{ W, H });
+    m_rectTable[CharacterAnimState::WIN] = sf::IntRect(sf::Vector2i{ W*6,H*2}, sf::Vector2i{ W, H });
 
     SetState(CharacterAnimState::WAIT);
 }
