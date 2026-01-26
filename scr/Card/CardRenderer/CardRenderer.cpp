@@ -35,12 +35,12 @@ void CardRenderer::DrawGrave(const sf::Font& arg_font, sf::RenderWindow& window,
 }
 
 /// <summary>
-/// 手札の描画
+/// 単体カード描画
 /// </summary>
 /// <param name="window"></param>
 /// <param name="pos">座標</param>
 /// <param name="card">カード</param>
-void CardRenderer::DrawHand(const sf::Font& arg_font, sf::RenderWindow& window, sf::Vector2f pos, const CardData& cardData)
+void CardRenderer::DrawSingleCard(const sf::Font& arg_font, sf::RenderWindow& window, sf::Vector2f pos, const CardData& cardData)
 {
     // カードのベース（白地）
     sf::RectangleShape rect({ 120.f, 160.f });

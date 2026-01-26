@@ -29,7 +29,7 @@ void TitleScene::Render(sf::RenderWindow& window)
 	if (tex)
 	{
 		sf::Sprite sprite(*tex);
-        sprite.setPosition({ 10.0f, 50.0f });
+        sprite.setPosition({ 0.0f,0.0f });
         window.draw(sprite);
 	}
 }

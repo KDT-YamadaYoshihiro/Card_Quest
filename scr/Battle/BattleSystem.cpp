@@ -14,9 +14,9 @@ BattleSystem::BattleSystem(sf::RenderWindow& arg_window)
 	:m_phase(TurnPhase::StartTurn),
 	m_turnCount(0)
 {
-
+	// すべてのカード情報を取得
 	CardManager::GetInstance().InitCardMaster(CardLoader::GetInstance().GetAll());
-
+	std::cout << CardManager::GetInstance().GetDeckCount() << std::endl;
 	// 生成・初期化
 	if (!Init(arg_window))
 	{
@@ -48,7 +48,7 @@ bool BattleSystem::Init(sf::RenderWindow& arg_window)
 		return false;
 	}
 	// キャラクターの作成
-	for (int i = 1; i < 7; i++)
+	for (int i = 1; i < 5; i++)
 	{
 		auto player = CharacterFactory::GetInstance().CreateCharacter<PlayerCharacter>(i,1);
 		m_players.push_back(player);
@@ -77,28 +77,31 @@ bool BattleSystem::Init(sf::RenderWindow& arg_window)
 		return false;
 	}
 
+	// 描画システム
+	m_render = std::make_unique<RenderSystem>(arg_window);
+	if (!m_render)
+	{
+		std::cout << "BattleSysytem/m_render:nullptr" << std::endl;
+		return false;
+	}
+
+	// バトル画面描画
+	m_battleView = std::make_unique<BattleView>(*m_context, *m_render);
+	if (!m_battleView)
+	{
+		std::cout << "BattleSysytem/m_battleView:nullptr" << std::endl;
+		return false;
+	}
+
 	// コントローラー
-	m_userController = std::make_unique<UserController>(*m_context);
+	m_userController = std::make_unique<UserController>(*m_context, *m_battleView);
 	if (!m_userController)
 	{
 		std::cout << "BattleSystem/m_userController:nullptr" << std::endl;
 		return false;
 	}
 
-	// 描画
-	m_render = std::make_unique<RenderSystem>(arg_window);
-	if(!m_render)
-	{ 
-		std::cout << "BattleSysytem/m_render:nullptr" << std::endl;
-		return false;
-	}
 
-	m_battleView = std::make_unique<BattleView>(*m_context,*m_render);
-	if (!m_battleView)
-	{
-		std::cout << "BattleSysytem/m_battleView:nullptr" << std::endl;
-		return false;
-	}
 
 	std::cout << "BattleSystem/Init():成功" << std::endl;
 	return true;
@@ -217,11 +220,7 @@ void BattleSystem::UserTurn(sf::RenderWindow& window)
 		return;
 	}
 
-	UserAction action = m_userController->ConsumeAction();
-
-	// View 同期
-	m_battleView->SetSelectedActor(action.actor);
-	m_battleView->SetTargetIndices(action.targets);
+	UserAction action = { m_userController->GetSelectActor(),m_userController->GetSelectCardId(),m_userController->GetSelectTargetIndices() };
 
 	if (!m_costManager->CanConsume(1))
 	{

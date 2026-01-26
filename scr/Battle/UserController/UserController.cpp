@@ -1,6 +1,7 @@
 #include "UserController.h"
 #include "../../System/InPutManager/InPutMouseManager.h"
 #include "../BattleContex/BattleContext.h"
+#include "../BattleView/BattleView.h"
 #include "../../Character/Character.h"
 #include "../../Card/Card.h"
 #include "../../Card/CardManager/CardManager.h"
@@ -17,8 +18,9 @@ namespace
     constexpr float HAND_SPACING = 140.f;
 }
 
-UserController::UserController(BattleContext& context)
-    : m_context(context)
+UserController::UserController(BattleContext& context,BattleView& battleView)
+    : m_context(context),
+    m_battleView(battleView)
 {
 }
 
@@ -45,6 +47,7 @@ void UserController::Update(sf::RenderWindow& window)
         UpdateSelectTarget(window);
         break;
     case PlayerSelectPhase::DONE:
+        return;
         break;
     }
 }
@@ -63,7 +66,7 @@ UserAction UserController::ConsumeAction()
     m_phase = PlayerSelectPhase::SELECT_PLAYER;
     m_selectedActor.reset();
     m_selectedCardIndex = -1;
-    m_selectedTargetIndices.clear();
+    m_selectedTargets.clear();
     m_targetCandidates.clear();
 
     return result;
@@ -87,6 +90,7 @@ void UserController::UpdateSelectPlayer(sf::RenderWindow& window)
     }
 
     m_selectedActor = players[index];
+    m_battleView.SetSelectedActor(players[index]);
     std::cout << "選択キャラ:" << players[index]->GetData().name << std::endl;
     m_phase = PlayerSelectPhase::SELECT_CARD;
 }
@@ -108,34 +112,32 @@ void UserController::UpdateSelectCard(sf::RenderWindow& window)
     }
 
     m_selectedCardIndex = index;
-    std::cout << "選択カード:" << index << std::endl;
+    m_selectCardId = m_selectedActor->GetHeldCardId(m_selectedCardIndex);
+    m_battleView.SetSelectedCard(m_selectCardId);
+    std::cout << "選択カード:" << m_selectCardId << std::endl;
     m_phase = PlayerSelectPhase::CREATE_TARGETS;
 }
 
 void UserController::UpdateCreateTargets()
 {
     // カードID、情報の取得
-    int cardId = m_selectedActor->GetHeldCardId(m_selectedCardIndex);
-    const CardData& card =CardManager::GetInstance().GetCardData(cardId);
+    const CardData& card =CardManager::GetInstance().GetCardData(m_selectCardId);
 
     // ターゲット候補の取得
     m_targetCandidates = m_context.CreateTargetCandidates(card.targetType,m_selectedActor->GetFaction(),m_selectedActor);
 
-    m_selectedTargetIndices.clear();
+    m_selectedTargets.clear();
 
     if (card.targetType == TargetType::ALLY_ALL || card.targetType == TargetType::OPPONENT_ALL)
     {
-        for (size_t i = 0; i < m_targetCandidates.size(); ++i)
-        {
-            m_selectedTargetIndices.push_back(static_cast<int>(i));
-        }
 
         UserAction action;
         action.actor = m_selectedActor;
-        action.cardId = cardId;
+        action.cardId = m_selectCardId;
         action.targets = m_targetCandidates;
 
         m_confirmedAction = action;
+        m_battleView.SetTargetIndices(m_targetCandidates);
         m_phase = PlayerSelectPhase::DONE;
     }
     else
@@ -159,16 +161,15 @@ void UserController::UpdateSelectTarget(sf::RenderWindow& window)
         return;
     }
 
-    m_selectedTargetIndices.push_back(index);
+    m_selectedTargets.push_back(m_targetCandidates[index]);
     m_phase = PlayerSelectPhase::CONFIRM;
 
-    int cardId = m_selectedActor->GetHeldCardId(m_selectedCardIndex);
-    const CardData& card = CardManager::GetInstance().GetCardData(cardId);
+    const CardData& card = CardManager::GetInstance().GetCardData(m_selectCardId);
 
     // 確定
     UserAction action;
     action.actor = m_selectedActor;
-    action.cardId = cardId;
+    action.cardId = m_selectCardId;
 
     if (card.targetType == TargetType::ALLY_ALL || card.targetType == TargetType::OPPONENT_ALL)
     {
@@ -176,15 +177,22 @@ void UserController::UpdateSelectTarget(sf::RenderWindow& window)
     }
     else
     {
-        action.targets.push_back(m_targetCandidates[index]);
+        action.targets = m_targetCandidates;
     }
 
+    m_selectedTargets = m_targetCandidates;
+    m_battleView.SetTargetIndices(action.targets);
+    m_battleView.SetSelectedCard(m_selectCardId);
     m_confirmedAction = action;
     m_phase = PlayerSelectPhase::DONE;
 }
 
-// ================= HitTest =================
-
+/// <summary>
+/// キャラクタークリック判定
+/// </summary>
+/// <param name="mousePos"></param>
+/// <param name="list"></param>
+/// <returns></returns>
 int UserController::HitTestCharacter(
     const sf::Vector2f& mousePos,
     const std::vector<std::shared_ptr<Character>>& list) const
@@ -199,6 +207,11 @@ int UserController::HitTestCharacter(
     return -1;
 }
 
+/// <summary>
+/// カードクリック判定
+/// </summary>
+/// <param name="mousePos"></param>
+/// <returns></returns>
 int UserController::HitTestHandCard(const sf::Vector2f& mousePos) const
 {
     for (size_t i = 0; i < m_handCardRects.size(); ++i)
@@ -211,8 +224,10 @@ int UserController::HitTestHandCard(const sf::Vector2f& mousePos) const
     return -1;
 }
 
-// ================= Rect 更新 =================
-
+/// <summary>
+/// キャラクタークリック範囲
+/// </summary>
+/// <param name="list"></param>
 void UserController::UpdateCharacterRects(
     const std::vector<std::shared_ptr<Character>>& list)
 {
@@ -225,6 +240,10 @@ void UserController::UpdateCharacterRects(
     }
 }
 
+/// <summary>
+/// カードクリック判定
+/// </summary>
+/// <param name="actor"></param>
 void UserController::UpdateHandCardRects(const Character& actor)
 {
     m_handCardRects.clear();
@@ -250,13 +269,18 @@ void UserController::UpdateHandCardRects(const Character& actor)
 
 // ================= 補助 =================
 
+/// <summary>
+/// マウス座標
+/// </summary>
+/// <param name="window"></param>
+/// <returns></returns>
 sf::Vector2f UserController::GetMousePos(sf::RenderWindow& window) const
 {
     auto pos = sf::Mouse::getPosition(window);
     return { static_cast<float>(pos.x), static_cast<float>(pos.y) };
 }
 
-// デバッグ用（必要なければ削除可）
+// デバッグ用描画
 void UserController::DrawDebug(sf::RenderWindow& window)
 {
     sf::RectangleShape r;
@@ -278,4 +302,25 @@ void UserController::DrawDebug(sf::RenderWindow& window)
         r.setSize({ rect.size.x, rect.size.y });
         window.draw(r);
     }
+}
+
+PlayerSelectPhase UserController::GetSelectPhase() const
+{
+    return m_phase;
+}
+
+std::shared_ptr<Character> UserController::GetSelectActor() const
+{
+    return m_selectedActor;
+}
+
+int UserController::GetSelectCardId() const
+{
+    return m_selectCardId;
+}
+
+
+const std::vector<std::shared_ptr<Character>>& UserController::GetSelectTargetIndices() const
+{
+    return m_selectedTargets;
 }

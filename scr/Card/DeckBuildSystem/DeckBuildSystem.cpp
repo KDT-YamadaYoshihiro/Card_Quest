@@ -97,7 +97,7 @@ void DeckBuildSystem::Draw(sf::RenderWindow& window, const sf::Font& font)
     {
         sf::Vector2f pos = { m_deckStartPos.x + m_cardSpacing * i + m_deckScrollX, m_deckStartPos.y };
 
-        m_renderer->DrawHand(font, window, pos, m_deckCards[i]->GetCardState());
+        m_renderer->DrawSingleCard(font, window, pos, m_deckCards[i]->GetCardState());
     }
 
     // ===== プール側（下段） =====
@@ -107,7 +107,7 @@ void DeckBuildSystem::Draw(sf::RenderWindow& window, const sf::Font& font)
     {
         sf::Vector2f pos = { m_poolStartPos.x + m_cardSpacing * i + m_poolScrollX, m_poolStartPos.y };
 
-        m_renderer->DrawHand(font, window, pos, m_displayPool[i].card->GetCardState());
+        m_renderer->DrawSingleCard(font, window, pos, m_displayPool[i].card->GetCardState());
 
         // ×n 表示
         sf::Text countText(font, "x" + std::to_string(m_displayPool[i].count));

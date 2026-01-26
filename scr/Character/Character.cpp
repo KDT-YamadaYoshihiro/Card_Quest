@@ -21,7 +21,7 @@ int Character::GetHeldCardId(int index) const
 // CardData Žæ“¾
 const CardData& Character::GetCardData(int index) const
 {
-    int cardId = GetHeldCardId(index);
+    int cardId = m_cardIds[index];
     return CardManager::GetInstance().GetCardData(cardId);
 }
 
@@ -58,10 +58,11 @@ void Character::ClearCards()
 
 bool Character::DrawCard()
 {
-
     int cardId;
     if (!CardManager::GetInstance().DrawCard(cardId))
+    {
         return false;
+    }
 
     AddCard(cardId);
     return true;

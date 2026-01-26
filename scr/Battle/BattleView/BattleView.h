@@ -3,7 +3,7 @@
 #include "../../Battle/BattleContex/BattleContext.h"
 #include "../../Card/CardRenderer/CardRenderer.h"
 #include "../../Character/ChracterSprite/CharacterSprite.h"
-
+#include "../../Battle/UserController/UserController.h"
 
 // バトルビューフェーズ
 enum class BattleViewPhase
@@ -30,10 +30,12 @@ class BattleView
 	// 
 	std::shared_ptr<Character> m_selectedActor;
 	// 
-	int m_selectedCard = -1;
-	// 
 	std::vector<std::shared_ptr<Character>> m_targets;
 
+	const sf::Font& m_font;
+	// 
+	int m_selectedCard = -1;
+	//
 	int m_costGain = 0;
 
 public:

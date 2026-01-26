@@ -13,8 +13,8 @@ public:
     void DrawDeck( const sf::Font& arg_font, sf::RenderWindow& window, sf::Vector2f pos, int count);
     // 墓地描画
     void DrawGrave(const sf::Font& arg_font, sf::RenderWindow& window, sf::Vector2f pos, int count);
-    // 手札描画
-    void DrawHand(const sf::Font& arg_font, sf::RenderWindow& window, sf::Vector2f pos, const CardData& cardData);
+    // 単体カード描画
+    void DrawSingleCard(const sf::Font& arg_font, sf::RenderWindow& window, sf::Vector2f pos, const CardData& cardData);
 
     // 改行処理
     sf::String WarpText(const sf::String& arg_scr, const sf::Font& arg_font, unsigned int arg_charSize, float arg_maxWidth);

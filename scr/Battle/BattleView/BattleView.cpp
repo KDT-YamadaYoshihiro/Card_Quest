@@ -1,6 +1,19 @@
 #include "BattleView.h"
 #include "../../CSVLoad/TextureLoader/TextureLoader.h"
 #include "../../View/Font/FontManager.h"
+#include "../../Card/CardManager/CardManager.h"
+
+// 座標系
+namespace
+{
+    // UI配置（画像イメージ準拠）
+    constexpr sf::Vector2f DECK_POS{ 50.f, 520.f };
+    constexpr sf::Vector2f GRAVE_POS{ 150.f, 520.f };
+
+    constexpr sf::Vector2f HAND_START{ 300.f, 520.f };
+    constexpr float HAND_SPACING = 140.f;
+    constexpr float SELECT_OFFSET_Y = 20.f;
+}
 
 /// <summary>
 /// 初期化
@@ -8,8 +21,10 @@
 /// <param name="context"></param>
 BattleView::BattleView(BattleContext& context, RenderSystem& render)
     : m_context(context),
-    m_render(render)
+    m_render(render),
+    m_font(FontManager::GetInstance().GetFont())
 {
+    m_cardRenderer = std::make_shared<CardRenderer>();
 }
 
 /// <summary>
@@ -61,7 +76,12 @@ void BattleView::ShowCostGain(int value)
 /// <param name="window"></param>
 void BattleView::Render(sf::RenderWindow& window)
 {
+    // カメラ機能N
+    m_render.ApplyCamera();
     DrawCharacters();
+
+    // カメラ機能OFF
+    m_render.ResetCamera();
     DrawCards(window);
     DrawFocus(window);
     DrawCostGain(window);
@@ -123,26 +143,37 @@ void BattleView::DrawCharacters()
 /// <param name="window"></param>
 void BattleView::DrawCards(sf::RenderWindow& window)
 {
+    // ===== 山札 =====
+    m_cardRenderer->DrawDeck(m_font, m_render.GetWindow(), DECK_POS, CardManager::GetInstance().GetDeckCount());
+
+    // ===== 墓地 =====
+    m_cardRenderer->DrawGrave(m_font, m_render.GetWindow(), GRAVE_POS, CardManager::GetInstance().GetCemeteryCount());
+
+    // ===== 手札 =====
     if (!m_selectedActor)
     {
         return;
     }
 
-    const int count = m_selectedActor->GetCardCount();
-    sf::Vector2f pos(300.f, 520.f);
+    const int cardCount = m_selectedActor->GetCardCount();
+    sf::Vector2f pos = HAND_START;
 
-    for (int i = 0; i < count; ++i)
+    for (int i = 0; i < cardCount; ++i)
     {
         sf::Vector2f drawPos = pos;
+
+        // 選択カードを少し上に
         if (i == m_selectedCard)
         {
-            drawPos.y -= 20.f;
+            drawPos.y -= SELECT_OFFSET_Y;
         }
 
+        // カードデータ取得
         const CardData& data = m_selectedActor->GetCardData(i);
-        m_cardRenderer->DrawHand(FontManager::GetInstance().GetFont(), window, drawPos, data);
+        // 描画
+        m_cardRenderer->DrawSingleCard(m_font,m_render.GetWindow(),drawPos,data);
 
-        pos.x += 140.f;
+        pos.x += HAND_SPACING;
     }
 }
 

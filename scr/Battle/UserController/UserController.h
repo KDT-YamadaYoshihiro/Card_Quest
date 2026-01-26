@@ -5,6 +5,7 @@
 #include "../../Card/CardDate.h"
 
 class BattleContext;
+class BattleView;
 class Character;
 
 class UserController
@@ -12,6 +13,7 @@ class UserController
 
 private:
     BattleContext& m_context;
+    BattleView& m_battleView;
 
     PlayerSelectPhase m_phase = PlayerSelectPhase::SELECT_PLAYER;
 
@@ -22,21 +24,50 @@ private:
     // 選択状態
     std::shared_ptr<Character> m_selectedActor;
     int m_selectedCardIndex = -1;
+    int m_selectCardId = -1;
     std::vector<std::shared_ptr<Character>> m_targetCandidates;
-    std::vector<int> m_selectedTargetIndices;
+    std::vector<std::shared_ptr<Character>> m_selectedTargets;
 
     // 確定行動
     std::optional<UserAction> m_confirmedAction;
 
 public:
 
-    UserController(BattleContext& context);
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="battleView"></param>
+    UserController(BattleContext& context, BattleView& battleView);
 
+    /// <summary>
+    /// 更新
+    /// </summary>
+    /// <param name="window"></param>
     void Update(sf::RenderWindow& window);
-    bool HasConfirmedAction() const;
-    UserAction ConsumeAction();
 
+    /// <summary>
+    /// 操作が確定しているか確認
+    /// </summary>
+    /// <returns></returns>
+    bool HasConfirmedAction() const;
+    /// <summary>
+    /// データのリセット
+    /// </summary>
+    /// <returns></returns>
+    UserAction ConsumeAction();
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="window"></param>
     void DrawDebug(sf::RenderWindow& window);
+
+    // 取得系
+    PlayerSelectPhase GetSelectPhase() const;
+    std::shared_ptr<Character> GetSelectActor() const;
+    int GetSelectCardId() const;
+    const std::vector<std::shared_ptr<Character>>& GetSelectTargetIndices() const;
 
 private:
     // ===== 内部更新 =====

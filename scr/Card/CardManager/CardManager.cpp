@@ -31,11 +31,14 @@ void CardManager::ShuffleDeck()
 // ドロー
 bool CardManager::DrawCard(int& cardId)
 {
+    // デッキの枚数確認
     if (m_deck.empty())
     {
         RecycleCemeteryToDeck();
         if (m_deck.empty())
+        {
             return false;
+        }
     }
 
     cardId = m_deck.back();

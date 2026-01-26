@@ -29,6 +29,8 @@ private:
 	
 	// コンテキスト
 	std::unique_ptr<BattleContext> m_context;
+	// バトル描画
+	std::unique_ptr<BattleView> m_battleView;
 	// ユーザー入力系
 	std::unique_ptr<UserController> m_userController;
 	// コスト管理
@@ -38,8 +40,6 @@ private:
 	std::vector<std::shared_ptr<Character>> m_enemies;
 	// 描画システム
 	std::unique_ptr<RenderSystem> m_render;
-	// バトル描画
-	std::unique_ptr<BattleView> m_battleView;
 	
 	// ターンフェーズ
 	TurnPhase m_phase;
