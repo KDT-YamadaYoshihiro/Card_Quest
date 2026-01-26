@@ -160,7 +160,7 @@ void UserController::UpdateSelectTarget(sf::RenderWindow& window)
     {
         return;
     }
-
+    m_selectedTargets.clear();
     m_selectedTargets.push_back(m_targetCandidates[index]);
     m_phase = PlayerSelectPhase::CONFIRM;
 
@@ -180,7 +180,6 @@ void UserController::UpdateSelectTarget(sf::RenderWindow& window)
         action.targets = m_targetCandidates;
     }
 
-    m_selectedTargets = m_targetCandidates;
     m_battleView.SetTargetIndices(action.targets);
     m_battleView.SetSelectedCard(m_selectCardId);
     m_confirmedAction = action;

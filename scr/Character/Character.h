@@ -74,6 +74,9 @@ public:
 	// 所持カードを cardId で取得
 	int GetHeldCardById(int cardId) const;
 
+	// 
+	int DiscardCardById(int cardId);
+
 	// 行動判断
 	virtual int DecideActionCardIndex() = 0;
 	virtual int DecideTargetIndex(const std::vector<Character*>& targets) = 0;
@@ -100,5 +103,10 @@ public:
 	void LevelUp();
 	// バトル開始ステータスリセット
 	void ResetBattleStatus();
+
+
+	//　エネミー用
+	virtual void InitEnemyCards() = 0;
+	virtual void InitEnemyType() = 0;
 
 };

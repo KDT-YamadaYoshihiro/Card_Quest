@@ -39,6 +39,7 @@ void Character::AddCard(int cardId)
 // カード破棄
 int Character::DiscardCard(int index)
 {
+    // カード確認
     if (index < 0 || index >= static_cast<int>(m_cardIds.size()))
     {
         std::cout << "破棄失敗：無効 index\n";
@@ -68,6 +69,7 @@ bool Character::DrawCard()
     return true;
 }
 
+// 
 int Character::GetHeldCardById(int cardId) const
 {
     auto it = std::find(m_cardIds.begin(), m_cardIds.end(), cardId);
@@ -79,6 +81,21 @@ int Character::GetHeldCardById(int cardId) const
     }
 
     return static_cast<int>(std::distance(m_cardIds.begin(), it));
+}
+
+// 
+int Character::DiscardCardById(int cardId)
+{
+    auto it = std::find(m_cardIds.begin(), m_cardIds.end(), cardId);
+    if (it == m_cardIds.end())
+    {
+        std::cout << "Chracter/DiscardCardById/無効なIDです" << std::endl;
+        return -1;
+    }
+
+    int id = *it;
+    m_cardIds.erase(it);
+    return id;
 }
 
 // ダメージ

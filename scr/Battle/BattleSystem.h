@@ -24,6 +24,26 @@ private:
 		EnemyTurn,
 		EndTurn
 	};
+
+	// ユーザーターンフェーズ
+	enum class UserTurnPhase
+	{
+		Start,
+		Select,
+		Action,
+		EndCheck,
+		EndUserTurn
+	};
+
+	// エネミーターンフェーズ
+	enum class EnemyTurnPhase
+	{
+		Start,
+		Select,
+		Action,
+		NextEnemy,
+		End
+	};
 	
 	// 依存システム
 	
@@ -43,8 +63,21 @@ private:
 	
 	// ターンフェーズ
 	TurnPhase m_phase;
+	// ユーザーターンフェーズ
+	UserTurnPhase m_userPhase;
+	// エネミーターンフェーズ
+	EnemyTurnPhase m_enemyPhase;
 	// ターン数
 	int m_turnCount;
+
+	// エネミー用
+	// 行動エネミーのindex
+	int m_currentEnemyIndex = 0;
+	// 行動エネミー
+	std::shared_ptr<Character> m_currentEnemy = nullptr;
+	// ターゲット確定枠
+	std::vector<std::shared_ptr<Character>> m_enemyFinalTargets;
+
 
 public:
 

@@ -74,6 +74,11 @@ public:
 
             data.description = desc;
             m_cards[data.cardId] = data;
+
+#ifdef _DEBUG
+            std::cout << "Loaded Card ID: " << data.cardId << std::endl;
+#endif
+
         }
         return true;
     }

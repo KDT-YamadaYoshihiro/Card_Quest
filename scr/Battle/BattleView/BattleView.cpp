@@ -71,6 +71,16 @@ void BattleView::ShowCostGain(int value)
 }
 
 /// <summary>
+/// 情報リセット
+/// </summary>
+void BattleView::ResetTransientView()
+{
+    ClearTargets();
+    ClearCostGain();
+    m_selectedCard = -1;
+}
+
+/// <summary>
 /// 描画
 /// </summary>
 /// <param name="window"></param>
@@ -217,4 +227,20 @@ void BattleView::DrawCostGain(sf::RenderWindow& window)
     text.setPosition({600.0f, 450.0f});
 
     window.draw(text);
+}
+
+/// <summary>
+/// ターゲット情報のリセット
+/// </summary>
+void BattleView::ClearTargets()
+{
+    m_targets.clear();
+}
+
+/// <summary>
+/// 行動須数の増加値リセット
+/// </summary>
+void BattleView::ClearCostGain()
+{
+    m_costGain = 0;
 }

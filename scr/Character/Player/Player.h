@@ -21,5 +21,7 @@ public:
     int DecideActionCardIndex() override { return 0; }
     int DecideTargetIndex(const std::vector<Character*>&) override { return 0; }
 
-
+	// エネミー用なので使用しない
+	void InitEnemyCards() override {};
+	void InitEnemyType() override {};
 };

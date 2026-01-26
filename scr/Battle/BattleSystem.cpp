@@ -1,5 +1,5 @@
 #include "BattleSystem.h"
-//#include "../Battle/Calculation/Calculation.h"
+#include "../Battle/Calculation/Calculation.h"
 #include "../Character/Factory/CharacterFactory.h"
 #include "../CSVLoad/CardLoader.h"
 //#include "../View/Font/FontManager.h"
@@ -12,6 +12,8 @@
 /// </summary>
 BattleSystem::BattleSystem(sf::RenderWindow& arg_window)
 	:m_phase(TurnPhase::StartTurn),
+	m_userPhase(UserTurnPhase::Start),
+	m_enemyPhase(EnemyTurnPhase::Start),
 	m_turnCount(0)
 {
 	// すべてのカード情報を取得
@@ -55,7 +57,9 @@ bool BattleSystem::Init(sf::RenderWindow& arg_window)
 	}
 	for (int i = 0; i < 3; i++) 
 	{
-		auto enemy = CharacterFactory::GetInstance().CreateCharacter<EnemyCharacter>(7,1);
+		auto enemy = CharacterFactory::GetInstance().CreateCharacter<EnemyCharacter>(7,2);
+		enemy->InitEnemyType();
+		enemy->InitEnemyCards();
 		m_enemies.push_back(enemy);
 	}
 
@@ -100,8 +104,6 @@ bool BattleSystem::Init(sf::RenderWindow& arg_window)
 		std::cout << "BattleSystem/m_userController:nullptr" << std::endl;
 		return false;
 	}
-
-
 
 	std::cout << "BattleSystem/Init():成功" << std::endl;
 	return true;
@@ -197,10 +199,10 @@ void BattleSystem::StartTurn()
 	// コスト回復
 	m_costManager->ResetCost();
 
-	// 各プレイヤーにカード配布
-	for (auto& p : m_context->GetAlivePlayers())
+	// 生存判定
+	if (IsBattleEnd())
 	{
-		p->DrawCard(); // Character責務
+		return;
 	}
 
 	// 次のフェーズ
@@ -212,101 +214,186 @@ void BattleSystem::StartTurn()
 /// </summary>
 void BattleSystem::UserTurn(sf::RenderWindow& window)
 {
+	UserAction action;
+	int discardId;
 
-	m_userController->Update(window);
-
-	if (!m_userController->HasConfirmedAction())
+	switch (m_userPhase)
 	{
-		return;
+	case BattleSystem::UserTurnPhase::Start:
+
+		// 各プレイヤーにカード配布
+		for (auto& p : m_context->GetAlivePlayers())
+		{
+			p->DrawCard();
+		}
+
+		m_userPhase = UserTurnPhase::Select;
+
+		break;
+	case BattleSystem::UserTurnPhase::Select:
+
+		// 選択系
+		// キャラクター、カード、ターゲット
+		m_userController->Update(window);
+
+		if(!m_userController->HasConfirmedAction())	
+		{ 
+			return;
+		}
+		// 状態遷移
+		m_userPhase = UserTurnPhase::Action;
+
+		break;
+	case BattleSystem::UserTurnPhase::Action:
+	{
+
+		action = m_userController->ConsumeAction();
+
+		if (!m_costManager->CanConsume(1))
+		{
+			return;
+		}
+
+		m_costManager->Consume(1);
+
+		// データ取得
+		const CardData& card = CardManager::GetInstance().GetCardData(action.cardId);
+
+		// アクション
+		ApplyAction(action.actor, action.targets, card);
+
+		// コストの増減
+		m_costManager->AddCost(card.actionPlus);
+		m_battleView->ShowCostGain(card.actionPlus);
+
+		// ここに問題あるかも？
+		// 使用カードは墓地へ
+		discardId = action.actor->DiscardCardById(action.cardId);
+		CardManager::GetInstance().SendCardIdToCemetery(discardId);
+
+		// 描画系をリセット
+		m_battleView->ResetTransientView();
+		// 状態遷移
+		m_userPhase = UserTurnPhase::EndCheck;
+
+		break;
 	}
+	case BattleSystem::UserTurnPhase::EndCheck:
 
-	UserAction action = { m_userController->GetSelectActor(),m_userController->GetSelectCardId(),m_userController->GetSelectTargetIndices() };
+		// 行動数0 
+		// true:エネミーターンへ / false:ユーザーターンの続行
+		if (m_costManager->IsEmpty())
+		{
+			m_userPhase = UserTurnPhase::EndUserTurn;
+		}
+		else {
+			m_userPhase = UserTurnPhase::Start;
+		}
 
-	if (!m_costManager->CanConsume(1))
-	{
-		return;
-	}
+		break;
 
-	m_costManager->Consume(1);
-
-	const CardData& card = CardManager::GetInstance().GetCardData(action.cardId);
-
-	ApplyAction(action.actor, action.targets, card);
-
-	m_costManager->AddCost(card.actionPlus);
-	m_battleView->ShowCostGain(card.actionPlus);
-
-	int discardId = action.actor->DiscardCard(action.actor->GetHeldCardById(action.cardId));
-	CardManager::GetInstance().SendCardIdToCemetery(discardId);
-
-	if (m_costManager->IsEmpty())
-	{
+	case BattleSystem::UserTurnPhase::EndUserTurn:
+		// エネミーターンへ
 		m_phase = TurnPhase::EnemyTurn;
+		break;
 	}
 }
+
 
 /// <summary>
 /// エネミーターン
 /// </summary>
 void BattleSystem::EnemyTurn()
 {
-	for (auto& enemy : m_context->GetAliveEnemies())
+
+
+	switch (m_enemyPhase)
 	{
-		// エネミーの手札確認
-		if (enemy->GetCardCount() == 0)
+	case BattleSystem::EnemyTurnPhase::Start:
+		
+		m_currentEnemyIndex = 0;
+		m_currentEnemy.reset();
+		m_enemyFinalTargets.clear();
+		m_enemyPhase = EnemyTurnPhase::Select;
+
+		break;
+	case BattleSystem::EnemyTurnPhase::Select:
+	{
+		const auto& enemies = m_context->GetAliveEnemies();
+
+		if (m_currentEnemyIndex >= enemies.size())
 		{
-			continue;
+			m_enemyPhase = EnemyTurnPhase::End;
+			break;
 		}
 
-		// カードデータの取得
-		int cardIndex = enemy->DecideActionCardIndex();
-		int cardId = enemy->GetHeldCardId(cardIndex);
+		m_currentEnemy = enemies[m_currentEnemyIndex];
+		m_enemyFinalTargets.clear();
+		m_enemyPhase = EnemyTurnPhase::Action;
+
+		break;
+	}
+	case BattleSystem::EnemyTurnPhase::Action:
+	{
+		int cardIndex = m_currentEnemy->DecideActionCardIndex();
+		if (cardIndex < 0)
+		{
+			m_enemyPhase = EnemyTurnPhase::NextEnemy;
+			break;
+		}
+
+		int cardId = m_currentEnemy->GetHeldCardId(cardIndex);
 		const CardData& card = CardManager::GetInstance().GetCardData(cardId);
 
-		// ターゲット候補の取得
-		auto targets = m_context->CreateTargetCandidates(card.targetType,enemy->GetFaction(), enemy);
+		auto targets = m_context->CreateTargetCandidates(card.targetType,m_currentEnemy->GetFaction(),m_currentEnemy);
 
-		// ターゲット候補がからでないことを確認
-		if (targets.empty()) 
+		if (targets.empty())
 		{
-			continue;
+			m_enemyPhase = EnemyTurnPhase::NextEnemy;
+			break;
 		}
 
-		// ターゲット確定枠
-		std::vector<std::shared_ptr<Character>> finalTargets;
-
-		// カードのタイプに合わせてアクション
-		if (card.targetType == TargetType::SELF)	// セルフ
+		if (card.targetType == TargetType::SELF)
 		{
-			finalTargets.push_back(enemy);
+			m_enemyFinalTargets.push_back(m_currentEnemy);
 		}
-		else if (card.targetType == TargetType::OPPONENT || card.targetType == TargetType::ALLY)	// 単体
+		else if (card.targetType == TargetType::OPPONENT || card.targetType == TargetType::ALLY)
 		{
 			std::vector<Character*> rawTargets;
-			for (auto& t : targets) 
-			{
+			for (auto& t : targets) {
 				rawTargets.push_back(t.get());
 			}
-			int targetIndex = enemy->DecideTargetIndex(rawTargets);
 
+			int targetIndex = m_currentEnemy->DecideTargetIndex(rawTargets);
 			if (targetIndex >= 0)
 			{
-				finalTargets.push_back(targets[targetIndex]);
+				m_enemyFinalTargets.push_back(targets[targetIndex]);
 			}
 		}
-		else																						// 全体
+		else
 		{
-			finalTargets = targets;
+			m_enemyFinalTargets = targets;
 		}
 
-		// アクション
-		ApplyAction(enemy, finalTargets, card);
+		ApplyAction(m_currentEnemy, m_enemyFinalTargets, card);
+		m_enemyPhase = EnemyTurnPhase::NextEnemy;
+		break;
+	}
+	case BattleSystem::EnemyTurnPhase::NextEnemy:
+		
+		++m_currentEnemyIndex;
+		m_enemyPhase = EnemyTurnPhase::Select;
+		
+		break;
 
-		// エネミーはカード破棄しない
-
+	case BattleSystem::EnemyTurnPhase::End:
+		m_phase = TurnPhase::EndTurn;
+		break;
+	default:
+		break;
 	}
 
-	m_phase = TurnPhase::EndTurn;
+
 }
 
 /// <summary>
@@ -342,6 +429,7 @@ void BattleSystem::ApplyAction(const std::shared_ptr<Character>& actor, const st
 	// アクション効果
 	for (auto& target : targets)
 	{
+		// 生存判定
 		if (!target || target->IsDead())
 		{
 			continue;
@@ -350,17 +438,31 @@ void BattleSystem::ApplyAction(const std::shared_ptr<Character>& actor, const st
 		switch (card.actionType)
 		{
 		case ActionType::ATTCK:
+		{
+			int damage = Calculation::GetDamage(actor->GetData().magicAtk, card.power, target->GetData().def);
+			target->TakeDamage(damage);
+			std::cout << actor->GetData().name << "が" << target->GetData().name << "に" << damage << "与えた" << std::endl;
+			std::cout << target->GetData().maxHp << "/" << target->GetData().hp << std::endl;
+			break;
+		}
 		case ActionType::MAGIC:
 		{
-			int damage = static_cast<int>(actor->GetData().atk * card.power * actor->GetBuffData().power);
+			int damage = Calculation::GetDamage(actor->GetData().atk, card.power, target->GetData().def);
 			target->TakeDamage(damage);
+			std::cout << actor->GetData().name << "が" << target->GetData().name << "に" << damage << "与えた" << std::endl;
+			std::cout << target->GetData().maxHp << "/" << target->GetData().hp << std::endl;
 			break;
 		}
 
 		case ActionType::HEAL:
-			target->TakeHeal(static_cast<int>(card.power));
-			break;
+		{
+			int heal = Calculation::GetMultiplicative(actor->GetData().maxHp, card.power);
+			target->TakeHeal(heal);
+			std::cout << actor->GetData().name << "が" << target->GetData().name << "に" << heal << "回復させた" << std::endl;
+			std::cout << target->GetData().maxHp << "/" << target->GetData().hp << std::endl;
 
+			break;
+		}
 		case ActionType::BUFF:
 			target->TakeBuff(card.power);
 			break;

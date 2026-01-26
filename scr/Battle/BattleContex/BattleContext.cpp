@@ -90,32 +90,56 @@ std::vector<std::shared_ptr<Character>> BattleContext::CreateTargetCandidates(Ta
         {
             for (auto& c : list)
             {
-                if (c && !c->IsDead())
-                    result.push_back(c);
+
+                if (!c || c->IsDead())
+                {
+                    continue;
+                }
+                if (c == actor)
+                {
+                    continue;
+                }
+
+                result.push_back(c);
             }
         };
 
     switch (targetType)
     {
     case TargetType::SELF:
+
         if (actor && !actor->IsDead())
+        {
             result.push_back(actor);
+        }
         break;
 
     case TargetType::ALLY:
     case TargetType::ALLY_ALL:
+
         if (actorFaction == Faction::Player)
+        {
             pushAlive(m_players);
+        }
         else
+        {
             pushAlive(m_enemies);
+        }
+
         break;
 
     case TargetType::OPPONENT:
     case TargetType::OPPONENT_ALL:
+
         if (actorFaction == Faction::Player)
+        {
             pushAlive(m_enemies);
+        }
         else
+        {
             pushAlive(m_players);
+        }
+
         break;
     }
 

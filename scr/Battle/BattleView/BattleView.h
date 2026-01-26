@@ -80,6 +80,10 @@ public:
 	/// <param name="arg_value"></param>
 	void ShowCostGain(int arg_value);
 
+	/// <summary>
+	/// 情報リセット
+	/// </summary>
+	void ResetTransientView();
 
 private:
 
@@ -106,5 +110,14 @@ private:
 	/// </summary>
 	/// <param name="window"></param>
 	void DrawCostGain(sf::RenderWindow& window);
+
+	/// <summary>
+	/// ターゲット情報のリセット
+	/// </summary>
+	void ClearTargets();
+	/// <summary>
+	/// 行動須数の増加値リセット
+	/// </summary>
+	void ClearCostGain();
 
 };
