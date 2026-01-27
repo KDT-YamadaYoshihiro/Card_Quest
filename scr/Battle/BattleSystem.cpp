@@ -143,6 +143,7 @@ void BattleSystem::Update(sf::RenderWindow& window)
 		e->Update();
 	}
 
+	m_battleView->Update(1.0f / 60.0f);
 }
 
 /// <summary>
@@ -443,6 +444,9 @@ void BattleSystem::ApplyAction(const std::shared_ptr<Character>& actor, const st
 		{
 			int damage = Calculation::GetDamage(actor->GetData().magicAtk, card.power, target->GetData().def);
 			target->TakeDamage(damage);
+			// ダメージ表示
+			m_battleView->AddDamagePopup(target->GetPosition(),damage,false);
+			// 確認用ログ
 			std::cout << actor->GetData().name << "が" << target->GetData().name << "に" << damage << "与えた" << std::endl;
 			std::cout << target->GetData().maxHp << "/" << target->GetData().hp << std::endl;
 			break;
@@ -451,6 +455,9 @@ void BattleSystem::ApplyAction(const std::shared_ptr<Character>& actor, const st
 		{
 			int damage = Calculation::GetDamage(actor->GetData().atk, card.power, target->GetData().def);
 			target->TakeDamage(damage);
+			// ダメージ表示
+			m_battleView->AddDamagePopup(target->GetPosition(),damage,false);
+			// 確認用ログ
 			std::cout << actor->GetData().name << "が" << target->GetData().name << "に" << damage << "与えた" << std::endl;
 			std::cout << target->GetData().maxHp << "/" << target->GetData().hp << std::endl;
 			break;
@@ -460,6 +467,9 @@ void BattleSystem::ApplyAction(const std::shared_ptr<Character>& actor, const st
 		{
 			int heal = Calculation::GetMultiplicative(actor->GetData().maxHp, card.power);
 			target->TakeHeal(heal);
+			// ダメージ表示
+			m_battleView->AddDamagePopup(target->GetPosition(),heal,true);
+			// 確認用ログ
 			std::cout << actor->GetData().name << "が" << target->GetData().name << "に" << heal << "回復させた" << std::endl;
 			std::cout << target->GetData().maxHp << "/" << target->GetData().hp << std::endl;
 

@@ -14,6 +14,16 @@ enum class BattleViewPhase
 	SelectTarget	// ターゲット選択
 };
 
+// ダメージ・回復量の表示用
+struct DamagePopup
+{
+	sf::Vector2f position;
+	int value;
+	bool isHeal;
+	float lifeTime;
+};
+
+
 // 
 class BattleView
 {
@@ -31,6 +41,8 @@ class BattleView
 	std::shared_ptr<Character> m_selectedActor;
 	// 
 	std::vector<std::shared_ptr<Character>> m_targets;
+	//
+	std::vector<DamagePopup> m_popups;
 
 	const sf::Font& m_font;
 	// 
@@ -51,6 +63,12 @@ public:
 	/// </summary>
 	/// <param name="arg_phase">変更先フェーズ</param>
 	void SetPhase(BattleViewPhase arg_phase);
+
+	/// <summary>
+	/// 更新
+	/// </summary>
+	/// <param name="dt"></param>
+	void Update(float dt);
 
 	/// <summary>
 	/// 描画
@@ -84,6 +102,8 @@ public:
 	/// 情報リセット
 	/// </summary>
 	void ResetTransientView();
+
+	void AddDamagePopup(const sf::Vector2f& arg_pos, int arg_value, bool arg_isHeal);
 
 private:
 

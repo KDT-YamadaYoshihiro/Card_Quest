@@ -37,6 +37,24 @@ void BattleView::SetPhase(BattleViewPhase phase)
 }
 
 /// <summary>
+/// 更新
+/// </summary>
+/// <param name="dt"></param>
+void BattleView::Update(float dt)
+{
+    for (auto& p : m_popups)
+    {
+        p.lifeTime -= dt;
+        p.position.y -= 30.f * dt; // 上に浮かせる
+    }
+
+    m_popups.erase(
+        std::remove_if(m_popups.begin(), m_popups.end(),
+            [](const DamagePopup& p) { return p.lifeTime <= 0.f; }),
+        m_popups.end());
+}
+
+/// <summary>
 ///  アクションキャラ設定
 /// </summary>
 /// <param name="index"></param>
@@ -81,6 +99,23 @@ void BattleView::ResetTransientView()
 }
 
 /// <summary>
+/// 効果量の設定
+/// </summary>
+/// <param name="arg_pos"></param>
+/// <param name="arg_value"></param>
+/// <param name="arg_isHeal"></param>
+void BattleView::AddDamagePopup(const sf::Vector2f& arg_pos, int arg_value, bool arg_isHeal)
+{
+    DamagePopup p;
+    p.position = arg_pos;
+    p.value = arg_value;
+    p.isHeal = arg_isHeal;
+    p.lifeTime = 1.0f;
+
+    m_popups.push_back(p);
+}
+
+/// <summary>
 /// 描画
 /// </summary>
 /// <param name="window"></param>
@@ -95,6 +130,17 @@ void BattleView::Render(sf::RenderWindow& window)
     DrawCards(window);
     DrawFocus(window);
     DrawCostGain(window);
+    for (auto& p : m_popups)
+    {
+        sf::Text text(FontManager::GetInstance().GetFont(),"");
+        text.setFont(FontManager::GetInstance().GetFont()); // 既存のフォント管理
+        text.setString((p.isHeal ? "+" : "-") + std::to_string(p.value));
+        text.setCharacterSize(24);
+        text.setPosition(p.position);
+        text.setFillColor(p.isHeal ? sf::Color::Green : sf::Color::Red);
+
+        window.draw(text);
+    }
 }
 
 /// <summary>
