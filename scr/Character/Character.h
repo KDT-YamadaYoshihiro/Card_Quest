@@ -50,7 +50,7 @@ public:
 
 	// ===== カード管理 =====
 
-	   // 所持カード数
+	// 所持カード数
 	int GetCardCount() const;
 
 	// cardId 取得（index指定）
@@ -58,6 +58,9 @@ public:
 
 	// CardData 取得（index指定）
 	const CardData& GetCardData(int index) const;
+
+	// カードの保持枠が空いているか
+	bool CanDrawCard() const;
 
 	// カード追加
 	void AddCard(int cardId);

@@ -294,6 +294,7 @@ void BattleSystem::UserTurn(sf::RenderWindow& window)
 
 	case BattleSystem::UserTurnPhase::EndUserTurn:
 		// エネミーターンへ
+		m_userPhase = UserTurnPhase::Start;
 		m_phase = TurnPhase::EnemyTurn;
 		break;
 	}
@@ -387,6 +388,7 @@ void BattleSystem::EnemyTurn()
 		break;
 
 	case BattleSystem::EnemyTurnPhase::End:
+		m_enemyPhase = EnemyTurnPhase::Start;
 		m_phase = TurnPhase::EndTurn;
 		break;
 	default:

@@ -25,6 +25,11 @@ const CardData& Character::GetCardData(int index) const
     return CardManager::GetInstance().GetCardData(cardId);
 }
 
+bool Character::CanDrawCard() const
+{
+    return static_cast<int>(m_cardIds.size()) < m_maxCardSlot;
+}
+
 // カード追加
 void Character::AddCard(int cardId)
 {
@@ -59,13 +64,19 @@ void Character::ClearCards()
 
 bool Character::DrawCard()
 {
+    // 先に手札の空きを確認
+    if (!CanDrawCard())
+    {
+        return false;
+    }
+
     int cardId;
     if (!CardManager::GetInstance().DrawCard(cardId))
     {
         return false;
     }
 
-    AddCard(cardId);
+    m_cardIds.push_back(cardId);
     return true;
 }
 

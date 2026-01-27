@@ -136,14 +136,14 @@ void UserController::UpdateCreateTargets()
         action.cardId = m_selectCardId;
         action.targets = m_targetCandidates;
 
-        m_confirmedAction = action;
         m_battleView.SetTargetIndices(m_targetCandidates);
+        m_confirmedAction = action;
         m_phase = PlayerSelectPhase::DONE;
     }
-    else
-    {
-        m_phase = PlayerSelectPhase::SELECT_TARGET;
-    }
+
+    // 単体は次のフェーズへ
+    m_phase = PlayerSelectPhase::SELECT_TARGET;
+    
 }
 
 void UserController::UpdateSelectTarget(sf::RenderWindow& window)
@@ -162,7 +162,6 @@ void UserController::UpdateSelectTarget(sf::RenderWindow& window)
     }
     m_selectedTargets.clear();
     m_selectedTargets.push_back(m_targetCandidates[index]);
-    m_phase = PlayerSelectPhase::CONFIRM;
 
     const CardData& card = CardManager::GetInstance().GetCardData(m_selectCardId);
 
@@ -170,15 +169,7 @@ void UserController::UpdateSelectTarget(sf::RenderWindow& window)
     UserAction action;
     action.actor = m_selectedActor;
     action.cardId = m_selectCardId;
-
-    if (card.targetType == TargetType::ALLY_ALL || card.targetType == TargetType::OPPONENT_ALL)
-    {
-        action.targets = m_targetCandidates;
-    }
-    else
-    {
-        action.targets = m_targetCandidates;
-    }
+    action.targets = m_selectedTargets;
 
     m_battleView.SetTargetIndices(action.targets);
     m_battleView.SetSelectedCard(m_selectCardId);
