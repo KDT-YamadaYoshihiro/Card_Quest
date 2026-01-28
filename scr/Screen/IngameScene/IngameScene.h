@@ -1,8 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "../SceneBase.h"
-#include "../../Battle/BattleSystem.h"
+#include "Screen/SceneBase.h"
+#include "System/Battle/BattleSystem.h"
 
 class IngameScene : public SceneBase
 {

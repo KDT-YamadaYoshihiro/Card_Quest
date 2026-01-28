@@ -1,5 +1,5 @@
 #include "SceneManager.h"
-#include "../Screen/TitleScene/TitleScene.h"
+#include "Screen/TitleScene/TitleScene.h"
 #include <iostream>
 
 
@@ -29,5 +29,10 @@ void SceneManager::Render(sf::RenderWindow& window)
 void SceneManager::HandleEvent(const sf::Event& event)
 {
     m_screen->handleEvent(event);
+}
+
+GameSession& SceneManager::GetSession()
+{
+    return m_session; 
 }
 

@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "../View/Render/RenderSystem.h"
-#include "../CSVLoad/TextureLoader/TextureLoader.h"
+#include "View/Render/RenderSystem.h"
+#include "CSVLoad/TextureLoader/TextureLoader.h"
 
 class SceneBase
 {

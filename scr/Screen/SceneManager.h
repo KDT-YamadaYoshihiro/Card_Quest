@@ -3,10 +3,18 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 #include "SceneBase.h"
+#include "System/Battle/BattleContex/BattleContext.h"
+
+
+class GameSession {
+public:
+    std::shared_ptr<BattleContext> battleContext;
+};
 
 class SceneManager {
 
     std::unique_ptr<SceneBase> m_screen;
+    GameSession m_session;
 
     SceneManager() = default;
     virtual ~SceneManager() = default;
@@ -27,6 +35,8 @@ public:
     void Update(sf::RenderWindow& arg_window);
     void Render(sf::RenderWindow& arg_window);
     void HandleEvent(const sf::Event& event);
+
+    GameSession& GetSession();
 
     template <typename T,  typename... Args>
     void ChangeScreen(Args&&... args)

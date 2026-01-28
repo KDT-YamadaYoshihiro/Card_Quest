@@ -1,7 +1,7 @@
 #pragma once
 #include <unordered_map>
-#include "../Character/CharacterData.h"
-#include "../Card/CardDate.h"
+#include "Entity/Character/CharacterData.h"
+#include "Entity/Card/CardDate.h"
 #include "CSVLoader.h"
 
 class CardLoader : public CSVLoader

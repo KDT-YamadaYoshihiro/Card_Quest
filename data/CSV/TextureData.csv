@@ -7,5 +7,14 @@ test,data/Bg/BG.png
 エイル,data/Character/Player/player_4.png
 ルチア,data/Character/Player/player_5.png
 スライム,data/Character/Enemy/enemy_0.png
-ウィンドバード,data/Character/Enemy/enemy_1.png
+ウィンドウバード,data/Character/Enemy/enemy_1.png
 リトルドラゴン,data/Character/Enemy/enemy_2.png
+アイコン＿アレス,data/Character/Icon/player_0.png
+アイコン＿リュミエール,data/Character/Icon/player_1.png
+アイコン＿グラント,data/Character/Icon/player_2.png
+アイコン＿セラフィナ,data/Character/Icon/player_3.png
+アイコン＿エイル,data/Character/Icon/player_4.png
+アイコン＿ルチア,data/Character/Icon/player_5.png
+アイコン＿スライム,data/Character/Icon_enemy0.png
+アイコンウィンドウバード,data/Character/Icon_enemy1.png
+アイコン＿リトルドラゴン,data/Character/Icon_enemy2.png

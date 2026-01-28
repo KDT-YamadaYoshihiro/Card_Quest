@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include <unordered_map>
 #include <iostream>
-#include "../Character/CharacterData.h"
+#include "Entity/Character/CharacterData.h"
 #include "CSVLoader.h"
 
 class CharacterLoader : public CSVLoader
@@ -44,12 +44,13 @@ public:
             data.lv = std::stoi(cols[1]);
             data.name = cols[2];
             data.textureKey = cols[3];
-            data.hp = std::stoi(cols[4]);
-            data.maxHp = std::stoi(cols[4]);
-            data.atk = std::stoi(cols[5]);
-            data.magicAtk = std::stoi(cols[6]);
-            data.def = std::stoi(cols[7]);
-            data.exp = std::stoi(cols[8]);
+            data.iconKey = cols[4];
+            data.hp = std::stoi(cols[5]);
+            data.maxHp = std::stoi(cols[5]);
+            data.atk = std::stoi(cols[6]);
+            data.magicAtk = std::stoi(cols[7]);
+            data.def = std::stoi(cols[8]);
+            data.exp = std::stoi(cols[9]);
 
             m_characters[data.charaId] = data;
 

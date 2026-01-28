@@ -1,11 +1,11 @@
 #include "GameMain.h"
-#include "../CSVLoad/TextureLoader/TextureLoader.h"
-#include "../CSVLoad/CharacterLoader.h"
-#include "../CSVLoad/CardLoader.h"
-#include "../Screen/SceneManager.h"
-#include "../CameraManager/CameraManager.h"
+#include "CSVLoad/TextureLoader/TextureLoader.h"
+#include "CSVLoad/CharacterLoader.h"
+#include "CSVLoad/CardLoader.h"
+#include "Screen/SceneManager.h"
+#include "View/CameraManager/CameraManager.h"
 #include "WindowSetting.h"
-#include "../View/Font/FontManager.h"
+#include "View/Font/FontManager.h"
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Sleep.hpp>

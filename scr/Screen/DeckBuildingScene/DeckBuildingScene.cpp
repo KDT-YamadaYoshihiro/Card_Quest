@@ -1,10 +1,10 @@
 #include "DeckBuildingScene.h"
-#include "../SceneManager.h"
-#include "../IngameScene/IngameScene.h"
-#include "../../Card/CardBuildPool/CardBuildPool.h"
-#include "../../Card/CardManager/CardManager.h"
-#include "../../System/InPutManager/InPutMouseManager.h"
-#include "../../View/Font/FontManager.h"
+#include "Screen/SceneManager.h"
+#include "Screen/IngameScene/IngameScene.h"
+#include "System/DeckBulid/CardBuildPool/CardBuildPool.h"
+#include "Entity/Card/CardManager/CardManager.h"
+#include "System/InPutManager/InPutMouseManager.h"
+#include "View/Font/FontManager.h"
 
 DeckBuildingScene::DeckBuildingScene()
     :SceneBase(),

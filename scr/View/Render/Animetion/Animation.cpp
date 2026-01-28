@@ -1,5 +1,5 @@
 #include "Animation.h"
-#include "../RenderSystem.h"
+#include "View/Render/RenderSystem.h"
 
 void Animation::AddFrame(const sf::Texture& arg_texture)
 {

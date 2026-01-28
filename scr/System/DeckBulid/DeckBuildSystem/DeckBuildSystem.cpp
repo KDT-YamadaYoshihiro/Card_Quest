@@ -1,0 +1,364 @@
+#include "DeckBuildSystem.h"
+#include "System/DeckBulid/CardBuildPool/CardBuildPool.h"
+#include "Entity/Card/CardFactory/CardFactory.h"
+#include <iostream>
+
+void DeckBuildSystem::Init()
+{
+	RebuildDisplayPool();
+}
+
+// 更新
+void DeckBuildSystem::Update(sf::Vector2f mousePos, bool isClick, bool isDragging, bool released, float wheelDelta)
+{
+
+    // ホイール
+    if (wheelDelta != 0.f)
+    {
+        m_poolScrollX += wheelDelta * 40.f;
+        ClampPoolScroll();
+    }
+
+    // 押した瞬間
+    if (isClick && !m_prevClick)
+    {
+        m_mouseDownPos = mousePos;
+        m_lastMouseX = mousePos.x;
+        m_dragStarted = false;
+        m_poolDragging = false;
+        m_deckDragging = false;
+    }
+
+    // ドラッグ判定
+    if (isDragging)
+    {
+        float dragDist = std::abs(mousePos.x - m_mouseDownPos.x);
+
+        if (dragDist > 5.f) // ← クリック/ドラッグ分離閾値
+        {
+            m_dragStarted = true;
+
+            sf::FloatRect poolArea(m_poolStartPos, { 800.f, 200.f });
+            sf::FloatRect deckArea(m_deckStartPos, { 800.f, 200.f });
+
+            if (poolArea.contains(m_mouseDownPos))
+                m_poolDragging = true;
+            else if (deckArea.contains(m_mouseDownPos))
+                m_deckDragging = true;
+        }
+    }
+
+    // ドラッグ中
+    if (m_dragStarted)
+    {
+        float deltaX = mousePos.x - m_lastMouseX;
+        m_lastMouseX = mousePos.x;
+
+        if (m_poolDragging)
+        {
+            m_poolScrollX += deltaX;
+            ClampPoolScroll();
+        }
+
+        if (m_deckDragging)
+        {
+            m_deckScrollX += deltaX;
+            ClampDeckScroll();
+        }
+    }
+
+    // 離した瞬間
+    if (released)
+    {
+        if (!m_dragStarted)
+        {
+            if (HandleDeckClick(mousePos))
+            {
+                m_prevClick = isClick;
+                return;
+            }
+            HandlePoolClick(mousePos);
+        }
+
+        m_poolDragging = false;
+        m_deckDragging = false;
+        m_dragStarted = false;
+    }
+
+    m_prevClick = isClick;
+}
+
+// 描画
+void DeckBuildSystem::Draw(sf::RenderWindow& window, const sf::Font& font)
+{
+
+    // ===== デッキ側（上段） =====
+    for (size_t i = 0; i < m_deckCards.size(); ++i)
+    {
+        sf::Vector2f pos = { m_deckStartPos.x + m_cardSpacing * i + m_deckScrollX, m_deckStartPos.y };
+
+        m_renderer->DrawSingleCard(font, window, pos, m_deckCards[i]->GetCardState());
+    }
+
+    // ===== プール側（下段） =====
+    const auto& pool = CardBuildPool::GetInstance().GetPoolCards();
+
+    for (size_t i = 0; i < m_displayPool.size(); ++i)
+    {
+        sf::Vector2f pos = { m_poolStartPos.x + m_cardSpacing * i + m_poolScrollX, m_poolStartPos.y };
+
+        m_renderer->DrawSingleCard(font, window, pos, m_displayPool[i].card->GetCardState());
+
+        // ×n 表示
+        sf::Text countText(font, "x" + std::to_string(m_displayPool[i].count));
+        countText.setCharacterSize(18);
+        countText.setFillColor(sf::Color::Black);
+        countText.setPosition({ pos.x + 85.f, pos.y + 130.f });
+        window.draw(countText);
+    }
+
+    // ===== 枚数表示 =====
+    sf::Text countText(font,std::to_string(m_deckCards.size()) + " / 30");
+    countText.setCharacterSize(20);
+    countText.setFillColor(sf::Color::White);
+    countText.setPosition({ 50.f, 250.f });
+    window.draw(countText);
+
+}
+
+// プールからデッキに追加
+bool DeckBuildSystem::AddFromPool(int poolIndex)
+{
+    if (m_deckCards.size() >= MAX_DECK_SIZE)
+    {
+		std::cout << "デッキの上限枚数に達しています" << std::endl;
+        return false;
+    }
+
+	// プールからカードを取得    
+    auto card = CardBuildPool::GetInstance().TakeCard(poolIndex);
+
+    if (!card)
+    {
+		std::cout << "プールからカードを取得できませんでした: " << poolIndex << std::endl;
+        return false;
+    }
+
+    m_deckCards.emplace_back(std::move(card));
+
+    return true;
+}
+
+// デッキからプールに戻す
+bool DeckBuildSystem::RemoveFromPool(int deckIndex)
+{
+    if (deckIndex >= m_deckCards.size())
+    {
+		std::cout << "指定indexが範囲外です:" << deckIndex << std::endl;
+        return false;
+    }
+
+	// デッキからカードを取り出す
+    auto card = std::move(m_deckCards[deckIndex]);
+	// デッキから削除
+    m_deckCards.erase(m_deckCards.begin() + deckIndex);
+
+	// カードをプールに戻す
+    CardBuildPool::GetInstance().ReturnCard(std::move(card));
+
+    return true;
+}
+
+// デッキ内カード取得
+const std::vector<std::unique_ptr<Card>>& DeckBuildSystem::GetDeckCards() const
+{
+	return m_deckCards;
+}
+
+// デッキ内枚数取得
+int DeckBuildSystem::GetDeckSize() const
+{
+	return static_cast<int>(m_deckCards.size());
+}
+
+// デッキ編成上限枚数取得
+int DeckBuildSystem::GetMaxDeckSize() const
+{
+	return MAX_DECK_SIZE;
+}
+
+// デッキ編成完了判定
+bool DeckBuildSystem::IsComplete() const
+{
+	return m_deckCards.size() == MAX_DECK_SIZE;
+}
+
+// デッキを引き渡す
+std::vector<int> DeckBuildSystem::TakeDeck()
+{
+    std::vector<int> result;
+    for (auto& card : m_deckCards)
+    {
+        result.push_back(card->GetCardState().cardId);
+    }
+    return result;
+}
+
+// プールクリック処理
+bool DeckBuildSystem::HandlePoolClick(sf::Vector2f mousePos)
+{
+    // ドラッグ中はクリック処理しない
+    if (m_poolDragging || m_deckDragging)
+    {
+        return false;
+    }
+	// デッキ上限チェック
+    if (m_deckCards.size() >= MAX_DECK_SIZE)
+    {
+        return false;
+    }
+
+    auto& pool = CardBuildPool::GetInstance();
+
+    const auto& cards = pool.GetPoolCards();
+
+    for (size_t i = 0; i < m_displayPool.size(); ++i)
+    {
+		// クリック判定矩形
+        sf::FloatRect rect({ m_poolStartPos.x + m_cardSpacing * i + m_poolScrollX, m_poolStartPos.y }, { 120.0f, 160.0f });
+
+        if (rect.contains(mousePos))
+        {
+			// プールからカードを取得
+			int id = m_displayPool[i].card->GetCardState().cardId;
+            auto card = pool.TakeCard(id);
+			// カードが取得できたらデッキに追加
+            if (card)
+            {
+				// デッキに追加
+                m_deckCards.emplace_back(std::move(card));
+				// プール表示再構築
+				RebuildDisplayPool();
+                return true;
+            }
+        }
+    }
+
+    return false;
+
+}
+
+// デッキクリック処理
+bool DeckBuildSystem::HandleDeckClick(sf::Vector2f mousePos)
+{
+    // ドラッグ中はクリック処理しない
+    if (m_poolDragging || m_deckDragging)
+    {
+        return false;
+    }
+
+    for (size_t i = 0; i < m_deckCards.size(); ++i)
+    {
+		// クリック判定矩形
+        sf::FloatRect rect({ m_deckStartPos.x + m_cardSpacing * i + m_deckScrollX, m_deckStartPos.y }, { 120.0f, 160.0f });
+
+        if (rect.contains(mousePos))
+        {
+			// カードをプールに戻す
+            CardBuildPool::GetInstance().ReturnCard(std::move(m_deckCards[i]));
+			// デッキから削除
+            m_deckCards.erase(m_deckCards.begin() + i);
+			// プール表示再構築
+            RebuildDisplayPool();
+            return true;
+        }
+    }
+	return false;
+}
+
+// ドラッグ処理
+void DeckBuildSystem::HandleDrag(sf::Vector2f mousePos, bool isClick)
+{
+
+    if (!isClick)
+    {
+        return;
+    }
+
+    float deltaX = mousePos.x - m_lastMouseX;
+    m_lastMouseX = mousePos.x;
+
+    // プールドラッグ
+    if (m_poolDragging)
+    {
+        m_poolScrollX += deltaX;
+        ClampPoolScroll();
+    }
+
+    // デッキドラッグ
+    if (m_deckDragging)
+    {
+        m_deckScrollX += deltaX;
+        ClampDeckScroll();
+    }
+
+}
+
+// プール再構築
+void DeckBuildSystem::RebuildDisplayPool()
+{
+	// クリア
+    m_displayPool.clear();
+	// カウントマップ作成
+    std::unordered_map<int, int> countMap;
+	// 最初の出現indexマップ作成
+    std::unordered_map<int, size_t> firstIndexMap;
+	// プール内カード取得
+    const auto& pool = CardBuildPool::GetInstance().GetPoolCards();
+
+    for (size_t i = 0; i < pool.size(); ++i)
+    {
+		// カードID取得
+        int id = pool[i]->GetCardState().cardId;
+        countMap[id]++;
+
+        if (!firstIndexMap.contains(id))
+        {
+			// 最初の出現index保存
+            firstIndexMap[id] = i;
+        }
+    }
+
+    for (const auto& [id, count] : countMap)
+    {
+		// カード生成
+        auto card = CardFactory::GetInstance().CreateCard(id);
+		// プール表示用に追加
+        m_displayPool.push_back({ std::move(card),count});
+    }
+}
+
+// スクロール制限
+void DeckBuildSystem::ClampPoolScroll()
+{
+	// プール側スクロール制限
+	// プール内カード数に基づく最大幅計算
+    float maxWidth = static_cast<float>(m_displayPool.size()) * m_cardSpacing;
+    float viewWidth = 800.f;
+	// 最小スクロール位置計算
+    float minScroll = std::min(0.f, viewWidth - maxWidth);
+	// スクロール位置制限
+    m_poolScrollX = std::clamp(m_poolScrollX, minScroll, 0.f);
+}
+
+void DeckBuildSystem::ClampDeckScroll()
+{
+	// デッキ側スクロール制限
+	// デッキ内カード数に基づく最大幅計算
+    float maxWidth = static_cast<float>(m_deckCards.size()) * m_cardSpacing;
+    float viewWidth = 800.f;
+	// 最小スクロール位置計算
+    float minScroll = std::min(0.f, viewWidth - maxWidth);
+	// スクロール位置制限
+    m_deckScrollX = std::clamp(m_deckScrollX, minScroll, 0.f);
+}
