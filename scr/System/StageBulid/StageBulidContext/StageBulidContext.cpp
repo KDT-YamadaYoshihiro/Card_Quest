@@ -3,12 +3,16 @@
 
 void StageBulidContext::Init()
 {
-	const auto& table = StageLoader::GetInstance().GetAllStageIds();
+    m_stageIds = StageLoader::GetInstance().GetAllStageIds();
 
-	if (!m_stageIds.empty())
-	{
-		m_selectedStageId = m_stageIds.front();
-	}
+    if (!m_stageIds.empty())
+    {
+        m_selectedStageId = m_stageIds.front();
+    }
+    else
+    {
+        m_selectedStageId = -1;
+    }
 }
 
 const std::vector<int>& StageBulidContext::GetStageIds() const

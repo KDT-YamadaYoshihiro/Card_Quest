@@ -103,7 +103,20 @@ public:
 	/// </summary>
 	void ResetTransientView();
 
+	/// <summary>
+	/// 効果量の設定
+	/// </summary>
+	/// <param name="arg_pos"></param>
+	/// <param name="arg_value"></param>
+	/// <param name="arg_isHeal"></param>
 	void AddDamagePopup(const sf::Vector2f& arg_pos, int arg_value, bool arg_isHeal);
+
+	/// <summary>
+	/// ダメージ表示座標（キャラクターの中心座標の適用）
+	/// </summary>
+	/// <param name="c"></param>
+	/// <returns></returns>
+	sf::Vector2f CalcDamagePopupPos(const std::shared_ptr<Character>& c);
 
 private:
 
@@ -139,5 +152,12 @@ private:
 	/// 行動須数の増加値リセット
 	/// </summary>
 	void ClearCostGain();
+
+	/// <summary>
+	/// キャラクターの中心座標計算
+	/// </summary>
+	/// <param name="c"></param>
+	/// <returns></returns>
+	sf::Vector2f GetCharacterCenter(const std::shared_ptr<Character>& c);
 
 };

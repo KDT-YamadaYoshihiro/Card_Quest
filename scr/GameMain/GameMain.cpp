@@ -49,7 +49,10 @@ bool GameMain::Init()
 
 void GameMain::Run()
 {
-    if (!Init()) return;
+    if (!Init())
+    {
+        return;
+    }
 
     while (m_isRunning && m_window.isOpen())
     {

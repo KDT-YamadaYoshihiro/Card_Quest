@@ -35,6 +35,7 @@ bool TextureLoader::LoadTextures(const std::string& path)
         }
 
         m_textures[id] = std::move(tex);
+
     }
 
     std::cout << "ƒtƒ@ƒCƒ‹‚Ì“Ç‚Ýž‚Ý¬Œ÷" << std::endl;

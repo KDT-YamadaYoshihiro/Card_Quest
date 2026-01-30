@@ -8,7 +8,7 @@
 StageBulidScene::StageBulidScene(sf::RenderWindow& arg_window)
 {
     // 
-    std::cout << "Result" << std::endl;
+    std::cout << "StageBulidScene" << std::endl;
 
     Init(arg_window);
 }

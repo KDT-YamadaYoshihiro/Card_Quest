@@ -26,6 +26,9 @@ bool StageLoader::LoadCSV(const std::string& path)
             std::stoi(cols[2]),
             std::stoi(cols[3])
         };
+#ifdef _DEBUG
+        std::cout << "Loaded stageID: " << data.stageId << std::endl;
+#endif
 
         m_stageTable[data.stageId] = data;
     }

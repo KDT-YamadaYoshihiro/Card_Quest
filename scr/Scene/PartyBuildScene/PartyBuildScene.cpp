@@ -91,7 +91,6 @@ void PartyBuildScene::StartDeckBulid()
     // パーティー情報をセット
     auto& session = SceneManager::GetInstance().GetSession();
 
-    session.battleContext = std::make_shared<BattleContext>();
     session.battleContext->SetPlayers(m_context.GetParty());
 
     // シーンの切り替え

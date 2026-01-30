@@ -15,6 +15,6 @@ test,data/Bg/BG.png
 アイコン＿セラフィナ,data/Character/Icon/player_3.png
 アイコン＿エイル,data/Character/Icon/player_4.png
 アイコン＿ルチア,data/Character/Icon/player_5.png
-アイコン＿スライム,data/Character/Icon_enemy0.png
-アイコンウィンドウバード,data/Character/Icon_enemy1.png
-アイコン＿リトルドラゴン,data/Character/Icon_enemy2.png
+アイコン＿スライム,data/Character/Icon/enemy_0.png
+アイコンウィンドウバード,data/Character/Icon/enemy_1.png
+アイコン＿リトルドラゴン,data/Character/Icon/enemy_2.png

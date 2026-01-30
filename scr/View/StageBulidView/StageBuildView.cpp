@@ -1,5 +1,7 @@
 #include "StageBuildView.h"
 #include "CSVLoad/StageLoader/StageLoader.h"
+#include "CSVLoad/CharacterLoader.h"
+#include "CSVLoad//TextureLoader/TextureLoader.h"
 #include "View/Font/FontManager.h"
 #include "System/InPutManager/InPutMouseManager.h"
 #include <cmath>
@@ -126,13 +128,33 @@ void StageBuildView::DrawStageDetails(const StageBulidContext& context)
         title.setPosition({ view.pos.x + 20, view.pos.y + 20 });
         m_render.Draw(title);
 
-        // エネミーID表示（アイコン化は後でOK）
+        // エネミーアイコン表示
+        constexpr sf::Vector2f ENEMY_ICON_SIZE{ 64.f, 64.f };
+        constexpr float ENEMY_ICON_SPACING = 72.f;
+
         for (int i = 0; i < 3; ++i)
         {
-            sf::Text enemy(m_font, "Enemy : " + std::to_string(data->enemyIds[i]));
-            enemy.setCharacterSize(18);
-            enemy.setPosition({ view.pos.x + 20, view.pos.y + 80 + i * 30 });
-            m_render.Draw(enemy);
+            int enemyId = data->enemyIds[i];
+            if (enemyId <= 0) continue;
+
+            // キャラデータ取得
+            const CharacterData* enemyData =
+                CharacterLoader::GetInstance().GetData(enemyId);
+
+            if (!enemyData) continue;
+
+            // テクスチャ取得
+            auto tex = TextureLoader::GetInstance().GetTextureID(enemyData->iconKey);
+            if (!tex) continue;
+
+            sf::Sprite sprite(*tex);
+
+            // サイズ調整
+            auto size = tex->getSize();
+            sprite.setScale({ ENEMY_ICON_SIZE.x / size.x,ENEMY_ICON_SIZE.y / size.y });
+            sprite.setPosition({view.pos.x + 20.f + i * ENEMY_ICON_SPACING,view.pos.y + 80.f});
+
+            m_render.Draw(sprite);
         }
     }
 }

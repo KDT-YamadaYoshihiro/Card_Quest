@@ -122,7 +122,7 @@ void BattleView::AddDamagePopup(const sf::Vector2f& arg_pos, int arg_value, bool
 void BattleView::Render(sf::RenderWindow& window)
 {
     // カメラ機能N
-    //m_render.ApplyCamera();
+    m_render.ApplyCamera();
     DrawCharacters();
 
     // カメラ機能OFF
@@ -240,7 +240,9 @@ void BattleView::DrawCards(sf::RenderWindow& window)
 void BattleView::DrawFocus(sf::RenderWindow& window)
 {
 
-    sf::CircleShape circle(80.f);
+    constexpr float RADIUS = 80.f;
+
+    sf::CircleShape circle(RADIUS);
     circle.setFillColor(sf::Color::Transparent);
     circle.setOutlineThickness(4.f);
     circle.setOutlineColor(sf::Color::Yellow);
@@ -252,8 +254,11 @@ void BattleView::DrawFocus(sf::RenderWindow& window)
             continue;
         }
 
-        auto pos = target->GetPosition();
-        circle.setPosition({ pos.x - 80.0f, pos.y - 80.0f });
+        sf::Vector2f center = GetCharacterCenter(target);
+
+        // CircleShape は左上基準なので半径分引く
+        circle.setPosition({center.x - RADIUS,center.y - RADIUS});
+
         window.draw(circle);
     }
 }
@@ -289,4 +294,25 @@ void BattleView::ClearTargets()
 void BattleView::ClearCostGain()
 {
     m_costGain = 0;
+}
+
+/// <summary>
+/// キャラクターの中心座標の取得
+/// </summary>
+/// <param name="c"></param>
+/// <returns></returns>
+sf::Vector2f BattleView::GetCharacterCenter(const std::shared_ptr<Character>& c)
+{
+    constexpr float CHAR_W = 165.f;
+    constexpr float CHAR_H = 150.f;
+
+    auto pos = c->GetPosition(); // 左上
+    return {pos.x + CHAR_W * 0.5f,pos.y + CHAR_H * 0.5f};
+}
+
+sf::Vector2f BattleView::CalcDamagePopupPos(const std::shared_ptr<Character>& c)
+{
+    auto center = GetCharacterCenter(c);
+    center.y -= 40.f; // 頭上に浮かせる
+    return center;
 }
