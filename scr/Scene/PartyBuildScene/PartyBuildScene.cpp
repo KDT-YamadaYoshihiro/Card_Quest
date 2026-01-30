@@ -1,8 +1,8 @@
-#include "PartyBulidScene.h"
+#include "PartyBuildScene.h"
 #include "Entity/Character/Factory/CharacterFactory.h"
 #include "System/Battle/BattleContex/BattleContext.h"
-#include "Screen/SceneManager.h"
-#include "Screen/DeckBuildingScene/DeckBuildingScene.h"
+#include "Scene/SceneManager/SceneManager.h"
+#include "Scene/DeckBuildingScene/DeckBuildingScene.h"
 #include "System/InPutManager/InPutMouseManager.h"
 
 /// <summary>
@@ -56,8 +56,7 @@ void PartyBuildScene::Update(sf::RenderWindow& arg_window)
     input.Update(arg_window);
 
     // マウス座標取得
-    sf::Vector2f mousePos(static_cast<float>(sf::Mouse::getPosition(arg_window).x), static_cast<float>(sf::Mouse::getPosition(arg_window).y));
-
+    sf::Vector2f mousePos = input.GetMousePosition(arg_window);
     float wheel = input.GetWheelDelta();
 
 

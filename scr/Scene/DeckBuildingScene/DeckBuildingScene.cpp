@@ -1,6 +1,6 @@
 #include "DeckBuildingScene.h"
-#include "Screen/SceneManager.h"
-#include "Screen/IngameScene/IngameScene.h"
+#include "Scene/SceneManager/SceneManager.h"
+#include "Scene/IngameScene/IngameScene.h"
 #include "System/DeckBulid/CardBuildPool/CardBuildPool.h"
 #include "Entity/Card/CardManager/CardManager.h"
 #include "System/InPutManager/InPutMouseManager.h"
@@ -33,7 +33,7 @@ void DeckBuildingScene::Update(sf::RenderWindow& arg_window)
     input.Update(arg_window);
 
 	// マウス座標取得
-    sf::Vector2f mousePos(static_cast<float>(sf::Mouse::getPosition(arg_window).x),static_cast<float>(sf::Mouse::getPosition(arg_window).y));
+    sf::Vector2f mousePos = input.GetMousePosition(arg_window);
 
     float wheel = input.GetWheelDelta();
 

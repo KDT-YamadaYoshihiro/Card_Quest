@@ -1,5 +1,6 @@
 #pragma once
 #include <unordered_map>
+#include <iostream>
 #include "Entity/Character/CharacterData.h"
 #include "Entity/Card/CardDate.h"
 #include "CSVLoader.h"
@@ -25,16 +26,22 @@ public:
     }
 
 
-    bool Load(const std::string& path)
+    bool LoadCSV(const std::string& path)
     {
         std::ifstream ifs(path);
-        if (!ifs.is_open()) return false;
+        if (!ifs.is_open())
+        {
+            return false;
+        }
 
         std::string line;
         bool first = true;
         while (std::getline(ifs, line))
         {
-            if (first) { first = false; continue; } // ヘッダスキップ
+            if (first) 
+            {
+                first = false; continue; 
+            } // ヘッダスキップ
 
             // もし行の中にダブルクォート付き改行がある場合、閉じるまで読み続ける
             while (std::count(line.begin(), line.end(), '"') % 2 != 0)
@@ -45,7 +52,10 @@ public:
             }
 
             auto cols = Split(line);
-            if (cols.size() < 8) continue;
+            if (cols.size() < 8)
+            {
+                continue;
+            }
 
             CardData data;
             data.cardId = std::stoi(cols[0]);

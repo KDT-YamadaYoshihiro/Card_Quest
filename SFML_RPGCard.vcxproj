@@ -133,12 +133,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="scr\CSVLoad\StageLoader\StageLoader.cpp" />
     <ClCompile Include="scr\System\PartyBulid\PartyBuildContext\PartyBuildContext.cpp" />
     <ClCompile Include="scr\System\PartyBulid\PartyBulidController\PartyBuildController.cpp" />
     <ClCompile Include="scr\View\PartyBulidView\PartyBulidView.cpp" />
     <ClCompile Include="scr\View\ChracterSprite\CharacterSprite.cpp" />
     <ClCompile Include="scr\System\DeckBulid\DeckBuildSystem\DeckBuildSystem.cpp" />
-    <ClCompile Include="scr\Screen\DeckBuildingScene\DeckBuildingScene.cpp" />
+    <ClCompile Include="scr\Scene\DeckBuildingScene\DeckBuildingScene.cpp" />
     <ClCompile Include="scr\System\DeckBulid\CardBuildPool\CardBuildPool.cpp" />
     <ClCompile Include="scr\System\Battle\BattleContex\BattleContext.cpp" />
     <ClCompile Include="scr\System\Battle\UserController\UserController.cpp" />
@@ -146,7 +147,7 @@
     <ClCompile Include="scr\View\CardRenderer\CardRenderer.cpp" />
     <ClCompile Include="scr\View\BattleView\BattleView.cpp" />
     <ClCompile Include="scr\Entity\Card\CardManager\CardManager.cpp" />
-    <ClCompile Include="scr\System\Battle\Calculation\Calculation.cpp" />
+    <ClCompile Include="scr\System\Calculation\Calculation.cpp" />
     <ClCompile Include="scr\System\Battle\BattleSystem.cpp" />
     <ClCompile Include="scr\Entity\Card\Card.cpp" />
     <ClCompile Include="scr\Entity\Character\Character.cpp" />
@@ -155,22 +156,28 @@
     <ClCompile Include="scr\CSVLoad\TextureLoader\TextureLoader.cpp" />
     <ClCompile Include="scr\GameMain\GameMain.cpp" />
     <ClCompile Include="scr\System\Battle\SelectTarget\TargetSelect.cpp" />
-    <ClCompile Include="scr\Screen\PartyBuildScene\PartyBuildScene.cpp" />
+    <ClCompile Include="scr\Scene\PartyBuildScene\PartyBuildScene.cpp" />
     <ClCompile Include="scr\View\Render\Animetion\Animation.cpp" />
     <ClCompile Include="scr\View\CameraManager\CameraManager.cpp" />
     <ClCompile Include="scr\View\Render\RenderSystem.cpp" />
-    <ClCompile Include="scr\Screen\IngameScene\IngameScene.cpp" />
-    <ClCompile Include="scr\Screen\ResultScene\ResultScene.cpp" />
-    <ClCompile Include="scr\Screen\ScreenManager.cpp" />
-    <ClCompile Include="scr\Screen\TitleScene\TitleScreen.cpp" />
+    <ClCompile Include="scr\Scene\IngameScene\IngameScene.cpp" />
+    <ClCompile Include="scr\Scene\ResultScene\ResultScene.cpp" />
+    <ClCompile Include="scr\Scene\SceneManager\ScreenManager.cpp" />
+    <ClCompile Include="scr\Scene\TitleScene\TitleScreen.cpp" />
+    <ClCompile Include="scr\System\StageBulid\StageBulidContext\StageBulidContext.cpp" />
+    <ClCompile Include="scr\Scene\StageBuildScene\StageBulidScene.cpp" />
+    <ClCompile Include="scr\System\StageBulid\StageBulidController\StageBulidController.cpp" />
+    <ClCompile Include="scr\View\StageBulidView\StageBuildView.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="scr\CSVLoad\StageLoader\StageLoader.h" />
     <ClInclude Include="scr\System\PartyBulid\PartyBuildContext\PartyBuildContext.h" />
     <ClInclude Include="scr\System\PartyBulid\PartyBulidController\PartyBuildController.h" />
+    <ClInclude Include="scr\System\StageBulid\StageData.h" />
     <ClInclude Include="scr\View\PartyBulidView\PartyBuildView.h" />
     <ClInclude Include="scr\View\ChracterSprite\CharacterSprite.h" />
     <ClInclude Include="scr\System\DeckBulid\DeckBuildSystem\DeckBuildSystem.h" />
-    <ClInclude Include="scr\Screen\DeckBuildingScene\DeckBuildingScene.h" />
+    <ClInclude Include="scr\Scene\DeckBuildingScene\DeckBuildingScene.h" />
     <ClInclude Include="scr\System\DeckBulid\CardBuildPool\CardBuildPool.h" />
     <ClInclude Include="scr\System\Battle\BattleContex\BattleContext.h" />
     <ClInclude Include="scr\System\Battle\UserController\ActionData.h" />
@@ -178,7 +185,7 @@
     <ClInclude Include="scr\View\CardRenderer\CardRenderer.h" />
     <ClInclude Include="scr\View\BattleView\BattleView.h" />
     <ClInclude Include="scr\Entity\Card\CardManager\CardManager.h" />
-    <ClInclude Include="scr\System\Battle\Calculation\Calculation.h" />
+    <ClInclude Include="scr\System\Calculation\Calculation.h" />
     <ClInclude Include="scr\System\Battle\BattleSystem.h" />
     <ClInclude Include="scr\Entity\Card\Card.h" />
     <ClInclude Include="scr\Entity\Card\CardDate.h" />
@@ -196,19 +203,23 @@
     <ClInclude Include="scr\GameMain\GameMain.h" />
     <ClInclude Include="scr\GameMain\WindowSetting.h" />
     <ClInclude Include="scr\System\Battle\SelectTarget\TargetSelect.h" />
-    <ClInclude Include="scr\Screen\PartyBuildScene\PartyBulidScene.h" />
+    <ClInclude Include="scr\Scene\PartyBuildScene\PartyBuildScene.h" />
     <ClInclude Include="scr\System\InPutManager\InPutMouseManager.h" />
     <ClInclude Include="scr\UI\CircleButton.h" />
     <ClInclude Include="scr\View\Render\Animetion\Animation.h" />
     <ClInclude Include="scr\View\CameraManager\CameraManager.h" />
     <ClInclude Include="scr\View\Render\RenderSystem.h" />
-    <ClInclude Include="scr\Screen\IngameScene\IngameScene.h" />
-    <ClInclude Include="scr\Screen\ResultScene\ResultScene.h" />
-    <ClInclude Include="scr\Screen\SceneBase.h" />
-    <ClInclude Include="scr\Screen\SceneManager.h" />
-    <ClInclude Include="scr\Screen\TitleScene\TitleScene.h" />
+    <ClInclude Include="scr\Scene\IngameScene\IngameScene.h" />
+    <ClInclude Include="scr\Scene\ResultScene\ResultScene.h" />
+    <ClInclude Include="scr\Scene\SceneBase.h" />
+    <ClInclude Include="scr\Scene\SceneManager\SceneManager.h" />
+    <ClInclude Include="scr\Scene\TitleScene\TitleScene.h" />
     <ClInclude Include="scr\UI\UIManager.h" />
     <ClInclude Include="scr\View\Font\FontManager.h" />
+    <ClInclude Include="scr\System\StageBulid\StageBulidContext\StageBulidContext.h" />
+    <ClInclude Include="scr\Scene\StageBuildScene\StageBulidScene.h" />
+    <ClInclude Include="scr\System\StageBulid\StageBulidController\StageBulidController.h" />
+    <ClInclude Include="scr\View\StageBulidView\StageBuildView.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

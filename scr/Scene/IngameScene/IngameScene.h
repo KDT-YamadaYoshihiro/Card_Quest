@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "Screen/SceneBase.h"
+#include "Scene/SceneBase.h"
 #include "System/Battle/BattleSystem.h"
 
 class IngameScene : public SceneBase

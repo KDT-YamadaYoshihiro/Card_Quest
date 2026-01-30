@@ -1,4 +1,6 @@
 #pragma once
+#include <array>
+
 // 計算クラス
 class Calculation
 {
@@ -22,4 +24,30 @@ public:
 	// ダメージ計算
 	static float GetDamage(float arg_atk, float arg_card, float arg_def);
 
+	// 平均値
+	template<size_t N>
+	static int CalcAverageLevel(const std::array<int, N>& levels);
 };
+
+template<size_t N>
+inline int Calculation::CalcAverageLevel(const std::array<int, N>& levels)
+{
+	int sum = 0;
+	int count = 0;
+
+	for (int lv : levels)
+	{
+		if (lv > 0)   // 有効レベルのみ
+		{
+			sum += lv;
+			++count;
+		}
+	}
+
+	if (count == 0)
+	{
+		return 0;
+	}
+
+	return sum / count;
+}

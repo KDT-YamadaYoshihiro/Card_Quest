@@ -2,7 +2,7 @@
 #include <memory>
 #include <vector>
 #include <SFML/Graphics.hpp>
-#include "SceneBase.h"
+#include "Scene/SceneBase.h"
 #include "System/Battle/BattleContex/BattleContext.h"
 
 

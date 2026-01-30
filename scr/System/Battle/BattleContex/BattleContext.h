@@ -14,14 +14,25 @@ private:
     std::vector<std::shared_ptr<Character>> m_players;
     std::vector<std::shared_ptr<Character>> m_enemies;
     
+    // エネミーID
+    std::vector<int> m_enemyIds;
+
+    // ステージID
+    int m_stageId;
 
 public:
 
     // 初期化
-    bool Init( const std::vector<std::shared_ptr<Character>>& enemies);
+    bool Init(const std::vector<std::shared_ptr<Character>>& arg_enemies);
     
     // プレイヤーメンバーのセット
     void SetPlayers(const std::vector<std::shared_ptr<Character>>& arg_players);
+
+    // エネミーのセット
+    void SetEnemyIds(std::vector<int> arg_enemyIds);
+    std::vector<int> GetEnemyIds();
+
+    void SetStageId(const int arg_stageId);
 
     // キャラクターの取得
     const std::vector<std::shared_ptr<Character>>& GetPlayers() const;

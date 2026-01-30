@@ -1,6 +1,6 @@
 #include "TitleScene.h"
-#include "Screen/SceneManager.h"
-#include "Screen/PartyBuildScene/PartyBulidScene.h"
+#include "Scene/SceneManager/SceneManager.h"
+#include "Scene/StageBuildScene/StageBulidScene.h"
 #include <SFML/Graphics.hpp>
 
 
@@ -17,7 +17,7 @@ void TitleScene::Update(sf::RenderWindow& arg_window)
     // キーボード判定
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space))
     {
-        SceneManager::GetInstance().ChangeScreen<PartyBuildScene>(arg_window);
+        SceneManager::GetInstance().ChangeScreen<StageBulidScene>(arg_window);
     }
 
 }

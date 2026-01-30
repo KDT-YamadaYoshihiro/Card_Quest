@@ -1,8 +1,8 @@
 #include "BattleSystem.h"
-#include "System/Battle/Calculation/Calculation.h"
+#include "System/Calculation/Calculation.h"
 #include "Entity/Character/Factory/CharacterFactory.h"
 #include "CSVLoad/CardLoader.h"
-#include "Screen/SceneManager.h"
+#include "Scene/SceneManager/SceneManager.h"
 //#include "../View/Font/FontManager.h"
 //#include "../Battle/UserController/UserController.h"
 //#include "../Battle/UserController/ActionData.h"
@@ -60,14 +60,11 @@ bool BattleSystem::Init(sf::RenderWindow& arg_window)
 	}
 	// キャラクターの作成
 	m_players = m_context->GetPlayers();
-	// エネミー
-	for (int i = 0; i < 3; i++) 
+	for (auto& id : m_context->GetEnemyIds())
 	{
-		auto enemy = CharacterFactory::GetInstance().CreateCharacter<EnemyCharacter>(7,2);
-		enemy->InitEnemyType();
-		enemy->InitEnemyCards();
-		m_enemies.push_back(enemy);
+		m_enemies.push_back(CharacterFactory::GetInstance().CreateCharacter<EnemyCharacter>(id, 2));
 	}
+
 
 	// 生成確認
 	if (m_players.empty()) {

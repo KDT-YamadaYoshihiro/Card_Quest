@@ -1,9 +1,9 @@
 #include "BattleContext.h"
 #include <iostream>
 
-bool BattleContext::Init(const std::vector<std::shared_ptr<Character>>& enemies)
+bool BattleContext::Init(const std::vector<std::shared_ptr<Character>>& arg_enemies)
 {
-    m_enemies = enemies;
+    m_enemies = arg_enemies;
 
     for (const auto& p : m_players)
     {
@@ -29,6 +29,22 @@ bool BattleContext::Init(const std::vector<std::shared_ptr<Character>>& enemies)
 void BattleContext::SetPlayers(const std::vector<std::shared_ptr<Character>>& arg_players)
 {
     m_players = arg_players;
+}
+
+void BattleContext::SetEnemyIds(std::vector<int> arg_enemyIds)
+{
+    m_enemyIds = arg_enemyIds;
+}
+
+std::vector<int> BattleContext::GetEnemyIds()
+{
+    return m_enemyIds;
+}
+
+
+void BattleContext::SetStageId(const int arg_stageId)
+{
+    m_stageId = arg_stageId;
 }
 
 const std::vector<std::shared_ptr<Character>>& BattleContext::GetPlayers() const

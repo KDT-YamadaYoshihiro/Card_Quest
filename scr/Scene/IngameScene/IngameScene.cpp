@@ -1,6 +1,6 @@
 #include "IngameScene.h"
-#include "../SceneManager.h"
-#include "../ResultScene/ResultScene.h"
+#include "Scene/SceneManager/SceneManager.h"
+#include "Scene/ResultScene/ResultScene.h"
 
 
 void IngameScene::Init(sf::RenderWindow& arg_window)

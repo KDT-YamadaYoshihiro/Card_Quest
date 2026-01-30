@@ -2,7 +2,8 @@
 #include "CSVLoad/TextureLoader/TextureLoader.h"
 #include "CSVLoad/CharacterLoader.h"
 #include "CSVLoad/CardLoader.h"
-#include "Screen/SceneManager.h"
+#include "CSVLoad/StageLoader/StageLoader.h"
+#include "Scene/Scenemanager/SceneManager.h"
 #include "View/CameraManager/CameraManager.h"
 #include "WindowSetting.h"
 #include "View/Font/FontManager.h"
@@ -29,13 +30,17 @@ bool GameMain::Init()
 
     m_window.setFramerateLimit(60);
 
+    
     SceneManager::GetInstance().Init(m_window);
     CameraManager::GetInstance().ViewInit({ 0.0f, 0.0f }, 
         { WindowSetting::GetInstance().GetWindowSizeW(), WindowSetting::GetInstance().GetWindowSizeH()});
 
+    // CSVÇÃì«Ç›çûÇ›
 	TextureLoader::GetInstance().LoadTextures("data/CSV/TextureData.csv");
-	CharacterLoader::GetInstance().Load("data/CSV/CharacterData.csv");
-    CardLoader::GetInstance().Load("data/CSV/CardData.csv");
+	CharacterLoader::GetInstance().LoadCSV("data/CSV/CharacterData.csv");
+    CardLoader::GetInstance().LoadCSV("data/CSV/CardData.csv");
+    StageLoader::GetInstance().LoadCSV("data/CSV/StageData.csv");
+    // ÉtÉHÉìÉgì«Ç›çûÇ›
     FontManager::GetInstance().FontLoad();
 
 

@@ -1,5 +1,5 @@
 #pragma once
-#include "Screen/SceneBase.h"
+#include "Scene/SceneBase.h"
 #include "System/PartyBulid/PartyBuildContext/PartyBuildContext.h"
 #include "System/PartyBulid/PartyBulidController/PartyBuildController.h"
 #include "View/PartyBulidView/PartyBuildView.h"

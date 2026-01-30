@@ -1,8 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "Screen/SceneBase.h"
+#include "Scene/SceneBase.h"
 #include "System/DeckBulid/DeckBuildSystem/DeckBuildSystem.h"
-#include "../../UI/CircleButton.h"
+#include "UI/CircleButton.h"
 
 class DeckBuildingScene : public SceneBase
 {

@@ -63,10 +63,10 @@
     <ClCompile Include="scr\GameMain\GameMain.cpp">
       <Filter>ソース ファイル\GameMain</Filter>
     </ClCompile>
-    <ClCompile Include="scr\Screen\ScreenManager.cpp">
+    <ClCompile Include="scr\Scene\SceneManager\ScreenManager.cpp">
       <Filter>ソース ファイル\Screen</Filter>
     </ClCompile>
-    <ClCompile Include="scr\Screen\TitleScene\TitleScreen.cpp">
+    <ClCompile Include="scr\Scene\TitleScene\TitleScreen.cpp">
       <Filter>ソース ファイル\Screen\Title</Filter>
     </ClCompile>
     <ClCompile Include="scr\Entity\Character\Player\Player.cpp">
@@ -84,7 +84,7 @@
     <ClCompile Include="scr\View\CameraManager\CameraManager.cpp">
       <Filter>ソース ファイル\Render</Filter>
     </ClCompile>
-    <ClCompile Include="scr\Screen\IngameScene\IngameScene.cpp">
+    <ClCompile Include="scr\Scene\IngameScene\IngameScene.cpp">
       <Filter>ソース ファイル\Screen\Ingame</Filter>
     </ClCompile>
     <ClCompile Include="scr\CSVLoad\TextureLoader\TextureLoader.cpp">
@@ -93,7 +93,7 @@
     <ClCompile Include="scr\View\Render\Animetion\Animation.cpp">
       <Filter>ソース ファイル\Render\Animetion</Filter>
     </ClCompile>
-    <ClCompile Include="scr\Screen\ResultScene\ResultScene.cpp">
+    <ClCompile Include="scr\Scene\ResultScene\ResultScene.cpp">
       <Filter>ソース ファイル\Screen\Result</Filter>
     </ClCompile>
     <ClCompile Include="scr\System\Battle\BattleSystem.cpp">
@@ -102,7 +102,7 @@
     <ClCompile Include="scr\Entity\Card\Card.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="scr\System\Battle\Calculation\Calculation.cpp">
+    <ClCompile Include="scr\System\Calculation\Calculation.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="scr\Entity\Card\CardManager\CardManager.cpp">
@@ -129,7 +129,7 @@
     <ClCompile Include="scr\System\DeckBulid\CardBuildPool\CardBuildPool.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="scr\Screen\DeckBuildingScene\DeckBuildingScene.cpp">
+    <ClCompile Include="scr\Scene\DeckBuildingScene\DeckBuildingScene.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="scr\System\DeckBulid\DeckBuildSystem\DeckBuildSystem.cpp">
@@ -138,7 +138,7 @@
     <ClCompile Include="scr\View\ChracterSprite\CharacterSprite.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="scr\Screen\PartyBuildScene\PartyBuildScene.cpp">
+    <ClCompile Include="scr\Scene\PartyBuildScene\PartyBuildScene.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="scr\View\PartyBulidView\PartyBulidView.cpp">
@@ -150,9 +150,24 @@
     <ClCompile Include="scr\System\PartyBulid\PartyBulidController\PartyBuildController.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="scr\System\StageBulid\StageBulidContext\StageBulidContext.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\CSVLoad\StageLoader\StageLoader.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\Scene\StageBuildScene\StageBulidScene.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\System\StageBulid\StageBulidController\StageBulidController.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\View\StageBulidView\StageBuildView.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="scr\Screen\SceneManager.h">
+    <ClInclude Include="scr\Scene\SceneManager\SceneManager.h">
       <Filter>ソース ファイル\Screen</Filter>
     </ClInclude>
     <ClInclude Include="scr\GameMain\GameMain.h">
@@ -161,10 +176,10 @@
     <ClInclude Include="scr\GameMain\WindowSetting.h">
       <Filter>ソース ファイル\GameMain</Filter>
     </ClInclude>
-    <ClInclude Include="scr\Screen\SceneBase.h">
+    <ClInclude Include="scr\Scene\SceneBase.h">
       <Filter>ソース ファイル\Screen</Filter>
     </ClInclude>
-    <ClInclude Include="scr\Screen\TitleScene\TitleScene.h">
+    <ClInclude Include="scr\Scene\TitleScene\TitleScene.h">
       <Filter>ソース ファイル\Screen\Title</Filter>
     </ClInclude>
     <ClInclude Include="scr\Entity\Character\Character.h">
@@ -200,7 +215,7 @@
     <ClInclude Include="scr\CSVLoad\CSVLoader.h">
       <Filter>ソース ファイル\CSVLoader</Filter>
     </ClInclude>
-    <ClInclude Include="scr\Screen\IngameScene\IngameScene.h">
+    <ClInclude Include="scr\Scene\IngameScene\IngameScene.h">
       <Filter>ソース ファイル\Screen\Ingame</Filter>
     </ClInclude>
     <ClInclude Include="scr\CSVLoad\TextureLoader\TextureLoader.h">
@@ -209,7 +224,7 @@
     <ClInclude Include="scr\View\Render\Animetion\Animation.h">
       <Filter>ソース ファイル\Render\Animetion</Filter>
     </ClInclude>
-    <ClInclude Include="scr\Screen\ResultScene\ResultScene.h">
+    <ClInclude Include="scr\Scene\ResultScene\ResultScene.h">
       <Filter>ソース ファイル\Screen\Result</Filter>
     </ClInclude>
     <ClInclude Include="scr\System\Battle\BattleSystem.h">
@@ -224,7 +239,7 @@
     <ClInclude Include="scr\Entity\Card\CardDate.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="scr\System\Battle\Calculation\Calculation.h">
+    <ClInclude Include="scr\System\Calculation\Calculation.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="scr\Entity\Card\CardManager\CardManager.h">
@@ -260,7 +275,7 @@
     <ClInclude Include="scr\System\DeckBulid\CardBuildPool\CardBuildPool.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="scr\Screen\DeckBuildingScene\DeckBuildingScene.h">
+    <ClInclude Include="scr\Scene\DeckBuildingScene\DeckBuildingScene.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="scr\System\DeckBulid\DeckBuildSystem\DeckBuildSystem.h">
@@ -272,7 +287,7 @@
     <ClInclude Include="scr\View\ChracterSprite\CharacterSprite.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="scr\Screen\PartyBuildScene\PartyBulidScene.h">
+    <ClInclude Include="scr\Scene\PartyBuildScene\PartyBuildScene.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="scr\View\PartyBulidView\PartyBuildView.h">
@@ -282,6 +297,24 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="scr\System\PartyBulid\PartyBuildContext\PartyBuildContext.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\CSVLoad\StageLoader\StageLoader.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\System\StageBulid\StageBulidContext\StageBulidContext.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\System\StageBulid\StageData.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Scene\StageBuildScene\StageBulidScene.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\System\StageBulid\StageBulidController\StageBulidController.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\View\StageBulidView\StageBuildView.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

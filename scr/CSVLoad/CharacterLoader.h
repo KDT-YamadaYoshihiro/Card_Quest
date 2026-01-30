@@ -23,7 +23,7 @@ public:
         return instance;
     }
 
-    bool Load(const std::string& path)
+    bool LoadCSV(const std::string& path)
     {
         std::ifstream ifs(path);
         if (!ifs.is_open()) {
@@ -34,10 +34,16 @@ public:
         bool first = true;
         while (std::getline(ifs, line))
         {
-            if (first) { first = false; continue; } // ヘッダスキップ
+            if (first) 
+            {
+                first = false; continue; 
+            } // ヘッダスキップ
 
             auto cols = Split(line);
-            if (cols.size() < 9) continue;
+            if (cols.size() < 9)
+            {
+                continue;
+            }
 
             CharacterData data;
             data.charaId = std::stoi(cols[0]);
