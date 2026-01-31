@@ -173,6 +173,7 @@
     <ClInclude Include="scr\CSVLoad\StageLoader\StageLoader.h" />
     <ClInclude Include="scr\System\PartyBulid\PartyBuildContext\PartyBuildContext.h" />
     <ClInclude Include="scr\System\PartyBulid\PartyBulidController\PartyBuildController.h" />
+    <ClInclude Include="scr\System\Singleton\Singleton.h" />
     <ClInclude Include="scr\System\StageBulid\StageData.h" />
     <ClInclude Include="scr\View\PartyBulidView\PartyBuildView.h" />
     <ClInclude Include="scr\View\ChracterSprite\CharacterSprite.h" />

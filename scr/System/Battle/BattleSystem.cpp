@@ -125,6 +125,9 @@ void BattleSystem::Update(sf::RenderWindow& window)
 	case BattleSystem::TurnPhase::EndTurn:
 		EndTurn();
 		break;
+	case BattleSystem::TurnPhase::Result:
+
+		break;
 	default:
 		break;
 	}
@@ -174,17 +177,18 @@ bool BattleSystem::IsUserWin() const
 /// </summary>
 void BattleSystem::InitPosition()
 {
+	// プレイヤー側：画面中央より少し左下に配置
 	for (int i = 0; i < m_players.size(); i++)
 	{
-		sf::Vector2f pos({ 200.0f,200.0f + i * 150.0f });
-		m_players[i]->SetPosition(sf::Vector2f(pos));
+		sf::Vector2f pos({ 50.0f + i * 140.0f, 300.0f });
+		m_players[i]->SetPosition(pos);
 	}
+	// エネミー側：画面右上のエリアに配置
 	for (int i = 0; i < m_enemies.size(); i++)
 	{
-		sf::Vector2f pos({ 600.0f + i * 165.0f,200.0f });
+		sf::Vector2f pos({ 750.0f + i * 165.0f, 200.0f });
 		m_enemies[i]->SetPosition(pos);
 	}
-
 }
 
 /// <summary>
@@ -319,7 +323,7 @@ void BattleSystem::EnemyTurn()
 	{
 		const auto& enemies = m_context->GetAliveEnemies();
 
-		if (m_currentEnemyIndex >= enemies.size())
+		if (enemies.size() <= 0)
 		{
 			m_enemyPhase = EnemyTurnPhase::End;
 			break;

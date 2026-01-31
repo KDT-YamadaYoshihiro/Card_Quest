@@ -52,6 +52,26 @@ void CharacterSprite::Init(const std::string& arg_textureKey)
 void CharacterSprite::SetPosition(const sf::Vector2f& arg_pos)
 {
     m_sprite.setPosition(arg_pos);
+    m_fill.setPosition({ arg_pos.x + 10.0f, arg_pos.y - 5.0f });
+    m_frame.setPosition({ arg_pos.x + 10.0f, arg_pos.y - 5.0f});
+}
+
+/// <summary>
+/// …•½•ûŒü‚Ì‰æ‘œ”½“]
+/// </summary>
+void CharacterSprite::SetSpriteWidthMirror()
+{
+    m_sprite.setOrigin({ m_sprite.getLocalBounds().size.x, 0.0f });
+    m_sprite.setScale(sf::Vector2f(-1.0f, 1.0f));
+}
+
+/// <summary>
+/// ‚’¼•ûŒü‚Ì‰æ‘œ”½“]
+/// </summary>
+void CharacterSprite::SetSpriteHeightMirror()
+{
+    m_sprite.setOrigin({ m_sprite.getLocalBounds().size.y, 0.0f });
+    m_sprite.setScale(sf::Vector2f(1.0f, -1.0f));
 }
 
 /// <summary>
@@ -74,7 +94,25 @@ void CharacterSprite::SetState(CharacterAnimState arg_state)
 /// •`‰æ
 /// </summary>
 /// <param name="arg_render">ƒŒƒ“ƒ_[ƒVƒXƒeƒ€</param>
-void CharacterSprite::Draw(RenderSystem& arg_render)
+void CharacterSprite::Draw(RenderSystem& arg_render, const CharacterData& arg_data, bool hpDrawFlag)
 {
     arg_render.Draw(m_sprite);
+    if (hpDrawFlag)
+    {
+        // HP‚Ì•`‰æ
+        // --- “h‚è‚Â‚Ô‚µƒQ[ƒW ---
+        float ratio = static_cast<float>(arg_data.hp) / arg_data.maxHp;
+        m_fill.setSize({ 100.0f * ratio, 10.0f });
+        m_fill.setFillColor(sf::Color::Green);
+
+        // --- ˜gü ---
+        m_frame.setSize({ 100.0f, 10.0f });
+        m_frame.setFillColor(sf::Color::Transparent);
+        m_frame.setOutlineColor(sf::Color::White);
+        m_frame.setOutlineThickness(2.0f);
+
+        arg_render.Draw(m_fill);
+        arg_render.Draw(m_frame);
+
+    }
 }

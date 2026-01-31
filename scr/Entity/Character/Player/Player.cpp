@@ -34,5 +34,5 @@ void PlayerCharacter::Update()
 void PlayerCharacter::Render(RenderSystem& render)
 {
 	m_sprite->SetPosition(m_pos);
-	m_sprite->Draw(render);
+	m_sprite->Draw(render,m_data,true);
 }

@@ -15,7 +15,7 @@ public:
 		:m_window(arg_window)
 	{
 		CameraManager::GetInstance().ViewInit(
-			{ 0.0f, 0.0f },
+			{ 640.0f, 360.0f },
 			{ static_cast<float>(arg_window.getSize().x), static_cast<float>(arg_window.getSize().y) });
 	}
 

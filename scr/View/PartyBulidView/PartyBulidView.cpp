@@ -33,11 +33,15 @@ void PartyBuildView::Draw()
 {
 	for (auto& icon : m_characterIcons)
 	{
+		icon.sprite.setOrigin({icon.sprite.getLocalBounds().size.x, 0.0f});
+		icon.sprite.setScale(sf::Vector2f(-1.0f, 1.0f));
 		m_render.Draw(icon.sprite);
 	}
 
 	for (auto& icon : m_partyIcons)
 	{
+		icon.sprite.setOrigin({ icon.sprite.getLocalBounds().size.x, 0.0f });
+		icon.sprite.setScale(sf::Vector2f(-1.0f, 1.0f));
 		m_render.Draw(icon.sprite);
 	}
 }

@@ -1,9 +1,13 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "System/Singleton/Singleton.h"
 
-class InPutMouseManager
+class InPutMouseManager : public Singleton<InPutMouseManager>
 {
 private:
+
+    friend class Singleton<InPutMouseManager>;
+
     bool m_prev = false;
     bool m_current = false;
     bool m_dragging = false;
@@ -11,12 +15,6 @@ private:
     float m_wheelDelta = 0.f;
 
 public:
-
-    static InPutMouseManager& GetInstance()
-    {
-        static InPutMouseManager instance;
-        return instance;
-    }
 
     /// <summary>
     /// çXêV

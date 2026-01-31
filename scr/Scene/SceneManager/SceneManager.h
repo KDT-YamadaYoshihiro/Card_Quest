@@ -11,23 +11,15 @@ public:
     std::shared_ptr<BattleContext> battleContext;
 };
 
-class SceneManager {
+class SceneManager : public Singleton<SceneManager>
+{
+    friend class Singleton<SceneManager>;
 
     std::unique_ptr<SceneBase> m_screen;
     GameSession m_session;
 
-    SceneManager() = default;
-    virtual ~SceneManager() = default;
-
 public:
 
-    // コピー、代入禁止
-    SceneManager(const SceneManager&) = delete;
-    SceneManager& operator = (const SceneManager&) = delete;
-    static SceneManager& GetInstance() {
-        static SceneManager instance;
-        return instance;
-    }
 
 
     // 更新・描画・イベント

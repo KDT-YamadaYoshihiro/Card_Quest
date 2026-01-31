@@ -3,8 +3,10 @@
 void CameraManager::ViewInit(const sf::Vector2f& center, const sf::Vector2f& size)
 {
 	m_view.setSize(size);
-	m_view.setCenter(size * 0.5f);
+	m_view.setCenter(center);
 	m_moveTarget = center;
+	m_currentZoom = 1.0f;
+	m_targetZoom = 1.0f;
 }
 
 void CameraManager::ViewUpdate(float arg_dt)
@@ -35,16 +37,17 @@ void CameraManager::ViewZoomTo(float arg_dt)
 
 		if (std::fabs(diff) <= step)
 		{
-			m_view.zoom(m_targetZoom / m_currentZoom);
 			m_currentZoom = m_targetZoom;
 			m_zoomEnabled = false;
 		}
 		else
 		{
-			float nextZoom = m_currentZoom + ((diff > 0 ? step : -step));
-			m_view.zoom(nextZoom / m_currentZoom);
-			m_currentZoom = nextZoom;
+			m_currentZoom += (diff > 0 ? step : -step);
 		}
+
+		sf::Vector2f baseSize = { m_view.getSize().x / (m_view.getSize().x / m_view.getSize().x), m_view.getSize().y }; 
+		m_view.setSize(sf::Vector2f(1280.0f * m_currentZoom, 720.0f * m_currentZoom)); 
+	
 	}
 }
 

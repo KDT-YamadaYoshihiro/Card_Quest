@@ -87,6 +87,7 @@ private:
     void UpdateHandCardRects(const Character& actor);
 
     // ===== ï‚èï =====
-    sf::Vector2f GetMousePos(sf::RenderWindow& window) const;
+    sf::Vector2f GetWorldMousePos(sf::RenderWindow& window) const;
+    sf::Vector2f GetScreenMousePos(sf::RenderWindow& window) const;
 
 };

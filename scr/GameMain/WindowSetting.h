@@ -1,8 +1,12 @@
 #pragma once
 #include <string>
+#include "System/Singleton/Singleton.h"
 
-class WindowSetting
+class WindowSetting : public Singleton<WindowSetting>
 {
+
+    friend class Singleton<WindowSetting>;
+
     bool m_windowMode;          // true = windowed, false = fullscreen
     float m_windowWidth;          // width
     float m_windowHeight;         // height

@@ -4,24 +4,14 @@
 #include "Entity/Character/CharacterData.h"
 #include "CSVLoader.h"
 
-class CharacterLoader : public CSVLoader
+class CharacterLoader : public CSVLoader,public Singleton<CharacterLoader>
 {
+
+    friend class Singleton<CharacterLoader>;
 
     std::unordered_map<int, CharacterData> m_characters;
 
-    CharacterLoader() = default;
-    virtual ~CharacterLoader() = default;
-
 public:
-
-    // コピー禁止
-    CharacterLoader(const CharacterLoader&) = delete;
-    CharacterLoader& operator = (const CharacterLoader&) = delete;
-    static CharacterLoader& GetInstance()
-    {
-        static CharacterLoader instance;
-        return instance;
-    }
 
     bool LoadCSV(const std::string& path)
     {

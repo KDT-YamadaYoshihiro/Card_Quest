@@ -4,13 +4,17 @@
 #include <random>
 #include <algorithm>
 #include "Entity/Card/CardDate.h"
+#include "System/Singleton/Singleton.h"
 
 class Character;
 
 // カード管理（IDベース）
-class CardManager
+class CardManager:public Singleton<CardManager>
 {
 private:
+
+    friend class Singleton<CardManager>;
+
     std::unordered_map<int, CardData> m_cardMaster;
     std::vector<int> m_deck;
     std::vector<int> m_cemetery;
@@ -20,14 +24,6 @@ private:
     CardManager();
 
 public:
-    CardManager(const CardManager&) = delete;
-    CardManager& operator=(const CardManager&) = delete;
-
-    static CardManager& GetInstance()
-    {
-        static CardManager instance;
-        return instance;
-    }
 
     // 初期化
     void InitCardMaster(const std::unordered_map<int, CardData>& cards);

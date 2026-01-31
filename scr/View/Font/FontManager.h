@@ -1,8 +1,10 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-class FontManager
+class FontManager : public Singleton<FontManager>
 {
+
+	friend class Singleton<FontManager>;
 
 	sf::Font m_font;
 

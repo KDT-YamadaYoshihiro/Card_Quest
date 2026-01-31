@@ -5,25 +5,13 @@
 #include <memory>
 #include "CSVLoad/CSVLoader.h"
 
-class TextureLoader : public CSVLoader
+class TextureLoader : public CSVLoader,public Singleton<TextureLoader>
 {
+	friend class Singleton<TextureLoader>;
 
 	std::unordered_map<std::string, sf::Texture> m_textures;
 
-	TextureLoader() = default;
-	virtual ~TextureLoader() = default;
-
 public:
-
-
-	// コピー、代入禁止
-	TextureLoader(const TextureLoader&) = delete;
-	TextureLoader& operator = (const TextureLoader) = delete;
-	static TextureLoader& GetInstance()
-	{
-		static TextureLoader instance;
-		return instance;
-	}
 
 	// CSV読込
 	bool LoadTextures(const std::string& path);

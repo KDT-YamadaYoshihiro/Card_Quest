@@ -1,9 +1,13 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <cmath>
+#include "System/Singleton/Singleton.h"
 
-class CameraManager
+class CameraManager : public Singleton<CameraManager>
 {
+
+	friend class Singleton<CameraManager>;
+
 	sf::View m_view;
 
 	float m_currentZoom = 1.0f;
@@ -23,19 +27,7 @@ class CameraManager
 	float m_shakeTime = 0.0f;
 	sf::Vector2f m_originalCenter;
 
-	CameraManager() = default;
-	virtual ~CameraManager() = default;
-
 public:
-
-	// ‘ã“ü‹Ö~AƒRƒs[‹Ö~
-	CameraManager(const CameraManager&) = delete;
-	CameraManager& operator = (const CameraManager&) = delete;
-	static CameraManager& GetInstance()
-	{
-		static CameraManager instance;
-		return instance;
-	}
 
 	// ‰Šú‰»
 	void ViewInit(const sf::Vector2f& center, const sf::Vector2f& size);

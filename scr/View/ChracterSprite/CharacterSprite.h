@@ -4,6 +4,7 @@
 #include <string>
 #include "View/Render/RenderSystem.h"
 #include "CSVLoad/TextureLoader/TextureLoader.h"
+#include "Entity/Character/CharacterData.h"
 
 enum class CharacterAnimState
 {
@@ -32,6 +33,10 @@ private:
 
 	sf::Vector2i m_cellSize{0, 0};
 
+	// HPバー
+	sf::RectangleShape m_fill;   // 塗り
+	sf::RectangleShape m_frame;  // 枠
+
 public:
 
 	// 初期化
@@ -50,6 +55,16 @@ public:
 	void SetPosition(const sf::Vector2f& arg_pos);
 
 	/// <summary>
+	/// 画像の水平反転
+	/// </summary>
+	void SetSpriteWidthMirror();
+
+	/// <summary>
+	/// 画像の垂直
+	/// </summary>
+	void SetSpriteHeightMirror();
+
+	/// <summary>
 	/// アニメーションステート設定
 	/// </summary>
 	/// <param name="arg_state">設定アニメーションステート</param>
@@ -59,7 +74,7 @@ public:
 	/// 描画
 	/// </summary>
 	/// <param name="arg_render">レンダーシステム</param>
-	void Draw(RenderSystem& arg_render);
+	void Draw(RenderSystem& arg_render, const CharacterData& arg_data,bool hpDrawFlag);
 
 
 

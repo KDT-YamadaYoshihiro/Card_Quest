@@ -5,22 +5,13 @@
 #include "Entity/Character/Enemy/Enemy.h"
 #include "CSVLoad/CharacterLoader.h"
 
-class CharacterFactory
+class CharacterFactory : public Singleton<CharacterFactory>
 {
 private:
-    CharacterFactory() = default;
-    ~CharacterFactory() = default;
 
-    CharacterFactory(const CharacterFactory&) = delete;
-    CharacterFactory& operator=(const CharacterFactory&) = delete;
+    friend class Singleton<CharacterFactory>;
 
 public:
-
-    static CharacterFactory& GetInstance()
-    {
-        static CharacterFactory instance;
-        return instance;
-    }
 
     // ID Ç©ÇÁ Character Çê∂ê¨
     template <typename T>

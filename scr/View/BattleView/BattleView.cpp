@@ -7,7 +7,7 @@
 namespace
 {
     // UI配置（画像イメージ準拠）
-    constexpr sf::Vector2f DECK_POS{ 50.f, 520.f };
+    constexpr sf::Vector2f DECK_POS{ 50.f, 120.f };
     constexpr sf::Vector2f GRAVE_POS{ 150.f, 520.f };
 
     constexpr sf::Vector2f HAND_START{ 300.f, 520.f };
@@ -42,6 +42,8 @@ void BattleView::SetPhase(BattleViewPhase phase)
 /// <param name="dt"></param>
 void BattleView::Update(float dt)
 {
+    UpdateCamera(dt);
+
     for (auto& p : m_popups)
     {
         p.lifeTime -= dt;
@@ -121,18 +123,25 @@ void BattleView::AddDamagePopup(const sf::Vector2f& arg_pos, int arg_value, bool
 /// <param name="window"></param>
 void BattleView::Render(sf::RenderWindow& window)
 {
-    // カメラ機能N
+    // カメラ機能ON
     m_render.ApplyCamera();
+
+    // 背景
+    auto tex = TextureLoader::GetInstance().GetTextureID("test");
+    if (tex)
+    {
+        sf::Sprite sprite(*tex);
+        sprite.setPosition({ 0.0f,0.0f });
+        window.draw(sprite);
+    }
+
+
     DrawCharacters();
 
-    // カメラ機能OFF
-    m_render.ResetCamera();
-    DrawCards(window);
-    DrawFocus(window);
-    DrawCostGain(window);
+    // ダメージや回復量の表示
     for (auto& p : m_popups)
     {
-        sf::Text text(FontManager::GetInstance().GetFont(),"");
+        sf::Text text(FontManager::GetInstance().GetFont(), "");
         text.setFont(FontManager::GetInstance().GetFont()); // 既存のフォント管理
         text.setString((p.isHeal ? "+" : "-") + std::to_string(p.value));
         text.setCharacterSize(24);
@@ -141,6 +150,13 @@ void BattleView::Render(sf::RenderWindow& window)
 
         window.draw(text);
     }
+    // ターゲットのサークル
+    DrawFocus(window);
+
+    // カメラ機能OFF
+    m_render.ResetCamera();
+    DrawCards(window);
+    DrawCostGain(window);
 }
 
 /// <summary>
@@ -182,10 +198,16 @@ void BattleView::DrawCharacters()
                     state = CharacterAnimState::WAIT;
                 }
 
+                // プレイヤーなら画像を反転
+                if (c->GetFaction() == Faction::Player)
+                {
+                    sprite->SetSpriteWidthMirror();
+                }
+
                 sprite->SetState(state);
                 sprite->SetPosition(c->GetPosition());
 
-                sprite->Draw(m_render);
+                sprite->Draw(m_render,c->GetData(),true);
             }
         };
 
@@ -202,34 +224,33 @@ void BattleView::DrawCards(sf::RenderWindow& window)
     // ===== 山札 =====
     m_cardRenderer->DrawDeck(m_font, m_render.GetWindow(), DECK_POS, CardManager::GetInstance().GetDeckCount());
 
-    // ===== 墓地 =====
-    m_cardRenderer->DrawGrave(m_font, m_render.GetWindow(), GRAVE_POS, CardManager::GetInstance().GetCemeteryCount());
+    //// ===== 墓地 =====
+    //m_cardRenderer->DrawGrave(m_font, m_render.GetWindow(), GRAVE_POS, CardManager::GetInstance().GetCemeteryCount());
 
     // ===== 手札 =====
-    if (!m_selectedActor)
-    {
-        return;
-    }
-
-    const int cardCount = m_selectedActor->GetCardCount();
     sf::Vector2f pos = HAND_START;
 
-    for (int i = 0; i < cardCount; ++i)
+    for (auto& p : m_context.GetAlivePlayers())
     {
-        sf::Vector2f drawPos = pos;
+        const int cardCount = p->GetCardCount();
 
-        // 選択カードを少し上に
-        if (i == m_selectedCard)
+        for (int i = 0; i < cardCount; ++i)
         {
-            drawPos.y -= SELECT_OFFSET_Y;
+            sf::Vector2f drawPos = pos;
+
+            // 選択カードを少し上に
+            if (i == m_selectedCard)
+            {
+                drawPos.y -= SELECT_OFFSET_Y;
+            }
+
+            // カードデータ取得
+            const CardData& data = p->GetCardData(i);
+            // 描画
+            m_cardRenderer->DrawSingleCard(m_font, m_render.GetWindow(), drawPos, data,p->GetData().iconKey);
+
+            pos.x += HAND_SPACING;
         }
-
-        // カードデータ取得
-        const CardData& data = m_selectedActor->GetCardData(i);
-        // 描画
-        m_cardRenderer->DrawSingleCard(m_font,m_render.GetWindow(),drawPos,data);
-
-        pos.x += HAND_SPACING;
     }
 }
 
@@ -308,6 +329,63 @@ sf::Vector2f BattleView::GetCharacterCenter(const std::shared_ptr<Character>& c)
 
     auto pos = c->GetPosition(); // 左上
     return {pos.x + CHAR_W * 0.5f,pos.y + CHAR_H * 0.5f};
+}
+
+void BattleView::UpdateCamera(float dt)
+{
+
+    auto& camera = CameraManager::GetInstance();
+
+    switch (m_phase)
+    {
+    case BattleViewPhase::SelectPlayer:
+    case BattleViewPhase::SelectCard:
+    {
+        // 全プレイヤーが収まる中心点を計算
+        const auto& players = m_context.GetPlayers();
+        if (players.empty()) break;
+
+        sf::Vector2f averageCenter{ 0.f, 0.f };
+        for (auto& p : players)
+        {
+            averageCenter += GetCharacterCenter(p);
+        }
+        averageCenter /= static_cast<float>(players.size());
+
+        camera.SetMove(averageCenter, 5.0f);
+        camera.SetZoom(1.0f, 2.0f);
+        camera.ViewStopFollow();
+        break;
+    }
+
+    case BattleViewPhase::SelectTarget:
+    {
+        if (m_targets.empty())
+        {
+            break;
+        }
+
+        sf::Vector2f targetCenter{ 0.f, 0.f };
+        for (auto& t : m_targets)
+        {
+            targetCenter += GetCharacterCenter(t);
+        }
+
+        targetCenter /= static_cast<float>(m_targets.size());
+
+        // ターゲット選択時は少しズームインして注目させる
+        camera.SetMove(targetCenter, 6.0f);
+        camera.SetZoom(0.7f, 3.0f);
+        break;
+    }
+    case BattleViewPhase::Default:
+        // 初期位置に戻る
+        camera.SetMove({ 640.0f, 360.0f }, 4.0f);
+        camera.SetZoom(1.0f, 2.0f);
+        break;
+    }
+
+    camera.ViewUpdate(dt);
 }
 
 sf::Vector2f BattleView::CalcDamagePopupPos(const std::shared_ptr<Character>& c)

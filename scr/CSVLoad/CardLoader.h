@@ -5,7 +5,7 @@
 #include "Entity/Card/CardDate.h"
 #include "CSVLoader.h"
 
-class CardLoader : public CSVLoader
+class CardLoader : public CSVLoader, public Singleton<CardLoader>
 {
 
     std::unordered_map<int, CardData> m_cards;

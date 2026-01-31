@@ -1,4 +1,6 @@
 #include "CardRenderer.h"
+#include "CSVLoad/TextureLoader/TextureLoader.h"
+
 #include <iostream>
 /// <summary>
 /// 山札の描画
@@ -40,7 +42,7 @@ void CardRenderer::DrawGrave(const sf::Font& arg_font, sf::RenderWindow& window,
 /// <param name="window"></param>
 /// <param name="pos">座標</param>
 /// <param name="card">カード</param>
-void CardRenderer::DrawSingleCard(const sf::Font& arg_font, sf::RenderWindow& window, sf::Vector2f pos, const CardData& cardData)
+void CardRenderer::DrawSingleCard(const sf::Font& arg_font, sf::RenderWindow& window, sf::Vector2f pos, const CardData& cardData, const std::string& IconKey)
 {
     // カードのベース（白地）
     sf::RectangleShape rect({ 120.f, 160.f });
@@ -68,6 +70,19 @@ void CardRenderer::DrawSingleCard(const sf::Font& arg_font, sf::RenderWindow& wi
     descText.setFillColor(sf::Color::Black);
     descText.setPosition({ pos.x + 5.0f, pos.y + 30.0f });
     window.draw(descText);
+
+    // 所持キャラクターのアイコン表示
+    auto tex = TextureLoader::GetInstance().GetTextureID(IconKey);
+    if (!tex)
+    {
+        // アイコンが見つからないとき何もしない
+        return;
+    }
+    sf::Sprite icon(*tex);
+    icon.setPosition({pos.x, pos.y + 100.0f});
+    icon.setOrigin({ icon.getLocalBounds().size.x, 0.0f });
+    icon.setScale(sf::Vector2f(-0.7f, 0.7f));
+    window.draw(icon);
 }
 
 

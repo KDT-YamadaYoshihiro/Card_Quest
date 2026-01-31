@@ -22,7 +22,8 @@ private:
 		StartTurn,
 		UserTurn,
 		EnemyTurn,
-		EndTurn
+		EndTurn,
+		Result,
 	};
 
 	// ユーザーターンフェーズ

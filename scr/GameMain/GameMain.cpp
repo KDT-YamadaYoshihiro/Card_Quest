@@ -95,7 +95,7 @@ void GameMain::Render()
 
 ENTRY_POINT{
 
-    GameMain::Instance().Run();
+    GameMain::GetInstance().Run();
 
     return 0;
 }

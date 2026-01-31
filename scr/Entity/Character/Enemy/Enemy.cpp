@@ -75,7 +75,7 @@ void EnemyCharacter::Update()
 void EnemyCharacter::Render(RenderSystem& render)
 {
     m_sprite->SetPosition(m_pos);
-    m_sprite->Draw(render);
+    m_sprite->Draw(render,m_data,true);
 }
 
 // 使用カードをランダム選択

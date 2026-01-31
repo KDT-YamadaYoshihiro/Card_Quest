@@ -83,7 +83,10 @@ void UserController::UpdateSelectPlayer(sf::RenderWindow& window)
     {
         return;
     }
-    int index = HitTestCharacter(GetMousePos(window), players);
+    // キャラクターはワールド座標で判定
+    sf::Vector2f worldPos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+    int index = HitTestCharacter(worldPos, players); 
+    
     if (index < 0)
     {
         return;
@@ -104,8 +107,8 @@ void UserController::UpdateSelectCard(sf::RenderWindow& window)
     {
         return;
     }
-    int index = HitTestHandCard(GetMousePos(window));
-
+    sf::Vector2f screenPos = window.mapPixelToCoords(sf::Mouse::getPosition(window), window.getDefaultView());
+    int index = HitTestHandCard(screenPos);
     if (index < 0)
     {
         return;
@@ -155,7 +158,9 @@ void UserController::UpdateSelectTarget(sf::RenderWindow& window)
         return;
     }
 
-    int index = HitTestCharacter(GetMousePos(window), m_targetCandidates);
+    // 現在のView設定に基づいたワールド座標を取得
+    sf::Vector2f worldPos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+    int index = HitTestCharacter(worldPos, m_targetCandidates);
     if (index < 0)
     {
         return;
@@ -269,16 +274,28 @@ void UserController::UpdateHandCardRects(const Character& actor)
 // ================= 補助 =================
 
 /// <summary>
-/// マウス座標
+/// マウスの「ワールド座標」を取得（キャラクター判定用）
 /// </summary>
-/// <param name="window"></param>
-/// <returns></returns>
-sf::Vector2f UserController::GetMousePos(sf::RenderWindow& window) const
+sf::Vector2f UserController::GetWorldMousePos(sf::RenderWindow& window) const
 {
-    auto pos = sf::Mouse::getPosition(window);
-    return { static_cast<float>(pos.x), static_cast<float>(pos.y) };
+    // 現在のウィンドウ内のマウスピクセル位置を取得
+    sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
+
+    // 現在のカメラ（View）の設定に基づいて、ワールド座標に変換
+    // これにより、ズームやスクロールの状態が反映された座標が返ります
+    return window.mapPixelToCoords(pixelPos);
 }
 
+/// <summary>
+/// マウスの「スクリーン座標」を取得（UI/カード判定用）
+/// </summary>
+sf::Vector2f UserController::GetScreenMousePos(sf::RenderWindow& window) const
+{
+    sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
+
+    // UIはカメラの影響を受けないため、デフォルトView（画面そのままの座標）で変換
+    return window.mapPixelToCoords(pixelPos, window.getDefaultView());
+}
 // デバッグ用描画
 void UserController::DrawDebug(sf::RenderWindow& window)
 {

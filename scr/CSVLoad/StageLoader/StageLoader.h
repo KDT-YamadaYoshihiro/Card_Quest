@@ -4,28 +4,13 @@
 #include "CSVLoad/CardLoader.h"
 #include "System/StageBulid/StageData.h"
 
-class StageLoader : public CSVLoader
+class StageLoader : public CSVLoader,public Singleton<StageLoader>
 {
 private:
-
+    friend class Singleton<StageLoader>;
     std::unordered_map<int, StageData> m_stageTable;
 
-	StageLoader() = default;
-	virtual ~StageLoader() = default;
-
 public:
-
-    /// <summary>
-    /// ÉRÉsÅ[ã÷é~
-    /// </summary>
-    /// <param name=""></param>
-    StageLoader(const StageLoader&) = delete;
-    StageLoader& operator = (const StageLoader&) = delete;
-    static StageLoader& GetInstance()
-    {
-        static StageLoader instance;
-        return instance;
-    }
 
     /// <summary>
     /// ì«Ç›çûÇ›

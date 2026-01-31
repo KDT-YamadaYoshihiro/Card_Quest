@@ -74,7 +74,9 @@ std::vector<std::shared_ptr<Character>> BattleContext::GetAliveEnemies() const
     for (const auto& e : m_enemies)
     {
         if (!e->GetData().dead)
+        {
             result.push_back(e);
+        }
     }
     return result;
 }

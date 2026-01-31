@@ -160,4 +160,10 @@ private:
 	/// <returns></returns>
 	sf::Vector2f GetCharacterCenter(const std::shared_ptr<Character>& c);
 
+	/// <summary>
+	/// ƒJƒƒ‰‚ÌXV
+	/// </summary>
+	/// <param name="dt"></param>
+	void UpdateCamera(float dt);
+
 };
