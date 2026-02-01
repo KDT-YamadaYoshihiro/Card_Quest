@@ -1,5 +1,7 @@
 id,filePath
-test,data/Bg/BG.png
+bg,data/Bg/BG.png
+CostFrame,data/CostFrame/CostFrame.png
+Title,data/Title/title.png
 アレス,data/Character/Player/player_0.png
 リュミエール,data/Character/Player/player_1.png
 グラント,data/Character/Player/player_2.png

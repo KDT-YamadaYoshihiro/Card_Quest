@@ -13,7 +13,7 @@ public:
 
 	IngameScene(sf::RenderWindow& arg_window):SceneBase()
 	{
-		std::cout << "Ingame" << std::endl;
+		ConsoleView::GetInstance().Add("IngameScene\n");
 		m_battle = std::make_shared<BattleSystem>(arg_window);
 	};
 	virtual ~IngameScene() = default;

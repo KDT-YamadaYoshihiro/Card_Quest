@@ -7,10 +7,11 @@
 #include "View/Font/FontManager.h"
 
 DeckBuildingScene::DeckBuildingScene()
-    :SceneBase(),
-    m_completeButton(50.0f, { 700.0f, 500.0f })
+    : SceneBase(),
+    m_completeButton(50.0f, { 700.0f, 600.0f })
 {
-	std::cout << "デッキ編成シーン" << std::endl;
+
+    ConsoleView::GetInstance().Add("DeckBuildingScene\n");
 	// カードプール構築
 	CardBuildPool::GetInstance().Build();
     m_deckBuildSystem.Init();
@@ -39,26 +40,38 @@ void DeckBuildingScene::Update(sf::RenderWindow& arg_window)
 
 	// デッキ編成システム更新
     m_deckBuildSystem.Update(mousePos, input.IsLeftClicked(),input.IsDragging(),input.IsLeftReleased(), wheel);
-    // 編成完了ボタン
+    // 編成完了ボタン(デッキ枚数が30枚以上の時)
     if (m_completeButton.IsClicked(mousePos, input.IsLeftClicked()))
     {
         if (m_deckBuildSystem.IsComplete())
         {
 			// CardManager にデッキをセット
             CardManager::GetInstance().InitDeck(m_deckBuildSystem.TakeDeck());
+            // Consoleのリセット
+            ConsoleView::GetInstance().Reset();
 			// シーン切り替え
 			SceneManager::GetInstance().ChangeScreen<IngameScene>(arg_window);
         }
-        // else: 30枚未満 → 何もしない or SE
+        
     }
 }
 
 void DeckBuildingScene::Render(sf::RenderWindow& arg_window)
 {
+    // 背景
+    auto tex = TextureLoader::GetInstance().GetTextureID("bg");
+    if (tex)
+    {
+        sf::Sprite sprite(*tex);
+        sprite.setPosition({ 0.0f,0.0f });
+        sprite.setScale({ 0.7f,0.7f });
+        arg_window.draw(sprite);
+    }
+
     // --- デッキ & プール描画 ---
 	m_deckBuildSystem.Draw(arg_window, FontManager::GetInstance().GetFont());
 
-  // --- 完了ボタン ---
+     // --- 完了ボタン ---
     m_completeButton.Draw(arg_window);
 }
 

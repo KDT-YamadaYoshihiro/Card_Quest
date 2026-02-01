@@ -1,7 +1,7 @@
 #include "DeckBuildSystem.h"
 #include "System/DeckBulid/CardBuildPool/CardBuildPool.h"
 #include "Entity/Card/CardFactory/CardFactory.h"
-#include <iostream>
+#include "View/ConsoleView/ConsoleView.h"
 
 void DeckBuildSystem::Init()
 {
@@ -131,7 +131,8 @@ bool DeckBuildSystem::AddFromPool(int poolIndex)
 {
     if (m_deckCards.size() >= MAX_DECK_SIZE)
     {
-		std::cout << "デッキの上限枚数に達しています" << std::endl;
+        ConsoleView::GetInstance().Add("デッキの上限枚数に達しています\n");
+
         return false;
     }
 
@@ -140,7 +141,7 @@ bool DeckBuildSystem::AddFromPool(int poolIndex)
 
     if (!card)
     {
-		std::cout << "プールからカードを取得できませんでした: " << poolIndex << std::endl;
+        ConsoleView::GetInstance().Add("プールからカードを取得できませんでした: " + std::to_string( poolIndex) + "\n");
         return false;
     }
 
@@ -154,7 +155,7 @@ bool DeckBuildSystem::RemoveFromPool(int deckIndex)
 {
     if (deckIndex >= m_deckCards.size())
     {
-		std::cout << "指定indexが範囲外です:" << deckIndex << std::endl;
+        ConsoleView::GetInstance().Add("指定indexが範囲外です:"  +  std::to_string(deckIndex) + "\n");
         return false;
     }
 

@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "../SceneBase.h"
+#include "Scene/SceneBase.h"
 
 
 class TitleScene : public SceneBase
@@ -12,7 +12,7 @@ public:
 
 	TitleScene():SceneBase()
 	{
-		std::cout << "Title" << std::endl;
+		ConsoleView::GetInstance().Add("TitleScene\n");
 	};
 
 

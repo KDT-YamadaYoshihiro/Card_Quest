@@ -12,6 +12,8 @@ void IngameScene::handleEvent(const sf::Event& event)
 {
 	if(m_battle->IsBattleEnd())
 	{
+		ConsoleView::GetInstance().Reset();
+
 		SceneManager::GetInstance().ChangeScreen<ResultScene>();
 	}
 }

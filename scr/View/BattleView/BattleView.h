@@ -74,7 +74,7 @@ public:
 	/// 描画
 	/// </summary>
 	/// <param name="window"></param>
-	void Render(sf::RenderWindow& window);
+	void Render(sf::RenderWindow& arg_window);
 
 	/// <summary>
 	/// アクションキャラ設定
@@ -93,7 +93,7 @@ public:
 	void SetTargetIndices(const std::vector<std::shared_ptr<Character>>& arg_target);
 
 	/// <summary>
-	/// コスト設定
+	/// 追加コスト設定
 	/// </summary>
 	/// <param name="arg_value"></param>
 	void ShowCostGain(int arg_value);
@@ -130,19 +130,36 @@ private:
 	/// カード描画
 	/// </summary>
 	/// <param name="window"></param>
-	void DrawCards(sf::RenderWindow& window);
+	void DrawCards(sf::RenderWindow& arg_window);
 
 	/// <summary>
 	/// ターゲットフォーカス（円を表示）
 	/// </summary>
 	/// <param name="window"></param>
-	void DrawFocus(sf::RenderWindow& window);
+	void DrawFocus(sf::RenderWindow& arg_window);
 
 	/// <summary>
 	/// コスト表示
 	/// </summary>
+	void DrawCost(sf::RenderWindow& arg_window);
+
+	/// <summary>
+	/// 追加コスト表示
+	/// </summary>
 	/// <param name="window"></param>
-	void DrawCostGain(sf::RenderWindow& window);
+	void DrawCostGain(sf::RenderWindow& arg_window);
+
+	/// <summary>
+	/// ステージ名の表示
+	/// </summary>
+	/// <param name="arg_window"></param>
+	void DrawStageName(sf::RenderWindow& arg_window);
+
+	/// <summary>
+	/// ターンバーナー表示
+	/// </summary>
+	/// <param name="window"></param>
+	void DrawTurnBanner(sf::RenderWindow& window);
 
 	/// <summary>
 	/// ターゲット情報のリセット

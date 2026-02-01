@@ -133,6 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="scr\View\ConsoleView\ConsoleView.cpp" />
     <ClCompile Include="scr\CSVLoad\StageLoader\StageLoader.cpp" />
     <ClCompile Include="scr\System\PartyBulid\PartyBuildContext\PartyBuildContext.cpp" />
     <ClCompile Include="scr\System\PartyBulid\PartyBulidController\PartyBuildController.cpp" />
@@ -155,7 +156,6 @@
     <ClCompile Include="scr\Entity\Character\Player\Player.cpp" />
     <ClCompile Include="scr\CSVLoad\TextureLoader\TextureLoader.cpp" />
     <ClCompile Include="scr\GameMain\GameMain.cpp" />
-    <ClCompile Include="scr\System\Battle\SelectTarget\TargetSelect.cpp" />
     <ClCompile Include="scr\Scene\PartyBuildScene\PartyBuildScene.cpp" />
     <ClCompile Include="scr\View\Render\Animetion\Animation.cpp" />
     <ClCompile Include="scr\View\CameraManager\CameraManager.cpp" />
@@ -170,6 +170,7 @@
     <ClCompile Include="scr\View\StageBulidView\StageBuildView.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="scr\View\ConsoleView\ConsoleView.h" />
     <ClInclude Include="scr\CSVLoad\StageLoader\StageLoader.h" />
     <ClInclude Include="scr\System\PartyBulid\PartyBuildContext\PartyBuildContext.h" />
     <ClInclude Include="scr\System\PartyBulid\PartyBulidController\PartyBuildController.h" />
@@ -203,7 +204,6 @@
     <ClInclude Include="scr\CSVLoad\TextureLoader\TextureLoader.h" />
     <ClInclude Include="scr\GameMain\GameMain.h" />
     <ClInclude Include="scr\GameMain\WindowSetting.h" />
-    <ClInclude Include="scr\System\Battle\SelectTarget\TargetSelect.h" />
     <ClInclude Include="scr\Scene\PartyBuildScene\PartyBuildScene.h" />
     <ClInclude Include="scr\System\InPutManager\InPutMouseManager.h" />
     <ClInclude Include="scr\UI\CircleButton.h" />

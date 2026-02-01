@@ -13,42 +13,132 @@ private:
     // キャラクター
     std::vector<std::shared_ptr<Character>> m_players;
     std::vector<std::shared_ptr<Character>> m_enemies;
-    
+
     // エネミーID
     std::vector<int> m_enemyIds;
 
     // ステージID
     int m_stageId;
 
+    // 
+    std::vector<std::shared_ptr<Character>> m_focusTargets;
+
+    // フォーカスの表示有無
+    bool IsFocusDraw = false;
+
+    // フェーズ
+    int m_currentTurnPhase = 0;
+
 public:
 
-    // 初期化
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    /// <param name="arg_enemies"></param>
+    /// <returns></returns>
     bool Init(const std::vector<std::shared_ptr<Character>>& arg_enemies);
-    
-    // プレイヤーメンバーのセット
+
+    /// <summary>
+    /// Partyメンバーのセット
+    /// </summary>
+    /// <param name="arg_players"></param>
     void SetPlayers(const std::vector<std::shared_ptr<Character>>& arg_players);
 
-    // エネミーのセット
+    /// <summary>
+    /// 生成エネミーのセット
+    /// </summary>
+    /// <param name="arg_enemyIds"></param>
     void SetEnemyIds(std::vector<int> arg_enemyIds);
     std::vector<int> GetEnemyIds();
 
+    /// <summary>
+    /// stageIDのセット・取得
+    /// </summary>
+    /// <param name="arg_stageId"></param>
     void SetStageId(const int arg_stageId);
+    int GetStageId() const;
 
-    // キャラクターの取得
+    /// <summary>
+    /// キャラクターのセット
+    /// </summary>
+    /// <returns></returns>
     const std::vector<std::shared_ptr<Character>>& GetPlayers() const;
     const std::vector<std::shared_ptr<Character>>& GetEnemies() const;
 
-    // 生存しているキャラクターの取得
+    /// <summary>
+    /// 生存しているキャラクターのセット
+    /// </summary>
+    /// <returns></returns>
     std::vector<std::shared_ptr<Character>> GetAlivePlayers() const;
     std::vector<std::shared_ptr<Character>> GetAliveEnemies() const;
 
 
-    // 全滅判定
+    /// <summary>
+    /// 全滅判定
+    /// </summary>
+    /// <returns></returns>
     bool IsPlayerAllDead() const;
     bool IsEnemyAllDead() const;
 
-    // ターゲット候補作作成
+    /// <summary>
+    /// ターゲット候補の作成
+    /// </summary>
+    /// <param name="targetType"></param>
+    /// <param name="actorFaction"></param>
+    /// <param name="actor"></param>
+    /// <returns></returns>
     std::vector<std::shared_ptr<Character>> CreateTargetCandidates(TargetType targetType, Faction actorFaction, const std::shared_ptr<Character>& actor) const;
 
 
+    /// <summary>
+    /// コントローラーの現状ホーバー・選択情報の取得
+    /// </summary>
+    /// <returns></returns>
+    int GetHoveredCardIndex() const;
+    std::shared_ptr<Character> GetHoveredTarget() const;
+
+    void SetFocusTargets(const std::vector<std::shared_ptr<Character>>& targets);
+    void ClearFocusTargets();
+    const std::vector<std::shared_ptr<Character>>& GetFocusTargets() const;
+
+
+    /// <summary>
+    /// UI上の通し番号からカードIDを取得する
+    /// </summary>
+    int GetCardIdByGlobalIndex(int globalIndex) const;
+
+    /// <summary>
+    /// カードIDから所持しているキャラクターを検索する
+    /// </summary>
+    std::shared_ptr<Character> GetCharacterByCardId(int cardId) const;
+
+    /// <summary>
+    /// カードIDからそのキャラ内でのローカルインデックスを取得する
+    /// </summary>
+    int GetLocalCardIndex(const std::shared_ptr<Character>& actor, int cardId) const;
+
+
+    /// <summary>
+    /// 表示・非表示の取得
+    /// </summary>
+    /// <returns></returns>
+    bool GetFocusDraw() const;
+
+    /// <summary>
+    /// 表示・非表示設定
+    /// </summary>
+    /// <param name="arg_draw"></param>
+    void SetFocusDraw(bool arg_draw);
+
+    /// <summary>
+    /// フェーズのセット
+    /// </summary>
+    /// <param name="phase"></param>
+    void SetTurnPhase(int phase);
+
+    /// <summary>
+    /// フェーズの主得
+    /// </summary>
+    /// <returns></returns>
+    int GetTurnPhase() const;
 };

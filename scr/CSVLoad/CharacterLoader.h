@@ -1,6 +1,5 @@
 ﻿#pragma once
 #include <unordered_map>
-#include <iostream>
 #include "Entity/Character/CharacterData.h"
 #include "CSVLoader.h"
 
@@ -17,7 +16,7 @@ public:
     {
         std::ifstream ifs(path);
         if (!ifs.is_open()) {
-			std::cout << "指定するファイルが見つかりません: " << path << std::endl;
+            ConsoleView::GetInstance().Add("指定するファイルが見つかりません: " + path + "\n");
             return false;
         }
         std::string line;
@@ -51,7 +50,8 @@ public:
             m_characters[data.charaId] = data;
 
 #ifdef _DEBUG
-            std::cout << "Loaded Character ID: " << data.charaId << std::endl;
+            ConsoleView::GetInstance().Add("Loaded Character ID: " + std::to_string(data.charaId) + "\n");
+
 #endif
         }
         return true;
@@ -61,7 +61,15 @@ public:
     {
         auto it = m_characters.find(id);
 
-        return (it != m_characters.end()) ? &it->second : nullptr;
+        if (it != m_characters.end())
+        {
+            return &it->second;
+        }
+        else
+        {
+            ConsoleView::GetInstance().Add("指定したIDは存在しません: " + std::to_string(id) + "\n");
+            return nullptr;
+        }
     }
 
 };

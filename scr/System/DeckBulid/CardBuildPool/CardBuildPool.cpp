@@ -1,4 +1,5 @@
 #include "CardBuildPool.h"
+#include "View/ConsoleView/ConsoleView.h"
 
 // プールの構築
 void CardBuildPool::Build()
@@ -59,7 +60,8 @@ std::unique_ptr<Card> CardBuildPool::TakeCard(int id)
             return card;
         }
     }
-	std::cout << "指定されたIDのカードはプールに存在しません: " << id << std::endl;
+    ConsoleView::GetInstance().Add("指定されたIDのカードはプールに存在しません: " + std::to_string(id) + "\n");
+
     return nullptr;
 }
 
@@ -69,7 +71,7 @@ void CardBuildPool::ReturnCard(std::unique_ptr<Card>&& card)
 
     if (!card)
     {
-        std::cout << "存在しないカードです" << std::endl;
+        ConsoleView::GetInstance().Add("存在しないカードです\n");
         return;
     }
 

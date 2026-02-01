@@ -8,7 +8,7 @@
 StageBulidScene::StageBulidScene(sf::RenderWindow& arg_window)
 {
     // 
-    std::cout << "StageBulidScene" << std::endl;
+    ConsoleView::GetInstance().Add("StageBulidScene\n");
 
     Init(arg_window);
 }
@@ -26,7 +26,7 @@ void StageBulidScene::Init(sf::RenderWindow& arg_window)
     m_controller = std::make_unique<StageBulidController>(m_context);
 
     // Œˆ’èƒ{ƒ^ƒ“
-    m_button = std::make_unique<CircleButton>(50.0f, sf::Vector2f(700.0f,700.0f));
+    m_button = std::make_unique<CircleButton>(50.0f, sf::Vector2f(700.0f,600.0f));
 }
 
 void StageBulidScene::handleEvent(const sf::Event& event)
@@ -61,6 +61,16 @@ void StageBulidScene::Update(sf::RenderWindow& arg_window)
 
 void StageBulidScene::Render(sf::RenderWindow& arg_window)
 {
+    // ”wŒi
+    auto tex = TextureLoader::GetInstance().GetTextureID("bg");
+    if (tex)
+    {
+        sf::Sprite sprite(*tex);
+        sprite.setPosition({ 0.0f,0.0f });
+        sprite.setScale({ 0.7f,0.7f });
+        arg_window.draw(sprite);
+    }
+
     m_view->Draw(m_context);
     m_button->Draw(arg_window);
 }
@@ -82,6 +92,8 @@ void StageBulidScene::DecideStage(sf::RenderWindow& arg_window)
     // vector<int>‚É•ÏŠ·
     std::vector<int> vec(stage->enemyIds.begin(), stage->enemyIds.end());
     session.battleContext->SetEnemyIds(vec); // std::array<int,3>
+
+    ConsoleView::GetInstance().Reset();
 
     SceneManager::GetInstance().ChangeScreen<PartyBuildScene>(arg_window);
 }

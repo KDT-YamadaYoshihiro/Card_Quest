@@ -23,7 +23,7 @@ BattleSystem::BattleSystem(sf::RenderWindow& arg_window)
 	// 生成・初期化
 	if (!Init(arg_window))
 	{
-		std::cout << "BattleSystem/Init():false" << std::endl;
+		ConsoleView::GetInstance().Add("BattleSysytem/Init():false\n");
 	}
 
 	// 座標の初期化
@@ -40,7 +40,7 @@ bool BattleSystem::Init(sf::RenderWindow& arg_window)
 	m_render = std::make_unique<RenderSystem>(arg_window);
 	if (!m_render)
 	{
-		std::cout << "BattleSysytem/m_render:nullptr" << std::endl;
+		ConsoleView::GetInstance().Add("BattleSystem/m_render:nullptr\n");
 		return false;
 	}
 
@@ -48,39 +48,36 @@ bool BattleSystem::Init(sf::RenderWindow& arg_window)
 	auto& session = SceneManager::GetInstance().GetSession();
 	m_context = session.battleContext;
 	if (!m_context) {
-		std::cout << "BattleSystem/m_context:nullptr" << std::endl;
-		return false;
-	}
-	// コスト
-	m_costManager = std::make_unique<CostManager>();
-	if (!m_costManager)
-	{
-		std::cout << "BattleSystem/m_costManager:nullptr" << std::endl;;
+		ConsoleView::GetInstance().Add("BattleSystem/ m_context:nullptr\n");
 		return false;
 	}
 	// キャラクターの作成
 	m_players = m_context->GetPlayers();
 	for (auto& id : m_context->GetEnemyIds())
 	{
-		m_enemies.push_back(CharacterFactory::GetInstance().CreateCharacter<EnemyCharacter>(id, 2));
+		auto enemy = CharacterFactory::GetInstance().CreateCharacter<EnemyCharacter>(id, 2);
+		enemy->AddCard(COMMON_CARDID);
+		enemy->AddCard(UNIQUE_CARDID + id);
+		m_enemies.push_back(enemy);
+
 	}
 
 
 	// 生成確認
 	if (m_players.empty()) {
-		std::cout << "BattleSystem/m_players:empty" << std::endl;
+		ConsoleView::GetInstance().Add("BattleSystem/m_players:emptyr\n");
 		return false;
 	}
 	if (m_enemies.empty())
 	{
-		std::cout << "BattleSysyte/m_enemis:empty" << std::endl;
+		ConsoleView::GetInstance().Add("BattleSystem/m_enemies:emptyr\n");
 		return false;
 	}
 
 	// コンテックスの初期化
 	if (!m_context->Init(m_enemies))
 	{
-		std::cout << "BattleSystem/m_context->Init() : false" << std::endl;
+		ConsoleView::GetInstance().Add("BattleSystem / m_context->Init() : false\n");
 		return false;
 	}
 
@@ -89,7 +86,7 @@ bool BattleSystem::Init(sf::RenderWindow& arg_window)
 	m_battleView = std::make_unique<BattleView>(*m_context, *m_render);
 	if (!m_battleView)
 	{
-		std::cout << "BattleSysytem/m_battleView:nullptr" << std::endl;
+		ConsoleView::GetInstance().Add("BattleSystem / m_battleView : nullptr\n");
 		return false;
 	}
 
@@ -97,11 +94,11 @@ bool BattleSystem::Init(sf::RenderWindow& arg_window)
 	m_userController = std::make_unique<UserController>(*m_context, *m_battleView);
 	if (!m_userController)
 	{
-		std::cout << "BattleSystem/m_userController:nullptr" << std::endl;
+		ConsoleView::GetInstance().Add("BattleSystem / m_userController : null_ptr\n");
 		return false;
 	}
 
-	std::cout << "BattleSystem/Init():成功" << std::endl;
+	ConsoleView::GetInstance().Add("BattleSystem /Init() : true\n");
 	return true;
 }
 
@@ -114,15 +111,22 @@ void BattleSystem::Update(sf::RenderWindow& window)
 	switch (m_phase)
 	{
 	case BattleSystem::TurnPhase::StartTurn:
+		ConsoleView::GetInstance().Add("TurnPhase::StartTurn\n");
 		StartTurn();
 		break;
 	case BattleSystem::TurnPhase::UserTurn:
+		ConsoleView::GetInstance().Add("TurnPhase::UserTurn\n");
+
 		UserTurn(window);
 		break;
 	case BattleSystem::TurnPhase::EnemyTurn:
+		ConsoleView::GetInstance().Add("TurnPhase::EnemyTurn\n");
+
 		EnemyTurn();
 		break;
 	case BattleSystem::TurnPhase::EndTurn:
+		ConsoleView::GetInstance().Add("TurnPhase::EndTurn\n");
+
 		EndTurn();
 		break;
 	case BattleSystem::TurnPhase::Result:
@@ -135,12 +139,15 @@ void BattleSystem::Update(sf::RenderWindow& window)
 	// キャラクター系の更新
 	for (auto& p : m_players)
 	{
+
 		p->Update();
 	}
 	for (auto& e : m_enemies)
 	{
 		e->Update();
 	}
+
+	m_context->SetTurnPhase(static_cast<int>(m_phase));
 
 	m_battleView->Update(1.0f / 60.0f);
 }
@@ -198,7 +205,7 @@ void BattleSystem::StartTurn()
 {
 
 	// コスト回復
-	m_costManager->ResetCost();
+	CostManager::GetInstance().ResetCost();
 
 	// 生存判定
 	if (IsBattleEnd())
@@ -222,6 +229,7 @@ void BattleSystem::UserTurn(sf::RenderWindow& window)
 	{
 	case BattleSystem::UserTurnPhase::Start:
 
+		ConsoleView::GetInstance().Add("UserTurnPhase::Start\n");
 		// 各プレイヤーにカード配布
 		for (auto& p : m_context->GetAlivePlayers())
 		{
@@ -232,6 +240,8 @@ void BattleSystem::UserTurn(sf::RenderWindow& window)
 
 		break;
 	case BattleSystem::UserTurnPhase::Select:
+
+		ConsoleView::GetInstance().Add("UserTurnPhase::Select\n");
 
 		// 選択系
 		// キャラクター、カード、ターゲット
@@ -247,15 +257,16 @@ void BattleSystem::UserTurn(sf::RenderWindow& window)
 		break;
 	case BattleSystem::UserTurnPhase::Action:
 	{
+		ConsoleView::GetInstance().Add("UserTurnPhase::Action\n");
 
 		action = m_userController->ConsumeAction();
 
-		if (!m_costManager->CanConsume(1))
+		if (!CostManager::GetInstance().CanConsume(1))
 		{
 			return;
 		}
 
-		m_costManager->Consume(1);
+		CostManager::GetInstance().Consume(1);
 
 		// データ取得
 		const CardData& card = CardManager::GetInstance().GetCardData(action.cardId);
@@ -264,10 +275,10 @@ void BattleSystem::UserTurn(sf::RenderWindow& window)
 		ApplyAction(action.actor, action.targets, card);
 
 		// コストの増減
-		m_costManager->AddCost(card.actionPlus);
+		CostManager::GetInstance().AddCost(card.actionPlus);
 		m_battleView->ShowCostGain(card.actionPlus);
 
-		// ここに問題あるかも？
+
 		// 使用カードは墓地へ
 		discardId = action.actor->DiscardCardById(action.cardId);
 		CardManager::GetInstance().SendCardIdToCemetery(discardId);
@@ -281,9 +292,11 @@ void BattleSystem::UserTurn(sf::RenderWindow& window)
 	}
 	case BattleSystem::UserTurnPhase::EndCheck:
 
+		ConsoleView::GetInstance().Add("UserTurnPhase::EndCheck\n");
+
 		// 行動数0 
 		// true:エネミーターンへ / false:ユーザーターンの続行
-		if (m_costManager->IsEmpty())
+		if (CostManager::GetInstance().IsEmpty())
 		{
 			m_userPhase = UserTurnPhase::EndUserTurn;
 		}
@@ -294,6 +307,9 @@ void BattleSystem::UserTurn(sf::RenderWindow& window)
 		break;
 
 	case BattleSystem::UserTurnPhase::EndUserTurn:
+
+		ConsoleView::GetInstance().Add("UserTurnPhase::EndUserTurn\n");
+
 		// エネミーターンへ
 		m_userPhase = UserTurnPhase::Start;
 		m_phase = TurnPhase::EnemyTurn;
@@ -312,27 +328,32 @@ void BattleSystem::EnemyTurn()
 	switch (m_enemyPhase)
 	{
 	case BattleSystem::EnemyTurnPhase::Start:
-		
+	{
+		// ターンの最初に「今から動く敵」を確定させる
+		m_actingEnemies = m_context->GetAliveEnemies();
 		m_currentEnemyIndex = 0;
-		m_currentEnemy.reset();
-		m_enemyFinalTargets.clear();
-		m_enemyPhase = EnemyTurnPhase::Select;
 
+		if (m_actingEnemies.empty()) {
+			m_enemyPhase = EnemyTurnPhase::End;
+		}
+		else {
+			m_enemyPhase = EnemyTurnPhase::Select;
+		}
 		break;
+	}
 	case BattleSystem::EnemyTurnPhase::Select:
 	{
-		const auto& enemies = m_context->GetAliveEnemies();
+		// 行動予定リストから取得
+		m_currentEnemy = m_actingEnemies[m_currentEnemyIndex];
 
-		if (enemies.size() <= 0)
-		{
-			m_enemyPhase = EnemyTurnPhase::End;
+		// もし直前の味方の反撃などで死んでいた場合の安全策
+		if (!m_currentEnemy || m_currentEnemy->IsDead()) {
+			m_enemyPhase = EnemyTurnPhase::NextEnemy;
 			break;
 		}
 
-		m_currentEnemy = enemies[m_currentEnemyIndex];
 		m_enemyFinalTargets.clear();
 		m_enemyPhase = EnemyTurnPhase::Action;
-
 		break;
 	}
 	case BattleSystem::EnemyTurnPhase::Action:
@@ -382,12 +403,19 @@ void BattleSystem::EnemyTurn()
 		break;
 	}
 	case BattleSystem::EnemyTurnPhase::NextEnemy:
-		
+	{
 		++m_currentEnemyIndex;
-		m_enemyPhase = EnemyTurnPhase::Select;
-		
-		break;
 
+		// 行動予定リストのサイズと比較する
+		if (m_currentEnemyIndex < static_cast<int>(m_actingEnemies.size())) {
+			m_enemyPhase = EnemyTurnPhase::Select;
+		}
+		else {
+			m_enemyPhase = EnemyTurnPhase::End;
+			m_actingEnemies.clear(); // リストを空にする
+		}
+		break;
+	}
 	case BattleSystem::EnemyTurnPhase::End:
 		m_enemyPhase = EnemyTurnPhase::Start;
 		m_phase = TurnPhase::EndTurn;
@@ -442,24 +470,25 @@ void BattleSystem::ApplyAction(const std::shared_ptr<Character>& actor, const st
 		{
 		case ActionType::ATTCK:
 		{
-			int damage = Calculation::GetDamage(actor->GetData().magicAtk, card.power, target->GetData().def);
-			target->TakeDamage(damage);
-			// ダメージ表示
-			m_battleView->AddDamagePopup(m_battleView->CalcDamagePopupPos(target),damage,false);
-			// 確認用ログ
-			std::cout << actor->GetData().name << "が" << target->GetData().name << "に" << damage << "与えた" << std::endl;
-			std::cout << target->GetData().maxHp << "/" << target->GetData().hp << std::endl;
-			break;
-		}
-		case ActionType::MAGIC:
-		{
 			int damage = Calculation::GetDamage(actor->GetData().atk, card.power, target->GetData().def);
 			target->TakeDamage(damage);
 			// ダメージ表示
 			m_battleView->AddDamagePopup(m_battleView->CalcDamagePopupPos(target),damage,false);
 			// 確認用ログ
-			std::cout << actor->GetData().name << "が" << target->GetData().name << "に" << damage << "与えた" << std::endl;
-			std::cout << target->GetData().maxHp << "/" << target->GetData().hp << std::endl;
+			ConsoleView::GetInstance().Add(actor->GetData().name + "が" + target->GetData().name + "に" + std::to_string(damage) + "与えた\n");
+			ConsoleView::GetInstance().Add(std::to_string(target->GetData().maxHp) + "/" + std::to_string(target->GetData().hp) + "\n");
+
+			break;
+		}
+		case ActionType::MAGIC:
+		{
+			int damage = Calculation::GetDamage(actor->GetData().magicAtk, card.power, target->GetData().def);
+			target->TakeDamage(damage);
+			// ダメージ表示
+			m_battleView->AddDamagePopup(m_battleView->CalcDamagePopupPos(target),damage,false);
+			// 確認用ログ
+			ConsoleView::GetInstance().Add(actor->GetData().name + "が" + target->GetData().name + "に" + std::to_string(damage) + "与えた\n");
+			ConsoleView::GetInstance().Add(std::to_string(target->GetData().maxHp) + "/" + std::to_string(target->GetData().hp) + "\n");
 			break;
 		}
 
@@ -470,8 +499,8 @@ void BattleSystem::ApplyAction(const std::shared_ptr<Character>& actor, const st
 			// ダメージ表示
 			m_battleView->AddDamagePopup(m_battleView->CalcDamagePopupPos(target),heal,true);
 			// 確認用ログ
-			std::cout << actor->GetData().name << "が" << target->GetData().name << "に" << heal << "回復させた" << std::endl;
-			std::cout << target->GetData().maxHp << "/" << target->GetData().hp << std::endl;
+			ConsoleView::GetInstance().Add(actor->GetData().name + "が" + target->GetData().name + "に" + std::to_string(heal) + "回復させた\n");
+			ConsoleView::GetInstance().Add(std::to_string(target->GetData().maxHp) + "/" + std::to_string(target->GetData().hp) + "\n");
 
 			break;
 		}

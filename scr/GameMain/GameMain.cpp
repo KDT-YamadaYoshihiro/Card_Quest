@@ -7,6 +7,7 @@
 #include "View/CameraManager/CameraManager.h"
 #include "WindowSetting.h"
 #include "View/Font/FontManager.h"
+#include "View/ConsoleView/ConsoleView.h"
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Sleep.hpp>
@@ -89,6 +90,7 @@ void GameMain::Render()
 {
     m_window.clear(sf::Color::Black);
     SceneManager::GetInstance().Render(m_window);
+    ConsoleView::GetInstance().RenderFrame();
     m_window.display();
 }
 

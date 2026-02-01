@@ -1,5 +1,6 @@
 #include "CardFactory.h"
 #include "CSVLoad/CardLoader.h"
+#include "View/ConsoleView/ConsoleView.h"
 
 // 単体生成
 std::unique_ptr<Card> CardFactory::CreateCard(int cardId)
@@ -8,12 +9,13 @@ std::unique_ptr<Card> CardFactory::CreateCard(int cardId)
 
 	if (!src)
 	{
-		std::cout << "dataが見つかりませんでした" << cardId << std::endl;
+		ConsoleView::GetInstance().Add("dataが見つかりませんでした" + std::to_string(cardId) + "\n");
 		return nullptr;
 	}
 
 	CardData data = *src;
 
+	ConsoleView::GetInstance().Add("カード:" + data.name + "を生成" + "\n");
 	return std::make_unique<Card>(data, CardZone::None);
 
 }
@@ -27,6 +29,7 @@ std::vector<std::unique_ptr<Card>> CardFactory::CreateBuildCards(int cardId)
 	// プレイヤー用のみ作成
 	if (cardId < 100 || cardId >= 1000) {
 		std::cout << "このIDはプレイヤー用ではございません" << std::endl;
+		ConsoleView::GetInstance().Add("このIDはプレイヤー用ではございません" + std::to_string(cardId) + "\n");
 		return result;
 	}
 
@@ -34,7 +37,8 @@ std::vector<std::unique_ptr<Card>> CardFactory::CreateBuildCards(int cardId)
 
 	if (!src)
 	{
-		std::cout << "dataが見つかりませんでした" << cardId << std::endl;
+		ConsoleView::GetInstance().Add("dataが見つかりませんでした" + std::to_string(cardId) + "\n");
+
 		return result;
 	}
 

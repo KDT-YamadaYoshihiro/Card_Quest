@@ -1,6 +1,8 @@
 #include "TitleScene.h"
 #include "Scene/SceneManager/SceneManager.h"
 #include "Scene/StageBuildScene/StageBulidScene.h"
+#include "View/Font/FontManager.h"
+#include "System/InPutManager/InPutMouseManager.h"
 #include <SFML/Graphics.hpp>
 
 
@@ -14,9 +16,12 @@ void TitleScene::handleEvent(const sf::Event& event)
 
 void TitleScene::Update(sf::RenderWindow& arg_window)
 {
+    InPutMouseManager::GetInstance().Update(arg_window);
+
     // キーボード判定
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space))
+    if (InPutMouseManager::GetInstance().IsLeftClicked())
     {
+        ConsoleView::GetInstance().Reset();
         SceneManager::GetInstance().ChangeScreen<StageBulidScene>(arg_window);
     }
 
@@ -24,14 +29,32 @@ void TitleScene::Update(sf::RenderWindow& arg_window)
 
 void TitleScene::Render(sf::RenderWindow& window)
 {
-    auto tex = TextureLoader::GetInstance().GetTextureID("test");
+    auto bg = TextureLoader::GetInstance().GetTextureID("bg");
 
-	if (tex)
+	if (bg)
 	{
-		sf::Sprite sprite(*tex);
+		sf::Sprite sprite(*bg);
         sprite.setPosition({ 0.0f,0.0f });
+        sprite.setScale({ 0.7f,0.7f });
         window.draw(sprite);
 	}
+
+    auto title = TextureLoader::GetInstance().GetTextureID("Title");
+
+    if (title)
+    {
+        sf::Sprite sprite(*title);
+        sprite.setPosition({ 100.0f,0.0f });
+        sprite.setScale({ 0.7f,0.7f });
+        window.draw(sprite);
+    }
+
+
+    sf::Text text(FontManager::GetInstance().GetFont(), "CLICK to START");
+    text.setPosition({ 400.0f, 400.0f });
+    text.setScale({ 2.0f,2.0f });
+    window.draw(text);
+
 }
 
 void TitleScene::End()

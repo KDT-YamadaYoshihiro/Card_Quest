@@ -4,6 +4,7 @@
 #include "Entity/Character/Player/Player.h"
 #include "Entity/Character/Enemy/Enemy.h"
 #include "CSVLoad/CharacterLoader.h"
+#include "View/ConsoleView/ConsoleView.h"
 
 class CharacterFactory : public Singleton<CharacterFactory>
 {
@@ -21,7 +22,7 @@ public:
         if (!src)
         {
 #ifdef _DEBUG
-            std::cout << id << "は存在しないIDです。" << std::endl;
+            ConsoleView::GetInstance().Add("存在しないIDです : " + std::to_string(id) + "\n");
 #endif // _DEBUG
 
             return nullptr; // 存在しない ID
@@ -35,6 +36,8 @@ public:
 
 #ifdef _DEBUG
         std::cout << id << "を生成" << std::endl;
+        ConsoleView::GetInstance().Add("キャラクター" + data.name + "を生成" + "\n");
+
 #endif // _DEBUG
 
         return std::make_shared<T>(data, maxCardSlot);

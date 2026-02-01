@@ -14,12 +14,10 @@ struct UserAction
 
 enum class PlayerSelectPhase
 {
-    SELECT_PLAYER,
-    SELECT_CARD,
-    CREATE_TARGETS,
-    SELECT_TARGET,
-    CONFIRM,
-    DONE
+    SELECT_CARD,    // カード選択
+    CREATE_TARGETS, // ターゲット候補作成
+    SELECT_TARGET,  // ターゲット選択
+    DONE            // 何もしない
 };
 
 // クリック判定用

@@ -2,6 +2,9 @@
 #include "CSVLoad/TextureLoader/TextureLoader.h"
 #include "View/Font/FontManager.h"
 #include "Entity/Card/CardManager/CardManager.h"
+#include "System/Battle/Cost/CostManager.h"
+#include "CSVLoad/StageLoader/StageLoader.h"
+
 
 // 座標系
 namespace
@@ -81,6 +84,7 @@ void BattleView::SetTargetIndices(const std::vector<std::shared_ptr<Character>>&
     m_targets = arg_target;
 }
 
+
 /// <summary>
 /// コスト設定
 /// </summary>
@@ -121,18 +125,19 @@ void BattleView::AddDamagePopup(const sf::Vector2f& arg_pos, int arg_value, bool
 /// 描画
 /// </summary>
 /// <param name="window"></param>
-void BattleView::Render(sf::RenderWindow& window)
+void BattleView::Render(sf::RenderWindow& arg_window)
 {
     // カメラ機能ON
     m_render.ApplyCamera();
 
     // 背景
-    auto tex = TextureLoader::GetInstance().GetTextureID("test");
+    auto tex = TextureLoader::GetInstance().GetTextureID("bg");
     if (tex)
     {
         sf::Sprite sprite(*tex);
-        sprite.setPosition({ 0.0f,0.0f });
-        window.draw(sprite);
+        sprite.setPosition({ -300.0f,-250.0f });
+        sprite.setScale({ 0.9f, 0.9f });
+        arg_window.draw(sprite);
     }
 
 
@@ -148,15 +153,18 @@ void BattleView::Render(sf::RenderWindow& window)
         text.setPosition(p.position);
         text.setFillColor(p.isHeal ? sf::Color::Green : sf::Color::Red);
 
-        window.draw(text);
+        arg_window.draw(text);
     }
     // ターゲットのサークル
-    DrawFocus(window);
+    DrawFocus(arg_window);
 
     // カメラ機能OFF
     m_render.ResetCamera();
-    DrawCards(window);
-    DrawCostGain(window);
+    DrawCards(arg_window);
+    DrawCost(arg_window);
+    DrawCostGain(arg_window);
+    DrawTurnBanner(arg_window);
+    DrawStageName(arg_window);
 }
 
 /// <summary>
@@ -219,13 +227,11 @@ void BattleView::DrawCharacters()
 /// カード描画
 /// </summary>
 /// <param name="window"></param>
-void BattleView::DrawCards(sf::RenderWindow& window)
+void BattleView::DrawCards(sf::RenderWindow& arg_window)
 {
     // ===== 山札 =====
     m_cardRenderer->DrawDeck(m_font, m_render.GetWindow(), DECK_POS, CardManager::GetInstance().GetDeckCount());
 
-    //// ===== 墓地 =====
-    //m_cardRenderer->DrawGrave(m_font, m_render.GetWindow(), GRAVE_POS, CardManager::GetInstance().GetCemeteryCount());
 
     // ===== 手札 =====
     sf::Vector2f pos = HAND_START;
@@ -258,45 +264,131 @@ void BattleView::DrawCards(sf::RenderWindow& window)
 /// ターゲットに円表示
 /// </summary>
 /// <param name="window"></param>
-void BattleView::DrawFocus(sf::RenderWindow& window)
+void BattleView::DrawFocus(sf::RenderWindow& arg_window)
 {
 
-    constexpr float RADIUS = 80.f;
+    // Contextから現在フォーカスすべき対象（1体または複数）を取得
+    const auto& focusTargets = m_context.GetFocusTargets();
 
-    sf::CircleShape circle(RADIUS);
-    circle.setFillColor(sf::Color::Transparent);
-    circle.setOutlineThickness(4.f);
-    circle.setOutlineColor(sf::Color::Yellow);
-
-    for (auto& target : m_targets)
-    {
-        if (!target)
+    if (m_context.GetFocusDraw()) {
+        for (const auto& target : focusTargets)
         {
-            continue;
+            if (!target || target->IsDead()) continue;
+
+            // 円のサイズ設定
+            float circleRadius = 60.f;
+            sf::CircleShape circle(circleRadius);
+            circle.setOutlineColor(sf::Color::Yellow);
+            circle.setOutlineThickness(3.f);
+            circle.setFillColor(sf::Color::Transparent);
+
+           
+            circle.setOrigin({ circleRadius, circleRadius });
+            // キャラクターの中心座標を取得して設定
+            sf::Vector2f centerPos = GetCharacterCenter(target);
+            circle.setPosition(centerPos);
+            // --------------------
+
+            arg_window.draw(circle);
         }
-
-        sf::Vector2f center = GetCharacterCenter(target);
-
-        // CircleShape は左上基準なので半径分引く
-        circle.setPosition({center.x - RADIUS,center.y - RADIUS});
-
-        window.draw(circle);
     }
 }
+
+void BattleView::DrawCost(sf::RenderWindow& arg_window)
+{
+    auto tex = TextureLoader::GetInstance().GetTextureID("CostFrame");
+    sf::Sprite sprite(*tex);
+    sprite.setPosition(sf::Vector2f(550.0f, 100.0f));
+    sprite.setScale({0.13f, 0.08f});
+    arg_window.draw(sprite);
+
+    sf::Text text(m_font, "");
+    int cost = CostManager::GetInstance().GetCurrentCost();
+    text.setString({"AP / " +  std::to_string(cost)});
+    auto pos = sprite.getPosition();
+    text.setPosition({ pos.x + 55 , pos.y + 30 });
+    arg_window.draw(text);
+}
+
 
 /// <summary>
 /// コスト表示
 /// </summary>
 /// <param name="window"></param>
-void BattleView::DrawCostGain(sf::RenderWindow& window)
+void BattleView::DrawCostGain(sf::RenderWindow& arg_window)
 {
-    if (m_costGain <= 0) return;
+    if (m_costGain <= 0)
+    {
+        return;
+    }
 
-    sf::Text text(FontManager::GetInstance().GetFont(), "");
+    sf::Text text(m_font, "");
     text.setString("+" + std::to_string(m_costGain));
     text.setCharacterSize(24);
     text.setFillColor(sf::Color::Yellow);
     text.setPosition({600.0f, 450.0f});
+
+    arg_window.draw(text);
+}
+
+void BattleView::DrawStageName(sf::RenderWindow& arg_window)
+{
+    // ステージIDの取得
+    int stageId = m_context.GetStageId();
+
+    const auto& stageData = StageLoader::GetInstance().GetStageData(stageId);
+
+    if (!stageData)
+    {
+        return;
+    }
+
+    sf::Text stageText(m_font, stageData->name);
+    stageText.setCharacterSize(30);
+    stageText.setFillColor(sf::Color::White);
+    stageText.setOutlineColor(sf::Color::Black); 
+    stageText.setOutlineThickness(2.f);
+
+    stageText.setPosition({ 20.0f, 50.0f });
+
+    arg_window.draw(stageText);
+}
+
+void BattleView::DrawTurnBanner(sf::RenderWindow& window)
+{
+    // BattleSystem.h の TurnPhase 定義と合わせる
+    // 0: StartTurn, 1: UserTurn, 2: EnemyTurn ... 
+    int phase = m_context.GetTurnPhase();
+
+    std::string turnStr = "";
+    sf::Color textColor = sf::Color::White;
+
+    if (phase == 1) { // UserTurn
+        turnStr = "PLAYER TURN";
+        textColor = sf::Color::Cyan; // 青系
+    }
+    else if (phase == 2) { // EnemyTurn
+        turnStr = "ENEMY TURN";
+        textColor = sf::Color(255, 100, 100); // 赤系
+    }
+    else {
+        return; // それ以外のフェーズ（Start等）では表示しない、または別の表示
+    }
+
+    sf::Text text(m_font, "");
+    text.setString(turnStr);
+    text.setCharacterSize(50); // 大きめに表示
+    text.setFillColor(textColor);
+    text.setOutlineColor(sf::Color::Black);
+    text.setOutlineThickness(4.f);
+
+    // 画面中央に配置
+    sf::FloatRect textRect = text.getLocalBounds();
+    text.setOrigin({ textRect.position.x + textRect.size.x / 2.0f,textRect.position.y + textRect.size.y / 2.0f });
+
+    // ウィンドウサイズを取得して中央へ
+    sf::Vector2u windowSize = window.getSize();
+    text.setPosition({ windowSize.x / 2.0f, 50.f }); 
 
     window.draw(text);
 }
@@ -327,8 +419,11 @@ sf::Vector2f BattleView::GetCharacterCenter(const std::shared_ptr<Character>& c)
     constexpr float CHAR_W = 165.f;
     constexpr float CHAR_H = 150.f;
 
-    auto pos = c->GetPosition(); // 左上
-    return {pos.x + CHAR_W * 0.5f,pos.y + CHAR_H * 0.5f};
+    // キャラクターの左上座標を取得
+    sf::Vector2f pos = c->GetPosition();
+
+    // 矩形サイズ（CHAR_W, CHAR_H）の半分を足して中心を計算
+    return { pos.x + (CHAR_W * 0.5f), pos.y + (CHAR_H * 0.5f) };
 }
 
 void BattleView::UpdateCamera(float dt)

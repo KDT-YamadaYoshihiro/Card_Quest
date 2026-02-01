@@ -1,8 +1,12 @@
 #pragma once
+#include "System/Singleton/Singleton.h"
 
-class CostManager
+class CostManager : public Singleton<CostManager>
 {
 private:
+
+    friend class Singleton<CostManager>;
+
     int m_currentCost = 0;
     int m_maxCost = 1;
 

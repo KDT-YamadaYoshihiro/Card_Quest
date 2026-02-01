@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include "System/Singleton/Singleton.h"
+#include "View/ConsoleView/ConsoleView.h"
 
 class CSVLoader
 {

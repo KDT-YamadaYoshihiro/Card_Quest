@@ -3,6 +3,7 @@
 #include <optional>
 #include "ActionData.h"
 #include "Entity/Card/CardDate.h"
+#include "System/Battle/BattleContex/BattleContext.h"
 
 class BattleContext;
 class BattleView;
@@ -15,7 +16,7 @@ private:
     BattleContext& m_context;
     BattleView& m_battleView;
 
-    PlayerSelectPhase m_phase = PlayerSelectPhase::SELECT_PLAYER;
+    PlayerSelectPhase m_phase = PlayerSelectPhase::SELECT_CARD;
 
     // Rect 管理
     std::vector<sf::FloatRect> m_characterRects;
@@ -30,6 +31,14 @@ private:
 
     // 確定行動
     std::optional<UserAction> m_confirmedAction;
+
+    // ダブルクリック判定用の仮選択状態
+    int m_preSelectedCardIndex = -1;
+    std::shared_ptr<Character> m_preSelectedTarget = nullptr;
+
+    // マウスホバー中の対象（描画用）
+    int m_hoveredCardIndex = -1;
+    std::shared_ptr<Character> m_hoveredTarget = nullptr;
 
 public:
 
@@ -68,11 +77,13 @@ public:
     std::shared_ptr<Character> GetSelectActor() const;
     int GetSelectCardId() const;
     const std::vector<std::shared_ptr<Character>>& GetSelectTargetIndices() const;
+    int GetHoveredCardIndex() const { return m_hoveredCardIndex; }
+    std::shared_ptr<Character> GetHoveredTarget() const { return m_hoveredTarget; }
+
 
 private:
     // ===== 内部更新 =====
-    void UpdateSelectPlayer(sf::RenderWindow& window);
-    void UpdateSelectCard(sf::RenderWindow& window);
+    void UpdateSelectCard(sf::RenderWindow& window , const sf::Vector2f& mousePos);
     void UpdateCreateTargets();
     void UpdateSelectTarget(sf::RenderWindow& window);
 
@@ -84,7 +95,7 @@ private:
 
     // ===== Rect 更新 =====
     void UpdateCharacterRects(const std::vector<std::shared_ptr<Character>>& list);
-    void UpdateHandCardRects(const Character& actor);
+    void UpdateHandCardRects();
 
     // ===== 補助 =====
     sf::Vector2f GetWorldMousePos(sf::RenderWindow& window) const;

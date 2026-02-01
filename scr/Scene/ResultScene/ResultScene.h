@@ -11,7 +11,7 @@ public:
 
 	ResultScene():SceneBase()
 	{
-		std::cout << "Result" << std::endl;
+		ConsoleView::GetInstance().Add("ResultScene\n");
 	}
 	virtual ~ResultScene() = default;
 

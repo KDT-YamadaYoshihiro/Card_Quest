@@ -46,7 +46,9 @@ private:
 		End
 	};
 	
-	// 依存システム
+	// 定数
+	const int  COMMON_CARDID = 1000;
+	const int  UNIQUE_CARDID = 1100;
 	
 	// コンテキスト
 	std::shared_ptr<BattleContext> m_context;
@@ -54,8 +56,6 @@ private:
 	std::unique_ptr<BattleView> m_battleView;
 	// ユーザー入力系
 	std::unique_ptr<UserController> m_userController;
-	// コスト管理
-	std::unique_ptr<CostManager> m_costManager;
 	// キャラクター
 	std::vector<std::shared_ptr<Character>> m_players;
 	std::vector<std::shared_ptr<Character>> m_enemies;
@@ -72,13 +72,14 @@ private:
 	int m_turnCount;
 
 	// エネミー用
-	// 行動エネミーのindex
-	int m_currentEnemyIndex = 0;
+	// 行動エネミー一覧
+	std::vector<std::shared_ptr<Character>> m_actingEnemies;
 	// 行動エネミー
 	std::shared_ptr<Character> m_currentEnemy = nullptr;
 	// ターゲット確定枠
 	std::vector<std::shared_ptr<Character>> m_enemyFinalTargets;
-
+	// 行動エネミーのindex
+	int m_currentEnemyIndex = 0;
 
 public:
 

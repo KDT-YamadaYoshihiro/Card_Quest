@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "View/Render/RenderSystem.h"
 #include "CSVLoad/TextureLoader/TextureLoader.h"
+#include "View/ConsoleView/ConsoleView.h"
 
 class SceneBase
 {

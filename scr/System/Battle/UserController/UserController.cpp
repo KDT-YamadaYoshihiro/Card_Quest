@@ -5,7 +5,7 @@
 #include "Entity/Character/Character.h"
 #include "Entity/Card/Card.h"
 #include "Entity/Card/CardManager/CardManager.h"
-
+#include "View/ConsoleView/ConsoleView.h"
 namespace
 {
     constexpr float CHAR_W = 165.f;
@@ -27,23 +27,29 @@ UserController::UserController(BattleContext& context,BattleView& battleView)
 void UserController::Update(sf::RenderWindow& window)
 {
     InPutMouseManager::GetInstance().Update(window);
+    sf::Vector2f mousePos = InPutMouseManager::GetInstance().GetMousePosition(window);
+
 
     switch (m_phase)
     {
-    case PlayerSelectPhase::SELECT_PLAYER:
-        std::cout << "キャラクター選択中" << std::endl;
-        UpdateSelectPlayer(window);
-        break;
     case PlayerSelectPhase::SELECT_CARD:
-        std::cout << "カード選択中" << std::endl;
-        UpdateSelectCard(window);
+
+        ConsoleView::GetInstance().Add("カード選択中\n");
+        // 座標系の更新
+        UpdateHandCardRects();
+        // 選択更新
+        UpdateSelectCard(window, mousePos);
         break;
     case PlayerSelectPhase::CREATE_TARGETS:
-        std::cout << "ターゲット候補作成" << std::endl;
+        ConsoleView::GetInstance().Add("ターゲット候補作成\n");
+        // 候補作成
         UpdateCreateTargets();
         break;
     case PlayerSelectPhase::SELECT_TARGET:
-        std::cout << "ターゲット選択中" << std::endl;
+        ConsoleView::GetInstance().Add("ターゲット選択中\n");
+        // 座標系の更新
+        UpdateCharacterRects(m_targetCandidates);
+        // 選択更新
         UpdateSelectTarget(window);
         break;
     case PlayerSelectPhase::DONE:
@@ -63,7 +69,7 @@ UserAction UserController::ConsumeAction()
     m_confirmedAction.reset();
 
     // 次の入力に備えてリセット
-    m_phase = PlayerSelectPhase::SELECT_PLAYER;
+    m_phase = PlayerSelectPhase::SELECT_CARD;
     m_selectedActor.reset();
     m_selectedCardIndex = -1;
     m_selectedTargets.clear();
@@ -74,51 +80,45 @@ UserAction UserController::ConsumeAction()
 
 // ================= 選択処理 =================
 
-void UserController::UpdateSelectPlayer(sf::RenderWindow& window)
-{
-    const auto& players = m_context.GetPlayers();
-    UpdateCharacterRects(players);
 
-    if (!InPutMouseManager::GetInstance().IsLeftClicked())
-    {
-        return;
-    }
-    // キャラクターはワールド座標で判定
-    sf::Vector2f worldPos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-    int index = HitTestCharacter(worldPos, players); 
-    
-    if (index < 0)
-    {
-        return;
-    }
 
-    m_selectedActor = players[index];
-    m_battleView.SetSelectedActor(players[index]);
-    std::cout << "選択キャラ:" << players[index]->GetData().name << std::endl;
-    m_phase = PlayerSelectPhase::SELECT_CARD;
-}
-
-void UserController::UpdateSelectCard(sf::RenderWindow& window)
+void UserController::UpdateSelectCard(sf::RenderWindow& window, const sf::Vector2f& mousePos)
 {
     
-    UpdateHandCardRects(*m_selectedActor);
+    m_hoveredCardIndex = HitTestHandCard(mousePos);
 
-    if (!InPutMouseManager::GetInstance().IsLeftClicked())
-    {
-        return;
-    }
-    sf::Vector2f screenPos = window.mapPixelToCoords(sf::Mouse::getPosition(window), window.getDefaultView());
-    int index = HitTestHandCard(screenPos);
-    if (index < 0)
-    {
-        return;
-    }
+    if (InPutMouseManager::GetInstance().IsLeftClicked()) {
+        if (m_hoveredCardIndex == -1) {
+            // indexが空なら何もしない
+            return;
+        }
+        // 同じカードを2回クリック、または既に選択中なら確定
+        if (m_preSelectedCardIndex == m_hoveredCardIndex) {
+            // インデックの同期
+            m_selectedCardIndex = m_hoveredCardIndex;
+            //  UIインデックスからカードIDを特定
+            int cardId = m_context.GetCardIdByGlobalIndex(m_selectedCardIndex);
+            // カードIDから行動者を特定
+            m_selectedActor = m_context.GetCharacterByCardId(cardId);
+            if (m_selectedActor) 
+            {
+                m_selectCardId = cardId;
+                
+                m_selectedCardIndex = m_context.GetLocalCardIndex(m_selectedActor, cardId);
 
-    m_selectedCardIndex = index;
-    m_selectCardId = m_selectedActor->GetHeldCardId(m_selectedCardIndex);
-    m_battleView.SetSelectedCard(m_selectCardId);
-    std::cout << "選択カード:" << m_selectCardId << std::endl;
-    m_phase = PlayerSelectPhase::CREATE_TARGETS;
+                m_battleView.SetSelectedCard(m_selectCardId);
+                ConsoleView::GetInstance().Add("選択カード" + std::to_string(m_selectCardId) +" 使用者:" + m_selectedActor->GetData().name + "\n");
+
+                m_phase = PlayerSelectPhase::CREATE_TARGETS;
+            }
+            m_preSelectedCardIndex = -1;
+        }
+        else {
+            //　選択状態にする
+            m_preSelectedCardIndex = m_hoveredCardIndex;
+        }
+        
+    }
 }
 
 void UserController::UpdateCreateTargets()
@@ -129,57 +129,87 @@ void UserController::UpdateCreateTargets()
     // ターゲット候補の取得
     m_targetCandidates = m_context.CreateTargetCandidates(card.targetType,m_selectedActor->GetFaction(),m_selectedActor);
 
-    m_selectedTargets.clear();
-
-    if (card.targetType == TargetType::ALLY_ALL || card.targetType == TargetType::OPPONENT_ALL)
-    {
-
-        UserAction action;
-        action.actor = m_selectedActor;
-        action.cardId = m_selectCardId;
-        action.targets = m_targetCandidates;
-
-        m_battleView.SetTargetIndices(m_targetCandidates);
-        m_confirmedAction = action;
-        m_phase = PlayerSelectPhase::DONE;
+    // ターゲットが空でないか確認
+    if (m_targetCandidates.empty()) {
+        m_phase = PlayerSelectPhase::SELECT_CARD;
+        return;
     }
 
-    // 単体は次のフェーズへ
+    // ターゲット選択フェーズ移行時の初期設定
+    if (card.targetType == TargetType::OPPONENT_ALL || card.targetType == TargetType::ALLY_ALL) {
+        // 全員をフォーカス
+        m_context.SetFocusTargets(m_targetCandidates);
+    }
+    else {
+        // デフォで0番目を仮選択・フォーカス
+        m_preSelectedTarget = m_targetCandidates[0];
+        m_context.SetFocusTargets({ m_preSelectedTarget });
+    }
+
+    // Focus表示
+    m_context.SetFocusDraw(true);
+
     m_phase = PlayerSelectPhase::SELECT_TARGET;
-    
 }
 
 void UserController::UpdateSelectTarget(sf::RenderWindow& window)
 {
-    UpdateCharacterRects(m_targetCandidates);
-
-    if (!InPutMouseManager::GetInstance().IsLeftClicked())
-    {
-        return;
-    }
-
     // 現在のView設定に基づいたワールド座標を取得
     sf::Vector2f worldPos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-    int index = HitTestCharacter(worldPos, m_targetCandidates);
-    if (index < 0)
-    {
-        return;
+
+    UpdateCharacterRects(m_targetCandidates);
+
+    const auto& cardData = m_selectedActor->GetCardData(m_selectedCardIndex);
+    bool isAreaAttack = (cardData.targetType == TargetType::OPPONENT_ALL || cardData.targetType == TargetType::ALLY_ALL);
+
+    // マウス直下のキャラ判定
+    int hoverIdx = HitTestCharacter(worldPos, m_targetCandidates);
+    std::shared_ptr<Character> hovered = (hoverIdx != -1) ? m_targetCandidates[hoverIdx] : nullptr;
+
+    // クリック処理
+    if (InPutMouseManager::GetInstance().IsLeftClicked()) {
+
+        bool isDone = false;
+
+        if (isAreaAttack) {
+            // 全体系：誰かをクリックすれば確定
+            if (hovered) {
+                m_selectedTargets = m_targetCandidates; // 全員をターゲットに
+                isDone = true;
+            }
+        }
+        else {
+            // 単体系：2クリック確定ロジック
+            if (hovered) {
+                if (m_preSelectedTarget == hovered) {
+                    m_selectedTargets.push_back(m_preSelectedTarget);
+                    isDone = true;
+                }
+                else {
+                    m_preSelectedTarget = hovered;
+                    // フォーカス対象を更新
+                    m_context.SetFocusTargets({ m_preSelectedTarget });
+                }
+            }
+        }
+
+        if (isDone) {
+            // --- 行動情報の確定 ---
+            UserAction action;
+            action.actor = m_selectedActor;      // 特定済みの使用者
+            action.cardId = m_selectCardId;      // 特定済みのカードID
+            action.targets = m_selectedTargets;  // 決定したターゲットリスト
+
+            m_confirmedAction = action;          // optionalに値をセット
+
+            // Focus表示
+            m_context.SetFocusDraw(false);
+
+            m_phase = PlayerSelectPhase::DONE;
+        }
+
     }
-    m_selectedTargets.clear();
-    m_selectedTargets.push_back(m_targetCandidates[index]);
 
-    const CardData& card = CardManager::GetInstance().GetCardData(m_selectCardId);
-
-    // 確定
-    UserAction action;
-    action.actor = m_selectedActor;
-    action.cardId = m_selectCardId;
-    action.targets = m_selectedTargets;
-
-    m_battleView.SetTargetIndices(action.targets);
-    m_battleView.SetSelectedCard(m_selectCardId);
-    m_confirmedAction = action;
-    m_phase = PlayerSelectPhase::DONE;
 }
 
 /// <summary>
@@ -209,11 +239,11 @@ int UserController::HitTestCharacter(
 /// <returns></returns>
 int UserController::HitTestHandCard(const sf::Vector2f& mousePos) const
 {
-    for (size_t i = 0; i < m_handCardRects.size(); ++i)
+    for (int i = 0; i < m_handCardRects.size(); ++i)
     {
         if (m_handCardRects[i].contains(mousePos))
         {
-            return static_cast<int>(i);
+            return i; 
         }
     }
     return -1;
@@ -248,26 +278,25 @@ void UserController::UpdateCharacterRects(
 /// カードクリック判定
 /// </summary>
 /// <param name="actor"></param>
-void UserController::UpdateHandCardRects(const Character& actor)
+void UserController::UpdateHandCardRects()
 {
     m_handCardRects.clear();
 
-    const int cardCount = actor.GetCardCount();
+    int cardCount = 0;
 
-    const float cardWidth = 120.f;
-    const float cardHeight = 160.f;
-    const float spacing = 20.f;
-
-    sf::Vector2f startPos(300.f, 500.f);
+    for (auto& p : m_context.GetAlivePlayers())
+    {
+        cardCount += p->GetCardCount();
+    }
 
     for (int i = 0; i < cardCount; ++i)
     {
-        sf::FloatRect rect(
-            sf::Vector2f(startPos.x + i * (cardWidth + spacing),startPos.y),
-            sf::Vector2f(cardWidth, cardHeight)
-        );
+        // 描画(BattleView)と同じ計算式でRectを作成
+        sf::Vector2f pos = HAND_START;
+        pos.x += i * HAND_SPACING;
 
-        m_handCardRects.push_back(rect);
+        // カードの矩形を登録
+        m_handCardRects.push_back(sf::FloatRect({ pos.x, pos.y }, { CARD_W, CARD_H }));
     }
 }
 

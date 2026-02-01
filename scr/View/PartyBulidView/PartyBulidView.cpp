@@ -3,6 +3,7 @@
 #include "System/PartyBulid/PartyBuildContext/PartyBuildContext.h"
 #include "CSVLoad/TextureLoader/TextureLoader.h"
 #include "Entity/Character/Character.h"
+#include "View/ConsoleView/ConsoleView.h"
 #include <iostream>
 
 
@@ -90,7 +91,8 @@ void PartyBuildView::BulidCharacterIcons(const PartyBuildContext& arg_context)
 
 		if (!tex)
 		{
-			std::cout << "テクスチャーが見つかりませんでした" << std::endl;
+			ConsoleView::GetInstance().Add("テクスチャーが見つかりませんでした\n");
+			
 			continue;
 		}
 
@@ -119,7 +121,10 @@ void PartyBuildView::BulidPartyIcons(const PartyBuildContext& arg_context)
 	for (auto& ch : arg_context.GetParty())
 	{
 		auto tex = TextureLoader::GetInstance().GetTextureID(ch->GetData().iconKey);
-		if (!tex) continue;
+		if (!tex)
+		{
+			continue;
+		}
 
 		
 		IconView icon( *tex, {start.x + index * spacingX, start.y},{SIZE_X,SIZE_Y});

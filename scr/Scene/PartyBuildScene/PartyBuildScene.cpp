@@ -11,6 +11,7 @@
 PartyBuildScene::PartyBuildScene(sf::RenderWindow& window)
 	:SceneBase()
 {
+    ConsoleView::GetInstance().Add("PartyBuildScene\n");
 	Init(window);
 }
 
@@ -31,7 +32,7 @@ void PartyBuildScene::Init(sf::RenderWindow& arg_window)
     m_context.Init(allChars);
     m_view = std::make_unique<PartyBuildView>(*m_render);
     m_controller = std::make_unique<PartyBuildController>(m_context, *m_view);
-    m_button = std::make_unique<CircleButton>(50,sf::Vector2f(700,700));
+    m_button = std::make_unique<CircleButton>(50,sf::Vector2f(700,600));
 }
 
 /// <summary>
@@ -72,6 +73,16 @@ void PartyBuildScene::Update(sf::RenderWindow& arg_window)
 /// <param name="arg_window"></param>
 void PartyBuildScene::Render(sf::RenderWindow& arg_window)
 {
+    // 背景
+    auto tex = TextureLoader::GetInstance().GetTextureID("bg");
+    if (tex)
+    {
+        sf::Sprite sprite(*tex);
+        sprite.setPosition({ 0.0f,0.0f });
+        sprite.setScale({ 0.7f,0.7f });
+        arg_window.draw(sprite);
+    }
+
     m_view->Draw();
     m_button->Draw(arg_window);
 }
@@ -92,6 +103,9 @@ void PartyBuildScene::StartDeckBulid()
     auto& session = SceneManager::GetInstance().GetSession();
 
     session.battleContext->SetPlayers(m_context.GetParty());
+
+    // Consoleのリセット
+    ConsoleView::GetInstance().Reset();
 
     // シーンの切り替え
     SceneManager::GetInstance().ChangeScreen<DeckBuildingScene>();

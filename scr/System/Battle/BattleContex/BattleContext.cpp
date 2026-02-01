@@ -1,5 +1,6 @@
 #include "BattleContext.h"
 #include <iostream>
+#include "View/ConsoleView/ConsoleView.h"
 
 bool BattleContext::Init(const std::vector<std::shared_ptr<Character>>& arg_enemies)
 {
@@ -9,7 +10,8 @@ bool BattleContext::Init(const std::vector<std::shared_ptr<Character>>& arg_enem
     {
         if (!p)
         {
-            std::cout << "BattleContext: player nullptr" << std::endl;
+            ConsoleView::GetInstance().Add("BattleContext: player nullptr\n");
+            
             return false;
         }
     }
@@ -18,7 +20,8 @@ bool BattleContext::Init(const std::vector<std::shared_ptr<Character>>& arg_enem
     {
         if (!e)
         {
-            std::cout << "BattleContext: enemy nullptr" << std::endl;
+            ConsoleView::GetInstance().Add("BattleContext: enemy nullptr\n");
+
             return false;
         }
     }
@@ -45,6 +48,11 @@ std::vector<int> BattleContext::GetEnemyIds()
 void BattleContext::SetStageId(const int arg_stageId)
 {
     m_stageId = arg_stageId;
+}
+
+int BattleContext::GetStageId() const
+{
+    return m_stageId;
 }
 
 const std::vector<std::shared_ptr<Character>>& BattleContext::GetPlayers() const
@@ -166,4 +174,83 @@ std::vector<std::shared_ptr<Character>> BattleContext::CreateTargetCandidates(Ta
 
     return result;
 }
+
+void BattleContext::SetFocusTargets(const std::vector<std::shared_ptr<Character>>& targets)
+{
+    m_focusTargets = targets;
+}
+
+void BattleContext::ClearFocusTargets()
+{
+    m_focusTargets.clear();
+}
+
+const std::vector<std::shared_ptr<Character>>& BattleContext::GetFocusTargets() const
+{
+    return m_focusTargets;
+}
+
+
+int BattleContext::GetCardIdByGlobalIndex(int globalIndex) const
+{
+    int currentIndex = 0;
+    for (const auto& p : GetAlivePlayers()) {
+        int count = p->GetCardCount();
+        if (globalIndex < currentIndex + count) {
+            // そのプレイヤーのカード範囲内なら、ローカルインデックスでIDを返す
+            return p->GetHeldCardId(globalIndex - currentIndex);
+        }
+        currentIndex += count;
+    }
+    return -1; // 見つからない場合
+}
+
+std::shared_ptr<Character> BattleContext::GetCharacterByCardId(int cardId) const
+{
+    for (const auto& p : GetAlivePlayers()) {
+        for (int i = 0; i < p->GetCardCount(); ++i) {
+            if (p->GetHeldCardId(i) == cardId) {
+                return p;
+            }
+        }
+    }
+    return nullptr;
+}
+
+int BattleContext::GetLocalCardIndex(const std::shared_ptr<Character>& actor, int cardId) const
+{
+    if (!actor)
+    {
+        return -1;
+    }
+
+    for (int i = 0; i < actor->GetCardCount(); ++i) {
+        if (actor->GetHeldCardId(i) == cardId)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
+bool BattleContext::GetFocusDraw() const
+{
+    return IsFocusDraw;
+}
+
+void BattleContext::SetFocusDraw(bool arg_draw)
+{
+    IsFocusDraw = arg_draw;
+}
+
+void BattleContext::SetTurnPhase(int phase)
+{
+     m_currentTurnPhase = phase; 
+}
+
+int BattleContext::GetTurnPhase() const
+{
+     return m_currentTurnPhase;
+}
+
 

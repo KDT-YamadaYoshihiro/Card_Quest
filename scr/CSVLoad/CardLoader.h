@@ -1,6 +1,5 @@
 #pragma once
 #include <unordered_map>
-#include <iostream>
 #include "Entity/Character/CharacterData.h"
 #include "Entity/Card/CardDate.h"
 #include "CSVLoader.h"
@@ -31,6 +30,7 @@ public:
         std::ifstream ifs(path);
         if (!ifs.is_open())
         {
+            ConsoleView::GetInstance().Add("指定のファイルが見つかりません " + path + "\n");
             return false;
         }
 
@@ -86,7 +86,7 @@ public:
             m_cards[data.cardId] = data;
 
 #ifdef _DEBUG
-            std::cout << "Loaded Card ID: " << data.cardId << std::endl;
+            ConsoleView::GetInstance().Add("Loaded Card ID: " + std::to_string(data.cardId) + "\n");
 #endif
 
         }

@@ -5,6 +5,7 @@ bool StageLoader::LoadCSV(const std::string& path)
     std::ifstream file(path);
     if (!file.is_open())
     {
+        ConsoleView::GetInstance().Add("指定したファイルが見つかりません :" + path + "\n");
         return false;
     }
 
@@ -21,13 +22,14 @@ bool StageLoader::LoadCSV(const std::string& path)
 
         StageData data;
         data.stageId = std::stoi(cols[0]);
+        data.name = cols[1];
         data.enemyIds = {
-            std::stoi(cols[1]),
             std::stoi(cols[2]),
-            std::stoi(cols[3])
+            std::stoi(cols[3]),
+            std::stoi(cols[4])
         };
 #ifdef _DEBUG
-        std::cout << "Loaded stageID: " << data.stageId << std::endl;
+        ConsoleView::GetInstance().Add("Loaded stageID: " + std::to_string(data.stageId) + "\n");
 #endif
 
         m_stageTable[data.stageId] = data;
