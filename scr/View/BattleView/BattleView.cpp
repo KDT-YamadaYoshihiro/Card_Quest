@@ -342,7 +342,6 @@ void BattleView::DrawCostGain(sf::RenderWindow& arg_window)
 void BattleView::DrawStageName(sf::RenderWindow& arg_window)
 {
 
-
     // ステージIDの取得
     int stageId = m_context.GetStageId();
 
@@ -361,7 +360,6 @@ void BattleView::DrawStageName(sf::RenderWindow& arg_window)
     stageText.setFillColor(sf::Color::White);
     stageText.setOutlineColor(sf::Color::Black); 
     stageText.setOutlineThickness(2.f);
-
     stageText.setPosition({ 20.0f, 50.0f });
 
     // 下地
