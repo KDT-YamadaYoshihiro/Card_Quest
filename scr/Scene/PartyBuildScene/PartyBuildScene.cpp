@@ -63,7 +63,9 @@ void PartyBuildScene::Update(sf::RenderWindow& arg_window)
 
     if (m_button->IsClicked(mousePos, input.IsLeftClicked()))
     {
-        StartDeckBulid();
+        if (!m_context.GetParty().empty()) {
+            StartDeckBulid();
+        }
     }
 }
 
