@@ -294,6 +294,10 @@ void BattleView::DrawFocus(sf::RenderWindow& arg_window)
     }
 }
 
+/// <summary>
+/// コスト表示
+/// </summary>
+/// <param name="arg_window"></param>
 void BattleView::DrawCost(sf::RenderWindow& arg_window)
 {
     auto tex = TextureLoader::GetInstance().GetTextureID("CostFrame");
@@ -331,8 +335,14 @@ void BattleView::DrawCostGain(sf::RenderWindow& arg_window)
     arg_window.draw(text);
 }
 
+/// <summary>
+/// ステージ名前の表示
+/// </summary>
+/// <param name="arg_window"></param>
 void BattleView::DrawStageName(sf::RenderWindow& arg_window)
 {
+
+
     // ステージIDの取得
     int stageId = m_context.GetStageId();
 
@@ -342,8 +352,11 @@ void BattleView::DrawStageName(sf::RenderWindow& arg_window)
     {
         return;
     }
-
-    sf::Text stageText(m_font, stageData->name);
+    // ステージ名
+    sf::Text stageText(m_font, "");
+    // UTF8に対応させる
+    sf::String unicodeString = sf::String::fromUtf8(stageData->name.begin(), stageData->name.end());
+    stageText.setString(unicodeString);
     stageText.setCharacterSize(30);
     stageText.setFillColor(sf::Color::White);
     stageText.setOutlineColor(sf::Color::Black); 
@@ -351,6 +364,25 @@ void BattleView::DrawStageName(sf::RenderWindow& arg_window)
 
     stageText.setPosition({ 20.0f, 50.0f });
 
+    // 下地
+    sf::FloatRect textBounds = stageText.getGlobalBounds();
+    sf::RectangleShape bgBox;
+
+    // ボックスのサイズ：テキストの範囲より少し大きくする（パディング）
+    float paddingX = 20.f;
+    float paddingY = 10.f;
+    bgBox.setSize({ textBounds.size.x + paddingX * 2, textBounds.size.y + paddingY * 2 });
+
+    // ボックスの色設定（半透明の青にすると画面に馴染みやすいです）
+    bgBox.setFillColor(sf::Color(0, 50, 150, 180)); // 暗めの青、少し透過
+    bgBox.setOutlineColor(sf::Color::Cyan);        // 枠線に明るい青
+    bgBox.setOutlineThickness(2.f);
+
+    // ボックスの位置：テキストを包むように配置
+    bgBox.setPosition({ textBounds.position.x - paddingX, textBounds.position.y - paddingY });
+
+    // 4. 描画（先にボックス、その後にテキストを重ねる）
+    arg_window.draw(bgBox);
     arg_window.draw(stageText);
 }
 
