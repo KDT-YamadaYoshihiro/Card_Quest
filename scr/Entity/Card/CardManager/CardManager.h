@@ -29,6 +29,9 @@ public:
     void InitCardMaster(const std::unordered_map<int, CardData>& cards);
     void InitDeck(const std::vector<int>& deckCardIds);
 
+	// æ“¾
+	const std::vector<int>& GetCardMasterIds() const;
+
     // ƒfƒbƒL‘€ì
     void ShuffleDeck();
     bool DrawCard(int& cardId);

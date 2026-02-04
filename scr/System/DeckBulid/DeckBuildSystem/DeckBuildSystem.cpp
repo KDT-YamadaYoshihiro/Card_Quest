@@ -2,9 +2,32 @@
 #include "System/DeckBulid/CardBuildPool/CardBuildPool.h"
 #include "Entity/Card/CardFactory/CardFactory.h"
 #include "View/ConsoleView/ConsoleView.h"
+#include "Entity/Card/CardManager/CardManager.h"
+
+void DeckBuildSystem::LoadDeckFromManager()
+{
+
+    m_deckCards.clear();
+
+    // CardManager から現在のデッキ ID リストを取得
+    const auto& currentDeckIds = CardManager::GetInstance().GetCardMasterIds();
+
+    for (int id : currentDeckIds)
+    {
+        // ID から Card クラスのインスタンスを生成して格納
+        auto card = CardFactory::GetInstance().CreateCard(id);
+        if (card)
+        {
+            m_deckCards.push_back(std::move(card));
+        }
+    }
+}
 
 void DeckBuildSystem::Init()
 {
+
+    LoadDeckFromManager();
+
 	RebuildDisplayPool();
 }
 

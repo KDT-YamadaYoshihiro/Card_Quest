@@ -22,6 +22,11 @@ void CardManager::InitDeck(const std::vector<int>& deckCardIds)
     ShuffleDeck();
 }
 
+const std::vector<int>& CardManager::GetCardMasterIds() const
+{
+	return m_deck;
+}
+
 // シャッフル
 void CardManager::ShuffleDeck()
 {
@@ -34,7 +39,6 @@ bool CardManager::DrawCard(int& cardId)
     // デッキの枚数確認
     if (m_deck.empty())
     {
-        RecycleCemeteryToDeck();
         if (m_deck.empty())
         {
             return false;

@@ -62,6 +62,14 @@ void Character::ClearCards()
     m_cardIds.clear();
 }
 
+// ‘S”jŠü‚µ‚ÄID•Ô‹p
+std::vector<int> Character::ClearAndReturnCards()
+{
+    std::vector<int> discardedIds = m_cardIds;
+    m_cardIds.clear();
+    return discardedIds;
+}
+
 bool Character::DrawCard()
 {
     // æ‚ÉèD‚Ì‹ó‚«‚ğŠm”F

@@ -3,10 +3,11 @@
 #include "Entity/Character/Factory/CharacterFactory.h"
 #include "CSVLoad/CardLoader.h"
 #include "Scene/SceneManager/SceneManager.h"
-//#include "../View/Font/FontManager.h"
-//#include "../Battle/UserController/UserController.h"
-//#include "../Battle/UserController/ActionData.h"
-//#include "../System/InPutManager/InPutManager.h"
+#include "View/Font/FontManager.h"
+#include "System/InPutManager/InPutMouseManager.h"
+
+#include "Scene/StageBuildScene/StageBulidScene.h"
+#include "Scene/PartyBuildScene/PartyBuildScene.h"
 
 /// <summary>
 /// 初期化処理
@@ -98,6 +99,21 @@ bool BattleSystem::Init(sf::RenderWindow& arg_window)
 		return false;
 	}
 
+	// ボタン系
+	m_toPartySceneButton = std::make_unique<BoxButton>(sf::Vector2f(200.f, 50.f), sf::Vector2f(300.f, 500.f), FontManager::GetInstance().GetFont(), "SelectParty");
+	m_toStageSelectButton = std::make_unique<BoxButton>(sf::Vector2f(200.f, 50.f), sf::Vector2f(950.f, 500.f), FontManager::GetInstance().GetFont(), "SelectStage");
+
+	if (!m_toPartySceneButton)
+	{
+		ConsoleView::GetInstance().Add("BattleSystem / m_toPartySceneButton : null_ptr\n");
+		return false;
+	}
+	if (!m_toStageSelectButton)
+	{
+		ConsoleView::GetInstance().Add("BattleSystem / m_toStageSelectButton : null_ptr\n");
+		return false;
+	}
+
 	ConsoleView::GetInstance().Add("BattleSystem /Init() : true\n");
 	return true;
 }
@@ -105,7 +121,7 @@ bool BattleSystem::Init(sf::RenderWindow& arg_window)
 /// <summary>
 ///	更新処理
 /// </summary>
-void BattleSystem::Update(sf::RenderWindow& window)
+void BattleSystem::Update(sf::RenderWindow& arg_window)
 {
 	// フェーズ進行
 	switch (m_phase)
@@ -117,7 +133,7 @@ void BattleSystem::Update(sf::RenderWindow& window)
 	case BattleSystem::TurnPhase::UserTurn:
 		ConsoleView::GetInstance().Add("TurnPhase::UserTurn\n");
 
-		this->UserTurn(window);
+		this->UserTurn(arg_window);
 		break;
 	case BattleSystem::TurnPhase::EnemyTurn:
 		ConsoleView::GetInstance().Add("TurnPhase::EnemyTurn\n");
@@ -130,7 +146,7 @@ void BattleSystem::Update(sf::RenderWindow& window)
 		this->EndTurn();
 		break;
 	case BattleSystem::TurnPhase::Result:
-
+		this->ResultEvent(arg_window);
 		break;
 	default:
 		break;
@@ -138,6 +154,26 @@ void BattleSystem::Update(sf::RenderWindow& window)
 
 	if (this->IsBattleEnd())
 	{
+		// バトル終了判定
+		if (m_phase != TurnPhase::Result && IsBattleEnd())
+		{
+			// --- 修正：味方の全キャラクターからカードを回収して墓地へ ---
+			const auto& players = m_context->GetPlayers();
+			for (auto& player : players)
+			{
+				if (!player) continue;
+
+				// キャラクターから全カードを回収
+				std::vector<int> cards = player->ClearAndReturnCards();
+
+				// 回収したIDをすべて墓地へ
+				for (int id : cards)
+				{
+					CardManager::GetInstance().SendCardIdToCemetery(id);
+				}
+			}
+		}
+			
 		ConsoleView::GetInstance().Reset();
 		m_phase = TurnPhase::Result;
 	}
@@ -163,9 +199,17 @@ void BattleSystem::Update(sf::RenderWindow& window)
 /// 描画
 /// </summary>
 /// <param name="window"></param>
-void BattleSystem::Render(sf::RenderWindow& window)
+void BattleSystem::Render(sf::RenderWindow& arg_window)
 {
-	m_battleView->Render(window);
+	// バトル系の描画
+	m_battleView->Render(arg_window);
+
+	// リザルト時のみ表示
+	if (m_phase == TurnPhase::Result)
+	{
+		this->ResultView(arg_window);
+	}
+
 }
 
 /// <summary>
@@ -184,6 +228,16 @@ bool BattleSystem::IsBattleEnd() const
 bool BattleSystem::IsUserWin() const
 {
 	return m_context->IsEnemyAllDead() && !m_context->IsPlayerAllDead();
+}
+
+bool BattleSystem::IsToPartyScene() const
+{
+	 return m_toPartyScene; 
+}
+
+bool BattleSystem::IsToStageSelectScene() const
+{
+	return m_toStageSelectScene; 
 }
 
 /// <summary>
@@ -458,15 +512,65 @@ void BattleSystem::EndTurn()
 }
 
 /// <summary>
-/// リザルト処理
+/// リザルトEvent処理
 /// </summary>
-void BattleSystem::Result()
+void BattleSystem::ResultEvent(sf::RenderWindow& arg_woindow)
 {
+	InPutMouseManager::GetInstance().Update(arg_woindow);
+
+	if (!InPutMouseManager::GetInstance().IsLeftClicked())
+	{
+		return;
+	}
+
+	if (!m_toPartySceneButton || !m_toStageSelectButton)
+	{
+		return;
+	}
+
+	bool isClickTriggered = InPutMouseManager::GetInstance().IsLeftClicked();
+	sf::Vector2f mousePos = InPutMouseManager::GetInstance().GetMousePosition(arg_woindow);
 
 	// ボタンのクリック判定
 	// 編成画面に
+	if (m_toPartySceneButton->IsClicked(mousePos,isClickTriggered))
+	{
+		m_toPartyScene = true;
+	}
 
 	// ステージ選択画面に
+	if (m_toStageSelectButton->IsClicked(mousePos, isClickTriggered))
+	{
+		m_toStageSelectScene = true;
+	}
+}
+
+/// <summary>
+/// リザルトの描画系
+/// </summary>
+/// <param name="arg_window"></param>
+void BattleSystem::ResultView(sf::RenderWindow& arg_window)
+{
+
+	// 黒のベース（半透明)
+	sf::RectangleShape bgBox;
+	bgBox.setSize(static_cast<sf::Vector2f>(arg_window.getSize()));
+	bgBox.setFillColor(sf::Color(0, 0, 0, 150)); // 黒、少し透過
+	arg_window.draw(bgBox);
+
+	// クリアかオーバーか
+	if (this->IsUserWin())
+	{
+		m_battleView->DrawClearBanner(arg_window);
+	}
+	else
+	{
+		m_battleView->DrawGameOverBanner(arg_window);
+	}
+
+	// ボタンの描画
+	m_toPartySceneButton->Draw(arg_window);
+	m_toStageSelectButton->Draw(arg_window);
 
 }
 

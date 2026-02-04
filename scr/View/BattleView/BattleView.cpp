@@ -25,7 +25,8 @@ namespace
 BattleView::BattleView(BattleContext& context, RenderSystem& render)
     : m_context(context),
     m_render(render),
-    m_font(FontManager::GetInstance().GetFont())
+    m_font(FontManager::GetInstance().GetFont()),
+	m_clearBannerText(m_font, "")
 {
     m_cardRenderer = std::make_shared<CardRenderer>();
 }
@@ -518,4 +519,48 @@ sf::Vector2f BattleView::CalcDamagePopupPos(const std::shared_ptr<Character>& c)
     auto center = GetCharacterCenter(c);
     center.y -= 40.f; // 頭上に浮かせる
     return center;
+}
+
+void BattleView::DrawClearBanner(sf::RenderWindow& arg_window)
+{
+
+	m_clearBannerText = sf::Text(m_font, "GAME CLEAR!");
+
+	// バナー文字列設定
+	m_clearBannerText.setString("STAGE CLEAR!");
+	m_clearBannerText.setCharacterSize(60);
+	m_clearBannerText.setFillColor(sf::Color::Green);
+	m_clearBannerText.setOutlineColor(sf::Color::Black);
+	m_clearBannerText.setOutlineThickness(4.f);
+	// 画面中央に配置
+	sf::FloatRect textRect = m_clearBannerText.getLocalBounds();
+	m_clearBannerText.setOrigin({ textRect.position.x + textRect.size.x / 2.0f,textRect.position.y + textRect.size.y / 2.0f });
+	// ウィンドウサイズを取得して中央へ
+	sf::Vector2u windowSize = arg_window.getSize();
+	m_clearBannerText.setPosition({ windowSize.x / 2.0f, windowSize.y / 2.0f });
+	arg_window.draw(m_clearBannerText);
+
+
+}
+
+void BattleView::DrawGameOverBanner(sf::RenderWindow& arg_window)
+{
+
+    m_clearBannerText = sf::Text(m_font, "GAME OVER");
+
+
+	// バナー文字列設定
+	m_clearBannerText.setString("GAME OVER");
+	m_clearBannerText.setCharacterSize(60);
+	m_clearBannerText.setFillColor(sf::Color::Red);
+	m_clearBannerText.setOutlineColor(sf::Color::Black);
+	m_clearBannerText.setOutlineThickness(4.f);
+	// 画面中央に配置
+	sf::FloatRect textRect = m_clearBannerText.getLocalBounds();
+	m_clearBannerText.setOrigin({ textRect.position.x + textRect.size.x / 2.0f,textRect.position.y + textRect.size.y / 2.0f });
+	// ウィンドウサイズを取得して中央へ
+	sf::Vector2u windowSize = arg_window.getSize();
+	m_clearBannerText.setPosition({ windowSize.x / 2.0f, windowSize.y / 2.0f });
+	arg_window.draw(m_clearBannerText);
+
 }

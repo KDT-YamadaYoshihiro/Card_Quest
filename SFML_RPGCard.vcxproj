@@ -170,6 +170,7 @@
     <ClCompile Include="scr\View\StageBulidView\StageBuildView.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="scr\UI\BoxButton.h" />
     <ClInclude Include="scr\View\ConsoleView\ConsoleView.h" />
     <ClInclude Include="scr\CSVLoad\StageLoader\StageLoader.h" />
     <ClInclude Include="scr\System\PartyBulid\PartyBuildContext\PartyBuildContext.h" />

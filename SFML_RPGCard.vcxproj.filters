@@ -114,9 +114,6 @@
     <ClCompile Include="scr\View\CardRenderer\CardRenderer.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="scr\System\Battle\SelectTarget\TargetSelect.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="scr\System\Battle\UserController\UserController.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -163,6 +160,9 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="scr\View\StageBulidView\StageBuildView.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\View\ConsoleView\ConsoleView.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -257,9 +257,6 @@
     <ClInclude Include="scr\View\Font\FontManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="scr\System\Battle\SelectTarget\TargetSelect.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="scr\System\Battle\UserController\UserController.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -318,6 +315,12 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="scr\System\Singleton\Singleton.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\View\ConsoleView\ConsoleView.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\UI\BoxButton.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
