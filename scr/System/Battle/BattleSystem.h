@@ -149,6 +149,11 @@ private:
 	void EndTurn();
 
 	/// <summary>
+	/// リザルト
+	/// </summary>
+	void Result();
+
+	/// <summary>
 	/// カードの使用時の効果
 	/// </summary>
 	/// <param name="actor"></param>

@@ -112,22 +112,22 @@ void BattleSystem::Update(sf::RenderWindow& window)
 	{
 	case BattleSystem::TurnPhase::StartTurn:
 		ConsoleView::GetInstance().Add("TurnPhase::StartTurn\n");
-		StartTurn();
+		this->StartTurn();
 		break;
 	case BattleSystem::TurnPhase::UserTurn:
 		ConsoleView::GetInstance().Add("TurnPhase::UserTurn\n");
 
-		UserTurn(window);
+		this->UserTurn(window);
 		break;
 	case BattleSystem::TurnPhase::EnemyTurn:
 		ConsoleView::GetInstance().Add("TurnPhase::EnemyTurn\n");
 
-		EnemyTurn();
+		this->EnemyTurn();
 		break;
 	case BattleSystem::TurnPhase::EndTurn:
 		ConsoleView::GetInstance().Add("TurnPhase::EndTurn\n");
 
-		EndTurn();
+		this->EndTurn();
 		break;
 	case BattleSystem::TurnPhase::Result:
 
@@ -135,6 +135,13 @@ void BattleSystem::Update(sf::RenderWindow& window)
 	default:
 		break;
 	}
+
+	if (this->IsBattleEnd())
+	{
+		ConsoleView::GetInstance().Reset();
+		m_phase = TurnPhase::Result;
+	}
+
 
 	// キャラクター系の更新
 	for (auto& p : m_players)
@@ -208,7 +215,7 @@ void BattleSystem::StartTurn()
 	CostManager::GetInstance().ResetCost();
 
 	// 生存判定
-	if (IsBattleEnd())
+	if (this->IsBattleEnd())
 	{
 		return;
 	}
@@ -398,7 +405,7 @@ void BattleSystem::EnemyTurn()
 			m_enemyFinalTargets = targets;
 		}
 
-		ApplyAction(m_currentEnemy, m_enemyFinalTargets, card);
+		this->ApplyAction(m_currentEnemy, m_enemyFinalTargets, card);
 		m_enemyPhase = EnemyTurnPhase::NextEnemy;
 		break;
 	}
@@ -445,8 +452,22 @@ void BattleSystem::EndTurn()
 	{
 		e->UpdateBuff();
 	}
+
 	// 次ターンへ
 	m_phase = TurnPhase::StartTurn;
+}
+
+/// <summary>
+/// リザルト処理
+/// </summary>
+void BattleSystem::Result()
+{
+
+	// ボタンのクリック判定
+	// 編成画面に
+
+	// ステージ選択画面に
+
 }
 
 //	カード使用時効果

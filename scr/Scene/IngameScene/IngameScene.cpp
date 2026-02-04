@@ -10,12 +10,6 @@ void IngameScene::Init(sf::RenderWindow& arg_window)
 
 void IngameScene::handleEvent(const sf::Event& event)
 {
-	if(m_battle->IsBattleEnd())
-	{
-		ConsoleView::GetInstance().Reset();
-
-		SceneManager::GetInstance().ChangeScreen<ResultScene>();
-	}
 }
 
 void IngameScene::Update(sf::RenderWindow& arg_window)
