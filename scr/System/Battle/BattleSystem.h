@@ -10,6 +10,7 @@
 #include "System/Battle/BattleContex/BattleContext.h"
 #include "System/Battle/UserController/UserController.h"
 #include "View/BattleView/BattleView.h"
+#include "UI/BoxButton.h"
 
 class BattleSystem
 {
@@ -62,6 +63,13 @@ private:
 	// 描画システム
 	std::unique_ptr<RenderSystem> m_render;
 	
+	// リザルト用
+	// 編成画面遷移ボタン
+	std::unique_ptr<BoxButton> m_toPartySceneButton;
+
+	// ステージ選択遷移ボタン
+	std::unique_ptr<BoxButton> m_toStageSelectButton;
+
 	// ターンフェーズ
 	TurnPhase m_phase;
 	// ユーザーターンフェーズ
@@ -80,6 +88,12 @@ private:
 	std::vector<std::shared_ptr<Character>> m_enemyFinalTargets;
 	// 行動エネミーのindex
 	int m_currentEnemyIndex = 0;
+
+	// シーン切り替え判定用
+	bool m_toPartyScene = false;
+	bool m_toStageSelectScene = false;
+
+
 
 public:
 
@@ -121,6 +135,14 @@ public:
 	/// <returns></returns>
 	bool IsUserWin() const;
 
+	/// <summary>
+	/// シーン切り替え判定
+	/// </summary>
+	/// <returns></returns>
+	bool IsToPartyScene() const;
+	bool IsToStageSelectScene() const;
+
+
 private:
 
 	/// <summary>
@@ -149,9 +171,16 @@ private:
 	void EndTurn();
 
 	/// <summary>
-	/// リザルト
+	/// リザルト画面のクリック判定
 	/// </summary>
-	void Result();
+	void ResultEvent(sf::RenderWindow& arg_woindow);
+
+	/// <summary>
+	/// リザルト描画
+	/// </summary>
+	/// <param name="arg_window"></param>
+	void ResultView(sf::RenderWindow& arg_window);
+
 
 	/// <summary>
 	/// カードの使用時の効果

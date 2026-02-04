@@ -66,6 +66,9 @@ public:
 		RebuildDisplayPool();
 	}
 
+	// カードマネージャーから現在のデッキを読み込む
+	void LoadDeckFromManager();
+
 	// 初期化
 	void Init();
 

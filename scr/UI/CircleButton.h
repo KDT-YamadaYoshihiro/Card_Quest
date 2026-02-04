@@ -3,6 +3,10 @@
 
 class CircleButton
 {
+private:
+    // 円形の形状
+    sf::CircleShape m_shape;
+
 public:
 
     CircleButton(float radius, sf::Vector2f pos)
@@ -23,8 +27,7 @@ public:
     bool IsHovered(sf::Vector2f mousePos) const
     {
         sf::Vector2f diff = mousePos - m_shape.getPosition();
-        return (diff.x * diff.x + diff.y * diff.y)
-            <= m_shape.getRadius() * m_shape.getRadius();
+        return (diff.x * diff.x + diff.y * diff.y) <= m_shape.getRadius() * m_shape.getRadius();
     }
 
 	// クリックされたか
@@ -33,7 +36,4 @@ public:
         return mousePressed && IsHovered(mousePos);
     }
 
-private:
-	// 円形の形状
-    sf::CircleShape m_shape;
 };

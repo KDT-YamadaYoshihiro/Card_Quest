@@ -45,6 +45,10 @@ class BattleView
 	std::vector<DamagePopup> m_popups;
 
 	const sf::Font& m_font;
+
+	// バナー用
+	sf::Text m_clearBannerText;
+
 	// 
 	int m_selectedCard = -1;
 	//
@@ -117,6 +121,19 @@ public:
 	/// <param name="c"></param>
 	/// <returns></returns>
 	sf::Vector2f CalcDamagePopupPos(const std::shared_ptr<Character>& c);
+
+	/// <summary>
+	/// ゲームクリアバナー描画
+	/// </summary>
+	/// <param name="arg_window"></param>
+	void DrawClearBanner(sf::RenderWindow& arg_window);
+
+	/// <summary>
+	///	ゲームオーバーバナー描画
+	/// </summary>
+	/// <param name="arg_window"></param>
+	void DrawGameOverBanner(sf::RenderWindow& arg_window);
+
 
 private:
 

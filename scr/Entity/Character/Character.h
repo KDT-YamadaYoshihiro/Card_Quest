@@ -71,6 +71,8 @@ public:
 	// 全破棄
 	void ClearCards();
 
+	std::vector<int> ClearAndReturnCards();
+
 	// カードドロー
 	bool DrawCard();
 
