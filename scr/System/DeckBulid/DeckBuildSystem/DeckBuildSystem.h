@@ -51,8 +51,8 @@ public:
 
 	DeckBuildSystem()
 		:m_renderer(std::make_shared<CardRenderer>()),
-		m_deckStartPos({ 50.f, 50.f }),
-		m_poolStartPos({ 50.f, 300.f }),
+		m_deckStartPos({ 50.f, 150.f }),
+		m_poolStartPos({ 50.f, 400.f }),
 		m_mouseDownPos({ 0.f, 0.f }),
 		m_cardSpacing(130.f),
 		m_poolScrollX(0.0f),

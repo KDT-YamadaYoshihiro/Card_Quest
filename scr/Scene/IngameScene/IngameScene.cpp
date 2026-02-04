@@ -17,6 +17,8 @@ void IngameScene::handleEvent(const sf::Event& event)
 void IngameScene::Update(sf::RenderWindow& arg_window)
 {
 
+	InPutMouseManager::GetInstance().Update(arg_window);
+
 	if (m_battle->IsToPartyScene())
 	{
 		CardManager::GetInstance().RecycleCemeteryToDeck();

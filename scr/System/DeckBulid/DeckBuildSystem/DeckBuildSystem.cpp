@@ -23,6 +23,7 @@ void DeckBuildSystem::LoadDeckFromManager()
     }
 }
 
+// 初期化
 void DeckBuildSystem::Init()
 {
 
@@ -116,6 +117,13 @@ void DeckBuildSystem::Draw(sf::RenderWindow& window, const sf::Font& font)
 {
 
     // ===== デッキ側（上段） =====
+
+     //　背景描画
+    sf::RectangleShape deckBG({ 1500.f, 220.f });
+    deckBG.setPosition({ 0.f, m_deckStartPos.y - 40.f });
+    deckBG.setFillColor(sf::Color(20, 20, 20, 200)); // 半透明の黒
+    window.draw(deckBG);
+
     for (size_t i = 0; i < m_deckCards.size(); ++i)
     {
         sf::Vector2f pos = { m_deckStartPos.x + m_cardSpacing * i + m_deckScrollX, m_deckStartPos.y };
@@ -124,6 +132,14 @@ void DeckBuildSystem::Draw(sf::RenderWindow& window, const sf::Font& font)
     }
 
     // ===== プール側（下段） =====
+
+	//　背景描画
+    sf::RectangleShape poolBG({ 1500.f, 220.f });
+    poolBG.setPosition({ 0.f,m_poolStartPos.y - 40.f });
+    poolBG.setFillColor(sf::Color(20, 20, 20, 200)); // 半透明の黒
+    window.draw(poolBG);
+
+
     const auto& pool = CardBuildPool::GetInstance().GetPoolCards();
 
     for (size_t i = 0; i < m_displayPool.size(); ++i)

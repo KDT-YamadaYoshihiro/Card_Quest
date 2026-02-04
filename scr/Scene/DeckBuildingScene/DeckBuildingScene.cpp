@@ -3,13 +3,17 @@
 #include "Scene/IngameScene/IngameScene.h"
 #include "System/DeckBulid/CardBuildPool/CardBuildPool.h"
 #include "Entity/Card/CardManager/CardManager.h"
-#include "System/InPutManager/InPutMouseManager.h"
 #include "View/Font/FontManager.h"
+#include "Scene/PartyBuildScene/PartyBuildScene.h"
+#include "UI/BoxButton.h"
 
 DeckBuildingScene::DeckBuildingScene()
-    : SceneBase(),
-    m_completeButton(50.0f, { 700.0f, 600.0f })
+    : SceneBase()
 {
+
+    m_nextButton = std::make_unique<BoxButton>(sf::Vector2f(200.f, 50.f), sf::Vector2f(1000.f, 680.f), FontManager::GetInstance().GetFont(), "next");
+    m_backButton = std::make_unique<BoxButton>(sf::Vector2f(200.f, 50.f), sf::Vector2f(200.f, 680.f), FontManager::GetInstance().GetFont(), "back");
+
 
     ConsoleView::GetInstance().Add("DeckBuildingScene\n");
 	// カードプール構築
@@ -41,7 +45,7 @@ void DeckBuildingScene::Update(sf::RenderWindow& arg_window)
 	// デッキ編成システム更新
     m_deckBuildSystem.Update(mousePos, input.IsLeftClicked(),input.IsDragging(),input.IsLeftReleased(), wheel);
     // 編成完了ボタン(デッキ枚数が30枚以上の時)
-    if (m_completeButton.IsClicked(mousePos, input.IsLeftClicked()))
+    if (m_nextButton->IsClicked(mousePos, input.IsLeftClicked()))
     {
         if (m_deckBuildSystem.IsComplete())
         {
@@ -51,9 +55,24 @@ void DeckBuildingScene::Update(sf::RenderWindow& arg_window)
             ConsoleView::GetInstance().Reset();
 			// シーン切り替え
 			SceneManager::GetInstance().ChangeScreen<IngameScene>(arg_window);
+
+            return;
         }
         
     }
+
+	if (m_backButton->IsClicked(mousePos, input.IsLeftClicked()))
+	{
+        // CardManager にデッキをセット
+        CardManager::GetInstance().InitDeck(m_deckBuildSystem.TakeDeck());
+		// Consoleのリセット
+		ConsoleView::GetInstance().Reset();
+		// シーン切り替え
+		SceneManager::GetInstance().ChangeScreen<PartyBuildScene>(arg_window);
+
+        return;
+	}
+
 }
 
 void DeckBuildingScene::Render(sf::RenderWindow& arg_window)
@@ -72,7 +91,8 @@ void DeckBuildingScene::Render(sf::RenderWindow& arg_window)
 	m_deckBuildSystem.Draw(arg_window, FontManager::GetInstance().GetFont());
 
      // --- 完了ボタン ---
-    m_completeButton.Draw(arg_window);
+    m_nextButton->Draw(arg_window);
+	m_backButton->Draw(arg_window);
 }
 
 void DeckBuildingScene::End()

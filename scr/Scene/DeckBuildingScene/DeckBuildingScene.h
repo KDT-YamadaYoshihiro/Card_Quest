@@ -2,7 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include "Scene/SceneBase.h"
 #include "System/DeckBulid/DeckBuildSystem/DeckBuildSystem.h"
-#include "UI/CircleButton.h"
+
+class BoxButton;
 
 class DeckBuildingScene : public SceneBase
 {
@@ -11,14 +12,15 @@ class DeckBuildingScene : public SceneBase
 	DeckBuildSystem m_deckBuildSystem;
 
 	// デッキ完成ボタン
-	CircleButton m_completeButton;
-
-
+	std::unique_ptr<BoxButton> m_nextButton;
+	std::unique_ptr<BoxButton> m_backButton;
+	
 public:
 
 	// 初期化
 	DeckBuildingScene();
 	virtual ~DeckBuildingScene() = default;
+
 	// シーン基本関数
 	virtual void Init(sf::RenderWindow& arg_window) override;
 	virtual void handleEvent(const sf::Event& event) override;

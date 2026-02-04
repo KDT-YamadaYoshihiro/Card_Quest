@@ -3,6 +3,7 @@
 #include "View/Render/RenderSystem.h"
 #include "CSVLoad/TextureLoader/TextureLoader.h"
 #include "View/ConsoleView/ConsoleView.h"
+#include "System/InPutManager/InPutMouseManager.h"
 
 class SceneBase
 {
