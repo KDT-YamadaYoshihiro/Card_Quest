@@ -516,7 +516,6 @@ void BattleSystem::EndTurn()
 /// </summary>
 void BattleSystem::ResultEvent(sf::RenderWindow& arg_woindow)
 {
-	InPutMouseManager::GetInstance().Update(arg_woindow);
 
 	if (!InPutMouseManager::GetInstance().IsLeftClicked())
 	{

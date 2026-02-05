@@ -11,8 +11,8 @@ DeckBuildingScene::DeckBuildingScene()
     : SceneBase()
 {
 
-    m_nextButton = std::make_unique<BoxButton>(sf::Vector2f(200.f, 50.f), sf::Vector2f(1000.f, 680.f), FontManager::GetInstance().GetFont(), "next");
-    m_backButton = std::make_unique<BoxButton>(sf::Vector2f(200.f, 50.f), sf::Vector2f(200.f, 680.f), FontManager::GetInstance().GetFont(), "back");
+    m_nextButton = std::make_unique<BoxButton>(sf::Vector2f(200.f, 50.f), sf::Vector2f(1000.f, 680.f), FontManager::GetInstance().GetFont(), "BATTLE START");
+    m_backButton = std::make_unique<BoxButton>(sf::Vector2f(200.f, 50.f), sf::Vector2f(200.f, 680.f), FontManager::GetInstance().GetFont(), "BACK");
 
 
     ConsoleView::GetInstance().Add("DeckBuildingScene\n");
@@ -42,6 +42,27 @@ void DeckBuildingScene::Update(sf::RenderWindow& arg_window)
 
     float wheel = input.GetWheelDelta();
 
+
+	// ボタンのカーソルが合ったら色を変える
+	// 完了ボタン
+	if(m_nextButton->IsHovered(mousePos))
+    {
+        m_nextButton->SetColor(sf::Color::Yellow);
+    }
+    else
+    {
+        m_nextButton->SetColor(sf::Color::White);
+	}
+	// 戻るボタン
+    if(m_backButton->IsHovered(mousePos))
+    {
+        m_backButton->SetColor(sf::Color::Yellow);
+    }
+    else
+    {
+        m_backButton->SetColor(sf::Color::White);
+    }
+
 	// デッキ編成システム更新
     m_deckBuildSystem.Update(mousePos, input.IsLeftClicked(),input.IsDragging(),input.IsLeftReleased(), wheel);
     // 編成完了ボタン(デッキ枚数が30枚以上の時)
@@ -61,6 +82,8 @@ void DeckBuildingScene::Update(sf::RenderWindow& arg_window)
         
     }
 
+
+	// 戻るボタン
 	if (m_backButton->IsClicked(mousePos, input.IsLeftClicked()))
 	{
         // CardManager にデッキをセット
@@ -87,8 +110,32 @@ void DeckBuildingScene::Render(sf::RenderWindow& arg_window)
         arg_window.draw(sprite);
     }
 
+
     // --- デッキ & プール描画 ---
 	m_deckBuildSystem.Draw(arg_window, FontManager::GetInstance().GetFont());
+
+    // パーティの描画
+    auto& session = SceneManager::GetInstance().GetSession();
+	const auto& party = session.battleContext->GetPlayers();
+	float posX = 850.f;
+    for (auto& member : party)
+    {
+		auto tex = TextureLoader::GetInstance().GetTextureID(member->GetData().iconKey);
+        if (!tex)
+        {
+            return;
+        }
+
+        sf::Sprite sprite(*tex);
+        sprite.setPosition({ posX, 20.f });
+        sprite.setOrigin({ sprite.getLocalBounds().size.x, 0.0f });
+        sprite.setScale({ -0.8f, 0.8f });
+        arg_window.draw(sprite);
+
+		posX += 100.f;
+    }
+
+
 
      // --- 完了ボタン ---
     m_nextButton->Draw(arg_window);

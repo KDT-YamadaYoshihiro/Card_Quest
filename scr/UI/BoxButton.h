@@ -61,5 +61,12 @@ public:
        sf::FloatRect textRect = m_text.getLocalBounds();  
        m_text.setOrigin({ textRect.position.x + textRect.size.x / 2.0f, textRect.position.y + textRect.size.y / 2.0f });  
    }  
+
+   //　ボタンの色を変更したい場合
+   void SetColor(const sf::Color& color)  
+   {  
+       m_shape.setFillColor(color);  
+   }
+
 };  
 

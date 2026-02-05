@@ -116,6 +116,21 @@ void DeckBuildSystem::Update(sf::Vector2f mousePos, bool isClick, bool isDraggin
 void DeckBuildSystem::Draw(sf::RenderWindow& window, const sf::Font& font)
 {
 
+	// Scene の案内文字
+	sf::Text titleText(font, "Deck Build");
+	titleText.setCharacterSize(50);
+	titleText.setFillColor(sf::Color::White);
+	titleText.setPosition({ 50.f, 10.f });
+	window.draw(titleText);
+
+    // 案内文字
+	sf::Text instructionText(font, "-Please select the cards.-");
+	instructionText.setCharacterSize(30);
+	instructionText.setFillColor(sf::Color::White);
+	instructionText.setPosition({ 450.f, 120.f });
+	window.draw(instructionText);
+
+
     // ===== デッキ側（上段） =====
 
      //　背景描画
@@ -124,6 +139,21 @@ void DeckBuildSystem::Draw(sf::RenderWindow& window, const sf::Font& font)
     deckBG.setFillColor(sf::Color(20, 20, 20, 200)); // 半透明の黒
     window.draw(deckBG);
 
+	// 文字描画
+    sf::Text deckText(font, "Deck");
+    deckText.setCharacterSize(24);
+    deckText.setFillColor(sf::Color::White);
+    deckText.setPosition({ 10.f, m_deckStartPos.y - 35.f });
+	window.draw(deckText);
+
+    // 枚数表示
+    sf::Text countText(font, std::to_string(m_deckCards.size()) + " / 30");
+    countText.setCharacterSize(20);
+    countText.setFillColor(sf::Color::White);
+    countText.setPosition({ 100.f,  m_deckStartPos.y - 35.f });
+    window.draw(countText);
+
+	// デッキ内カード描画
     for (size_t i = 0; i < m_deckCards.size(); ++i)
     {
         sf::Vector2f pos = { m_deckStartPos.x + m_cardSpacing * i + m_deckScrollX, m_deckStartPos.y };
@@ -140,8 +170,15 @@ void DeckBuildSystem::Draw(sf::RenderWindow& window, const sf::Font& font)
     window.draw(poolBG);
 
 
-    const auto& pool = CardBuildPool::GetInstance().GetPoolCards();
+	// 文字描画
+	sf::Text poolText(font, "Card");
+	poolText.setCharacterSize(24);
+	poolText.setFillColor(sf::Color::White);
+	poolText.setPosition({ 10.f, m_poolStartPos.y - 35.f });
+	window.draw(poolText);
 
+	// プール内カード描画
+    const auto& pool = CardBuildPool::GetInstance().GetPoolCards();
     for (size_t i = 0; i < m_displayPool.size(); ++i)
     {
         sf::Vector2f pos = { m_poolStartPos.x + m_cardSpacing * i + m_poolScrollX, m_poolStartPos.y };
@@ -155,13 +192,6 @@ void DeckBuildSystem::Draw(sf::RenderWindow& window, const sf::Font& font)
         countText.setPosition({ pos.x + 85.f, pos.y + 130.f });
         window.draw(countText);
     }
-
-    // ===== 枚数表示 =====
-    sf::Text countText(font,std::to_string(m_deckCards.size()) + " / 30");
-    countText.setCharacterSize(20);
-    countText.setFillColor(sf::Color::White);
-    countText.setPosition({ 50.f, 250.f });
-    window.draw(countText);
 
 }
 

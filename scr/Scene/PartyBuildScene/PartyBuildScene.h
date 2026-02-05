@@ -3,7 +3,7 @@
 #include "System/PartyBulid/PartyBuildContext/PartyBuildContext.h"
 #include "System/PartyBulid/PartyBulidController/PartyBuildController.h"
 #include "View/PartyBulidView/PartyBuildView.h"
-#include "UI/CircleButton.h"
+#include "UI/BoxButton.h"
 #include <iostream>
 
 class PartyBuildScene : public SceneBase
@@ -14,7 +14,8 @@ private:
 	std::unique_ptr<RenderSystem> m_render;
 	std::unique_ptr<PartyBuildView> m_view;
 	std::unique_ptr<PartyBuildController> m_controller;
-	std::unique_ptr<CircleButton> m_button;
+	std::unique_ptr<BoxButton> m_nextButton;
+	std::unique_ptr<BoxButton> m_backButton;
 
 public:
 

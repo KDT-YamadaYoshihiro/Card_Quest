@@ -10,30 +10,42 @@ void PartyBuildController::Update(sf::RenderWindow& window)
 {
 
     if (!InPutMouseManager::GetInstance().IsLeftClicked())
+    {
         return;
+    }
 
     auto mouse = GetMousePos(window);
 
-    // 左：キャラ一覧 → パーティ追加
+    // 全キャラ一覧（ベンチ） → パーティ追加
     const auto& charIcons = m_view.GetCharacterIcons();
     for (size_t i = 0; i < charIcons.size(); ++i)
     {
         if (charIcons[i].rect.contains(mouse))
         {
+            // アイコンに対応するキャラを直接取得
             auto ch = GetCharacterByIconIndex(i);
-            m_context.AddToParty(ch);
+            if (ch)
+            {
+                m_context.AddToParty(ch);
+            }
             return;
         }
     }
 
-    // 右：パーティ → 除外
+    // パーティメンバー → 除外
     const auto& partyIcons = m_view.GetPartyIcons();
+    // パーティリストのサイズとアイコン数が一致している前提
+    const auto& partyList = m_context.GetParty();
+
     for (size_t i = 0; i < partyIcons.size(); ++i)
     {
         if (partyIcons[i].rect.contains(mouse))
         {
-            auto ch = m_context.GetParty()[i];
-            m_context.RmoveParty(ch);
+            if (i < partyList.size())
+            {
+                auto ch = partyList[i];
+                m_context.RmoveParty(ch);
+            }
             return;
         }
     }
@@ -47,12 +59,11 @@ sf::Vector2f PartyBuildController::GetMousePos(sf::RenderWindow& window)
 
 std::shared_ptr<Character> PartyBuildController::GetCharacterByIconIndex(size_t index)
 {
-    size_t count = 0;
-    for (auto& ch : m_context.GetAllCharacters())
+
+    auto allChars = m_context.GetAllCharacters();
+    if (index < allChars.size())
     {
-        if (m_context.IsInParty(ch)) continue;
-        if (count == index) return ch;
-        ++count;
+        return allChars[index];
     }
     return nullptr;
 }
