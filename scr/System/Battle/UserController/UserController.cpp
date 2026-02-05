@@ -26,8 +26,9 @@ UserController::UserController(BattleContext& context,BattleView& battleView)
 
 void UserController::Update(sf::RenderWindow& window)
 {
-    InPutMouseManager::GetInstance().Update(window);
-    sf::Vector2f mousePos = InPutMouseManager::GetInstance().GetMousePosition(window);
+
+    sf::Vector2f mousePos = this->GetScreenMousePos(window);
+    //sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window), window.getDefaultView());
 
 
     switch (m_phase)
@@ -81,7 +82,11 @@ UserAction UserController::ConsumeAction()
 // ================= 選択処理 =================
 
 
-
+/// <summary>
+/// カード選択
+/// </summary>
+/// <param name="window"></param>
+/// <param name="mousePos"></param>
 void UserController::UpdateSelectCard(sf::RenderWindow& window, const sf::Vector2f& mousePos)
 {
     
@@ -121,6 +126,9 @@ void UserController::UpdateSelectCard(sf::RenderWindow& window, const sf::Vector
     }
 }
 
+/// <summary>
+/// ターゲット候補の取得
+/// </summary>
 void UserController::UpdateCreateTargets()
 {
     // カードID、情報の取得
@@ -152,6 +160,10 @@ void UserController::UpdateCreateTargets()
     m_phase = PlayerSelectPhase::SELECT_TARGET;
 }
 
+/// <summary>
+/// ターゲット選択
+/// </summary>
+/// <param name="window"></param>
 void UserController::UpdateSelectTarget(sf::RenderWindow& window)
 {
     // 現在のView設定に基づいたワールド座標を取得

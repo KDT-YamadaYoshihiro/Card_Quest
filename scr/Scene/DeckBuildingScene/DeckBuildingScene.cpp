@@ -11,8 +11,8 @@ DeckBuildingScene::DeckBuildingScene()
     : SceneBase()
 {
 
-    m_nextButton = std::make_unique<BoxButton>(sf::Vector2f(200.f, 50.f), sf::Vector2f(1000.f, 680.f), FontManager::GetInstance().GetFont(), "next");
-    m_backButton = std::make_unique<BoxButton>(sf::Vector2f(200.f, 50.f), sf::Vector2f(200.f, 680.f), FontManager::GetInstance().GetFont(), "back");
+    m_nextButton = std::make_unique<BoxButton>(sf::Vector2f(200.f, 50.f), sf::Vector2f(1000.f, 680.f), FontManager::GetInstance().GetFont(), "BATTLE START");
+    m_backButton = std::make_unique<BoxButton>(sf::Vector2f(200.f, 50.f), sf::Vector2f(200.f, 680.f), FontManager::GetInstance().GetFont(), "BACK");
 
 
     ConsoleView::GetInstance().Add("DeckBuildingScene\n");
@@ -42,6 +42,27 @@ void DeckBuildingScene::Update(sf::RenderWindow& arg_window)
 
     float wheel = input.GetWheelDelta();
 
+
+	// ボタンのカーソルが合ったら色を変える
+	// 完了ボタン
+	if(m_nextButton->IsHovered(mousePos))
+    {
+        m_nextButton->SetColor(sf::Color::Yellow);
+    }
+    else
+    {
+        m_nextButton->SetColor(sf::Color::White);
+	}
+	// 戻るボタン
+    if(m_backButton->IsHovered(mousePos))
+    {
+        m_backButton->SetColor(sf::Color::Yellow);
+    }
+    else
+    {
+        m_backButton->SetColor(sf::Color::White);
+    }
+
 	// デッキ編成システム更新
     m_deckBuildSystem.Update(mousePos, input.IsLeftClicked(),input.IsDragging(),input.IsLeftReleased(), wheel);
     // 編成完了ボタン(デッキ枚数が30枚以上の時)
@@ -61,6 +82,8 @@ void DeckBuildingScene::Update(sf::RenderWindow& arg_window)
         
     }
 
+
+	// 戻るボタン
 	if (m_backButton->IsClicked(mousePos, input.IsLeftClicked()))
 	{
         // CardManager にデッキをセット

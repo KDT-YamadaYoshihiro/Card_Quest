@@ -4,6 +4,8 @@
 #include "Scene/SceneManager/SceneManager.h"
 #include "Scene/DeckBuildingScene/DeckBuildingScene.h"
 #include "System/InPutManager/InPutMouseManager.h"
+#include "View/Font/FontManager.h"
+#include "Scene/StageBuildScene/StageBulidScene.h"
 
 /// <summary>
 /// 初期化
@@ -11,6 +13,7 @@
 PartyBuildScene::PartyBuildScene(sf::RenderWindow& window)
 	:SceneBase()
 {
+
     ConsoleView::GetInstance().Add("PartyBuildScene\n");
 	Init(window);
 }
@@ -32,7 +35,8 @@ void PartyBuildScene::Init(sf::RenderWindow& arg_window)
     m_context.Init(allChars);
     m_view = std::make_unique<PartyBuildView>(*m_render);
     m_controller = std::make_unique<PartyBuildController>(m_context, *m_view);
-    m_button = std::make_unique<CircleButton>(50,sf::Vector2f(700,600));
+    m_nextButton = std::make_unique<BoxButton>(sf::Vector2f(200.f, 50.f), sf::Vector2f(1000.f, 680.f), FontManager::GetInstance().GetFont(), "BATTLE START");
+    m_backButton = std::make_unique<BoxButton>(sf::Vector2f(200.f, 50.f), sf::Vector2f(200.f, 680.f), FontManager::GetInstance().GetFont(), "BACK");
 }
 
 /// <summary>
@@ -60,11 +64,41 @@ void PartyBuildScene::Update(sf::RenderWindow& arg_window)
     sf::Vector2f mousePos = input.GetMousePosition(arg_window);
     float wheel = input.GetWheelDelta();
 
+	// ボタンのカーソルが合ったら色を変える
+	// 完了ボタン
+    if(m_nextButton->IsHovered(mousePos))
+    {
+        m_nextButton->SetColor(sf::Color::Yellow);
+    }
+    else
+    {
+        m_nextButton->SetColor(sf::Color::White);
+    }
+	// 戻るボタン
+    if(m_backButton->IsHovered(mousePos))
+    {
+        m_backButton->SetColor(sf::Color::Yellow);
+    }
+    else
+    {
+        m_backButton->SetColor(sf::Color::White);
+	}
 
-    if (m_button->IsClicked(mousePos, input.IsLeftClicked()))
+
+	// 戻るボタン処理
+    if (m_backButton->IsClicked(mousePos, input.IsLeftClicked()))
+    {
+        // Consoleのリセット
+        ConsoleView::GetInstance().Reset();
+        SceneManager::GetInstance().ChangeScreen<StageBulidScene>(arg_window);
+        return;
+	}
+	// 次へボタン処理
+    if (m_nextButton->IsClicked(mousePos, input.IsLeftClicked()))
     {
         if (!m_context.GetParty().empty()) {
             StartDeckBulid();
+			return;
         }
     }
 }
@@ -85,8 +119,10 @@ void PartyBuildScene::Render(sf::RenderWindow& arg_window)
         arg_window.draw(sprite);
     }
 
-    m_view->Draw();
-    m_button->Draw(arg_window);
+    m_view->Draw(m_context);
+    m_nextButton->Draw(arg_window);
+    m_backButton->Draw(arg_window);
+
 }
 
 /// <summary>

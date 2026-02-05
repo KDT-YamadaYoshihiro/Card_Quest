@@ -4,6 +4,7 @@
 #include "CSVLoad/TextureLoader/TextureLoader.h"
 #include "Entity/Character/Character.h"
 #include "View/ConsoleView/ConsoleView.h"
+#include "View/ChracterSprite/CharacterSprite.h"
 #include <iostream>
 
 
@@ -14,7 +15,19 @@
 PartyBuildView::PartyBuildView(RenderSystem& arg_render)
 	:m_render(arg_render)
 {
+    // --- パーティエリアの背景設定 ---
+    m_partyBackground.setPosition(PARTY_POS);
+    m_partyBackground.setSize(PARTY_SIZE);
+    m_partyBackground.setFillColor(sf::Color(30, 30, 30, 150)); // 暗めの半透明
+    m_partyBackground.setOutlineThickness(2.0f);
+    m_partyBackground.setOutlineColor(sf::Color(100, 100, 100)); // グレーの枠線
 
+    // --- ベンチエリアの背景設定 ---
+    m_benchBackground.setPosition(BENCH_POS);
+    m_benchBackground.setSize(BENCH_SIZE);
+    m_benchBackground.setFillColor(sf::Color(30, 30, 30, 150));
+    m_benchBackground.setOutlineThickness(2.0f);
+    m_benchBackground.setOutlineColor(sf::Color(100, 100, 100));
 }
 
 /// <summary>
@@ -23,29 +36,136 @@ PartyBuildView::PartyBuildView(RenderSystem& arg_render)
 /// <param name="context"></param>
 void PartyBuildView::Update(const PartyBuildContext& arg_context)
 {
-	BulidCharacterIcons(arg_context);
-	BulidPartyIcons(arg_context);
+	// アイコン（クリック判定用やリスト表示用）の構築
+	m_characterIcons.clear();
+	sf::Vector2f start{ 120.0f, 400.0f };
+	float spacingX = 180.0f;
+	int index = 0;
+
+	for (auto& ch : arg_context.GetAllCharacters())
+	{
+		auto tex = TextureLoader::GetInstance().GetTextureID(ch->GetData().iconKey);
+		if (!tex) continue;
+
+		// 座標計算
+		sf::Vector2f pos = { start.x + index * spacingX, start.y };
+
+		IconView icon(*tex, pos, { SIZE_X, SIZE_Y });
+
+		// アイコン画像の調整（左向きにする等）
+		icon.sprite.setOrigin({ icon.sprite.getLocalBounds().size.x, 0.0f });
+		icon.sprite.setScale({ -1.0f, 1.0f });
+		icon.sprite.setPosition(icon.rect.position);
+
+		m_characterIcons.push_back(icon);
+		++index;
+	}
+
+	// ==========================================
+	// 2. 現在のパーティのアイコン構築（クリック判定用）
+	// ==========================================
+	m_partyIcons.clear();
+
+	// 画面上部に配置
+	sf::Vector2f partyStart{ 250.0f, 120.0f };
+	float partySpacingX = 200.0f;
+	index = 0;
+
+	for (auto& ch : arg_context.GetParty())
+	{
+		// 描画自体はSpriteで行うが、Controllerでのクリック判定用にIconView(Rect)を作っておく
+		auto tex = TextureLoader::GetInstance().GetTextureID(ch->GetData().iconKey);
+		if (!tex) continue; // テクスチャがなくてもRectだけは作れますが、基本ある前提
+
+		sf::Vector2f pos = { partyStart.x + index * partySpacingX, partyStart.y };
+
+		IconView icon(*tex, pos, { SIZE_X, SIZE_Y });
+		m_partyIcons.push_back(icon);
+
+		++index;
+	}
 }
 
 /// <summary>
 /// 描画
 /// </summary>
-void PartyBuildView::Draw()
+void PartyBuildView::Draw(const PartyBuildContext& arg_context)
 {
-	for (auto& icon : m_characterIcons)
-	{
-		icon.sprite.setOrigin({icon.sprite.getLocalBounds().size.x, 0.0f});
-		icon.sprite.setScale(sf::Vector2f(-1.0f, 1.0f));
-		m_render.Draw(icon.sprite);
-	}
 
-	for (auto& icon : m_partyIcons)
-	{
-		icon.sprite.setOrigin({ icon.sprite.getLocalBounds().size.x, 0.0f });
-		icon.sprite.setScale(sf::Vector2f(-1.0f, 1.0f));
-		m_render.Draw(icon.sprite);
-	}
+    // 背景ボックス
+    m_render.Draw(m_partyBackground);
+    m_render.Draw(m_benchBackground);
+
+    // キャラクター一覧（ベンチ）の描画
+    auto allChars = arg_context.GetAllCharacters();
+    sf::Vector2f start{ 120.0f, 400.0f };
+    float spacingX = 180.0f;
+
+    for (size_t i = 0; i < allChars.size(); ++i)
+    {
+        auto& ch = allChars[i];
+        auto tex = TextureLoader::GetInstance().GetTextureID(ch->GetData().iconKey);
+        if (!tex) continue;
+
+        // その場で位置を確定
+        sf::Vector2f pos = { start.x + i * spacingX, start.y };
+
+        sf::Sprite iconSprite(*tex);
+        // 原点と反転の設定を固定
+        iconSprite.setOrigin({ iconSprite.getLocalBounds().size.x, 0.0f });
+        iconSprite.setScale({ -1.0f, 1.0f });
+        iconSprite.setPosition(pos);
+
+
+        // パーティ編成済みのキャラはグレーアウト
+        if (arg_context.IsInParty(ch))
+        {
+            // 暗いグレーかつ半透明に設定 (R, G, B, A)
+            // 元の色に対して 100/255 の強さで描画し、透明度を 150 にする
+            iconSprite.setColor(sf::Color(100, 100, 100, 255));
+        }
+        else
+        {
+            // 通常状態（白を乗算 = 元の色のまま）
+            iconSprite.setColor(sf::Color::White);
+        }
+
+        m_render.Draw(iconSprite);
+
+    }
+
+    // 選択されたパーティメンバーの描画
+    auto party = arg_context.GetParty();
+    sf::Vector2f partyStart{ 250.0f, 120.0f };
+    float partySpacingX = 200.0f;
+
+    for (size_t i = 0; i < party.size(); ++i)
+    {
+        auto& ch = party[i];
+        if (!ch) continue;
+
+        // Sprite生成（初回のみ）
+        if (!m_spriteTable.contains(ch.get()))
+        {
+            auto sprite = std::make_unique<CharacterSprite>(ch->GetData().textureKey);
+            sprite->Init(ch->GetData().textureKey);
+            m_spriteTable[ch.get()] = std::move(sprite);
+        }
+
+        auto& sprite = m_spriteTable[ch.get()];
+
+        // 重要：描画直前に最新の計算済み座標をセット
+        sf::Vector2f pos = { partyStart.x + i * partySpacingX, partyStart.y };
+        sprite->SetPosition(pos);
+
+        sprite->SetSpriteWidthMirror();
+        sprite->SetState(CharacterAnimState::WAIT);
+
+        // 描画
+        sprite->Draw(m_render, ch->GetData(), false);
+    }
 }
+
 
 /// <summary>
 /// キャラクターアイコンView情報の取得
@@ -65,74 +185,3 @@ const std::vector<IconView>& PartyBuildView::GetPartyIcons() const
 	return m_partyIcons;
 }
 
-/// <summary>
-/// キャラクターのアイコン描画
-/// </summary>
-/// <param name="context"></param>
-void PartyBuildView::BulidCharacterIcons(const PartyBuildContext& arg_context)
-{
-
-	m_characterIcons.clear();
-
-	// スタート座標と描画間隔
-	sf::Vector2f start{ 50.0f,50.0f };
-	float spacingY = 120.0f;
-
-	int index = 0;
-	for (auto& ch : arg_context.GetAllCharacters())
-	{
-
-		if (arg_context.IsInParty(ch))
-		{
-			continue;
-		}
-
-		auto tex = TextureLoader::GetInstance().GetTextureID(ch->GetData().iconKey);
-
-		if (!tex)
-		{
-			ConsoleView::GetInstance().Add("テクスチャーが見つかりませんでした\n");
-			
-			continue;
-		}
-
-		IconView icon(*tex, { start.x , start.y + index * spacingY }, { SIZE_X, SIZE_Y });
-		icon.sprite.setPosition({ start.x , start.y + index * spacingY });
-		icon.rect = sf::FloatRect(icon.sprite.getPosition(),sf::Vector2(SIZE_X, SIZE_Y));
-
-		m_characterIcons.push_back(icon);
-		++index;
-	}
-
-}
-
-/// <summary>
-/// パーティメンバーのアイコン描画
-/// </summary>
-/// <param name="context"></param>
-void PartyBuildView::BulidPartyIcons(const PartyBuildContext& arg_context)
-{
-	m_partyIcons.clear();
-
-	sf::Vector2f start{ 500.0f, 120.0f };
-	float spacingX = 140.0f;
-
-	int index = 0;
-	for (auto& ch : arg_context.GetParty())
-	{
-		auto tex = TextureLoader::GetInstance().GetTextureID(ch->GetData().iconKey);
-		if (!tex)
-		{
-			continue;
-		}
-
-		
-		IconView icon( *tex, {start.x + index * spacingX, start.y},{SIZE_X,SIZE_Y});
-		icon.sprite.setPosition({ start.x + index * spacingX, start.y });
-
-		icon.rect = sf::FloatRect(icon.sprite.getPosition(),sf::Vector2f(SIZE_X, SIZE_Y));
-
-		m_partyIcons.push_back(icon);
-		++index;
-	}
-}
