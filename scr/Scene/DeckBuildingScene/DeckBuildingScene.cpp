@@ -87,8 +87,32 @@ void DeckBuildingScene::Render(sf::RenderWindow& arg_window)
         arg_window.draw(sprite);
     }
 
+
     // --- デッキ & プール描画 ---
 	m_deckBuildSystem.Draw(arg_window, FontManager::GetInstance().GetFont());
+
+    // パーティの描画
+    auto& session = SceneManager::GetInstance().GetSession();
+	const auto& party = session.battleContext->GetPlayers();
+	float posX = 850.f;
+    for (auto& member : party)
+    {
+		auto tex = TextureLoader::GetInstance().GetTextureID(member->GetData().iconKey);
+        if (!tex)
+        {
+            return;
+        }
+
+        sf::Sprite sprite(*tex);
+        sprite.setPosition({ posX, 20.f });
+        sprite.setOrigin({ sprite.getLocalBounds().size.x, 0.0f });
+        sprite.setScale({ -0.8f, 0.8f });
+        arg_window.draw(sprite);
+
+		posX += 100.f;
+    }
+
+
 
      // --- 完了ボタン ---
     m_nextButton->Draw(arg_window);
