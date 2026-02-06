@@ -5,6 +5,9 @@
 #include "View/Render/RenderSystem.h"
 #include "System/StageBulid/StageBulidContext/StageBulidContext.h"
 
+class TriangleButton;
+class BoxButton;
+
 struct StageDetailView
 {
     int stageId;
@@ -22,6 +25,8 @@ private:
     sf::Font m_font;
 
     std::unordered_map<int, StageDetailView> m_detailViews;
+
+
     int m_prevSelectedStageId = -1;
 
     // スクロール
@@ -53,6 +58,7 @@ public:
     /// <param name="context"></param>
     void Draw(const StageBulidContext& context);
 
+
 private:
 
     /// <summary>
@@ -71,7 +77,7 @@ private:
     /// 詳細表示の移動更新
     /// </summary>
     /// <param name="selectedStageId"></param>
-    void UpdateDetailAnimation(int selectedStageId);
+    //void UpdateDetailAnimation(int selectedStageId);
 
     /// <summary>
     /// スクロール用の更新メソッド
@@ -79,5 +85,11 @@ private:
     /// <param name="window"></param>
     /// <param name="stageCout"></param>
     void UpdateScroll(sf::RenderWindow& window, size_t stageCount);
+
+    /// <summary>
+	/// 出現モンスター表示
+    /// </summary>
+    /// <param name="data"></param>
+    void DrawStageMonsters(const StageData* data);
 
 };

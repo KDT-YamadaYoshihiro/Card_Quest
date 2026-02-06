@@ -49,10 +49,6 @@ public:
     void AddCost(int amount)
     {
         m_currentCost += amount;
-        if (m_currentCost > m_maxCost)
-        {
-            m_currentCost = m_maxCost;
-        }
     }
 
 	// Å‘åƒRƒXƒg‘‰Á

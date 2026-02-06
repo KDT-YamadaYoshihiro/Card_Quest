@@ -616,7 +616,7 @@ void BattleSystem::ApplyAction(const std::shared_ptr<Character>& actor, const st
 		{
 		case ActionType::ATTCK:
 		{
-			int damage = Calculation::GetDamage(actor->GetData().atk, card.power, target->GetData().def);
+			int damage = Calculation::GetDamage(actor->GetData().magicAtk, actor->GetBuffData().power, card.power, target->GetData().def, target->GetBuffData().power);
 			target->TakeDamage(damage);
 			// ダメージ表示
 			m_battleView->AddDamagePopup(m_battleView->CalcDamagePopupPos(target),damage,false);
@@ -628,7 +628,7 @@ void BattleSystem::ApplyAction(const std::shared_ptr<Character>& actor, const st
 		}
 		case ActionType::MAGIC:
 		{
-			int damage = Calculation::GetDamage(actor->GetData().magicAtk, card.power, target->GetData().def);
+			int damage = Calculation::GetDamage(actor->GetData().magicAtk, actor->GetBuffData().power, card.power, target->GetData().def, target->GetBuffData().power);
 			target->TakeDamage(damage);
 			// ダメージ表示
 			m_battleView->AddDamagePopup(m_battleView->CalcDamagePopupPos(target),damage,false);
@@ -651,8 +651,14 @@ void BattleSystem::ApplyAction(const std::shared_ptr<Character>& actor, const st
 			break;
 		}
 		case ActionType::BUFF:
-			target->TakeBuff(card.power);
+			target->TakeBuff(card.power, card.turn);
 			break;
+
+		case ActionType::ACTION_NONE:
+
+			ConsoleView::GetInstance().Add("ターンが" + std::to_string(card.actionPlus) + "追加された\n");
+			CostManager::GetInstance().AddCost(card.actionPlus);
+
 		}
 	}
 }

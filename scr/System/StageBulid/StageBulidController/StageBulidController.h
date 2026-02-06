@@ -10,11 +10,19 @@ private:
 
 public:
 
+	/// <summary>
+	/// ‰Šú‰»
+	/// </summary>
+	/// <param name="context"></param>
 	StageBulidController(StageBulidContext& context)
 		:m_context(context) 
 	{
 	}
 
+	/// <summary>
+	/// XV
+	/// </summary>
+	/// <param name="window"></param>
 	void Update(sf::RenderWindow& window);
 
 };

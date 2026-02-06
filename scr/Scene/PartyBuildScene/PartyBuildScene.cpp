@@ -35,7 +35,7 @@ void PartyBuildScene::Init(sf::RenderWindow& arg_window)
     m_context.Init(allChars);
     m_view = std::make_unique<PartyBuildView>(*m_render);
     m_controller = std::make_unique<PartyBuildController>(m_context, *m_view);
-    m_nextButton = std::make_unique<BoxButton>(sf::Vector2f(200.f, 50.f), sf::Vector2f(1000.f, 680.f), FontManager::GetInstance().GetFont(), "BATTLE START");
+    m_nextButton = std::make_unique<BoxButton>(sf::Vector2f(200.f, 50.f), sf::Vector2f(1000.f, 680.f), FontManager::GetInstance().GetFont(), "NEXT");
     m_backButton = std::make_unique<BoxButton>(sf::Vector2f(200.f, 50.f), sf::Vector2f(200.f, 680.f), FontManager::GetInstance().GetFont(), "BACK");
 }
 

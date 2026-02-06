@@ -4,36 +4,36 @@
 void Card::UseCard(Character* target)
 {
 
-	if (!target)
-	{
-		return;
-	}
+	//if (!target)
+	//{
+	//	return;
+	//}
 
-	switch (m_data.actionType) {
+	//switch (m_data.actionType) {
 
-	case ActionType::ATTCK:
+	//case ActionType::ATTCK:
 
-		target->TakeDamage(m_value);
+	//	target->TakeDamage(m_value);
 
-		break;
+	//	break;
 
-	case ActionType::MAGIC:
+	//case ActionType::MAGIC:
 
-		target->TakeDamage(m_value);
+	//	target->TakeDamage(m_value);
 
-		break;
+	//	break;
 
-	case ActionType::HEAL:
+	//case ActionType::HEAL:
 
-		target->TakeHeal(m_value);
+	//	target->TakeHeal(m_value);
 
-		break;
+	//	break;
 
-	case ActionType::BUFF:
+	//case ActionType::BUFF:
 
-		target->TakeBuff(m_value);
+	//	target->TakeBuff(m_value);
 
-		break;
+	//	break;
 
-	}
+	//}
 }

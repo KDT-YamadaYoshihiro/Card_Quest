@@ -3,17 +3,20 @@
 
 void StageBulidController::Update(sf::RenderWindow& window)
 {
+    auto& mouse = InPutMouseManager::GetInstance();
+    if (!mouse.IsLeftClicked()) return;
 
-	if (!InPutMouseManager::GetInstance().IsLeftClicked())
-		return;
+    sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition(window));
 
-	auto mouse = sf::Mouse::getPosition(window);
+    // Contextから共有ポインタを介して判定
+    auto* leftBtn = m_context.GetLeftArrow();
+    auto* rightBtn = m_context.GetRightArrow();
 
-	// 左側リストクリック判定
-	int index = (mouse.y - 80) / 40;
-	const auto& ids = m_context.GetStageIds();
-	if (index >= 0 && index < ids.size())
-	{
-		m_context.SelectStage(ids[index]);
-	}
+    if (leftBtn && leftBtn->IsClicked(mousePos, true)) {
+        m_context.SelectPrevStage();
+    }
+    if (rightBtn && rightBtn->IsClicked(mousePos, true)) {
+        m_context.SelectNextStage();
+    }
+
 }

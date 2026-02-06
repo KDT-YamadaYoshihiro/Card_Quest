@@ -4,14 +4,16 @@
 #include "CSVLoad//TextureLoader/TextureLoader.h"
 #include "View/Font/FontManager.h"
 #include "System/InPutManager/InPutMouseManager.h"
+#include "UI/TriangleButton.h"
+#include "UI/BoxButton.h"
 #include <cmath>
 
 namespace
 {
-    constexpr float LIST_START_Y = 80.f;
+    constexpr float LIST_START_Y = 300.f;
     constexpr float LIST_INTERVAL = 40.f;
 
-    constexpr sf::Vector2f DETAIL_BASE_POS{ 420.f, 100.f };
+    constexpr sf::Vector2f DETAIL_BASE_POS{ 920.f, 100.f };
     constexpr float DETAIL_SLIDE_OFFSET = 900.f; // 画面外
 }
 
@@ -23,7 +25,6 @@ StageBuildView::StageBuildView(RenderSystem& render)
     : m_render(render),
     m_font(FontManager::GetInstance().GetFont())
 {
-   
 }
 
 /// <summary>
@@ -47,7 +48,7 @@ void StageBuildView::Update(sf::RenderWindow& window, const StageBulidContext& c
 
     if (selected != m_prevSelectedStageId)
     {
-        UpdateDetailAnimation(selected);
+        //UpdateDetailAnimation(selected);
         m_prevSelectedStageId = selected;
     }
 
@@ -109,85 +110,90 @@ void StageBuildView::DrawStageList(const StageBulidContext& context)
 /// <param name="context"></param>
 void StageBuildView::DrawStageDetails(const StageBulidContext& context)
 {
-    for (auto& [stageId, view] : m_detailViews)
+
+    const auto* stage = context.GetSelectedStage();
+    if (!stage)
     {
-        const StageData* data = StageLoader::GetInstance().GetStageData(stageId);
-        if (!data) continue;
-
-        sf::RectangleShape panel({ 320.f, 360.f });
-        panel.setPosition(view.pos);
-        panel.setFillColor(sf::Color(40, 40, 40, 220));
-        panel.setOutlineThickness(2.f);
-        panel.setOutlineColor(sf::Color::White);
-
-        m_render.Draw(panel);
-
-        // ステージ名
-        sf::Text title(m_font, "Stage " + std::to_string(stageId));
-        title.setCharacterSize(26);
-        title.setPosition({ view.pos.x + 20, view.pos.y + 20 });
-        m_render.Draw(title);
-
-        // エネミーアイコン表示
-        constexpr sf::Vector2f ENEMY_ICON_SIZE{ 64.f, 64.f };
-        constexpr float ENEMY_ICON_SPACING = 72.f;
-
-        for (int i = 0; i < 3; ++i)
-        {
-            int enemyId = data->enemyIds[i];
-            if (enemyId <= 0) continue;
-
-            // キャラデータ取得
-            const CharacterData* enemyData =
-                CharacterLoader::GetInstance().GetData(enemyId);
-
-            if (!enemyData) continue;
-
-            // テクスチャ取得
-            auto tex = TextureLoader::GetInstance().GetTextureID(enemyData->iconKey);
-            if (!tex) continue;
-
-            sf::Sprite sprite(*tex);
-
-            // サイズ調整
-            auto size = tex->getSize();
-            sprite.setScale({ ENEMY_ICON_SIZE.x / size.x,ENEMY_ICON_SIZE.y / size.y });
-            sprite.setPosition({view.pos.x + 20.f + i * ENEMY_ICON_SPACING,view.pos.y + 80.f});
-
-            m_render.Draw(sprite);
-        }
+        return;
     }
+
+    // 背景パネル
+    sf::RectangleShape detailPanel({ 700.f, 400.f });
+    detailPanel.setOrigin({ 200.f, 200.f });
+    detailPanel.setPosition({ 500.f, 300.f }); 
+    detailPanel.setFillColor(sf::Color(100, 149, 237)); // 落ち着いた青
+    m_render.Draw(detailPanel);
+
+    // ステージタイトル 
+    sf::Text title(m_font, "");
+    sf::String titleText = sf::String::fromUtf8(stage->name.begin(), stage->name.end());
+	title.setString(titleText);
+	title.setCharacterSize(32);
+	title.setPosition({ 320.f, 120.f });
+	m_render.Draw(title);
+
+    // モンスター表示
+    DrawStageMonsters(stage);
+
+    // 4. テキスト情報（敵の数、特殊制限）
+    sf::Text info(m_font, "");
+	std::string infoStr = std::to_string(stage->enemyIds.size()) + "Enemies\n";
+	infoStr += "Special Rules: None"; // 仮
+	info.setString(infoStr);
+    info.setCharacterSize(24);
+    info.setPosition({ 320.f, 420.f });
+    m_render.Draw(info);
+
+	// ボタン描画
+    if (auto* left = context.GetLeftArrow())
+    {
+        left->Draw(m_render.GetWindow());
+    }
+    if (auto* right = context.GetRightArrow())
+    {
+        right->Draw(m_render.GetWindow());
+    }
+
+	if (auto* nextBtn = context.GetNextButton())
+	{
+		nextBtn->Draw(m_render.GetWindow());
+	}
+	if (auto* backBtn = context.GetBackButton())
+	{
+		backBtn->Draw(m_render.GetWindow());
+	}
+
 }
 
 /// <summary>
 /// 詳細表示物の移動更新
 /// </summary>
 /// <param name="selectedStageId"></param>
-void StageBuildView::UpdateDetailAnimation(int selectedStageId)
-{
-    // ステージが未登録なら追加
-    if (m_detailViews.find(selectedStageId) == m_detailViews.end())
-    {
-        StageDetailView view;
-        view.stageId = selectedStageId;
-        view.pos = DETAIL_BASE_POS + sf::Vector2f(DETAIL_SLIDE_OFFSET, 0.f);
-        view.targetPos = DETAIL_BASE_POS;
-
-        m_detailViews[selectedStageId] = view;
-    }
-
-    for (auto& [id, view] : m_detailViews)
-    {
-        if (id == selectedStageId)
-        {
-            view.targetPos = DETAIL_BASE_POS;
-        }
-        else
-        {
-            view.targetPos = DETAIL_BASE_POS + sf::Vector2f(DETAIL_SLIDE_OFFSET, 0.f);
-        }
-    }
-}
+//void StageBuildView::UpdateDetailAnimation(int selectedStageId)
+//{
+//    // ステージが未登録なら追加
+//    if (m_detailViews.find(selectedStageId) == m_detailViews.end())
+//    {
+//        StageDetailView view;
+//        view.stageId = selectedStageId;
+//        view.pos = DETAIL_BASE_POS + sf::Vector2f(DETAIL_SLIDE_OFFSET, 0.f);
+//        view.targetPos = DETAIL_BASE_POS;
+//
+//        m_detailViews[selectedStageId] = view;
+//    }
+//
+//    for (auto& [id, view] : m_detailViews)
+//    {
+//        if (id == selectedStageId)
+//        {
+//            view.targetPos = DETAIL_BASE_POS;
+//        }
+//        else
+//        {
+//            view.targetPos = DETAIL_BASE_POS + sf::Vector2f(DETAIL_SLIDE_OFFSET, 0.f);
+//        }
+//    }
+//}
 
 /// <summary>
 /// スクロールの更新
@@ -215,7 +221,43 @@ void StageBuildView::UpdateScroll(sf::RenderWindow& window, size_t stageCount)
     float minY = -(stageCount * ITEM_HEIGHT) + 300.f; // 表示領域想定
     if (m_scrollOffsetY < minY) m_scrollOffsetY = minY;
     if (m_scrollOffsetY > 0.f) m_scrollOffsetY = 0.f;
+}
+
+/// <summary>
+/// エネミーアイコンの描画
+/// </summary>
+/// <param name="data"></param>
+void StageBuildView::DrawStageMonsters(const StageData* data)
+{
+	// 詳細ビューの位置取得
+    constexpr float MONSTER_Y = 250.f;
+    constexpr float SPACING = 150.f;
+
+    // エネミーアイコン表示
+    constexpr sf::Vector2f ENEMY_ICON_SIZE{ 128.f, 128.f };
+    constexpr float ENEMY_ICON_SPACING = 72.f;
 
 
+    for (int i = 0; i < 3; ++i) {
+		int enemyId = data->enemyIds[i];
+        // キャラデータ取得
+        const CharacterData* enemyData = CharacterLoader::GetInstance().GetData(enemyId);
+        if (!enemyData)
+        {
+            continue;
+        }
 
+        // テクスチャ取得
+        auto tex = TextureLoader::GetInstance().GetTextureID(enemyData->iconKey);
+        if (!tex) continue;
+
+        sf::Sprite sprite(*tex);
+        // 配置位置を中央揃えに調整
+            // サイズ調整
+        auto size = tex->getSize();
+        sprite.setScale({ ENEMY_ICON_SIZE.x / size.x,ENEMY_ICON_SIZE.y / size.y });
+        sprite.setPosition({ 650.f - SPACING + (i * SPACING) - (ENEMY_ICON_SIZE.x / 2), MONSTER_Y });
+        m_render.Draw(sprite);
+
+    }
 }

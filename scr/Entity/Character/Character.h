@@ -99,7 +99,7 @@ public:
 	// 回復する
 	void TakeHeal(int heal);
 	// バフを受ける
-	void TakeBuff(float power);
+	void TakeBuff(float power, int turn);
 	// バフ更新
 	void UpdateBuff();
 	// バフリセット

@@ -5,7 +5,9 @@
 #include "System/StageBulid/StageBulidController/StageBulidController.h"
 #include "View/StageBulidView/StageBuildView.h"
 #include "View/Render/RenderSystem.h"
-#include "UI/CircleButton.h"
+
+class TriangleButton;
+class BoxButton;
 
 class StageBulidScene : public SceneBase
 {
@@ -16,7 +18,11 @@ private:
 	StageBulidContext m_context;
 	std::unique_ptr<StageBulidController> m_controller;
 	std::unique_ptr<StageBuildView> m_view;
-	std::unique_ptr<CircleButton> m_button;
+
+	std::unique_ptr<TriangleButton> m_leftArrow;
+	std::unique_ptr<TriangleButton> m_rightArrow;
+	std::unique_ptr<BoxButton> m_backButton;
+	std::unique_ptr<BoxButton> m_nextButton;
 
 public:
 
@@ -33,6 +39,7 @@ public:
 	/// BattleContext‚Ö‚ÌŽó‚¯“n‚µ
 	/// </summary>
 	void DecideStage(sf::RenderWindow& arg_window);
+
 
 };
 

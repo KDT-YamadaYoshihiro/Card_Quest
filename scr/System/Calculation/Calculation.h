@@ -22,7 +22,7 @@ public:
 	static float GetDivision(float arg_a, float arg_b);
 
 	// ダメージ計算
-	static float GetDamage(float arg_atk, float arg_card, float arg_def);
+	static float GetDamage(float arg_atk, float arg_atkBuff, float arg_card, float arg_def, float arg_defBuff);
 
 	// 平均値
 	template<size_t N>

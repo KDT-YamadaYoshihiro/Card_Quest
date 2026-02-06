@@ -139,9 +139,10 @@ void Character::TakeHeal(int heal)
 }
 
 // バフ
-void Character::TakeBuff(float power)
+void Character::TakeBuff(float power, int arg_turn)
 {
     m_buff.power += power;
+	m_buff.turn = arg_turn; 
 }
 
 // バフ更新
