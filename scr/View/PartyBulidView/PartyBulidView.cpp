@@ -5,6 +5,7 @@
 #include "Entity/Character/Character.h"
 #include "View/ConsoleView/ConsoleView.h"
 #include "View/ChracterSprite/CharacterSprite.h"
+#include "View/Font/FontManager.h"
 #include <iostream>
 
 
@@ -38,7 +39,7 @@ void PartyBuildView::Update(const PartyBuildContext& arg_context)
 {
 	// アイコン（クリック判定用やリスト表示用）の構築
 	m_characterIcons.clear();
-	sf::Vector2f start{ 120.0f, 400.0f };
+	sf::Vector2f start{ 120.0f, 415.0f };
 	float spacingX = 180.0f;
 	int index = 0;
 
@@ -67,7 +68,7 @@ void PartyBuildView::Update(const PartyBuildContext& arg_context)
 	m_partyIcons.clear();
 
 	// 画面上部に配置
-	sf::Vector2f partyStart{ 250.0f, 120.0f };
+	sf::Vector2f partyStart{ 250.0f, 130.0f };
 	float partySpacingX = 200.0f;
 	index = 0;
 
@@ -92,13 +93,40 @@ void PartyBuildView::Update(const PartyBuildContext& arg_context)
 void PartyBuildView::Draw(const PartyBuildContext& arg_context)
 {
 
+    // Scene の案内文字
+    sf::Text titleText(FontManager::GetInstance().GetFont(), "Party Build");
+    titleText.setCharacterSize(50);
+    titleText.setFillColor(sf::Color::White);
+    titleText.setPosition({ 50.f, 10.f });
+    m_render.Draw(titleText);
+
+    // 案内文字
+    sf::Text instructionText(FontManager::GetInstance().GetFont(), "-Select your party members.-");
+    instructionText.setCharacterSize(30);
+    instructionText.setFillColor(sf::Color::White);
+    instructionText.setPosition({ 400.f, 50.f });
+    m_render.Draw(instructionText);
+
+
+
     // 背景ボックス
     m_render.Draw(m_partyBackground);
     m_render.Draw(m_benchBackground);
 
+    // 文字列描画
+    sf::Text partyLabel(FontManager::GetInstance().GetFont(), "PARTY");
+    partyLabel.setFillColor(sf::Color::White);
+    partyLabel.setPosition({PARTY_POS.x + 10.0f, PARTY_POS.y + 5.0f});
+	m_render.Draw(partyLabel);
+
+	sf::Text benchLabel(FontManager::GetInstance().GetFont(), "BENCH" );
+	benchLabel.setFillColor(sf::Color::White);
+    benchLabel.setPosition({ BENCH_POS.x + 10.0f, BENCH_POS.y});
+	m_render.Draw(benchLabel);
+
     // キャラクター一覧（ベンチ）の描画
     auto allChars = arg_context.GetAllCharacters();
-    sf::Vector2f start{ 120.0f, 400.0f };
+    sf::Vector2f start{ 120.0f, 415.0f };
     float spacingX = 180.0f;
 
     for (size_t i = 0; i < allChars.size(); ++i)
@@ -136,7 +164,7 @@ void PartyBuildView::Draw(const PartyBuildContext& arg_context)
 
     // 選択されたパーティメンバーの描画
     auto party = arg_context.GetParty();
-    sf::Vector2f partyStart{ 250.0f, 120.0f };
+    sf::Vector2f partyStart{ 250.0f, 130.0f };
     float partySpacingX = 200.0f;
 
     for (size_t i = 0; i < party.size(); ++i)
