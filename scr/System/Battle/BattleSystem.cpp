@@ -516,13 +516,34 @@ void BattleSystem::EndTurn()
 /// </summary>
 void BattleSystem::ResultEvent(sf::RenderWindow& arg_woindow)
 {
-
-	if (!InPutMouseManager::GetInstance().IsLeftClicked())
+	// ボタンが存在しなければ処理しない
+	if (!m_toPartySceneButton || !m_toStageSelectButton)
 	{
 		return;
 	}
 
-	if (!m_toPartySceneButton || !m_toStageSelectButton)
+	// ボタンがホバーしていたら色の変更
+	// 編成画面
+	if (m_toPartySceneButton->IsHovered(InPutMouseManager::GetInstance().GetMousePosition(arg_woindow)))
+	{
+		m_toPartySceneButton->SetColor(sf::Color::Yellow);
+	}
+	else
+	{
+		m_toPartySceneButton->SetColor(sf::Color::White);
+	}
+	// ステージ選択ボタン
+	if (m_toStageSelectButton->IsHovered(InPutMouseManager::GetInstance().GetMousePosition(arg_woindow)))
+	{
+		m_toStageSelectButton->SetColor(sf::Color::Yellow);
+	}
+	else
+	{
+		m_toStageSelectButton->SetColor(sf::Color::White);
+	}
+
+	// クリックしていなければ処理しない
+	if (!InPutMouseManager::GetInstance().IsLeftClicked())
 	{
 		return;
 	}
@@ -536,12 +557,13 @@ void BattleSystem::ResultEvent(sf::RenderWindow& arg_woindow)
 	{
 		m_toPartyScene = true;
 	}
-
 	// ステージ選択画面に
 	if (m_toStageSelectButton->IsClicked(mousePos, isClickTriggered))
 	{
 		m_toStageSelectScene = true;
 	}
+
+
 }
 
 /// <summary>
