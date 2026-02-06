@@ -10,21 +10,25 @@
 /// <summary>
 /// 初期化
 /// </summary>
-PartyBuildScene::PartyBuildScene(sf::RenderWindow& window)
+PartyBuildScene::PartyBuildScene()
 	:SceneBase()
 {
 
     ConsoleView::GetInstance().Add("PartyBuildScene\n");
-	Init(window);
 }
 
 /// <summary>
 /// 初期化
 /// </summary>
 /// <param name="arg_window"></param>
-void PartyBuildScene::Init(sf::RenderWindow& arg_window)
+bool PartyBuildScene::Init(sf::RenderWindow& arg_window)
 {
     m_render = std::make_unique<RenderSystem>(arg_window);
+    if (!m_render)
+    {
+        ConsoleView::GetInstance().Add("PartyBuildScene/m_render:nullptr\n");
+        return false;
+	}
 
     std::vector<std::shared_ptr<Character>> allChars;
     for (int i = 1; i <= 6; ++i)
@@ -33,10 +37,42 @@ void PartyBuildScene::Init(sf::RenderWindow& arg_window)
     }
 
     m_context.Init(allChars);
+
+    if(m_context.GetParty().empty())
+    {
+        ConsoleView::GetInstance().Add("PartyBuildScene/m_context.GetParty():empty\n");
+	}
+
     m_view = std::make_unique<PartyBuildView>(*m_render);
+    if (!m_view)
+    {
+        ConsoleView::GetInstance().Add("PartyBuildScene/m_view:nullptr\n");
+        return false;
+    }
+
     m_controller = std::make_unique<PartyBuildController>(m_context, *m_view);
+    if (!m_controller)
+    {
+        ConsoleView::GetInstance().Add("PartyBuildScene/m_controller:nullptr\n");
+        return false;
+    }
+
+	// ボタン
     m_nextButton = std::make_unique<BoxButton>(sf::Vector2f(200.f, 50.f), sf::Vector2f(1000.f, 680.f), FontManager::GetInstance().GetFont(), "NEXT");
+    if(!m_nextButton)
+    {
+        ConsoleView::GetInstance().Add("PartyBuildScene/m_nextButton:nullptr\n");
+        return false;
+	}
+
     m_backButton = std::make_unique<BoxButton>(sf::Vector2f(200.f, 50.f), sf::Vector2f(200.f, 680.f), FontManager::GetInstance().GetFont(), "BACK");
+    if (!m_backButton)
+    {
+        ConsoleView::GetInstance().Add("PartyBuildScene/m_backButton:nullptr\n");
+        return false;
+    }
+
+	return true;
 }
 
 /// <summary>
@@ -97,7 +133,7 @@ void PartyBuildScene::Update(sf::RenderWindow& arg_window)
     if (m_nextButton->IsClicked(mousePos, input.IsLeftClicked()))
     {
         if (!m_context.GetParty().empty()) {
-            StartDeckBulid();
+            StartDeckBulid(arg_window);
 			return;
         }
     }
@@ -135,7 +171,7 @@ void PartyBuildScene::End()
 /// <summary>
 /// デッキ編成画面に移行
 /// </summary>
-void PartyBuildScene::StartDeckBulid()
+void PartyBuildScene::StartDeckBulid(sf::RenderWindow& arg_window)
 {
     // パーティー情報をセット
     auto& session = SceneManager::GetInstance().GetSession();
@@ -146,5 +182,5 @@ void PartyBuildScene::StartDeckBulid()
     ConsoleView::GetInstance().Reset();
 
     // シーンの切り替え
-    SceneManager::GetInstance().ChangeScreen<DeckBuildingScene>();
+    SceneManager::GetInstance().ChangeScreen<DeckBuildingScene>(arg_window);
 }

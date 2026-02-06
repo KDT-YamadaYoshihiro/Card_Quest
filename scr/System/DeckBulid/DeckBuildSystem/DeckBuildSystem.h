@@ -21,6 +21,8 @@ class DeckBuildSystem
 	std::vector<std::unique_ptr<Card>> m_deckCards;
 	// プール内表示用カード
 	std::vector<DisplayCard> m_displayPool;
+	// デッキ表示用のリスト
+	std::vector<DisplayCard> m_displayDeck;
 	// カード描画
 	std::shared_ptr<CardRenderer> m_renderer;
 	// 描画位置
@@ -51,10 +53,10 @@ public:
 
 	DeckBuildSystem()
 		:m_renderer(std::make_shared<CardRenderer>()),
-		m_deckStartPos({ 50.f, 200.f }),
-		m_poolStartPos({ 50.f, 450.f }),
+		m_deckStartPos({ 50.f, 160.f }),
+		m_poolStartPos({ 50.f, 420.f }),
 		m_mouseDownPos({ 0.f, 0.f }),
-		m_cardSpacing(130.f),
+		m_cardSpacing(160.f),
 		m_poolScrollX(0.0f),
 		m_poolDragging(false),
 		m_poolDragStartX(0.0f),
@@ -109,6 +111,8 @@ private:
 	void HandleDrag(sf::Vector2f mousePos, bool isClick);
 	// プール再構築
 	void RebuildDisplayPool();
+	// デッキ再構築
+	void RebuildDisplayDeck();
 	// スクロール制限
 	void ClampPoolScroll();
 	void ClampDeckScroll();

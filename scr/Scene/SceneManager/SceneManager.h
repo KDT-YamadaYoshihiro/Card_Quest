@@ -15,7 +15,7 @@ class SceneManager : public Singleton<SceneManager>
 {
     friend class Singleton<SceneManager>;
 
-    std::unique_ptr<SceneBase> m_screen;
+    std::unique_ptr<SceneBase> m_scene;
     GameSession m_session;
 
 public:
@@ -31,9 +31,26 @@ public:
     GameSession& GetSession();
 
     template <typename T,  typename... Args>
-    void ChangeScreen(Args&&... args)
+    void ChangeScreen(sf::RenderWindow& arg_window, Args&&... args)
     {
-        m_screen = std::make_unique<T>(std::forward<Args>(args)...);
+        auto newScene = std::make_unique<T>();
+
+        m_scene.reset();
+        m_scene = std::move(newScene);
+
+        if (m_scene)
+        {
+            if (static_cast<T*>(m_scene.get())->Init(arg_window, std::forward<Args>(args)...))
+            {
+                ConsoleView::GetInstance().Add("SceneManager: Init Success\n");
+            }
+            else
+            {
+                ConsoleView::GetInstance().Add("SceneManager: Init Failed\n");
+            }
+        }
     }
+
+
 
 };

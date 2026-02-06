@@ -14,8 +14,8 @@ namespace
     constexpr float CARD_W = 120.f;
     constexpr float CARD_H = 160.f;
 
-    constexpr sf::Vector2f HAND_START{ 300.f, 520.f };
-    constexpr float HAND_SPACING = 140.f;
+    constexpr sf::Vector2f HAND_START{ 200.f, 520.f };
+    constexpr float HAND_SPACING = 180.f;
 }
 
 UserController::UserController(BattleContext& context,BattleView& battleView)

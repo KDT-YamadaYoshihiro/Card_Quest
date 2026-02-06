@@ -19,16 +19,22 @@ private:
 
 public:
 
-	PartyBuildScene(sf::RenderWindow& window);
+	PartyBuildScene();
 	virtual ~PartyBuildScene() = default;
 
-	void Init(sf::RenderWindow& arg_window) override;
+	bool Init(sf::RenderWindow& arg_window) override;
 	void handleEvent(const sf::Event& event) override;
 	void Update(sf::RenderWindow& arg_window) override;
 	void Render(sf::RenderWindow& arg_window) override;
 	void End() override;
 
-	void StartDeckBulid();
+private:
+
+	/// <summary>
+	/// ƒfƒbƒL•Ò¬‰æ–Ê‚ÖˆÚ“®
+	/// </summary>
+	/// <param name="arg_window"></param>
+	void StartDeckBulid(sf::RenderWindow& arg_window);
 
 
 };

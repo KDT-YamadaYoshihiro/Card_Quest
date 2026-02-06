@@ -18,17 +18,7 @@ BattleSystem::BattleSystem(sf::RenderWindow& arg_window)
 	m_enemyPhase(EnemyTurnPhase::Start),
 	m_turnCount(0)
 {
-	// すべてのカード情報を取得
-	CardManager::GetInstance().InitCardMaster(CardLoader::GetInstance().GetAll());
-	std::cout << CardManager::GetInstance().GetDeckCount() << std::endl;
-	// 生成・初期化
-	if (!Init(arg_window))
-	{
-		ConsoleView::GetInstance().Add("BattleSysytem/Init():false\n");
-	}
 
-	// 座標の初期化
-	InitPosition();
 }
 
 /// <summary>
@@ -37,6 +27,10 @@ BattleSystem::BattleSystem(sf::RenderWindow& arg_window)
 /// <returns>成功：失敗</returns>
 bool BattleSystem::Init(sf::RenderWindow& arg_window)
 {
+	// すべてのカード情報を取得
+	CardManager::GetInstance().InitCardMaster(CardLoader::GetInstance().GetAll());
+	std::cout << CardManager::GetInstance().GetDeckCount() << std::endl;
+
 	// 描画システム
 	m_render = std::make_unique<RenderSystem>(arg_window);
 	if (!m_render)
@@ -62,6 +56,9 @@ bool BattleSystem::Init(sf::RenderWindow& arg_window)
 		m_enemies.push_back(enemy);
 
 	}
+
+	// キャラ座標の初期化
+	CharaInitPosition();
 
 
 	// 生成確認
@@ -243,7 +240,7 @@ bool BattleSystem::IsToStageSelectScene() const
 /// <summary>
 /// キャラクターの座標設定
 /// </summary>
-void BattleSystem::InitPosition()
+void BattleSystem::CharaInitPosition()
 {
 	// プレイヤー側：画面中央より少し左下に配置
 	for (int i = 0; i < m_players.size(); i++)

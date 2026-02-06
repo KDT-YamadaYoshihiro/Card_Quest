@@ -6,8 +6,14 @@
 #include <SFML/Graphics.hpp>
 
 
-void TitleScene::Init(sf::RenderWindow& arg_window)
+TitleScene::TitleScene()
 {
+    ConsoleView::GetInstance().Add("TitleScene\n");
+}
+
+bool TitleScene::Init(sf::RenderWindow& arg_window)
+{
+	return true;
 }
 
 void TitleScene::handleEvent(const sf::Event& event)
@@ -27,7 +33,7 @@ void TitleScene::Update(sf::RenderWindow& arg_window)
 
 }
 
-void TitleScene::Render(sf::RenderWindow& window)
+void TitleScene::Render(sf::RenderWindow& arg_window)
 {
     auto bg = TextureLoader::GetInstance().GetTextureID("bg");
 
@@ -36,7 +42,7 @@ void TitleScene::Render(sf::RenderWindow& window)
 		sf::Sprite sprite(*bg);
         sprite.setPosition({ 0.0f,0.0f });
         sprite.setScale({ 0.7f,0.7f });
-        window.draw(sprite);
+        arg_window.draw(sprite);
 	}
 
     auto title = TextureLoader::GetInstance().GetTextureID("Title");
@@ -46,14 +52,14 @@ void TitleScene::Render(sf::RenderWindow& window)
         sf::Sprite sprite(*title);
         sprite.setPosition({ 100.0f,0.0f });
         sprite.setScale({ 0.7f,0.7f });
-        window.draw(sprite);
+        arg_window.draw(sprite);
     }
 
 
     sf::Text text(FontManager::GetInstance().GetFont(), "CLICK to START");
     text.setPosition({ 400.0f, 400.0f });
     text.setScale({ 2.0f,2.0f });
-    window.draw(text);
+    arg_window.draw(text);
 
 }
 

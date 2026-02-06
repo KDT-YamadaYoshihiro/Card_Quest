@@ -1,7 +1,13 @@
 #include "ResultScene.h"
 
-void ResultScene::Init(sf::RenderWindow& arg_window)
+ResultScene::ResultScene()
+	: SceneBase()
 {
+}
+
+bool ResultScene::Init(sf::RenderWindow& arg_window)
+{
+	return true;
 }
 
 void ResultScene::handleEvent(const sf::Event& event)

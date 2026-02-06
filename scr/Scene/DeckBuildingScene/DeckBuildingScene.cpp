@@ -11,18 +11,30 @@ DeckBuildingScene::DeckBuildingScene()
     : SceneBase()
 {
 
-    m_nextButton = std::make_unique<BoxButton>(sf::Vector2f(200.f, 50.f), sf::Vector2f(1000.f, 680.f), FontManager::GetInstance().GetFont(), "BATTLE START");
-    m_backButton = std::make_unique<BoxButton>(sf::Vector2f(200.f, 50.f), sf::Vector2f(200.f, 680.f), FontManager::GetInstance().GetFont(), "BACK");
-
-
-    ConsoleView::GetInstance().Add("DeckBuildingScene\n");
-	// カードプール構築
-	CardBuildPool::GetInstance().Build();
-    m_deckBuildSystem.Init();
 }
 
-void DeckBuildingScene::Init(sf::RenderWindow& arg_window)
+bool DeckBuildingScene::Init(sf::RenderWindow& arg_window)
 {
+    m_nextButton = std::make_unique<BoxButton>(sf::Vector2f(200.f, 50.f), sf::Vector2f(1000.f, 680.f), FontManager::GetInstance().GetFont(), "BATTLE START");
+    if(!m_nextButton)
+    {
+        ConsoleView::GetInstance().Add("DeckBuildingScene/m_nextButton:nullptr\n");
+        return false;
+	}
+
+    m_backButton = std::make_unique<BoxButton>(sf::Vector2f(200.f, 50.f), sf::Vector2f(200.f, 680.f), FontManager::GetInstance().GetFont(), "BACK");
+    if (!m_backButton)
+    {
+        ConsoleView::GetInstance().Add("DeckBuildingScene/m_backButton:nullptr\n");
+        return false;
+    }
+
+    ConsoleView::GetInstance().Add("DeckBuildingScene\n");
+    // カードプール構築
+    CardBuildPool::GetInstance().Build();
+    m_deckBuildSystem.Init();
+
+	return true;
 }
 
 void DeckBuildingScene::handleEvent(const sf::Event& event)

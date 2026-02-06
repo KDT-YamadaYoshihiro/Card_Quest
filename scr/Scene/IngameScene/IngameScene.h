@@ -11,15 +11,15 @@ class IngameScene : public SceneBase
 
 public:
 
-	IngameScene(sf::RenderWindow& arg_window):SceneBase()
-	{
-		ConsoleView::GetInstance().Add("IngameScene\n");
-		m_battle = std::make_shared<BattleSystem>(arg_window);
-	};
+	/// <summary>
+	/// èâä˙âª
+	/// </summary>
+	/// <param name="arg_window"></param>
+	IngameScene();
 	virtual ~IngameScene() = default;
 
 
-	void Init(sf::RenderWindow& arg_window) override;
+	bool Init(sf::RenderWindow& arg_window) override;
 	void handleEvent(const sf::Event& event) override;
 	void Update(sf::RenderWindow& arg_window) override;
 	void Render(sf::RenderWindow& arg_window) override;

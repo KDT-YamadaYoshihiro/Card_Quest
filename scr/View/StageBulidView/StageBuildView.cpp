@@ -67,7 +67,7 @@ void StageBuildView::Update(sf::RenderWindow& window, const StageBulidContext& c
 /// <param name="context"></param>
 void StageBuildView::Draw(const StageBulidContext& context)
 {
-    DrawStageList(context);
+	//DrawStageList(context); 　// debug用
     DrawStageDetails(context);
 }
 
@@ -164,36 +164,6 @@ void StageBuildView::DrawStageDetails(const StageBulidContext& context)
 	}
 
 }
-
-/// <summary>
-/// 詳細表示物の移動更新
-/// </summary>
-/// <param name="selectedStageId"></param>
-//void StageBuildView::UpdateDetailAnimation(int selectedStageId)
-//{
-//    // ステージが未登録なら追加
-//    if (m_detailViews.find(selectedStageId) == m_detailViews.end())
-//    {
-//        StageDetailView view;
-//        view.stageId = selectedStageId;
-//        view.pos = DETAIL_BASE_POS + sf::Vector2f(DETAIL_SLIDE_OFFSET, 0.f);
-//        view.targetPos = DETAIL_BASE_POS;
-//
-//        m_detailViews[selectedStageId] = view;
-//    }
-//
-//    for (auto& [id, view] : m_detailViews)
-//    {
-//        if (id == selectedStageId)
-//        {
-//            view.targetPos = DETAIL_BASE_POS;
-//        }
-//        else
-//        {
-//            view.targetPos = DETAIL_BASE_POS + sf::Vector2f(DETAIL_SLIDE_OFFSET, 0.f);
-//        }
-//    }
-//}
 
 /// <summary>
 /// スクロールの更新

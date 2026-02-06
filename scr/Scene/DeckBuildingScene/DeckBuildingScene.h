@@ -22,7 +22,7 @@ public:
 	virtual ~DeckBuildingScene() = default;
 
 	// ƒV[ƒ“Šî–{ŠÖ”
-	virtual void Init(sf::RenderWindow& arg_window) override;
+	virtual bool Init(sf::RenderWindow& arg_window) override;
 	virtual void handleEvent(const sf::Event& event) override;
 	virtual void Update(sf::RenderWindow& arg_window) override;
 	virtual void Render(sf::RenderWindow& arg_window) override;

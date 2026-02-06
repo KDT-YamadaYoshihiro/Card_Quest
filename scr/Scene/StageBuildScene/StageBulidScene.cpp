@@ -9,35 +9,71 @@
 #include "UI/BoxButton.h"
 #include "UI/TriangleButton.h"
 
-StageBulidScene::StageBulidScene(sf::RenderWindow& arg_window)
+StageBulidScene::StageBulidScene()
 {
     // 
     ConsoleView::GetInstance().Add("StageBulidScene\n");
 
-    Init(arg_window);
 }
 
-void StageBulidScene::Init(sf::RenderWindow& arg_window)
+bool StageBulidScene::Init(sf::RenderWindow& arg_window)
 {
     // RenderSystem
     m_render = std::make_unique<RenderSystem>(arg_window);
+    if(!m_render)
+    {
+        ConsoleView::GetInstance().Add("StageBulidScene/m_render:nullptr\n");
+        return false;
+	}
 
     // Context èâä˙âª
     m_context.Init();
 
     // View / Controller
     m_view = std::make_unique<StageBuildView>(*m_render);
+    if(!m_view)
+    {
+        ConsoleView::GetInstance().Add("StageBulidScene/m_view:nullptr\n");
+        return false;
+	}
     m_controller = std::make_unique<StageBulidController>(m_context);
+    if (!m_controller)
+    {
+        ConsoleView::GetInstance().Add("StageBulidScene/m_controller:nullptr\n");
+        return false;
+    }
 
 	// É{É^Éì
     m_nextButton = std::make_unique<BoxButton>(sf::Vector2f(200.f, 50.f), sf::Vector2f(1000.f, 680.f), FontManager::GetInstance().GetFont(), "NEXT");
+    if (!m_nextButton)
+    {
+        ConsoleView::GetInstance().Add("StageBulidScene/m_nextButton:nullptr\n");
+        return false;
+    }
     m_backButton = std::make_unique<BoxButton>(sf::Vector2f(200.f, 50.f), sf::Vector2f(200.f, 680.f), FontManager::GetInstance().GetFont(), "BACK");
+    if(!m_backButton)
+    {
+        ConsoleView::GetInstance().Add("StageBulidScene/m_backButton:nullptr\n");
+        return false;
+	}
     m_leftArrow = std::make_unique<TriangleButton>(sf::Vector2f(50, 70), sf::Vector2f(200, 300), TriangleButton::Direction::Left);
+    if (!m_leftArrow)
+    {
+        ConsoleView::GetInstance().Add("StageBulidScene/m_leftArrow:nullptr\n");
+        return false;
+    }
 	m_rightArrow = std::make_unique<TriangleButton>(sf::Vector2f(50, 70), sf::Vector2f(1200, 300), TriangleButton::Direction::Right);
+    if(!m_rightArrow)
+    {
+        ConsoleView::GetInstance().Add("StageBulidScene/m_rightArrow:nullptr\n");
+        return false;
+	}
 
 	// ContextÇ…É{É^ÉìÇìoò^
     m_context.SetNavigationButtons(std::move(m_leftArrow), std::move(m_rightArrow));
 	m_context.SetSceneButton(std::move(m_nextButton), std::move(m_backButton)); 
+
+	return true;
 }
 
 void StageBulidScene::handleEvent(const sf::Event& event)
@@ -95,7 +131,7 @@ void StageBulidScene::Update(sf::RenderWindow& arg_window)
     if (m_context.GetBackButton()->IsClicked(input.GetMousePosition(arg_window), input.IsLeftClicked()))
     {
         ConsoleView::GetInstance().Reset();
-        SceneManager::GetInstance().ChangeScreen<TitleScene>();
+        SceneManager::GetInstance().ChangeScreen<TitleScene>(arg_window);
         return;
     }
 

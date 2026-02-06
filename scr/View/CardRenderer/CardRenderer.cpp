@@ -44,21 +44,53 @@ void CardRenderer::DrawGrave(const sf::Font& arg_font, sf::RenderWindow& window,
 /// <param name="card">カード</param>
 void CardRenderer::DrawSingleCard(const sf::Font& arg_font, sf::RenderWindow& window, sf::Vector2f pos, const CardData& cardData, const std::string& IconKey)
 {
-    // カードのベース（白地）
-    sf::RectangleShape rect({ 120.f, 160.f });
-    rect.setFillColor(sf::Color(230, 230, 230));
-    rect.setOutlineColor(sf::Color::Black);
-    rect.setOutlineThickness(2.0f);
-    rect.setPosition(pos);
-    window.draw(rect);
+
+    std::string baseTextureKey;
+    if (cardData.actionType == ActionType::MAGIC || cardData.actionType == ActionType::HEAL)
+    {
+        baseTextureKey = "cardMgc";
+    }
+    else {
+        baseTextureKey = "cardAtk";
+    }
+
+    sf::Vector2f cardSize(120.f, 160.f); // デフォルトサイズ
+
+    // カードベース（テクスチャ）の描画
+    auto baseTex = TextureLoader::GetInstance().GetTextureID(baseTextureKey);
+    if (baseTex)
+    {
+        sf::Sprite baseSprite(*baseTex);
+        baseSprite.setPosition(pos);
+        baseSprite.setScale({ 0.25f, 0.25f }); 
+        window.draw(baseSprite);
+        cardSize.x = baseSprite.getGlobalBounds().size.x;
+        cardSize.y = baseSprite.getGlobalBounds().size.y;
+    }
+    else
+    {
+        // カードのベース（白地）
+        sf::RectangleShape rect({ 120.f, 160.f });
+        rect.setFillColor(sf::Color(230, 230, 230));
+        rect.setOutlineColor(sf::Color::Black);
+        rect.setOutlineThickness(2.0f);
+        rect.setPosition(pos);
+        window.draw(rect);
+    }
 
 
     // 技名
     sf::Text nameText(arg_font, sf::String::fromUtf8(cardData.name.begin(), cardData.name.end()));
     nameText.setCharacterSize(14);
     nameText.setFillColor(sf::Color::Black);
-    nameText.setPosition({ pos.x + 5.0f, pos.y + 5.0f });
+
+    // テキストのサイズ（境界）を取得
+    sf::FloatRect textRect = nameText.getLocalBounds();
+    // 原点をテキストの中心に設定する
+    nameText.setOrigin({textRect.position.x + textRect.size.x / 2.0f,textRect.position.y + textRect.size.y / 2.0f});
+    nameText.setPosition({pos.x + (cardSize.x / 2.0f),pos.y + 20.0f});
     window.draw(nameText);
+
 
     // 説明
     sf::String desc = sf::String::fromUtf8(cardData.description.begin(), cardData.description.end());
@@ -68,7 +100,7 @@ void CardRenderer::DrawSingleCard(const sf::Font& arg_font, sf::RenderWindow& wi
     sf::Text descText(arg_font,desc);
     descText.setCharacterSize(12);
     descText.setFillColor(sf::Color::Black);
-    descText.setPosition({ pos.x + 5.0f, pos.y + 30.0f });
+    descText.setPosition({ pos.x + 30.0f, pos.y + 50.0f });
     window.draw(descText);
 
     // 所持キャラクターのアイコン表示

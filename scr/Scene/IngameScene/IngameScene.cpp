@@ -4,9 +4,32 @@
 #include "Scene/StageBuildScene/StageBulidScene.h"
 
 
-void IngameScene::Init(sf::RenderWindow& arg_window)
+IngameScene::IngameScene()
+	:SceneBase()
 {
-	//battle->Init(arg_window);
+}
+
+bool IngameScene::Init(sf::RenderWindow& arg_window)
+{
+	ConsoleView::GetInstance().Add("IngameScene\n");
+	m_battle = std::make_shared<BattleSystem>(arg_window);
+	if (!m_battle)
+	{
+		ConsoleView::GetInstance().Add("IngameScene/m_battle:nullptr\n");
+		return false; 
+	}
+
+	if (m_battle->Init(arg_window))
+	{
+		ConsoleView::GetInstance().Add("IngameScene/m_battle->Init():true\n");
+		return true;
+	}
+	else
+	{
+		ConsoleView::GetInstance().Add("IngameScene/m_battle->Init():false\n");
+		return false;
+	}
+
 }
 
 void IngameScene::handleEvent(const sf::Event& event)

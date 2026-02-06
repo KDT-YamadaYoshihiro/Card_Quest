@@ -13,9 +13,9 @@ namespace
     constexpr sf::Vector2f DECK_POS{ 50.f, 120.f };
     constexpr sf::Vector2f GRAVE_POS{ 150.f, 520.f };
 
-    constexpr sf::Vector2f HAND_START{ 300.f, 520.f };
-    constexpr float HAND_SPACING = 140.f;
-    constexpr float SELECT_OFFSET_Y = 20.f;
+    constexpr sf::Vector2f HAND_START{ 200.f, 520.f };
+    constexpr float HAND_SPACING = 180.f;
+    constexpr float SELECT_OFFSET_Y = 50.f;
 }
 
 /// <summary>

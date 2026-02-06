@@ -30,6 +30,8 @@ void DeckBuildSystem::Init()
     LoadDeckFromManager();
 
 	RebuildDisplayPool();
+
+    RebuildDisplayDeck();
 }
 
 // 更新
@@ -127,14 +129,14 @@ void DeckBuildSystem::Draw(sf::RenderWindow& window, const sf::Font& font)
 	sf::Text instructionText(font, "-Please select the cards.-");
 	instructionText.setCharacterSize(30);
 	instructionText.setFillColor(sf::Color::White);
-	instructionText.setPosition({ 450.f, 120.f });
+	instructionText.setPosition({ 430.f, 80.f });
 	window.draw(instructionText);
 
 
     // ===== デッキ側（上段） =====
 
      //　背景描画
-    sf::RectangleShape deckBG({ 1500.f, 220.f });
+    sf::RectangleShape deckBG({ 1500.f, 250.f });
     deckBG.setPosition({ 0.f, m_deckStartPos.y - 40.f });
     deckBG.setFillColor(sf::Color(20, 20, 20, 200)); // 半透明の黒
     window.draw(deckBG);
@@ -153,18 +155,38 @@ void DeckBuildSystem::Draw(sf::RenderWindow& window, const sf::Font& font)
     countText.setPosition({ 100.f,  m_deckStartPos.y - 35.f });
     window.draw(countText);
 
-	// デッキ内カード描画
-    for (size_t i = 0; i < m_deckCards.size(); ++i)
-    {
-        sf::Vector2f pos = { m_deckStartPos.x + m_cardSpacing * i + m_deckScrollX, m_deckStartPos.y };
+	//// デッキ内カード描画
+ //   for (size_t i = 0; i < m_deckCards.size(); ++i)
+ //   {
+ //       sf::Vector2f pos = { m_deckStartPos.x + m_cardSpacing * i + m_deckScrollX, m_deckStartPos.y };
 
-        m_renderer->DrawSingleCard(font, window, pos, m_deckCards[i]->GetCardState(),"");
+ //       m_renderer->DrawSingleCard(font, window, pos, m_deckCards[i]->GetCardState(),"");
+ //   }
+
+    for (size_t i = 0; i < m_displayDeck.size(); ++i)
+    {
+        sf::Vector2f pos = m_deckStartPos + sf::Vector2f(i * m_cardSpacing + m_deckScrollX, 0.f);
+
+        // カード本体の描画
+        m_renderer->DrawSingleCard(font, window, pos,m_displayDeck[i].card->GetCardState(),"");
+
+        // 枚数表示 (*n)
+        if (m_displayDeck[i].count > 1)
+        {
+            sf::Text countText(font, "x" + std::to_string(m_displayDeck[i].count));
+            countText.setCharacterSize(20);
+            countText.setFillColor(sf::Color::Yellow);
+            countText.setOutlineColor(sf::Color::Black);
+            countText.setOutlineThickness(2.f);
+            countText.setPosition(pos + sf::Vector2f(80.f, 130.f)); // 右下付近
+            window.draw(countText);
+        }
     }
 
     // ===== プール側（下段） =====
 
 	//　背景描画
-    sf::RectangleShape poolBG({ 1500.f, 220.f });
+    sf::RectangleShape poolBG({ 1500.f, 250.f });
     poolBG.setPosition({ 0.f,m_poolStartPos.y - 40.f });
     poolBG.setFillColor(sf::Color(20, 20, 20, 200)); // 半透明の黒
     window.draw(poolBG);
@@ -205,16 +227,21 @@ bool DeckBuildSystem::AddFromPool(int poolIndex)
         return false;
     }
 
+    int targetId = m_displayPool[poolIndex].card->GetCardState().cardId;
 	// プールからカードを取得    
-    auto card = CardBuildPool::GetInstance().TakeCard(poolIndex);
+    auto card = CardBuildPool::GetInstance().TakeCard(targetId);
 
     if (!card)
     {
-        ConsoleView::GetInstance().Add("プールからカードを取得できませんでした: " + std::to_string( poolIndex) + "\n");
+        ConsoleView::GetInstance().Add("プールからカードを取得できませんでした: " + std::to_string(targetId) + "\n");
         return false;
     }
 
     m_deckCards.emplace_back(std::move(card));
+
+    // 表示用リストを更新
+    RebuildDisplayPool();
+    RebuildDisplayDeck();
 
     return true;
 }
@@ -294,26 +321,13 @@ bool DeckBuildSystem::HandlePoolClick(sf::Vector2f mousePos)
 
     for (size_t i = 0; i < m_displayPool.size(); ++i)
     {
-		// クリック判定矩形
         sf::FloatRect rect({ m_poolStartPos.x + m_cardSpacing * i + m_poolScrollX, m_poolStartPos.y }, { 120.0f, 160.0f });
 
         if (rect.contains(mousePos))
         {
-			// プールからカードを取得
-			int id = m_displayPool[i].card->GetCardState().cardId;
-            auto card = pool.TakeCard(id);
-			// カードが取得できたらデッキに追加
-            if (card)
-            {
-				// デッキに追加
-                m_deckCards.emplace_back(std::move(card));
-				// プール表示再構築
-				RebuildDisplayPool();
-                return true;
-            }
+            return AddFromPool(static_cast<int>(i));
         }
     }
-
     return false;
 
 }
@@ -327,18 +341,47 @@ bool DeckBuildSystem::HandleDeckClick(sf::Vector2f mousePos)
         return false;
     }
 
-    for (size_t i = 0; i < m_deckCards.size(); ++i)
+  //  for (size_t i = 0; i < m_deckCards.size(); ++i)
+  //  {
+		//// クリック判定矩形
+  //      sf::FloatRect rect({ m_deckStartPos.x + m_cardSpacing * i + m_deckScrollX, m_deckStartPos.y }, { 120.0f, 160.0f });
+
+  //      if (rect.contains(mousePos))
+  //      {
+		//	// カードをプールに戻す
+  //          CardBuildPool::GetInstance().ReturnCard(std::move(m_deckCards[i]));
+		//	// デッキから削除
+  //          m_deckCards.erase(m_deckCards.begin() + i);
+		//	// プール表示再構築
+  //          RebuildDisplayPool();
+  //          return true;
+  //      }
+  //  }
+
+    for (size_t i = 0; i < m_displayDeck.size(); ++i)
     {
-		// クリック判定矩形
         sf::FloatRect rect({ m_deckStartPos.x + m_cardSpacing * i + m_deckScrollX, m_deckStartPos.y }, { 120.0f, 160.0f });
 
         if (rect.contains(mousePos))
         {
-			// カードをプールに戻す
-            CardBuildPool::GetInstance().ReturnCard(std::move(m_deckCards[i]));
-			// デッキから削除
-            m_deckCards.erase(m_deckCards.begin() + i);
-			// プール表示再構築
+            // 1. クリックされた表示上のカードIDを特定
+            int targetId = m_displayDeck[i].card->GetCardState().cardId;
+
+            // 2. 実データ(m_deckCards)からそのIDを1つだけ探して削除
+            for (auto it = m_deckCards.begin(); it != m_deckCards.end(); ++it)
+            {
+                if ((*it)->GetCardState().cardId == targetId)
+                {
+                    // プール(CardBuildPool)に実体を戻す
+                    CardBuildPool::GetInstance().ReturnCard(std::move(*it));
+                    // リストから除去
+                    m_deckCards.erase(it);
+                    break;
+                }
+            }
+
+            // 3. 表示を再構築
+            RebuildDisplayDeck();
             RebuildDisplayPool();
             return true;
         }
@@ -405,6 +448,34 @@ void DeckBuildSystem::RebuildDisplayPool()
         auto card = CardFactory::GetInstance().CreateCard(id);
 		// プール表示用に追加
         m_displayPool.push_back({ std::move(card),count});
+    }
+}
+
+void DeckBuildSystem::RebuildDisplayDeck()
+{
+
+    m_displayDeck.clear();
+    if (m_deckCards.empty())
+    {
+        return;
+    }
+
+    std::unordered_map<int, int> countMap;
+    std::vector<int> idOrder; // 追加された順序を維持したい場合
+
+    for (const auto& card : m_deckCards)
+    {
+        int id = card->GetCardState().cardId;
+        if (countMap[id] == 0) {
+            idOrder.push_back(id);
+        }
+        countMap[id]++;
+    }
+
+    for (int id : idOrder)
+    {
+        auto card = CardFactory::GetInstance().CreateCard(id);
+        m_displayDeck.push_back({ std::move(card), countMap[id] });
     }
 }
 

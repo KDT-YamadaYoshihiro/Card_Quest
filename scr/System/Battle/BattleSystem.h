@@ -148,7 +148,7 @@ private:
 	/// <summary>
 	/// 座標の初期化
 	/// </summary>
-	void InitPosition();
+	void CharaInitPosition();
 
 	/// <summary>
 	/// ターン開始
