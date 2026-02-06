@@ -56,7 +56,7 @@ bool StageBulidScene::Init(sf::RenderWindow& arg_window)
         ConsoleView::GetInstance().Add("StageBulidScene/m_backButton:nullptr\n");
         return false;
 	}
-    m_leftArrow = std::make_unique<TriangleButton>(sf::Vector2f(50, 70), sf::Vector2f(200, 300), TriangleButton::Direction::Left);
+    m_leftArrow = std::make_unique<TriangleButton>(sf::Vector2f(50, 70), sf::Vector2f(100, 300), TriangleButton::Direction::Left);
     if (!m_leftArrow)
     {
         ConsoleView::GetInstance().Add("StageBulidScene/m_leftArrow:nullptr\n");
