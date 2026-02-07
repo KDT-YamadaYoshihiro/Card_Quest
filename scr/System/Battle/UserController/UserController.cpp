@@ -119,7 +119,8 @@ void UserController::SelectCard(int cardIdx)
     auto cardData = CardManager::GetInstance().GetCardData(m_selectCardId);
 
     UpdateCreateTargets();
-    m_context.SetPredictedCost(cardData.actionPlus);
+	int predctionCost = cardData.actionPlus - 1;
+    m_context.SetPredictedCost(predctionCost);
     m_context.ClearFocusTargets();
 
     if (!m_targetCandidates.empty())

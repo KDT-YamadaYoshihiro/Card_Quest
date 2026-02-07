@@ -124,14 +124,11 @@ std::vector<std::shared_ptr<Character>> BattleContext::CreateTargetCandidates(Ta
                 {
                     continue;
                 }
-                if (c == actor)
-                {
-                    continue;
-                }
 
                 result.push_back(c);
             }
         };
+
 
     switch (targetType)
     {

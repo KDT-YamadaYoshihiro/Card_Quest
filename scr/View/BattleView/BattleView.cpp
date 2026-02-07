@@ -172,10 +172,7 @@ void BattleView::Render(sf::RenderWindow& arg_window)
     // 行動数
     DrawCost(arg_window);
     // 増加行動数
-    if (m_context.GetPredictedCost() > 0)
-    {
-        DrawCostGain(arg_window);
-    }
+    DrawCostGain(arg_window);
     // バーナー
     DrawTurnBanner(arg_window);
     // ステージ名
@@ -254,6 +251,8 @@ void BattleView::DrawCards(sf::RenderWindow& arg_window)
         {
             sf::Vector2f drawPos = pos;
 
+            
+
             // 選択カードを少し上に
             if (i == m_selectedCard)
             {
@@ -303,60 +302,6 @@ void BattleView::DrawFocus(sf::RenderWindow& arg_window)
         arg_window.draw(focusCircle);
     }
 
-    //// Contextから現在フォーカスすべき対象（1体または複数）を取得
-    //const auto& focusTargets = m_context.GetFocusTargets();
-
-    //if (m_context.GetFocusDraw()) {
-    //    for (const auto& target : focusTargets)
-    //    {
-    //        if (!target || target->IsDead()) continue;
-
-    //        // 円のサイズ設定
-    //        float circleRadius = 60.f;
-    //        sf::CircleShape circle(circleRadius);
-    //        circle.setOutlineColor(sf::Color::Yellow);
-    //        circle.setOutlineThickness(3.f);
-    //        circle.setFillColor(sf::Color::Transparent);
-
-    //       
-    //        circle.setOrigin({ circleRadius, circleRadius });
-    //        // キャラクターの中心座標を取得して設定
-    //        sf::Vector2f centerPos = GetCharacterCenter(target);
-    //        circle.setPosition(centerPos);
-    //        // --------------------
-
-    //        arg_window.draw(circle);
-    //    }
-    //}
-
-    //if (userCtrl.GetSelectPhase() == PlayerSelectPhase::SELECT_TARGET &&
-    //    userCtrl.GetSelectCardId() != -1)
-    //{
-    //    const auto& targets = userCtrl.GetSelectTargetIndices();
-
-    //    for (const auto& target : targets)
-    //    {
-    //        if (!target)
-    //        {
-    //            continue;
-    //        }
-
-    //        // ターゲットの足元や中心にフォーカスを表示
-    //        // 画像やシェイプの設定は既存のものを利用
-    //        float circleRadius = 60.f;
-    //        sf::CircleShape focusCircle(circleRadius);
-    //        focusCircle.setFillColor(sf::Color::Transparent);
-    //        focusCircle.setOutlineColor(sf::Color::Yellow);
-    //        focusCircle.setOutlineThickness(3.f);
-
-    //        focusCircle.setOrigin({ circleRadius, circleRadius });
-    //        // キャラクターの中心座標を取得して設定
-    //        sf::Vector2f centerPos = GetCharacterCenter(target);
-    //        focusCircle.setPosition(centerPos);
-
-    //        arg_window.draw(focusCircle);
-    //    }
-    //}
 }
 
 /// <summary>
@@ -387,7 +332,6 @@ void BattleView::DrawCost(sf::RenderWindow& arg_window)
 void BattleView::DrawCostGain(sf::RenderWindow& arg_window)
 {
     int val = m_context.GetPredictedCost();
-    if (val == 0) return;
 
     sf::Text gainText(m_font,"");
     gainText.setFont(m_font);
@@ -395,23 +339,28 @@ void BattleView::DrawCostGain(sf::RenderWindow& arg_window)
     gainText.setOutlineColor(sf::Color::Black);
     gainText.setOutlineThickness(2.f);
 
-    if (val > 0)
+    if (val == 0)
     {
-        // --- 通常の消費：赤または黄色で "-" 表示 ---
-        gainText.setFillColor(sf::Color::Yellow);
-        gainText.setString(" - " + std::to_string(val));
+        // --- 変化なし：白色で "0" 表示 ---
+        gainText.setFillColor(sf::Color::White);
+        gainText.setString(" + 0");
     }
+	else if (val > 0)
+	{
+        // --- コスト獲得：緑色で "+" 表示 ---
+		gainText.setFillColor(sf::Color::Green);
+		gainText.setString(" + " + std::to_string(val));
+	}
     else
     {
-        // --- コスト獲得：緑色で "+" 表示 ---
-        // valが-1なら、絶対値をとって "+ 1" とする
-        gainText.setFillColor(sf::Color::Green);
-        gainText.setString(" + " + std::to_string(std::abs(val)));
+        // --- コスト消費：赤色で "-" 表示 ---
+        gainText.setFillColor(sf::Color::Red);
+        gainText.setString(" - " + std::to_string(std::abs(val)));
     }
 
     // 表示位置：現在のAP表示の右側に配置
     // (DrawCostの座標 50.f, 650.f に対して調整)
-    gainText.setPosition({ 180.f, 650.f });
+    gainText.setPosition(sf::Vector2f(750.0f, 130.0f));
 
     arg_window.draw(gainText);
 }
