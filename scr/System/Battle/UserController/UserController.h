@@ -84,8 +84,10 @@ public:
 private:
     // ===== ì‡ïîçXêV =====
     void UpdateSelectCard(sf::RenderWindow& window , const sf::Vector2f& mousePos);
+    void SelectCard(int cardIdx);
     void UpdateCreateTargets();
     void UpdateSelectTarget(sf::RenderWindow& window);
+    void ConfirmAction(const std::vector<std::shared_ptr<Character>>& targets);
 
     // ===== HitTest =====
     int HitTestCharacter(const sf::Vector2f& mousePos,

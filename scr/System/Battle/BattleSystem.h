@@ -93,7 +93,8 @@ private:
 	bool m_toPartyScene = false;
 	bool m_toStageSelectScene = false;
 
-
+	// AnimationçXêVóp
+	sf::Clock m_clock;
 
 public:
 

@@ -20,14 +20,14 @@ private:
     // ステージID
     int m_stageId;
 
-    // 
+    // フォーカスターゲット
     std::vector<std::shared_ptr<Character>> m_focusTargets;
-
     // フォーカスの表示有無
     bool IsFocusDraw = false;
-
     // フェーズ
     int m_currentTurnPhase = 0;
+    // 追加行動数
+    int m_uiPredictedCost = 0;
 
 public:
 
@@ -97,10 +97,34 @@ public:
     int GetHoveredCardIndex() const;
     std::shared_ptr<Character> GetHoveredTarget() const;
 
+    /// <summary>
+    /// フォーカスターゲットのセット
+    /// </summary>
+    /// <param name="targets"></param>
     void SetFocusTargets(const std::vector<std::shared_ptr<Character>>& targets);
+
+    /// <summary>
+    /// フォーカスターゲットのリセット
+    /// </summary>
     void ClearFocusTargets();
+
+    /// <summary>
+    /// フォーカスターゲットの取得
+    /// </summary>
+    /// <returns></returns>
     const std::vector<std::shared_ptr<Character>>& GetFocusTargets() const;
 
+    /// <summary>
+    /// 追加行動数のセット
+    /// </summary>
+    /// <param name="arg_cost"></param>
+    void SetPredictedCost(int arg_cost);
+
+    /// <summary>
+    /// 追加行動数の取得
+    /// </summary>
+    /// <returns></returns>
+    int GetPredictedCost() const;
 
     /// <summary>
     /// UI上の通し番号からカードIDを取得する

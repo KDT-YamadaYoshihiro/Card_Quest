@@ -8,7 +8,7 @@
 
 #include "Scene/StageBuildScene/StageBulidScene.h"
 #include "Scene/PartyBuildScene/PartyBuildScene.h"
-
+#include <SFML/System.hpp>
 /// <summary>
 /// 初期化処理
 /// </summary>
@@ -174,22 +174,22 @@ void BattleSystem::Update(sf::RenderWindow& arg_window)
 		ConsoleView::GetInstance().Reset();
 		m_phase = TurnPhase::Result;
 	}
-
-
+	float dt = m_clock.restart().asSeconds();
 	// キャラクター系の更新
 	for (auto& p : m_players)
 	{
-
 		p->Update();
+		p->UpdateAnimTimer(dt);
 	}
 	for (auto& e : m_enemies)
 	{
 		e->Update();
+		e->UpdateAnimTimer(dt);
 	}
 
 	m_context->SetTurnPhase(static_cast<int>(m_phase));
 
-	m_battleView->Update(1.0f / 60.0f);
+	m_battleView->Update(dt);
 }
 
 /// <summary>
@@ -613,6 +613,9 @@ void BattleSystem::ApplyAction(const std::shared_ptr<Character>& actor, const st
 		{
 		case ActionType::ATTCK:
 		{
+			actor->SetAnimation(CharacterAnimState::ATTACK, 1.0f);
+			target->SetAnimation(CharacterAnimState::DAMAGE, 0.8f);
+
 			int damage = Calculation::GetDamage(actor->GetData().magicAtk, actor->GetBuffData().power, card.power, target->GetData().def, target->GetBuffData().power);
 			target->TakeDamage(damage);
 			// ダメージ表示
@@ -625,6 +628,9 @@ void BattleSystem::ApplyAction(const std::shared_ptr<Character>& actor, const st
 		}
 		case ActionType::MAGIC:
 		{
+			actor->SetAnimation(CharacterAnimState::MAGIC, 1.0f);
+			target->SetAnimation(CharacterAnimState::DAMAGE, 0.8f);
+
 			int damage = Calculation::GetDamage(actor->GetData().magicAtk, actor->GetBuffData().power, card.power, target->GetData().def, target->GetBuffData().power);
 			target->TakeDamage(damage);
 			// ダメージ表示
@@ -637,6 +643,7 @@ void BattleSystem::ApplyAction(const std::shared_ptr<Character>& actor, const st
 
 		case ActionType::HEAL:
 		{
+			actor->SetAnimation(CharacterAnimState::MAGIC, 1.0f);
 			int heal = Calculation::GetMultiplicative(actor->GetData().maxHp, card.power);
 			target->TakeHeal(heal);
 			// ダメージ表示
@@ -648,6 +655,7 @@ void BattleSystem::ApplyAction(const std::shared_ptr<Character>& actor, const st
 			break;
 		}
 		case ActionType::BUFF:
+			actor->SetAnimation(CharacterAnimState::MAGIC, 1.0f);
 			target->TakeBuff(card.power, card.turn);
 			break;
 

@@ -117,6 +117,56 @@ int Character::DiscardCardById(int cardId)
     return id;
 }
 
+void Character::SetAnimation(CharacterAnimState state, float duration)
+{
+    m_animState = state;
+    m_animTimer = duration;
+    m_animDuration = duration;
+}
+
+void Character::UpdateAnimTimer(float arg_dt)
+{
+    m_totalTime += arg_dt;
+    if (m_animTimer > 0.0f) {
+        m_animTimer -= arg_dt;
+        if (m_animTimer <= 0.0f) {
+            m_animState = CharacterAnimState::WAIT; 
+        }
+    }
+}
+
+sf::Vector2f Character::GetVisualPosition() const
+{
+    sf::Vector2f offset(0.f, 0.f);
+
+    // 待機時の上下揺れ (常に適用)
+    if (m_animState == CharacterAnimState::WAIT && !IsDead()) {
+        offset.y = sin(m_totalTime * 2.0f) * 2.0f; // 速度3.0, 振幅5px
+    }
+
+    // アクション中の特殊移動
+    if (m_animTimer > 0.0f) {
+        float progress = 1.0f - (m_animTimer / m_animDuration); // 0.0 ～ 1.0
+        float dir = (m_faction == Faction::Player) ? 1.0f : -1.0f; // 向き
+
+        if (m_animState == CharacterAnimState::ATTACK) {
+            // 右へ踏み込み(30px) ＋ 小刻みな揺れ(10px)
+            float moveX = 30.0f * sin(progress * 3.14f);
+            float shake = 10.0f * sin(progress * 20.0f);
+            offset.x = (moveX + shake) * dir;
+        }
+        else if (m_animState == CharacterAnimState::MAGIC) {
+            // 上へふわっと浮く(20px)
+            offset.y = -20.0f * sin(progress * 3.14f);
+        }
+        else if (m_animState == CharacterAnimState::DAMAGE) {
+            // 後ろへのけぞる
+            offset.x = -15.0f * sin(progress * 3.14f) * dir;
+        }
+    }
+    return m_pos + offset;
+}
+
 // ダメージ
 void Character::TakeDamage(int damage)
 {

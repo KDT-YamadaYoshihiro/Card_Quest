@@ -92,39 +92,57 @@ void UserController::UpdateSelectCard(sf::RenderWindow& window, const sf::Vector
     
     m_hoveredCardIndex = HitTestHandCard(mousePos);
 
-    if (InPutMouseManager::GetInstance().IsLeftClicked()) {
-        if (m_hoveredCardIndex == -1) {
-            // indexが空なら何もしない
-            return;
-        }
-        // 同じカードを2回クリック、または既に選択中なら確定
-        if (m_preSelectedCardIndex == m_hoveredCardIndex) {
-            // インデックの同期
-            m_selectedCardIndex = m_hoveredCardIndex;
-            //  UIインデックスからカードIDを特定
-            int cardId = m_context.GetCardIdByGlobalIndex(m_selectedCardIndex);
-            // カードIDから行動者を特定
-            m_selectedActor = m_context.GetCharacterByCardId(cardId);
-            if (m_selectedActor) 
-            {
-                m_selectCardId = cardId;
-                
-                m_selectedCardIndex = m_context.GetLocalCardIndex(m_selectedActor, cardId);
+    int cardIdx = HitTestHandCard(mousePos);
+    m_hoveredCardIndex = cardIdx;
 
-                m_battleView.SetSelectedCard(m_selectCardId);
-                ConsoleView::GetInstance().Add("選択カード" + std::to_string(m_selectCardId) +" 使用者:" + m_selectedActor->GetData().name + "\n");
-
-                m_phase = PlayerSelectPhase::CREATE_TARGETS;
-            }
-            m_preSelectedCardIndex = -1;
+    if (InPutMouseManager::GetInstance().IsLeftClicked())
+    {
+        if (cardIdx != -1)
+        {
+            // カード選択処理の実行
+            SelectCard(cardIdx);
         }
-        else {
-            //　選択状態にする
-            m_preSelectedCardIndex = m_hoveredCardIndex;
-        }
-        
     }
 }
+
+void UserController::SelectCard(int cardIdx)
+{
+    m_selectedCardIndex = cardIdx;
+    m_selectCardId = m_context.GetCardIdByGlobalIndex(cardIdx);
+
+    m_selectedActor = m_context.GetCharacterByCardId(m_selectCardId);
+    if(!m_selectedActor) {
+        ConsoleView::GetInstance().Add("Error: Actor not found for card ID: " + std::to_string(m_selectCardId));
+        return;
+    }
+
+    auto cardData = CardManager::GetInstance().GetCardData(m_selectCardId);
+
+    UpdateCreateTargets();
+    m_context.SetPredictedCost(cardData.actionPlus);
+    m_context.ClearFocusTargets();
+
+    if (!m_targetCandidates.empty())
+    {
+        // ターゲットタイプによるフォーカス分岐
+        if (cardData.targetType == TargetType::ALLY_ALL || cardData.targetType == TargetType::OPPONENT_ALL) // 全体対象の場合
+        {
+            // 全員をフォーカス
+            m_context.SetFocusTargets(m_targetCandidates);
+            
+            m_preSelectedTarget = nullptr;
+        }
+        else // 単体対象の場合（デフォルト）
+        {
+            // 0番目をデフォルトフォーカス
+            m_preSelectedTarget = m_targetCandidates[0];
+            m_context.SetFocusTargets({ m_preSelectedTarget });
+        }
+    }
+
+    m_phase = PlayerSelectPhase::SELECT_TARGET;
+}
+
 
 /// <summary>
 /// ターゲット候補の取得
@@ -166,62 +184,61 @@ void UserController::UpdateCreateTargets()
 /// <param name="window"></param>
 void UserController::UpdateSelectTarget(sf::RenderWindow& window)
 {
-    // 現在のView設定に基づいたワールド座標を取得
-    sf::Vector2f worldPos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+    sf::Vector2f mousePos = GetScreenMousePos(window);
 
-    UpdateCharacterRects(m_targetCandidates);
-
-    const auto& cardData = m_selectedActor->GetCardData(m_selectedCardIndex);
-    bool isAreaAttack = (cardData.targetType == TargetType::OPPONENT_ALL || cardData.targetType == TargetType::ALLY_ALL);
-
-    // マウス直下のキャラ判定
-    int hoverIdx = HitTestCharacter(worldPos, m_targetCandidates);
-    std::shared_ptr<Character> hovered = (hoverIdx != -1) ? m_targetCandidates[hoverIdx] : nullptr;
-
-    // クリック処理
-    if (InPutMouseManager::GetInstance().IsLeftClicked()) {
-
-        bool isDone = false;
-
-        if (isAreaAttack) {
-            // 全体系：誰かをクリックすれば確定
-            if (hovered) {
-                m_selectedTargets = m_targetCandidates; // 全員をターゲットに
-                isDone = true;
-            }
-        }
-        else {
-            // 単体系：2クリック確定ロジック
-            if (hovered) {
-                if (m_preSelectedTarget == hovered) {
-                    m_selectedTargets.push_back(m_preSelectedTarget);
-                    isDone = true;
-                }
-                else {
-                    m_preSelectedTarget = hovered;
-                    // フォーカス対象を更新
-                    m_context.SetFocusTargets({ m_preSelectedTarget });
-                }
-            }
-        }
-
-        if (isDone) {
-            // --- 行動情報の確定 ---
-            UserAction action;
-            action.actor = m_selectedActor;      // 特定済みの使用者
-            action.cardId = m_selectCardId;      // 特定済みのカードID
-            action.targets = m_selectedTargets;  // 決定したターゲットリスト
-
-            m_confirmedAction = action;          // optionalに値をセット
-
-            // Focus表示
-            m_context.SetFocusDraw(false);
-
-            m_phase = PlayerSelectPhase::DONE;
-        }
-
+    // --- 追加仕様：ターゲット選択中もカードのクリックをチェック ---
+    int cardIdx = HitTestHandCard(mousePos);
+    if (InPutMouseManager::GetInstance().IsLeftClicked() && cardIdx != -1)
+    {
+        // 別のカード（または同じカード）がクリックされたら、カード選択をやり直す
+        SelectCard(cardIdx);
+        return; // 以降のターゲット判定はスキップ
     }
 
+    int targetIdx = HitTestCharacter(mousePos, m_targetCandidates);
+    m_hoveredTarget = (targetIdx != -1) ? m_targetCandidates[targetIdx] : nullptr;
+
+    if (InPutMouseManager::GetInstance().IsLeftClicked())
+    {
+        if (targetIdx != -1)
+        {
+            auto clickedTarget = m_targetCandidates[targetIdx];
+            auto cardData = CardManager::GetInstance().GetCardData(m_selectCardId);
+
+            // --- 仕様変更：全体攻撃と単体攻撃で決定ロジックを分ける ---
+            if (cardData.targetType == TargetType::ALLY_ALL || cardData.targetType == TargetType::OPPONENT_ALL)
+            {
+                // 全員ターゲット時
+                ConfirmAction(m_targetCandidates);
+            }
+            else if (m_preSelectedTarget == clickedTarget)
+            {
+                // 2回目：決定
+                std::vector<std::shared_ptr<Character>> targets = { clickedTarget };
+                ConfirmAction(targets);
+            }
+            else
+            {
+                // 1回目：フォーカス更新
+                m_preSelectedTarget = clickedTarget;
+                m_context.ClearFocusTargets();
+                m_context.SetFocusTargets({ m_preSelectedTarget });
+            }
+        }
+    }
+
+}
+
+void UserController::ConfirmAction(const std::vector<std::shared_ptr<Character>>& targets)
+{
+    UserAction action;
+    action.actor = m_selectedActor;
+    action.cardId = m_selectCardId;
+    action.targets = targets;
+    m_confirmedAction = action;
+
+    m_context.ClearFocusTargets();
+    m_context.SetPredictedCost(0);
 }
 
 /// <summary>
