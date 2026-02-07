@@ -37,6 +37,7 @@ private:
 	sf::RectangleShape m_fill;   // 塗り
 	sf::RectangleShape m_frame;  // 枠
 
+
 public:
 
 	// 初期化
@@ -69,7 +70,7 @@ public:
 	/// </summary>
 	/// <param name="arg_state">設定アニメーションステート</param>
 	void SetState(CharacterAnimState arg_state);
-
+	
 	/// <summary>
 	/// 描画
 	/// </summary>

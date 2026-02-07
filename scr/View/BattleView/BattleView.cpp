@@ -141,8 +141,14 @@ void BattleView::Render(sf::RenderWindow& arg_window)
         arg_window.draw(sprite);
     }
 
-
+    // キャラクター描画
     DrawCharacters();
+
+    // ターゲットフォーカスの描画
+    if (!m_context.GetFocusTargets().empty())
+    {
+        DrawFocus(arg_window);
+    }
 
     // ダメージや回復量の表示
     for (auto& p : m_popups)
@@ -161,10 +167,15 @@ void BattleView::Render(sf::RenderWindow& arg_window)
 
     // カメラ機能OFF
     m_render.ResetCamera();
+    // カード
     DrawCards(arg_window);
+    // 行動数
     DrawCost(arg_window);
+    // 増加行動数
     DrawCostGain(arg_window);
+    // バーナー
     DrawTurnBanner(arg_window);
+    // ステージ名
     DrawStageName(arg_window);
 }
 
@@ -194,27 +205,22 @@ void BattleView::DrawCharacters()
                 // ===== 状態決定 =====
                 CharacterAnimState state = CharacterAnimState::WAIT;
 
+                // Animation
                 if (c->IsDead())
                 {
-                    state = CharacterAnimState::DEAD;
+                    sprite->SetState(CharacterAnimState::DEAD);
                 }
-                else if (c == m_selectedActor)
-                {
-                    state = CharacterAnimState::WAIT;
-                }
-                else
-                {
-                    state = CharacterAnimState::WAIT;
+                else {
+                    sprite->SetState(c->GetAnimState());
                 }
 
-                // プレイヤーなら画像を反転
+                // 演出座標を取得してセット
+                sprite->SetPosition(c->GetVisualPosition());
+
                 if (c->GetFaction() == Faction::Player)
                 {
                     sprite->SetSpriteWidthMirror();
                 }
-
-                sprite->SetState(state);
-                sprite->SetPosition(c->GetPosition());
 
                 sprite->Draw(m_render,c->GetData(),true);
             }
@@ -245,6 +251,8 @@ void BattleView::DrawCards(sf::RenderWindow& arg_window)
         {
             sf::Vector2f drawPos = pos;
 
+            
+
             // 選択カードを少し上に
             if (i == m_selectedCard)
             {
@@ -268,31 +276,32 @@ void BattleView::DrawCards(sf::RenderWindow& arg_window)
 void BattleView::DrawFocus(sf::RenderWindow& arg_window)
 {
 
-    // Contextから現在フォーカスすべき対象（1体または複数）を取得
     const auto& focusTargets = m_context.GetFocusTargets();
 
-    if (m_context.GetFocusDraw()) {
-        for (const auto& target : focusTargets)
+    for (const auto& target : focusTargets)
+    {
+        if (!target)
         {
-            if (!target || target->IsDead()) continue;
-
-            // 円のサイズ設定
-            float circleRadius = 60.f;
-            sf::CircleShape circle(circleRadius);
-            circle.setOutlineColor(sf::Color::Yellow);
-            circle.setOutlineThickness(3.f);
-            circle.setFillColor(sf::Color::Transparent);
-
-           
-            circle.setOrigin({ circleRadius, circleRadius });
-            // キャラクターの中心座標を取得して設定
-            sf::Vector2f centerPos = GetCharacterCenter(target);
-            circle.setPosition(centerPos);
-            // --------------------
-
-            arg_window.draw(circle);
+            continue;
         }
+
+        // キャラクターの足元に円を描画する例
+        float circleRadius = 60.f;
+        sf::CircleShape focusCircle(circleRadius);
+        focusCircle.setOutlineThickness(3.f);
+        focusCircle.setOutlineColor(sf::Color::Yellow);
+        focusCircle.setFillColor(sf::Color::Transparent);
+
+        // スプライトの位置から足元の座標を計算（プロジェクトの座標系に合わせて調整してください）
+        sf::Vector2f pos = target->GetPosition();
+        focusCircle.setOrigin({ circleRadius, circleRadius });
+        // キャラクターの中心座標を取得して設定
+        sf::Vector2f centerPos = GetCharacterCenter(target);
+        focusCircle.setPosition(centerPos);
+
+        arg_window.draw(focusCircle);
     }
+
 }
 
 /// <summary>
@@ -317,23 +326,43 @@ void BattleView::DrawCost(sf::RenderWindow& arg_window)
 
 
 /// <summary>
-/// コスト表示
+/// 追加コスト表示
 /// </summary>
 /// <param name="window"></param>
 void BattleView::DrawCostGain(sf::RenderWindow& arg_window)
 {
-    if (m_costGain <= 0)
+    int val = m_context.GetPredictedCost();
+
+    sf::Text gainText(m_font,"");
+    gainText.setFont(m_font);
+    gainText.setCharacterSize(36);
+    gainText.setOutlineColor(sf::Color::Black);
+    gainText.setOutlineThickness(2.f);
+
+    if (val == 0)
     {
-        return;
+        // --- 変化なし：白色で "0" 表示 ---
+        gainText.setFillColor(sf::Color::White);
+        gainText.setString(" + 0");
+    }
+	else if (val > 0)
+	{
+        // --- コスト獲得：緑色で "+" 表示 ---
+		gainText.setFillColor(sf::Color::Green);
+		gainText.setString(" + " + std::to_string(val));
+	}
+    else
+    {
+        // --- コスト消費：赤色で "-" 表示 ---
+        gainText.setFillColor(sf::Color::Red);
+        gainText.setString(" - " + std::to_string(std::abs(val)));
     }
 
-    sf::Text text(m_font, "");
-    text.setString("+" + std::to_string(m_costGain));
-    text.setCharacterSize(24);
-    text.setFillColor(sf::Color::Yellow);
-    text.setPosition({600.0f, 450.0f});
+    // 表示位置：現在のAP表示の右側に配置
+    // (DrawCostの座標 50.f, 650.f に対して調整)
+    gainText.setPosition(sf::Vector2f(750.0f, 130.0f));
 
-    arg_window.draw(text);
+    arg_window.draw(gainText);
 }
 
 /// <summary>

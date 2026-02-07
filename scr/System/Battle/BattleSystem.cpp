@@ -8,7 +8,7 @@
 
 #include "Scene/StageBuildScene/StageBulidScene.h"
 #include "Scene/PartyBuildScene/PartyBuildScene.h"
-
+#include <SFML/System.hpp>
 /// <summary>
 /// 初期化処理
 /// </summary>
@@ -174,22 +174,22 @@ void BattleSystem::Update(sf::RenderWindow& arg_window)
 		ConsoleView::GetInstance().Reset();
 		m_phase = TurnPhase::Result;
 	}
-
-
+	float dt = m_clock.restart().asSeconds();
 	// キャラクター系の更新
 	for (auto& p : m_players)
 	{
-
 		p->Update();
+		p->UpdateAnimTimer(dt);
 	}
 	for (auto& e : m_enemies)
 	{
 		e->Update();
+		e->UpdateAnimTimer(dt);
 	}
 
 	m_context->SetTurnPhase(static_cast<int>(m_phase));
 
-	m_battleView->Update(1.0f / 60.0f);
+	m_battleView->Update(dt);
 }
 
 /// <summary>
@@ -215,7 +215,41 @@ void BattleSystem::Render(sf::RenderWindow& arg_window)
 /// <returns></returns>
 bool BattleSystem::IsBattleEnd() const
 {
-	return m_context->IsPlayerAllDead() || m_context->IsEnemyAllDead();
+	// 1. 敵が全滅しているか（勝利条件）
+	if (m_context->GetAliveEnemies().empty())
+	{
+		return true;
+	}
+
+	// 2. プレイヤーが全滅しているか（敗北条件1）
+	auto alivePlayers = m_context->GetAlivePlayers();
+	if (alivePlayers.empty())
+	{
+		return true;
+	}
+
+	// 3. 行動不能状態の判定（敗北条件2）
+	// 山札が空、かつ生存している全プレイヤーの手札が0枚の場合
+	if (CardManager::GetInstance().GetDeckCount() == 0)
+	{
+		bool hasAnyCard = false;
+		for (const auto& player : alivePlayers)
+		{
+			if (player->GetCardCount() > 0)
+			{
+				hasAnyCard = true;
+				break;
+			}
+		}
+
+		if (!hasAnyCard)
+		{
+			// デッキも手札も尽きたので、これ以上行動できない（詰み）
+			return true;
+		}
+	}
+
+	return false;
 }
 
 /// <summary>
@@ -331,10 +365,6 @@ void BattleSystem::UserTurn(sf::RenderWindow& window)
 
 		// アクション
 		ApplyAction(action.actor, action.targets, card);
-
-		// コストの増減
-		CostManager::GetInstance().AddCost(card.actionPlus);
-		m_battleView->ShowCostGain(card.actionPlus);
 
 
 		// 使用カードは墓地へ
@@ -613,6 +643,9 @@ void BattleSystem::ApplyAction(const std::shared_ptr<Character>& actor, const st
 		{
 		case ActionType::ATTCK:
 		{
+			actor->SetAnimation(CharacterAnimState::ATTACK, 1.0f);
+			target->SetAnimation(CharacterAnimState::DAMAGE, 0.8f);
+
 			int damage = Calculation::GetDamage(actor->GetData().magicAtk, actor->GetBuffData().power, card.power, target->GetData().def, target->GetBuffData().power);
 			target->TakeDamage(damage);
 			// ダメージ表示
@@ -620,11 +653,18 @@ void BattleSystem::ApplyAction(const std::shared_ptr<Character>& actor, const st
 			// 確認用ログ
 			ConsoleView::GetInstance().Add(actor->GetData().name + "が" + target->GetData().name + "に" + std::to_string(damage) + "与えた\n");
 			ConsoleView::GetInstance().Add(std::to_string(target->GetData().maxHp) + "/" + std::to_string(target->GetData().hp) + "\n");
+			ConsoleView::GetInstance().Add("ターンが" + std::to_string(card.actionPlus) + "追加された\n");
+			// コストの増減
+			CostManager::GetInstance().AddCost(card.actionPlus);
+			m_battleView->ShowCostGain(card.actionPlus);
 
 			break;
 		}
 		case ActionType::MAGIC:
 		{
+			actor->SetAnimation(CharacterAnimState::MAGIC, 1.0f);
+			target->SetAnimation(CharacterAnimState::DAMAGE, 0.8f);
+
 			int damage = Calculation::GetDamage(actor->GetData().magicAtk, actor->GetBuffData().power, card.power, target->GetData().def, target->GetBuffData().power);
 			target->TakeDamage(damage);
 			// ダメージ表示
@@ -632,11 +672,18 @@ void BattleSystem::ApplyAction(const std::shared_ptr<Character>& actor, const st
 			// 確認用ログ
 			ConsoleView::GetInstance().Add(actor->GetData().name + "が" + target->GetData().name + "に" + std::to_string(damage) + "与えた\n");
 			ConsoleView::GetInstance().Add(std::to_string(target->GetData().maxHp) + "/" + std::to_string(target->GetData().hp) + "\n");
+
+			// コストの増減
+			ConsoleView::GetInstance().Add("ターンが" + std::to_string(card.actionPlus) + "追加された\n");
+			CostManager::GetInstance().AddCost(card.actionPlus);
+			m_battleView->ShowCostGain(card.actionPlus);
+
 			break;
 		}
 
 		case ActionType::HEAL:
 		{
+			actor->SetAnimation(CharacterAnimState::MAGIC, 1.0f);
 			int heal = Calculation::GetMultiplicative(actor->GetData().maxHp, card.power);
 			target->TakeHeal(heal);
 			// ダメージ表示
@@ -645,10 +692,22 @@ void BattleSystem::ApplyAction(const std::shared_ptr<Character>& actor, const st
 			ConsoleView::GetInstance().Add(actor->GetData().name + "が" + target->GetData().name + "に" + std::to_string(heal) + "回復させた\n");
 			ConsoleView::GetInstance().Add(std::to_string(target->GetData().maxHp) + "/" + std::to_string(target->GetData().hp) + "\n");
 
+			// コストの増減
+			ConsoleView::GetInstance().Add("ターンが" + std::to_string(card.actionPlus) + "追加された\n");
+			CostManager::GetInstance().AddCost(card.actionPlus);
+			m_battleView->ShowCostGain(card.actionPlus);
+
 			break;
 		}
 		case ActionType::BUFF:
+
+			actor->SetAnimation(CharacterAnimState::MAGIC, 1.0f);
 			target->TakeBuff(card.power, card.turn);
+			// コストの増減
+			ConsoleView::GetInstance().Add("ターンが" + std::to_string(card.actionPlus) + "追加された\n");
+			CostManager::GetInstance().AddCost(card.actionPlus);
+			m_battleView->ShowCostGain(card.actionPlus);
+
 			break;
 
 		case ActionType::ACTION_NONE:

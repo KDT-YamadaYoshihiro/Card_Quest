@@ -124,14 +124,11 @@ std::vector<std::shared_ptr<Character>> BattleContext::CreateTargetCandidates(Ta
                 {
                     continue;
                 }
-                if (c == actor)
-                {
-                    continue;
-                }
 
                 result.push_back(c);
             }
         };
+
 
     switch (targetType)
     {
@@ -175,6 +172,18 @@ std::vector<std::shared_ptr<Character>> BattleContext::CreateTargetCandidates(Ta
     return result;
 }
 
+// åªèÛñ¢égóp------------------------------------------------------
+int BattleContext::GetHoveredCardIndex() const
+{
+    return 0;
+}
+std::shared_ptr<Character> BattleContext::GetHoveredTarget() const
+{
+    return std::shared_ptr<Character>();
+}
+// ----------------------------------------------------------------
+
+
 void BattleContext::SetFocusTargets(const std::vector<std::shared_ptr<Character>>& targets)
 {
     m_focusTargets = targets;
@@ -190,6 +199,15 @@ const std::vector<std::shared_ptr<Character>>& BattleContext::GetFocusTargets() 
     return m_focusTargets;
 }
 
+void BattleContext::SetPredictedCost(int arg_cost)
+{
+    m_uiPredictedCost = arg_cost;
+}
+
+int BattleContext::GetPredictedCost() const
+{
+    return m_uiPredictedCost;
+}
 
 int BattleContext::GetCardIdByGlobalIndex(int globalIndex) const
 {
