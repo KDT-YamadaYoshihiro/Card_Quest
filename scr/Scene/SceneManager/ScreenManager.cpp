@@ -15,9 +15,9 @@ void SceneManager::Init(sf::RenderWindow& arg_window)
     }
 }
 
-void SceneManager::Update(sf::RenderWindow& arg_window)
+void SceneManager::Update(sf::RenderWindow& arg_window, float dt)
 {
-    m_scene->Update(arg_window);
+    m_scene->Update(arg_window,dt);
 }
 
 void SceneManager::Render(sf::RenderWindow& window)

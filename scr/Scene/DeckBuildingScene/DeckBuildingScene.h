@@ -24,7 +24,7 @@ public:
 	// ƒV[ƒ“Šî–{ŠÖ”
 	virtual bool Init(sf::RenderWindow& arg_window) override;
 	virtual void handleEvent(const sf::Event& event) override;
-	virtual void Update(sf::RenderWindow& arg_window) override;
+	virtual void Update(sf::RenderWindow& arg_window, float dt) override;
 	virtual void Render(sf::RenderWindow& arg_window) override;
 	virtual void End() override;
 };

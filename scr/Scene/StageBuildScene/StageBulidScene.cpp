@@ -82,12 +82,15 @@ void StageBulidScene::handleEvent(const sf::Event& event)
     InPutMouseManager::GetInstance().HandleEvent(event);
 }
 
-void StageBulidScene::Update(sf::RenderWindow& arg_window)
+void StageBulidScene::Update(sf::RenderWindow& arg_window, float dt)
 {
     auto& input = InPutMouseManager::GetInstance();
     auto mousePos = input.GetMousePosition(arg_window);
     // 入力更新
     input.Update(arg_window);
+
+	// ライトエフェクト更新
+    m_lightEffect->Update(dt);
 
     // 選択処理（左リスト）
     m_controller->Update(arg_window);
@@ -149,6 +152,10 @@ void StageBulidScene::Render(sf::RenderWindow& arg_window)
         arg_window.draw(sprite);
     }
 
+	// ライトエフェクト
+    m_lightEffect->Draw(arg_window);
+
+	// ビュー描画
     m_view->Draw(m_context);
 }
 

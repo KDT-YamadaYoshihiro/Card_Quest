@@ -42,8 +42,11 @@ void DeckBuildingScene::handleEvent(const sf::Event& event)
     InPutMouseManager::GetInstance().HandleEvent(event);
 }
 
-void DeckBuildingScene::Update(sf::RenderWindow& arg_window)
+void DeckBuildingScene::Update(sf::RenderWindow& arg_window, float dt)
 {
+
+    // ライトエフェクト更新
+    m_lightEffect->Update(dt);
 
 	// 入力更新
     auto& input = InPutMouseManager::GetInstance();
@@ -51,7 +54,6 @@ void DeckBuildingScene::Update(sf::RenderWindow& arg_window)
 
 	// マウス座標取得
     sf::Vector2f mousePos = input.GetMousePosition(arg_window);
-
     float wheel = input.GetWheelDelta();
 
 
@@ -123,6 +125,9 @@ void DeckBuildingScene::Render(sf::RenderWindow& arg_window)
     }
 
 
+	// ライトエフェクト描画
+	m_lightEffect->Draw(arg_window);
+
     // --- デッキ & プール描画 ---
 	m_deckBuildSystem.Draw(arg_window, FontManager::GetInstance().GetFont());
 
@@ -146,8 +151,6 @@ void DeckBuildingScene::Render(sf::RenderWindow& arg_window)
 
 		posX += 100.f;
     }
-
-
 
      // --- 完了ボタン ---
     m_nextButton->Draw(arg_window);

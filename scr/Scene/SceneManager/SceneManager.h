@@ -24,7 +24,7 @@ public:
 
     // 更新・描画・イベント
     void Init(sf::RenderWindow& arg_window);
-    void Update(sf::RenderWindow& arg_window);
+    void Update(sf::RenderWindow& arg_window, float dt);
     void Render(sf::RenderWindow& arg_window);
     void HandleEvent(const sf::Event& event);
 

@@ -131,16 +131,6 @@ void BattleView::Render(sf::RenderWindow& arg_window)
     // カメラ機能ON
     m_render.ApplyCamera();
 
-    // 背景
-    auto tex = TextureLoader::GetInstance().GetTextureID("bg");
-    if (tex)
-    {
-        sf::Sprite sprite(*tex);
-        sprite.setPosition({ -300.0f,-250.0f });
-        sprite.setScale({ 0.9f, 0.9f });
-        arg_window.draw(sprite);
-    }
-
     // キャラクター描画
     DrawCharacters();
 
@@ -172,7 +162,9 @@ void BattleView::Render(sf::RenderWindow& arg_window)
     // 行動数
     DrawCost(arg_window);
     // 増加行動数
-    DrawCostGain(arg_window);
+    if (m_context.GetFocusDraw()) {
+        DrawCostGain(arg_window);
+    }
     // バーナー
     DrawTurnBanner(arg_window);
     // ステージ名
@@ -285,21 +277,15 @@ void BattleView::DrawFocus(sf::RenderWindow& arg_window)
             continue;
         }
 
-        // キャラクターの足元に円を描画する例
-        float circleRadius = 60.f;
-        sf::CircleShape focusCircle(circleRadius);
-        focusCircle.setOutlineThickness(3.f);
-        focusCircle.setOutlineColor(sf::Color::Yellow);
-        focusCircle.setFillColor(sf::Color::Transparent);
+		auto tex = TextureLoader::GetInstance().GetTextureID("targetFrame");
+		sf::Sprite sprite(*tex);
+		sprite.setOrigin(sf::Vector2f(tex->getSize().x / 2.f, tex->getSize().y / 2.f));
+		// キャラクターの中心座標を取得して設定
+		sf::Vector2f centerPos = GetCharacterCenter(target);
+		sprite.setScale({ 0.1f,0.1f });
+        sprite.setPosition({ centerPos.x, centerPos.y + 10.f });
+		arg_window.draw(sprite);
 
-        // スプライトの位置から足元の座標を計算（プロジェクトの座標系に合わせて調整してください）
-        sf::Vector2f pos = target->GetPosition();
-        focusCircle.setOrigin({ circleRadius, circleRadius });
-        // キャラクターの中心座標を取得して設定
-        sf::Vector2f centerPos = GetCharacterCenter(target);
-        focusCircle.setPosition(centerPos);
-
-        arg_window.draw(focusCircle);
     }
 
 }
@@ -331,6 +317,11 @@ void BattleView::DrawCost(sf::RenderWindow& arg_window)
 /// <param name="window"></param>
 void BattleView::DrawCostGain(sf::RenderWindow& arg_window)
 {
+	// フォーカス表示が有効な場合のみ描画
+    if (!m_context.GetFocusDraw()) {
+        return;
+    }
+
     int val = m_context.GetPredictedCost();
 
     sf::Text gainText(m_font,"");
@@ -414,6 +405,10 @@ void BattleView::DrawStageName(sf::RenderWindow& arg_window)
     arg_window.draw(stageText);
 }
 
+/// <summary>
+/// ターンのバナー表示
+/// </summary>
+/// <param name="window"></param>
 void BattleView::DrawTurnBanner(sf::RenderWindow& window)
 {
     // BattleSystem.h の TurnPhase 定義と合わせる

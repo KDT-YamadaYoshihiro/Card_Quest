@@ -31,7 +31,7 @@ public:
 
 	bool Init(sf::RenderWindow& arg_window) override;
 	void handleEvent(const sf::Event& event) override;
-	void Update(sf::RenderWindow& arg_window) override;
+	void Update(sf::RenderWindow& arg_window, float dt) override;
 	void Render(sf::RenderWindow& arg_window) override;
 	void End() override;
 

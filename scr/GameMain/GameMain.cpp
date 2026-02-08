@@ -33,8 +33,7 @@ bool GameMain::Init()
 
     
     SceneManager::GetInstance().Init(m_window);
-    CameraManager::GetInstance().ViewInit({ 0.0f, 0.0f }, 
-        { WindowSetting::GetInstance().GetWindowSizeW(), WindowSetting::GetInstance().GetWindowSizeH()});
+    CameraManager::GetInstance().ViewInit({ 0.0f, 0.0f }, static_cast<sf::Vector2f>( WindowSetting::GetInstance().GetWindowSize()));
 
     // CSVÇÃì«Ç›çûÇ›
 	TextureLoader::GetInstance().LoadTextures("data/CSV/TextureData.csv");
@@ -81,7 +80,7 @@ void GameMain::ProcessEvents()
 
 void GameMain::Update(float dt)
 {
-    SceneManager::GetInstance().Update(m_window);
+    SceneManager::GetInstance().Update(m_window, dt);
     CameraManager::GetInstance().ViewUpdate(dt);
 }
 
