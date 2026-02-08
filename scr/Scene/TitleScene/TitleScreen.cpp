@@ -4,7 +4,7 @@
 #include "View/Font/FontManager.h"
 #include "System/InPutManager/InPutMouseManager.h"
 #include <SFML/Graphics.hpp>
-
+#include <algorithm>
 
 TitleScene::TitleScene()
 {
@@ -25,7 +25,7 @@ void TitleScene::Update(sf::RenderWindow& arg_window, float dt)
     InPutMouseManager::GetInstance().Update(arg_window);
 
 	m_lightEffect->Update(dt);
-
+    UpdateAlpha(dt);
     // キーボード判定
     if (InPutMouseManager::GetInstance().IsLeftClicked())
     {
@@ -62,7 +62,8 @@ void TitleScene::Render(sf::RenderWindow& arg_window)
 
 	// CLICK to START 描画
     sf::Text text(FontManager::GetInstance().GetFont(), "CLICK to START");
-    text.setPosition({ 400.0f, 400.0f });
+    text.setFillColor(sf::Color(255, 255, 255, m_titleAlpha));
+    text.setPosition({ 380.0f, 400.0f });
     text.setScale({ 2.0f,2.0f });
     arg_window.draw(text);
 
@@ -70,4 +71,22 @@ void TitleScene::Render(sf::RenderWindow& arg_window)
 
 void TitleScene::End()
 {
+}
+
+void TitleScene::UpdateAlpha(float dt)
+{
+
+    // 透明度の変更速度
+    m_titleAlpha += m_alphaChangeSpeed * dt;
+
+    if(m_titleAlpha > 255)
+    {
+		m_titleAlpha = 255;
+        m_alphaChangeSpeed = -std::abs(m_alphaChangeSpeed);
+	}
+    if(m_titleAlpha < 0)
+    {
+		m_titleAlpha = 0;
+        m_alphaChangeSpeed = std::abs(m_alphaChangeSpeed);
+	}
 }
