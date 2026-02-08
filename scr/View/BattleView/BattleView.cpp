@@ -131,16 +131,6 @@ void BattleView::Render(sf::RenderWindow& arg_window)
     // カメラ機能ON
     m_render.ApplyCamera();
 
-    // 背景
-    auto tex = TextureLoader::GetInstance().GetTextureID("bg");
-    if (tex)
-    {
-        sf::Sprite sprite(*tex);
-        sprite.setPosition({ -300.0f,-250.0f });
-        sprite.setScale({ 0.9f, 0.9f });
-        arg_window.draw(sprite);
-    }
-
     // キャラクター描画
     DrawCharacters();
 
@@ -285,21 +275,15 @@ void BattleView::DrawFocus(sf::RenderWindow& arg_window)
             continue;
         }
 
-        // キャラクターの足元に円を描画する例
-        float circleRadius = 60.f;
-        sf::CircleShape focusCircle(circleRadius);
-        focusCircle.setOutlineThickness(3.f);
-        focusCircle.setOutlineColor(sf::Color::Yellow);
-        focusCircle.setFillColor(sf::Color::Transparent);
+		auto tex = TextureLoader::GetInstance().GetTextureID("targetFrame");
+		sf::Sprite sprite(*tex);
+		sprite.setOrigin(sf::Vector2f(tex->getSize().x / 2.f, tex->getSize().y / 2.f));
+		// キャラクターの中心座標を取得して設定
+		sf::Vector2f centerPos = GetCharacterCenter(target);
+		sprite.setScale({ 0.1f,0.1f });
+        sprite.setPosition({ centerPos.x, centerPos.y + 10.f });
+		arg_window.draw(sprite);
 
-        // スプライトの位置から足元の座標を計算（プロジェクトの座標系に合わせて調整してください）
-        sf::Vector2f pos = target->GetPosition();
-        focusCircle.setOrigin({ circleRadius, circleRadius });
-        // キャラクターの中心座標を取得して設定
-        sf::Vector2f centerPos = GetCharacterCenter(target);
-        focusCircle.setPosition(centerPos);
-
-        arg_window.draw(focusCircle);
     }
 
 }

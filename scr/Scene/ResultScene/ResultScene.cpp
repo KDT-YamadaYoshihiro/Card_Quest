@@ -14,8 +14,11 @@ void ResultScene::handleEvent(const sf::Event& event)
 {
 }
 
-void ResultScene::Update(sf::RenderWindow& arg_window)
+void ResultScene::Update(sf::RenderWindow& arg_window, float dt)
 {
+    // ライトエフェクト更新
+    m_lightEffect->Update(dt);
+
 }
 
 void ResultScene::Render(sf::RenderWindow& arg_window)

@@ -4,6 +4,7 @@ CostFrame,data/CostFrame/CostFrame.png
 Title,data/Title/title.png
 cardAtk,data/cardBase/card_attack.png
 cardMgc,data/cardBase/card_magic.png
+targetFrame,data/TargetFrame/target_frame.png
 アレス,data/Character/Player/player_0.png
 リュミエール,data/Character/Player/player_1.png
 グラント,data/Character/Player/player_2.png

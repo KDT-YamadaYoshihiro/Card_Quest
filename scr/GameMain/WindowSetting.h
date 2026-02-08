@@ -8,11 +8,10 @@ class WindowSetting : public Singleton<WindowSetting>
     friend class Singleton<WindowSetting>;
 
     bool m_windowMode;          // true = windowed, false = fullscreen
-    float m_windowWidth;          // width
-    float m_windowHeight;         // height
+	sf::Vector2u m_windowSize; // window size
     std::string m_windowTitle;  // window title
 
-    WindowSetting() : m_windowMode(true), m_windowWidth(1280), m_windowHeight(720), m_windowTitle("Game") {}
+    WindowSetting() : m_windowMode(true), m_windowSize({ 1280,720 }), m_windowTitle("Card_Quest") {}
     ~WindowSetting() {}
 
 public:
@@ -31,8 +30,7 @@ public:
     bool GetWindowMode() const { return m_windowMode; }
 
     // ウィンドウサイズの取得
-    float GetWindowSizeW() const { return m_windowWidth; }
-    float GetWindowSizeH() const { return m_windowHeight; }
+	const sf::Vector2u& GetWindowSize() const { return m_windowSize; }
 
     // ウィンドウタイトルの取得
     const std::string& GetWindowTitle() const { return m_windowTitle; }

@@ -87,7 +87,7 @@ void PartyBuildScene::handleEvent(const sf::Event& event)
 /// 更新処理
 /// </summary>
 /// <param name="arg_window"></param>
-void PartyBuildScene::Update(sf::RenderWindow& arg_window)
+void PartyBuildScene::Update(sf::RenderWindow& arg_window, float dt)
 {
     m_view->Update(m_context);
     m_controller->Update(m_render->GetWindow());
@@ -99,6 +99,10 @@ void PartyBuildScene::Update(sf::RenderWindow& arg_window)
     // マウス座標取得
     sf::Vector2f mousePos = input.GetMousePosition(arg_window);
     float wheel = input.GetWheelDelta();
+
+    // ライトエフェクト更新
+    m_lightEffect->Update(dt);
+
 
 	// ボタンのカーソルが合ったら色を変える
 	// 完了ボタン
@@ -154,8 +158,12 @@ void PartyBuildScene::Render(sf::RenderWindow& arg_window)
         sprite.setScale({ 0.7f,0.7f });
         arg_window.draw(sprite);
     }
-
+    
+	// ライトエフェクト描画
+    m_lightEffect->Draw(arg_window);
+	// パーティー編成画面描画
     m_view->Draw(m_context);
+	// ボタン描画
     m_nextButton->Draw(arg_window);
     m_backButton->Draw(arg_window);
 

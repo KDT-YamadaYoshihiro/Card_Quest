@@ -37,7 +37,7 @@ void IngameScene::handleEvent(const sf::Event& event)
 
 }
 
-void IngameScene::Update(sf::RenderWindow& arg_window)
+void IngameScene::Update(sf::RenderWindow& arg_window, float dt)
 {
 
 	InPutMouseManager::GetInstance().Update(arg_window);
@@ -56,12 +56,28 @@ void IngameScene::Update(sf::RenderWindow& arg_window)
 		return;
 	}
 
+	// ライトエフェクト更新
+	m_lightEffect->Update(dt);
 
+	// バトル更新
 	m_battle->Update(arg_window);
 }
 
 void IngameScene::Render(sf::RenderWindow& arg_window)
-{	
+{
+	// 背景
+	auto tex = TextureLoader::GetInstance().GetTextureID("bg");
+	if (tex)
+	{
+		sf::Sprite sprite(*tex);
+		sprite.setPosition({ -300.0f,-250.0f });
+		sprite.setScale({ 0.9f, 0.9f });
+		arg_window.draw(sprite);
+	}
+
+	// ライトエフェクト描画
+	m_lightEffect->Draw(arg_window);
+	// バトル描画
 	m_battle->Render(arg_window);
 }
 

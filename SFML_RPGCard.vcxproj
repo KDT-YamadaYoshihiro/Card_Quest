@@ -133,6 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="scr\UI\LightEffect\LightEffect.cpp" />
     <ClCompile Include="scr\View\ConsoleView\ConsoleView.cpp" />
     <ClCompile Include="scr\CSVLoad\StageLoader\StageLoader.cpp" />
     <ClCompile Include="scr\System\PartyBulid\PartyBuildContext\PartyBuildContext.cpp" />
@@ -170,6 +171,7 @@
     <ClCompile Include="scr\View\StageBulidView\StageBuildView.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="scr\UI\LightEffect\LightEffect.h" />
     <ClInclude Include="scr\UI\BoxButton.h" />
     <ClInclude Include="scr\UI\TriangleButton.h" />
     <ClInclude Include="scr\View\ConsoleView\ConsoleView.h" />
