@@ -398,6 +398,10 @@ void BattleView::DrawStageName(sf::RenderWindow& arg_window)
     arg_window.draw(stageText);
 }
 
+/// <summary>
+/// ターンのバナー表示
+/// </summary>
+/// <param name="window"></param>
 void BattleView::DrawTurnBanner(sf::RenderWindow& window)
 {
     // BattleSystem.h の TurnPhase 定義と合わせる
