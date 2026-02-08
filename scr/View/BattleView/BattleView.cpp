@@ -162,7 +162,9 @@ void BattleView::Render(sf::RenderWindow& arg_window)
     // 行動数
     DrawCost(arg_window);
     // 増加行動数
-    DrawCostGain(arg_window);
+    if (m_context.GetFocusDraw()) {
+        DrawCostGain(arg_window);
+    }
     // バーナー
     DrawTurnBanner(arg_window);
     // ステージ名
@@ -315,6 +317,11 @@ void BattleView::DrawCost(sf::RenderWindow& arg_window)
 /// <param name="window"></param>
 void BattleView::DrawCostGain(sf::RenderWindow& arg_window)
 {
+	// フォーカス表示が有効な場合のみ描画
+    if (!m_context.GetFocusDraw()) {
+        return;
+    }
+
     int val = m_context.GetPredictedCost();
 
     sf::Text gainText(m_font,"");

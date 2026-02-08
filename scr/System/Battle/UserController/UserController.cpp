@@ -54,6 +54,7 @@ void UserController::Update(sf::RenderWindow& window)
         UpdateSelectTarget(window);
         break;
     case PlayerSelectPhase::DONE:
+		m_context.SetFocusDraw(false);
         return;
         break;
     }
@@ -211,12 +212,15 @@ void UserController::UpdateSelectTarget(sf::RenderWindow& window)
             {
                 // 全員ターゲット時
                 ConfirmAction(m_targetCandidates);
+                m_context.SetFocusDraw(false);
+
             }
             else if (m_preSelectedTarget == clickedTarget)
             {
                 // 2回目：決定
                 std::vector<std::shared_ptr<Character>> targets = { clickedTarget };
                 ConfirmAction(targets);
+                m_context.SetFocusDraw(false);
             }
             else
             {

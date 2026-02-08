@@ -31,7 +31,7 @@ public:
 	// フォントの読み込み
 	void FontLoad()
 	{
-		if (!m_font.openFromFile("data/Font/genkai-mincho.ttf"))
+		if (!m_font.openFromFile("data/Font/SoukouMincho.ttf"))
 		{
 			// エラー処理（assert / ログなど）
 			throw std::runtime_error("Font load failed");
