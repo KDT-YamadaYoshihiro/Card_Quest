@@ -11,6 +11,8 @@
 #include "System/Battle/UserController/UserController.h"
 #include "View/BattleView/BattleView.h"
 #include "UI/BoxButton.h"
+#include "System/Battle/MenuWindow/MenuWindow.h"
+
 
 class BattleSystem
 {
@@ -76,8 +78,6 @@ private:
 	UserTurnPhase m_userPhase;
 	// エネミーターンフェーズ
 	EnemyTurnPhase m_enemyPhase;
-	// ターン数
-	int m_turnCount;
 
 	// エネミー用
 	// 行動エネミー一覧
@@ -86,15 +86,28 @@ private:
 	std::shared_ptr<Character> m_currentEnemy = nullptr;
 	// ターゲット確定枠
 	std::vector<std::shared_ptr<Character>> m_enemyFinalTargets;
+
+	// メニューウィンドウ
+	std::unique_ptr<MenuWindow> m_menuWindow;
+
+	// Animation更新用
+	sf::Clock m_clock;
+
+
+	// ターン数
+	int m_turnCount;
+
 	// 行動エネミーのindex
 	int m_currentEnemyIndex = 0;
+
+	// シーン遷移用フラグ (あきらめる等で使用)
+	bool m_isToStageSelect = false;
+
 
 	// シーン切り替え判定用
 	bool m_toPartyScene = false;
 	bool m_toStageSelectScene = false;
 
-	// Animation更新用
-	sf::Clock m_clock;
 
 public:
 
@@ -143,6 +156,17 @@ public:
 	bool IsToPartyScene() const;
 	bool IsToStageSelectScene() const;
 
+	/// <summary>
+	/// メニューの状態取得
+	/// </summary>
+	/// <returns></returns>
+	bool GetStageSelectScene() const;
+
+	/// <summary>
+	/// 再挑戦リクエストがあるか
+	/// </summary>
+	/// <returns></returns>
+	bool IsRetryRequested() const;
 
 private:
 
@@ -150,6 +174,11 @@ private:
 	/// 座標の初期化
 	/// </summary>
 	void CharaInitPosition();
+
+	/// <summary>
+	/// メニューの更新メソッド
+	/// </summary>
+	void MenuUpdate(sf::RenderWindow& arg_window);
 
 	/// <summary>
 	/// ターン開始

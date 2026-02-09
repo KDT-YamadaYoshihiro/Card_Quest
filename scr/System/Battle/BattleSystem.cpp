@@ -111,6 +111,13 @@ bool BattleSystem::Init(sf::RenderWindow& arg_window)
 		return false;
 	}
 
+	// メニューウィンドウの生成と初期化
+	m_menuWindow = std::make_unique<MenuWindow>();
+	if (!m_menuWindow->Init())
+	{
+		return false;
+	}
+
 	ConsoleView::GetInstance().Add("BattleSystem /Init() : true\n");
 	return true;
 }
@@ -120,6 +127,10 @@ bool BattleSystem::Init(sf::RenderWindow& arg_window)
 /// </summary>
 void BattleSystem::Update(sf::RenderWindow& arg_window)
 {
+
+	// メニュー更新
+	MenuUpdate(arg_window);
+
 	// フェーズ進行
 	switch (m_phase)
 	{
@@ -154,7 +165,7 @@ void BattleSystem::Update(sf::RenderWindow& arg_window)
 		// バトル終了判定
 		if (m_phase != TurnPhase::Result && IsBattleEnd())
 		{
-			// --- 修正：味方の全キャラクターからカードを回収して墓地へ ---
+			// 味方の全キャラクターからカードを回収して墓地へ
 			const auto& players = m_context->GetPlayers();
 			for (auto& player : players)
 			{
@@ -199,7 +210,14 @@ void BattleSystem::Update(sf::RenderWindow& arg_window)
 void BattleSystem::Render(sf::RenderWindow& arg_window)
 {
 	// バトル系の描画
-	m_battleView->Render(arg_window);
+	if (m_battleView) {
+		m_battleView->Render(arg_window);
+	}
+	// メニュー描画
+	if (m_menuWindow)
+	{
+		m_menuWindow->Render(arg_window);
+	}
 
 	// リザルト時のみ表示
 	if (m_phase == TurnPhase::Result)
@@ -215,20 +233,20 @@ void BattleSystem::Render(sf::RenderWindow& arg_window)
 /// <returns></returns>
 bool BattleSystem::IsBattleEnd() const
 {
-	// 1. 敵が全滅しているか（勝利条件）
+	// 敵が全滅しているか（勝利条件）
 	if (m_context->GetAliveEnemies().empty())
 	{
 		return true;
 	}
 
-	// 2. プレイヤーが全滅しているか（敗北条件1）
+	// プレイヤーが全滅しているか（敗北条件1）
 	auto alivePlayers = m_context->GetAlivePlayers();
 	if (alivePlayers.empty())
 	{
 		return true;
 	}
 
-	// 3. 行動不能状態の判定（敗北条件2）
+	// 行動不能状態の判定（敗北条件2）
 	// 山札が空、かつ生存している全プレイヤーの手札が0枚の場合
 	if (CardManager::GetInstance().GetDeckCount() == 0)
 	{
@@ -271,6 +289,16 @@ bool BattleSystem::IsToStageSelectScene() const
 	return m_toStageSelectScene; 
 }
 
+bool BattleSystem::GetStageSelectScene() const
+{
+	return m_isToStageSelect; 
+}
+
+bool BattleSystem::IsRetryRequested() const
+{
+	return m_menuWindow && m_menuWindow->GetResult() == MenuResult::Retry;
+}
+
 /// <summary>
 /// キャラクターの座標設定
 /// </summary>
@@ -287,6 +315,33 @@ void BattleSystem::CharaInitPosition()
 	{
 		sf::Vector2f pos({ 750.0f + i * 165.0f, 200.0f });
 		m_enemies[i]->SetPosition(pos);
+	}
+}
+
+void BattleSystem::MenuUpdate(sf::RenderWindow& arg_window)
+{
+	// 1. メニューの更新（エスケープキーやクリック判定）
+	m_menuWindow->Update(arg_window);
+
+	// 2. メニューが開いている場合は、背後のゲーム更新をストップ（ポーズ状態）
+	if (m_menuWindow->IsOpen())
+	{
+		return;
+	}
+
+	// 3. メニューの結果に応じた処理
+	MenuResult result = m_menuWindow->GetResult();
+	if (result == MenuResult::GiveUp)
+	{
+		m_isToStageSelect = true; // あきらめる：ステージ選択へ
+		return;
+	}
+	else if (result == MenuResult::Retry)
+	{
+		// 再挑戦：このクラスの外（Scene側）でBattleSystemを再生成させるか、
+		// ここで Init を呼び直して状態をリセットする
+		// 今回はフラグ管理を想定
+		return;
 	}
 }
 
