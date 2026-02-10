@@ -168,6 +168,9 @@ void BattleSystem::Update(sf::RenderWindow& arg_window)
 				{
 					CardManager::GetInstance().SendCardIdToCemetery(id);
 				}
+				// 勝利アニメーションへ
+				player->SetAnimation(CharacterAnimState::WIN, 20.0f);
+
 			}
 		}
 			
