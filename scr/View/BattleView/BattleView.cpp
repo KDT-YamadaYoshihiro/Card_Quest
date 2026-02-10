@@ -156,7 +156,7 @@ void BattleView::Render(sf::RenderWindow& arg_window)
     DrawFocus(arg_window);
 
     // カメラ機能OFF
-    m_render.ResetCamera();
+    //m_render.ResetCamera();
     // カード
     DrawCards(arg_window);
     // 行動数

@@ -14,7 +14,7 @@ void PartyBuildController::Update(sf::RenderWindow& window)
         return;
     }
 
-    auto mouse = GetMousePos(window);
+    auto mouse = InPutMouseManager::GetInstance().GetMousePosition(window);
 
     // 全キャラ一覧（ベンチ） → パーティ追加
     const auto& charIcons = m_view.GetCharacterIcons();
@@ -53,7 +53,7 @@ void PartyBuildController::Update(sf::RenderWindow& window)
 
 sf::Vector2f PartyBuildController::GetMousePos(sf::RenderWindow& window)
 {
-    auto pos = sf::Mouse::getPosition(window);
+    auto pos = InPutMouseManager::GetInstance().GetMousePosition(window);
     return { static_cast<float>(pos.x), static_cast<float>(pos.y) };
 }
 

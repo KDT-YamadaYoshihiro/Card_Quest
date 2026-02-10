@@ -26,10 +26,7 @@ UserController::UserController(BattleContext& context,BattleView& battleView)
 
 void UserController::Update(sf::RenderWindow& window)
 {
-
-    sf::Vector2f mousePos = this->GetScreenMousePos(window);
-    //sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window), window.getDefaultView());
-
+    sf::Vector2f mousePos = InPutMouseManager::GetInstance().GetMousePosition(window);
 
     switch (m_phase)
     {
