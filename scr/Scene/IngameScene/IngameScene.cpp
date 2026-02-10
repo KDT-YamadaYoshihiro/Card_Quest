@@ -2,7 +2,7 @@
 #include "Scene/SceneManager/SceneManager.h"
 #include "Scene/PartyBuildScene/PartyBuildScene.h"
 #include "Scene/StageBuildScene/StageBulidScene.h"
-
+#include "System/InPutManager/InPutMouseManager.h"
 
 IngameScene::IngameScene()
 	:SceneBase()

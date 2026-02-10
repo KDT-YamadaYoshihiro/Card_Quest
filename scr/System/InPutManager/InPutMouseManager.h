@@ -13,7 +13,7 @@ private:
     bool m_dragging = false;
     sf::Vector2f m_pressPos;
     float m_wheelDelta = 0.f;
-
+    sf::Vector2f mMousePos = {};
 public:
 
     /// <summary>
@@ -25,10 +25,19 @@ public:
         m_prev = m_current;
         m_current = sf::Mouse::isButtonPressed(sf::Mouse::Button::Left);
 
-        sf::Vector2f mousePos(
+        sf::Vector2f MousePos(
             static_cast<float>(sf::Mouse::getPosition(window).x),
             static_cast<float>(sf::Mouse::getPosition(window).y)
         );
+
+        sf::Vector2f mousePos = window.mapPixelToCoords((sf::Vector2i)MousePos);
+
+        mMousePos = mousePos;
+
+        //sf::Vector2f mousePos(
+        //    static_cast<float>(sf::Mouse::getPosition(window).x),
+        //    static_cast<float>(sf::Mouse::getPosition(window).y)
+        //);
 
         // âüÇµÇΩèuä‘
         if (m_current && !m_prev)
@@ -115,10 +124,7 @@ public:
     /// <returns></returns>
     sf::Vector2f GetMousePosition(const sf::RenderWindow& window) const
     {
-        return sf::Vector2f(
-            static_cast<float>(sf::Mouse::getPosition(window).x),
-            static_cast<float>(sf::Mouse::getPosition(window).y)
-        );
+        return mMousePos;
     }
 
     /// <summary>

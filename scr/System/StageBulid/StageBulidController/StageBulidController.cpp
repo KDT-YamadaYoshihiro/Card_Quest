@@ -6,7 +6,7 @@ void StageBulidController::Update(sf::RenderWindow& window)
     auto& mouse = InPutMouseManager::GetInstance();
     if (!mouse.IsLeftClicked()) return;
 
-    sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition(window));
+    sf::Vector2f mousePos = mouse.GetMousePosition(window);
 
     // Contextから共有ポインタを介して判定
     auto* leftBtn = m_context.GetLeftArrow();

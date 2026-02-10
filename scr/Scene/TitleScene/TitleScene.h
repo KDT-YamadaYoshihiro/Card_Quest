@@ -9,7 +9,7 @@ class TitleScene : public SceneBase
 private:
 
 	// タイトルテキストの透明度
-	int m_titleAlpha = 255;
+	float m_titleAlpha = 255.0f;
 	// 透明度の変化速度
 	float m_alphaChangeSpeed = 200.0f;
 

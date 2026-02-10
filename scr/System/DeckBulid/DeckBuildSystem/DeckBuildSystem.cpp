@@ -155,13 +155,6 @@ void DeckBuildSystem::Draw(sf::RenderWindow& window, const sf::Font& font)
     countText.setPosition({ 100.f,  m_deckStartPos.y - 35.f });
     window.draw(countText);
 
-	//// デッキ内カード描画
- //   for (size_t i = 0; i < m_deckCards.size(); ++i)
- //   {
- //       sf::Vector2f pos = { m_deckStartPos.x + m_cardSpacing * i + m_deckScrollX, m_deckStartPos.y };
-
- //       m_renderer->DrawSingleCard(font, window, pos, m_deckCards[i]->GetCardState(),"");
- //   }
 
     for (size_t i = 0; i < m_displayDeck.size(); ++i)
     {
@@ -341,33 +334,16 @@ bool DeckBuildSystem::HandleDeckClick(sf::Vector2f mousePos)
         return false;
     }
 
-  //  for (size_t i = 0; i < m_deckCards.size(); ++i)
-  //  {
-		//// クリック判定矩形
-  //      sf::FloatRect rect({ m_deckStartPos.x + m_cardSpacing * i + m_deckScrollX, m_deckStartPos.y }, { 120.0f, 160.0f });
-
-  //      if (rect.contains(mousePos))
-  //      {
-		//	// カードをプールに戻す
-  //          CardBuildPool::GetInstance().ReturnCard(std::move(m_deckCards[i]));
-		//	// デッキから削除
-  //          m_deckCards.erase(m_deckCards.begin() + i);
-		//	// プール表示再構築
-  //          RebuildDisplayPool();
-  //          return true;
-  //      }
-  //  }
-
     for (size_t i = 0; i < m_displayDeck.size(); ++i)
     {
         sf::FloatRect rect({ m_deckStartPos.x + m_cardSpacing * i + m_deckScrollX, m_deckStartPos.y }, { 120.0f, 160.0f });
 
         if (rect.contains(mousePos))
         {
-            // 1. クリックされた表示上のカードIDを特定
+            // クリックされた表示上のカードIDを特定
             int targetId = m_displayDeck[i].card->GetCardState().cardId;
 
-            // 2. 実データ(m_deckCards)からそのIDを1つだけ探して削除
+            // 実データ(m_deckCards)からそのIDを1つだけ探して削除
             for (auto it = m_deckCards.begin(); it != m_deckCards.end(); ++it)
             {
                 if ((*it)->GetCardState().cardId == targetId)
@@ -380,7 +356,7 @@ bool DeckBuildSystem::HandleDeckClick(sf::Vector2f mousePos)
                 }
             }
 
-            // 3. 表示を再構築
+            // 表示を再構築
             RebuildDisplayDeck();
             RebuildDisplayPool();
             return true;
