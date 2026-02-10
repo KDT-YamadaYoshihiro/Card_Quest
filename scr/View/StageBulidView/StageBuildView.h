@@ -23,7 +23,7 @@ private:
     float m_scrollOffsetY = 0.f;
 
     // 定数
-	static constexpr float SLIDE_SPEED = 0.15f;     // スライド速度
+	static constexpr float SLIDE_SPEED = 0.003f;     // スライド速度
 	static constexpr float ITEM_HEIGHT = 40.f;      // アイテム高さ
 	static constexpr float PANEL_WIDTH = 700.f;     // パネル幅
 

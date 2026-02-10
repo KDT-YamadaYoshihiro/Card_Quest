@@ -24,9 +24,9 @@ float Calculation::GetDivision(float arg_a, float arg_b)
 	return answer;
 }
 
-float Calculation::GetDamage(float arg_atk, float arg_atkBuff, float arg_card, float arg_def, float arg_defBuff)
+float Calculation::GetDamage(float arg_atk, float arg_atkBuff, float arg_card, float arg_def)
 {
-	float damage = (arg_atk * arg_atkBuff * arg_card * K) - (arg_def * arg_defBuff * D);
+	float damage = (arg_atk * arg_atkBuff * arg_card * K) - (arg_def * D);
 
 	// É_ÉÅÅ[ÉWÇÃç≈í·ï€èÿ
 	if (damage <= 0)

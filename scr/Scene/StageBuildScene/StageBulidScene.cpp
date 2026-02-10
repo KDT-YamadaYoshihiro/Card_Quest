@@ -118,6 +118,24 @@ void StageBulidScene::Update(sf::RenderWindow& arg_window, float dt)
 		m_context.GetBackButton()->SetColor(sf::Color::White);
 	}
 
+	// ステージ切り替えボタン
+    if(m_context.GetLeftArrow()->IsHovered(mousePos))
+    {
+       m_context.GetLeftArrow()->SetColor(sf::Color::Yellow);
+    }
+    else
+    {
+        m_context.GetLeftArrow()->SetColor(sf::Color::White);
+	}
+    if(m_context.GetRightArrow()->IsHovered(mousePos))
+    {
+        m_context.GetRightArrow()->SetColor(sf::Color::Yellow);
+    }
+    else
+    {
+        m_context.GetRightArrow()->SetColor(sf::Color::White);
+    }
+
 
     // クリックしていなければ処理しない
     if (!input.IsLeftClicked())

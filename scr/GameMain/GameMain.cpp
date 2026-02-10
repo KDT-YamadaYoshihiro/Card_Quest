@@ -11,7 +11,8 @@
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Sleep.hpp>
-
+#include<SFML/Window.hpp>
+#include<SFML/Window/WindowEnums.hpp>
 
 #ifdef _DEBUG
 #define ENTRY_POINT int main()
@@ -31,7 +32,22 @@ bool GameMain::Init()
 
     m_window.setFramerateLimit(60);
 
-    
+#ifdef _DEBUG
+    // デバッグ時は WindowSetting に保存されているサイズでウィンドウ表示
+    m_window.create(sf::VideoMode({ 1280, 720 }), "Card Quest");
+#else
+    m_window.create(
+        sf::VideoMode::getDesktopMode(),
+        "Card Quest",
+        sf::State::Fullscreen
+    );
+#endif // _DEBUG
+
+
+    sf::Vector2f size = sf::Vector2f(m_window.getSize());
+    sf::View view(sf::FloatRect({ 0.f, 0.f }, { 1280.f, 720.f }));
+    m_window.setView(view);
+
     SceneManager::GetInstance().Init(m_window);
     CameraManager::GetInstance().ViewInit({ 0.0f, 0.0f }, static_cast<sf::Vector2f>( WindowSetting::GetInstance().GetWindowSize()));
 
@@ -54,9 +70,16 @@ void GameMain::Run()
         return;
     }
 
+	m_clock.restart();
+
     while (m_isRunning && m_window.isOpen())
     {
         float dt = m_clock.restart().asSeconds();
+
+        if (dt <= 0.0f)
+        {
+			dt = 1.0f / 60.0f;
+        }
 
         ProcessEvents();
         Update(dt);

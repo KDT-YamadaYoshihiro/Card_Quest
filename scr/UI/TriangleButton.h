@@ -98,26 +98,7 @@ public:
 	/// <returns></returns>
 	bool IsHovered(sf::Vector2f arg_mousePos) const
 	{
-		// ローカル座標に変換して判定
-		sf::Vector2f localPos = arg_mousePos - m_shape.getPosition();
-
-		auto p0 = m_shape.getPoint(0);
-		auto p1 = m_shape.getPoint(1);
-		auto p2 = m_shape.getPoint(2);
-
-		// 外積を用いた点の内外判定
-		auto sign = [](sf::Vector2f p1, sf::Vector2f p2, sf::Vector2f p3) {
-			return (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y);
-			};
-
-		float d1 = sign(localPos, p0, p1);
-		float d2 = sign(localPos, p1, p2);
-		float d3 = sign(localPos, p2, p0);
-
-		bool has_neg = (d1 < 0) || (d2 < 0) || (d3 < 0);
-		bool has_pos = (d1 > 0) || (d2 > 0) || (d3 > 0);
-
-		return !(has_neg && has_pos);
+		return m_shape.getGlobalBounds().contains(arg_mousePos);
 	}
 
 	/// <summary>

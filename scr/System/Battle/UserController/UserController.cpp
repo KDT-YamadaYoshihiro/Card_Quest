@@ -26,10 +26,7 @@ UserController::UserController(BattleContext& context,BattleView& battleView)
 
 void UserController::Update(sf::RenderWindow& window)
 {
-
-    sf::Vector2f mousePos = this->GetScreenMousePos(window);
-    //sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window), window.getDefaultView());
-
+    sf::Vector2f mousePos = InPutMouseManager::GetInstance().GetMousePosition(window);
 
     switch (m_phase)
     {
@@ -186,7 +183,7 @@ void UserController::UpdateCreateTargets()
 /// <param name="window"></param>
 void UserController::UpdateSelectTarget(sf::RenderWindow& window)
 {
-    sf::Vector2f mousePos = GetScreenMousePos(window);
+	sf::Vector2f mousePos = InPutMouseManager::GetInstance().GetMousePosition(window);
 
     // --- 追加仕様：ターゲット選択中もカードのクリックをチェック ---
     int cardIdx = HitTestHandCard(mousePos);

@@ -85,10 +85,22 @@ void StageBuildView::Draw(const StageBulidContext& context)
     DrawStageContent(stage, m_currentOffsetX);
 
     // ボタン類はスライドさせない（固定位置）
-    if (auto* left = context.GetLeftArrow())  left->Draw(m_render.GetWindow());
-    if (auto* right = context.GetRightArrow()) right->Draw(m_render.GetWindow());
-    if (auto* nextBtn = context.GetNextButton()) nextBtn->Draw(m_render.GetWindow());
-    if (auto* backBtn = context.GetBackButton()) backBtn->Draw(m_render.GetWindow());
+    if (auto* left = context.GetLeftArrow())
+    {
+        left->Draw(m_render.GetWindow());
+    }
+    if (auto* right = context.GetRightArrow()) 
+    {
+        right->Draw(m_render.GetWindow());
+    }
+    if (auto* nextBtn = context.GetNextButton())
+    {
+        nextBtn->Draw(m_render.GetWindow());
+    }
+    if (auto* backBtn = context.GetBackButton())
+    {
+        backBtn->Draw(m_render.GetWindow());
+    }
 }
 
 /// <summary>
@@ -141,10 +153,16 @@ void StageBuildView::DrawStageMonsters(const StageData* data, float offsetX)
     for (int i = 0; i < 3 && i < data->enemyIds.size(); ++i)
     {
         const CharacterData* enemyData = CharacterLoader::GetInstance().GetData(data->enemyIds[i]);
-        if (!enemyData) continue;
+        if (!enemyData)
+        {
+            continue;
+        }
 
         auto tex = TextureLoader::GetInstance().GetTextureID(enemyData->iconKey);
-        if (!tex) continue;
+        if (!tex)
+        {
+            continue;
+        }
 
         sf::Sprite sprite(*tex);
         auto size = tex->getSize();
@@ -169,6 +187,12 @@ void StageBuildView::UpdateScroll(sf::RenderWindow& window, size_t stageCount)
 
     // スクロール制限 (リスト表示を復活させる場合に使用)
     float minY = -(stageCount * ITEM_HEIGHT);
-    if (m_scrollOffsetY < minY) m_scrollOffsetY = minY;
-    if (m_scrollOffsetY > 0.f) m_scrollOffsetY = 0.f;
+    if (m_scrollOffsetY < minY)
+    {
+        m_scrollOffsetY = minY;
+    }
+    if (m_scrollOffsetY > 0.f)
+    {
+        m_scrollOffsetY = 0.f;
+    }
 }

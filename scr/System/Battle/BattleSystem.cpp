@@ -649,7 +649,7 @@ void BattleSystem::ApplyAction(const std::shared_ptr<Character>& actor, const st
 			actor->SetAnimation(CharacterAnimState::ATTACK, 1.0f);
 			target->SetAnimation(CharacterAnimState::DAMAGE, 0.8f);
 
-			int damage = Calculation::GetDamage(actor->GetData().magicAtk, actor->GetBuffData().power, card.power, target->GetData().def, target->GetBuffData().power);
+			int damage = Calculation::GetDamage(actor->GetData().atk, actor->GetBuffData().power, card.power, target->GetData().def);
 			target->TakeDamage(damage);
 			// ダメージ表示
 			m_battleView->AddDamagePopup(m_battleView->CalcDamagePopupPos(target),damage,false);
@@ -668,7 +668,7 @@ void BattleSystem::ApplyAction(const std::shared_ptr<Character>& actor, const st
 			actor->SetAnimation(CharacterAnimState::MAGIC, 1.0f);
 			target->SetAnimation(CharacterAnimState::DAMAGE, 0.8f);
 
-			int damage = Calculation::GetDamage(actor->GetData().magicAtk, actor->GetBuffData().power, card.power, target->GetData().def, target->GetBuffData().power);
+			int damage = Calculation::GetDamage(actor->GetData().magicAtk, actor->GetBuffData().power, card.power, target->GetData().def);
 			target->TakeDamage(damage);
 			// ダメージ表示
 			m_battleView->AddDamagePopup(m_battleView->CalcDamagePopupPos(target),damage,false);

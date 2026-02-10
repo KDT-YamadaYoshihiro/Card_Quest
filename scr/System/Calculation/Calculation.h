@@ -6,7 +6,7 @@ class Calculation
 {
 	// 定数
 	constexpr static float K = 1.5f; // ダメージ補正定数
-	constexpr static float D = 0.8f; // 防御補正定数
+	constexpr static float D = 0.6f; // 防御補正定数
 public:
 
 	// 加法
@@ -22,7 +22,7 @@ public:
 	static float GetDivision(float arg_a, float arg_b);
 
 	// ダメージ計算
-	static float GetDamage(float arg_atk, float arg_atkBuff, float arg_card, float arg_def, float arg_defBuff);
+	static float GetDamage(float arg_atk, float arg_atkBuff, float arg_card, float arg_def);
 
 	// 平均値
 	template<size_t N>
