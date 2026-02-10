@@ -183,7 +183,7 @@ void UserController::UpdateCreateTargets()
 /// <param name="window"></param>
 void UserController::UpdateSelectTarget(sf::RenderWindow& window)
 {
-    sf::Vector2f mousePos = GetScreenMousePos(window);
+	sf::Vector2f mousePos = InPutMouseManager::GetInstance().GetMousePosition(window);
 
     // --- 追加仕様：ターゲット選択中もカードのクリックをチェック ---
     int cardIdx = HitTestHandCard(mousePos);

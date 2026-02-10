@@ -79,14 +79,14 @@ void TitleScene::UpdateAlpha(float dt)
     // “§–¾“x‚Ì•ÏX‘¬“x
     m_titleAlpha += m_alphaChangeSpeed * dt;
 
-    if(m_titleAlpha > 255)
+    if(m_titleAlpha > 255.0f)
     {
-		m_titleAlpha = 255;
+		m_titleAlpha = 255.0f;
         m_alphaChangeSpeed = -std::abs(m_alphaChangeSpeed);
 	}
-    if(m_titleAlpha < 0)
+    if(m_titleAlpha < 0.0f)
     {
-		m_titleAlpha = 0;
+		m_titleAlpha = 0.0f;
         m_alphaChangeSpeed = std::abs(m_alphaChangeSpeed);
 	}
 }
