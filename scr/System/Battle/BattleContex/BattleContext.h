@@ -28,6 +28,8 @@ private:
     int m_currentTurnPhase = 0;
     // 追加行動数
     int m_uiPredictedCost = 0;
+    // 選択カード
+	int m_selectedCardId = -1;
 
 public:
 
@@ -165,4 +167,17 @@ public:
     /// </summary>
     /// <returns></returns>
     int GetTurnPhase() const;
+
+    /// <summary>
+    /// 選択カードのセット
+    /// </summary>
+    /// <param name="cardId"></param>
+	void SetSelectedCardId(int cardId);
+
+    /// <summary>
+    /// 選択カードの取得
+    /// </summary>
+    /// <returns></returns>
+	int GetSelectedCardId() const;
+
 };

@@ -40,7 +40,7 @@ void CharacterSprite::Init(const std::string& arg_textureKey)
     m_rectTable[CharacterAnimState::MAGIC] = sf::IntRect(sf::Vector2i{ W*3, H*3 }, sf::Vector2i{ W, H });
     m_rectTable[CharacterAnimState::DAMAGE] = sf::IntRect(sf::Vector2i{ W*0, H*4 }, sf::Vector2i{ W, H });
     m_rectTable[CharacterAnimState::DEAD] = sf::IntRect(sf::Vector2i{ W*6, H*3 }, sf::Vector2i{ W, H });
-    m_rectTable[CharacterAnimState::WIN] = sf::IntRect(sf::Vector2i{ W*6,H*2}, sf::Vector2i{ W, H });
+    m_rectTable[CharacterAnimState::WIN] = sf::IntRect(sf::Vector2i{ W*6,H*1}, sf::Vector2i{ W, H });
 
     SetState(CharacterAnimState::WAIT);
 }

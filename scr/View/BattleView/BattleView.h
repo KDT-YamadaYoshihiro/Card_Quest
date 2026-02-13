@@ -50,7 +50,7 @@ class BattleView
 	sf::Text m_clearBannerText;
 
 	// 
-	int m_selectedCard = -1;
+	int m_selectedCardId = -1;
 	//
 	int m_costGain = 0;
 

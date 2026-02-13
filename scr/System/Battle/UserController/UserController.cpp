@@ -107,7 +107,7 @@ void UserController::SelectCard(int cardIdx)
 {
     m_selectedCardIndex = cardIdx;
     m_selectCardId = m_context.GetCardIdByGlobalIndex(cardIdx);
-
+	m_context.SetSelectedCardId(m_selectCardId);
     m_selectedActor = m_context.GetCharacterByCardId(m_selectCardId);
     if(!m_selectedActor) {
         ConsoleView::GetInstance().Add("Error: Actor not found for card ID: " + std::to_string(m_selectCardId));
@@ -138,6 +138,7 @@ void UserController::SelectCard(int cardIdx)
             m_context.SetFocusTargets({ m_preSelectedTarget });
         }
     }
+
 
     m_phase = PlayerSelectPhase::SELECT_TARGET;
 }

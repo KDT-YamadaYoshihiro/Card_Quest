@@ -4,7 +4,7 @@
 #include "Entity/Card/CardManager/CardManager.h"
 #include "System/Battle/Cost/CostManager.h"
 #include "CSVLoad/StageLoader/StageLoader.h"
-
+#include "GameMain/WindowSetting.h"
 
 // 座標系
 namespace
@@ -74,7 +74,7 @@ void BattleView::SetSelectedActor(const std::shared_ptr<Character>& actor)
 /// </summary
 void BattleView::SetSelectedCard(int index)
 {
-    m_selectedCard = index;
+    m_selectedCardId = index;
 }
 
 /// <summary>
@@ -102,7 +102,7 @@ void BattleView::ResetTransientView()
 {
     ClearTargets();
     ClearCostGain();
-    m_selectedCard = -1;
+    m_selectedCardId = -1;
 }
 
 /// <summary>
@@ -129,7 +129,7 @@ void BattleView::AddDamagePopup(const sf::Vector2f& arg_pos, int arg_value, bool
 void BattleView::Render(sf::RenderWindow& arg_window)
 {
     // カメラ機能ON
-    m_render.ApplyCamera();
+    //m_render.ApplyCamera();
 
     // キャラクター描画
     DrawCharacters();
@@ -243,10 +243,10 @@ void BattleView::DrawCards(sf::RenderWindow& arg_window)
         {
             sf::Vector2f drawPos = pos;
 
-            
-
+			auto card = p->GetCardData(i);
+            m_selectedCardId = m_context.GetSelectedCardId();
             // 選択カードを少し上に
-            if (i == m_selectedCard)
+            if (card.cardId == m_selectedCardId)
             {
                 drawPos.y -= SELECT_OFFSET_Y;
             }
@@ -442,7 +442,7 @@ void BattleView::DrawTurnBanner(sf::RenderWindow& window)
     text.setOrigin({ textRect.position.x + textRect.size.x / 2.0f,textRect.position.y + textRect.size.y / 2.0f });
 
     // ウィンドウサイズを取得して中央へ
-    sf::Vector2u windowSize = window.getSize();
+    sf::Vector2u windowSize = WindowSetting::GetInstance().GetWindowSize();
     text.setPosition({ windowSize.x / 2.0f, 50.f }); 
 
     window.draw(text);
@@ -481,6 +481,10 @@ sf::Vector2f BattleView::GetCharacterCenter(const std::shared_ptr<Character>& c)
     return { pos.x + (CHAR_W * 0.5f), pos.y + (CHAR_H * 0.5f) };
 }
 
+/// <summary>
+/// カメラ更新
+/// </summary>
+/// <param name="dt"></param>
 void BattleView::UpdateCamera(float dt)
 {
 
@@ -538,6 +542,11 @@ void BattleView::UpdateCamera(float dt)
     camera.ViewUpdate(dt);
 }
 
+/// <summary>
+/// ダメージポップアップ位置計算
+/// </summary>
+/// <param name="c"></param>
+/// <returns></returns>
 sf::Vector2f BattleView::CalcDamagePopupPos(const std::shared_ptr<Character>& c)
 {
     auto center = GetCharacterCenter(c);
@@ -545,6 +554,10 @@ sf::Vector2f BattleView::CalcDamagePopupPos(const std::shared_ptr<Character>& c)
     return center;
 }
 
+/// <summary>
+/// ゲームクリアバナーの描画
+/// </summary>
+/// <param name="arg_window"></param>
 void BattleView::DrawClearBanner(sf::RenderWindow& arg_window)
 {
 
@@ -560,13 +573,17 @@ void BattleView::DrawClearBanner(sf::RenderWindow& arg_window)
 	sf::FloatRect textRect = m_clearBannerText.getLocalBounds();
 	m_clearBannerText.setOrigin({ textRect.position.x + textRect.size.x / 2.0f,textRect.position.y + textRect.size.y / 2.0f });
 	// ウィンドウサイズを取得して中央へ
-	sf::Vector2u windowSize = arg_window.getSize();
+	sf::Vector2u windowSize = WindowSetting::GetInstance().GetWindowSize();
 	m_clearBannerText.setPosition({ windowSize.x / 2.0f, windowSize.y / 2.0f });
 	arg_window.draw(m_clearBannerText);
 
 
 }
 
+/// <summary>
+/// ゲームオーバーバナーの描画
+/// </summary>
+/// <param name="arg_window"></param>
 void BattleView::DrawGameOverBanner(sf::RenderWindow& arg_window)
 {
 
@@ -583,7 +600,7 @@ void BattleView::DrawGameOverBanner(sf::RenderWindow& arg_window)
 	sf::FloatRect textRect = m_clearBannerText.getLocalBounds();
 	m_clearBannerText.setOrigin({ textRect.position.x + textRect.size.x / 2.0f,textRect.position.y + textRect.size.y / 2.0f });
 	// ウィンドウサイズを取得して中央へ
-	sf::Vector2u windowSize = arg_window.getSize();
+	sf::Vector2u windowSize = WindowSetting::GetInstance().GetWindowSize();
 	m_clearBannerText.setPosition({ windowSize.x / 2.0f, windowSize.y / 2.0f });
 	arg_window.draw(m_clearBannerText);
 
