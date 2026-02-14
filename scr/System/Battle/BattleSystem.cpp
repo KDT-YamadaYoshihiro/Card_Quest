@@ -219,20 +219,20 @@ void BattleSystem::Render(sf::RenderWindow& arg_window)
 /// <returns></returns>
 bool BattleSystem::IsBattleEnd() const
 {
-	// 1. 敵が全滅しているか（勝利条件）
+	// 敵が全滅しているか
 	if (m_context->GetAliveEnemies().empty())
 	{
 		return true;
 	}
 
-	// 2. プレイヤーが全滅しているか（敗北条件1）
+	// プレイヤーが全滅しているか
 	auto alivePlayers = m_context->GetAlivePlayers();
 	if (alivePlayers.empty())
 	{
 		return true;
 	}
 
-	// 3. 行動不能状態の判定（敗北条件2）
+	// 行動不能状態の判定
 	// 山札が空、かつ生存している全プレイヤーの手札が0枚の場合
 	if (CardManager::GetInstance().GetDeckCount() == 0)
 	{
@@ -248,7 +248,7 @@ bool BattleSystem::IsBattleEnd() const
 
 		if (!hasAnyCard)
 		{
-			// デッキも手札も尽きたので、これ以上行動できない（詰み）
+			// デッキも手札も尽きたので、これ以上行動できない
 			return true;
 		}
 	}
@@ -265,11 +265,19 @@ bool BattleSystem::IsUserWin() const
 	return m_context->IsEnemyAllDead() && !m_context->IsPlayerAllDead();
 }
 
+/// <summary>
+/// パーティー編成画面への遷移判定
+/// </summary>
+/// <returns></returns>
 bool BattleSystem::IsToPartyScene() const
 {
 	 return m_toPartyScene; 
 }
 
+/// <summary>
+/// ステージ選択Sceneへの遷移判定
+/// </summary>
+/// <returns></returns>
 bool BattleSystem::IsToStageSelectScene() const
 {
 	return m_toStageSelectScene; 
@@ -355,13 +363,14 @@ void BattleSystem::UserTurn(sf::RenderWindow& window)
 	{
 		ConsoleView::GetInstance().Add("UserTurnPhase::Action\n");
 
+		
 		action = m_userController->ConsumeAction();
-
+		// コスト消費可能か
 		if (!CostManager::GetInstance().CanConsume(1))
 		{
 			return;
 		}
-
+		// コスト消費
 		CostManager::GetInstance().Consume(1);
 
 		// データ取得
@@ -369,7 +378,6 @@ void BattleSystem::UserTurn(sf::RenderWindow& window)
 
 		// アクション
 		ApplyAction(action.actor, action.targets, card);
-
 
 		// 使用カードは墓地へ
 		discardId = action.actor->DiscardCardById(action.cardId);
@@ -400,10 +408,12 @@ void BattleSystem::UserTurn(sf::RenderWindow& window)
 
 	case BattleSystem::UserTurnPhase::EndUserTurn:
 
+		// 
 		ConsoleView::GetInstance().Add("UserTurnPhase::EndUserTurn\n");
 
-		// エネミーターンへ
+		// ユーザーフェーズのリセット
 		m_userPhase = UserTurnPhase::Start;
+		// エネミーターンへ
 		m_phase = TurnPhase::EnemyTurn;
 		break;
 	}
