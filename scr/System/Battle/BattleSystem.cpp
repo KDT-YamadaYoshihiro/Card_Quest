@@ -154,7 +154,6 @@ void BattleSystem::Update(sf::RenderWindow& arg_window)
 		// バトル終了判定
 		if (m_phase != TurnPhase::Result && IsBattleEnd())
 		{
-			// --- 修正：味方の全キャラクターからカードを回収して墓地へ ---
 			const auto& players = m_context->GetPlayers();
 			for (auto& player : players)
 			{
@@ -177,6 +176,7 @@ void BattleSystem::Update(sf::RenderWindow& arg_window)
 		ConsoleView::GetInstance().Reset();
 		m_phase = TurnPhase::Result;
 	}
+	// Animation更新のためのデルタタイム計測
 	float dt = m_clock.restart().asSeconds();
 	// キャラクター系の更新
 	for (auto& p : m_players)
@@ -190,8 +190,9 @@ void BattleSystem::Update(sf::RenderWindow& arg_window)
 		e->UpdateAnimTimer(dt);
 	}
 
+	// コンテキストの更新
 	m_context->SetTurnPhase(static_cast<int>(m_phase));
-
+	// 描画系の更新
 	m_battleView->Update(dt);
 }
 
@@ -449,6 +450,7 @@ void BattleSystem::EnemyTurn()
 	}
 	case BattleSystem::EnemyTurnPhase::Action:
 	{
+		// 行動予定の敵が行う行動を決定する
 		int cardIndex = m_currentEnemy->DecideActionCardIndex();
 		if (cardIndex < 0)
 		{
@@ -456,17 +458,20 @@ void BattleSystem::EnemyTurn()
 			break;
 		}
 
+		// カード情報の取得
 		int cardId = m_currentEnemy->GetHeldCardId(cardIndex);
 		const CardData& card = CardManager::GetInstance().GetCardData(cardId);
 
+		// ターゲットの決定
 		auto targets = m_context->CreateTargetCandidates(card.targetType,m_currentEnemy->GetFaction(),m_currentEnemy);
 
+		// ターゲットがいない場合は行動できないので次の敵へ
 		if (targets.empty())
 		{
 			m_enemyPhase = EnemyTurnPhase::NextEnemy;
 			break;
 		}
-
+		// ターゲットの確定
 		if (card.targetType == TargetType::SELF)
 		{
 			m_enemyFinalTargets.push_back(m_currentEnemy);
@@ -578,7 +583,9 @@ void BattleSystem::ResultEvent(sf::RenderWindow& arg_woindow)
 		return;
 	}
 
+	// クリックしている場合は、クリック位置を取得
 	bool isClickTriggered = InPutMouseManager::GetInstance().IsLeftClicked();
+	// マウス座標の取得
 	sf::Vector2f mousePos = InPutMouseManager::GetInstance().GetMousePosition(arg_woindow);
 
 	// ボタンのクリック判定
@@ -642,6 +649,7 @@ void BattleSystem::ApplyAction(const std::shared_ptr<Character>& actor, const st
 			continue;
 		}
 
+		// カードの種類ごとに処理
 		switch (card.actionType)
 		{
 		case ActionType::ATTCK:
