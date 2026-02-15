@@ -1,7 +1,7 @@
 #include "EffectAnimetion.h"
 
 EffectAnimation::EffectAnimation(const EffectData& config, const sf::Texture& texture)
-	: m_config(config), m_sprite(texture), m_isPlaying(false), m_currentFrame(0), m_elapsedTime(sf::Time::Zero)
+	: m_config(config), m_sprite(texture), m_isPlaying(false), m_currentFrame(0), m_elapsedTime(0.0f)
 {
     // 画像サイズから1フレームあたりのサイズを計算 (Rectサイズ計算)
     sf::Vector2u texSize = texture.getSize();
@@ -19,11 +19,12 @@ void EffectAnimation::Play(sf::Vector2f position, sf::Vector2f scale)
     m_sprite.setScale(scale);
     m_isPlaying = true;
     m_currentFrame = 0;
-    m_elapsedTime = sf::Time::Zero;
+    m_elapsedTime = 0.0f;
 
 }
 
-void EffectAnimation::Update(sf::Time deltaTime)
+
+void EffectAnimation::Update(float deltaTime)
 {
 	// 再生中でなければ更新しない
     if (!m_isPlaying)
@@ -34,12 +35,11 @@ void EffectAnimation::Update(sf::Time deltaTime)
 	// 経過時間を更新
     m_elapsedTime += deltaTime;
 
-    if (m_elapsedTime.asSeconds() >= m_config.frameDuration) {
-		// フレーム切り替え
-        m_elapsedTime = sf::Time::Zero;
+    if (m_elapsedTime >= m_config.frameDuration) {
+		//　フレームを進める
+        m_elapsedTime = 0.0f;
         m_currentFrame++;
 
-        // 全フレーム再生終了判定
         if (m_currentFrame >= m_config.xDivision * m_config.yDivision) {
             m_isPlaying = false;
         }

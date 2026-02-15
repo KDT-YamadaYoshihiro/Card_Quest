@@ -1,5 +1,4 @@
 #include "LightEffect.h"
-#include "EffectAnimetion.h"
 
 LightEffect::LightEffect(size_t count, sf::Vector2u windowSize)
     : m_windowSize(windowSize), m_gen(std::random_device{}()) {

@@ -14,26 +14,30 @@ bool StageLoader::LoadCSV(const std::string& path)
 
     while (std::getline(file, line))
     {
-        auto cols = Split(line);
-        if (cols.size() < 4)
-        {
-            continue;
+        if (line.empty()) continue;
+        auto rows = Split(line);
+
+        // 必要な列数（ID, Name, Text, BG, Enemy...）が揃っているかチェック
+        if (rows.size() < 5) continue;
+
+        try {
+            StageData data;
+            data.stageId = std::stoi(rows[0]);
+            data.name = rows[1];
+            data.enemyIds = {
+                std::stoi(rows[2]),
+                std::stoi(rows[3]),
+                std::stoi(rows[4])
+            };
+
+            m_stageTable[data.stageId] = data;
         }
-
-        StageData data;
-        data.stageId = std::stoi(cols[0]);
-        data.name = cols[1];
-        data.enemyIds = {
-            std::stoi(cols[2]),
-            std::stoi(cols[3]),
-            std::stoi(cols[4])
-        };
-#ifdef _DEBUG
-        ConsoleView::GetInstance().Add("Loaded stageID: " + std::to_string(data.stageId) + "\n");
-#endif
-
-        m_stageTable[data.stageId] = data;
+        catch (const std::exception& e) {
+            // エラーをログに出力して次の行へ
+            std::cerr << "StageLoader Error: " << e.what() << " in line: " << line << std::endl;
+        }
     }
+
     return true;
 }
 

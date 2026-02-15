@@ -1,20 +1,45 @@
 #include "EffectDataLoder.h"
 
-void EffectDataLoder::Load(const std::string& filePath)
+void EffectDataLoder::LoadCSV(const std::string& filePath)
 {
     std::ifstream file(filePath);
+    if (!file.is_open()) return;
+
     std::string line;
+
+    // ヘッダー行を読み飛ばす
+    std::getline(file, line);
+
     while (std::getline(file, line)) {
+        // 空行をスキップ
+        if (line.empty())
+        {
+            continue;
+        }
+
         auto rows = Split(line);
-        if (rows.empty()) continue;
 
-        EffectData config;
-        config.key = rows[0];
-        config.xDivision = std::stoi(rows[1]);
-        config.yDivision = std::stoi(rows[2]);
-        config.positionType = static_cast<PositionType>(std::stoi(rows[3]));
+        // 列数が足りているかチェック
+        if (rows.size() < 5)
+        {
+            continue;
+        }
 
-        m_configs[config.key] = config;
+        try {
+            EffectData config;
+            config.key = rows[0];
+            config.positionType = static_cast<PositionType>(std::stoi(rows[1]));
+            config.frameDuration = std::stof(rows[2]);
+            config.xDivision = std::stoi(rows[3]);
+            config.yDivision = std::stoi(rows[4]);
+
+            m_configs[config.key] = config;
+        }
+        catch (const std::exception& e) {
+            // 変換に失敗した行があればスキップしてログを出す
+            std::cerr << "CSV変換エラー (line: " << line << "): " << e.what() << std::endl;
+            continue;
+        }
     }
 }
 

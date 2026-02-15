@@ -30,8 +30,7 @@ bool TextureLoader::LoadTextures(const std::string& path)
         sf::Texture tex;
         if (!tex.loadFromFile(filePath))
         {
-            ConsoleView::GetInstance().Add("ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ¸”s : " + filePath);
-
+            std::cerr << "Failed to load texture: " << path << " (id: " << id << ")" << std::endl;
             continue;
         }
 

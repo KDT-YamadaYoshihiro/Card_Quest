@@ -5,6 +5,7 @@
 #include "Scene/SceneManager/SceneManager.h"
 #include "View/Font/FontManager.h"
 #include "System/InPutManager/InPutMouseManager.h"
+#include "View/Effect/EffectManager/EffectManager.h"
 
 #include "Scene/StageBuildScene/StageBulidScene.h"
 #include "Scene/PartyBuildScene/PartyBuildScene.h"
@@ -194,6 +195,8 @@ void BattleSystem::Update(sf::RenderWindow& arg_window)
 	m_context->SetTurnPhase(static_cast<int>(m_phase));
 	// 描画系の更新
 	m_battleView->Update(dt);
+	// エフェクトの更新
+	EffectManager::GetInstance().Update(dt);
 }
 
 /// <summary>
@@ -204,6 +207,8 @@ void BattleSystem::Render(sf::RenderWindow& arg_window)
 {
 	// バトル系の描画
 	m_battleView->Render(arg_window);
+
+	EffectManager::GetInstance().Draw(arg_window);
 
 	// リザルト時のみ表示
 	if (m_phase == TurnPhase::Result)
@@ -659,6 +664,23 @@ void BattleSystem::ApplyAction(const std::shared_ptr<Character>& actor, const st
 			continue;
 		}
 
+
+		// 設定を取得
+		const auto& effectData = EffectDataLoder::GetInstance().GetConfig(std::to_string(card.cardId));
+		// PositionTypeに応じて「誰の座標を渡すか」決める
+		sf::Vector2f playPos;
+		if (effectData.positionType == PositionType::Target)
+		{
+			playPos = target->GetPosition(); // 相手の座標
+		}
+		else 
+		{
+			playPos = actor->GetPosition();  // 自分の座標（Centerの場合はManager内で上書きされるのでこれでOK）
+		}
+		// マネージャーに依頼
+		EffectManager::GetInstance().CreateEffect(std::to_string(card.cardId), playPos);
+
+
 		// カードの種類ごとに処理
 		switch (card.actionType)
 		{
@@ -701,7 +723,6 @@ void BattleSystem::ApplyAction(const std::shared_ptr<Character>& actor, const st
 
 			break;
 		}
-
 		case ActionType::HEAL:
 		{
 			actor->SetAnimation(CharacterAnimState::MAGIC, 1.0f);

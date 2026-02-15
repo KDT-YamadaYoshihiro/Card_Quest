@@ -133,7 +133,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="scr\View\Render\EffectAnimetion\EffectAnimetion.cpp" />
+    <ClCompile Include="scr\View\Effect\EffectManager\EffectManager.cpp" />
+    <ClCompile Include="scr\View\Effect\EffectAnimetion\EffectAnimetion.cpp" />
     <ClCompile Include="scr\CSVLoad\EffectDataLoder\EffectDataLoder.cpp" />
     <ClCompile Include="scr\UI\Fade\Fade.cpp" />
     <ClCompile Include="scr\System\Battle\MenuWindow\MenuWindow.cpp" />
@@ -175,7 +176,8 @@
     <ClCompile Include="scr\View\StageBulidView\StageBuildView.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="scr\View\Render\EffectAnimetion\EffectAnimetion.h" />
+    <ClInclude Include="scr\View\Effect\EffectManager\EffectManager.h" />
+    <ClInclude Include="scr\View\Effect\EffectAnimetion\EffectAnimetion.h" />
     <ClInclude Include="scr\CSVLoad\EffectDataLoder\EffectDataLoder.h" />
     <ClInclude Include="scr\UI\Fade\Fade.h" />
     <ClInclude Include="scr\System\Battle\MenuWindow\MenuWindow.h" />

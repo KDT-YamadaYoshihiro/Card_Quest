@@ -85,9 +85,7 @@ public:
             data.description = desc;
             m_cards[data.cardId] = data;
 
-#ifdef _DEBUG
             ConsoleView::GetInstance().Add("Loaded Card ID: " + std::to_string(data.cardId) + "\n");
-#endif
 
         }
         return true;

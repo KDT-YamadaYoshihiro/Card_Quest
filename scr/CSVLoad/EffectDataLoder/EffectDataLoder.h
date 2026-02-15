@@ -5,9 +5,10 @@
 
 enum class PositionType
 {
-	Self,
 	Target,
-	Center,
+	PlayerSide,
+	EnemySide,
+	WindowCenter
 };
 
 struct EffectData
@@ -35,7 +36,7 @@ public:
 	/// エフェクトデータをCSVファイルから読み込む
 	/// </summary>
 	/// <param name="filePath"></param>
-	void Load(const std::string& filePath);
+	void LoadCSV(const std::string& filePath);
 
 	/// <summary>
 	/// エフェクトデータの取得

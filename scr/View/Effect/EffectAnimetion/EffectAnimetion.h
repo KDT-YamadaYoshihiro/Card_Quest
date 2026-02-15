@@ -8,11 +8,11 @@ private:
 
     const EffectData& m_config;
     sf::Sprite m_sprite;
-    bool m_isPlaying;
+    float m_elapsedTime;
     int m_currentFrame;
     int m_frameWidth;
     int m_frameHeight;
-    sf::Time m_elapsedTime;
+    bool m_isPlaying;
 
 public:
 
@@ -34,7 +34,7 @@ public:
 	/// エフェクト再生の更新
     /// </summary>
     /// <param name="deltaTime"></param>
-    void Update(sf::Time deltaTime);
+    void Update(float deltaTime);
 
 
     /// <summary>
