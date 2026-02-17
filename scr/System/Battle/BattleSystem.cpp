@@ -664,21 +664,21 @@ void BattleSystem::ApplyAction(const std::shared_ptr<Character>& actor, const st
 			continue;
 		}
 
-
 		// 設定を取得
 		const auto& effectData = EffectDataLoder::GetInstance().GetConfig(std::to_string(card.cardId));
-		// PositionTypeに応じて「誰の座標を渡すか」決める
-		sf::Vector2f playPos;
-		if (effectData.positionType == PositionType::Target)
-		{
-			playPos = target->GetPosition(); // 相手の座標
+		if (effectData.positionType == PositionType::PlayerSide || effectData.positionType == PositionType::EnemySize) {
+			// 【全体エフェクト】ループの外で1回だけ生成
+			// 一番左のキャラ（targets[0]など）の座標を基準に渡す
+			sf::Vector2f basePos = targets[0]->GetPosition();
+			EffectManager::GetInstance().CreateEffect(std::to_string(card.cardId), basePos);
 		}
-		else 
-		{
-			playPos = actor->GetPosition();  // 自分の座標（Centerの場合はManager内で上書きされるのでこれでOK）
+
+		for (auto& target : targets) {
+			if (effectData.positionType == PositionType::PlayerChara || effectData.positionType == PositionType::EnemyChara) {
+				// 【単体エフェクト】各ターゲットの頭上に出す
+				EffectManager::GetInstance().CreateEffect(std::to_string(card.cardId), target->GetPosition());
+			}
 		}
-		// マネージャーに依頼
-		EffectManager::GetInstance().CreateEffect(std::to_string(card.cardId), playPos);
 
 
 		// カードの種類ごとに処理

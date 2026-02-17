@@ -235,6 +235,12 @@ void BattleView::DrawCards(sf::RenderWindow& arg_window)
     // ===== 手札 =====
     sf::Vector2f pos = HAND_START;
 
+    // 手札全体での通し番号をカウントする変数
+    int globalCardIdx = 0;
+
+    // 選択中のグローバルインデックスを取得
+    int selectedCardGlobalIdx = m_context.GetSelectedCardIndex();
+
     for (auto& p : m_context.GetAlivePlayers())
     {
         const int cardCount = p->GetCardCount();
@@ -243,20 +249,21 @@ void BattleView::DrawCards(sf::RenderWindow& arg_window)
         {
             sf::Vector2f drawPos = pos;
 
-			auto card = p->GetCardData(i);
-            m_selectedCardId = m_context.GetSelectedCardId();
-            // 選択カードを少し上に
-            if (card.cardId == m_selectedCardId)
+            // ローカルな i ではなく、手札全体での通し番号で比較する
+            if (globalCardIdx == selectedCardGlobalIdx)
             {
                 drawPos.y -= SELECT_OFFSET_Y;
             }
 
             // カードデータ取得
             const CardData& data = p->GetCardData(i);
-            // 描画
-            m_cardRenderer->DrawSingleCard(m_font, m_render.GetWindow(), drawPos, data,p->GetData().iconKey);
 
+            // 描画
+            m_cardRenderer->DrawSingleCard(m_font, m_render.GetWindow(), drawPos, data, p->GetData().iconKey);
+
+            // 次のカードへ座標と通し番号を進める
             pos.x += HAND_SPACING;
+            globalCardIdx++;
         }
     }
 }

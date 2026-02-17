@@ -5,10 +5,11 @@
 
 enum class PositionType
 {
-	Target,
-	PlayerSide,
-	EnemySide,
-	WindowCenter
+	PlayerChara,    // プレイヤー単体
+	EnemyChara,     // エネミー単体
+	PlayerSide,     // プレイヤー全体（基準から大きく表示）
+	EnemySize,      // エネミー全体（基準から大きく表示）
+	WIndowScenter   // 画面中央
 };
 
 struct EffectData

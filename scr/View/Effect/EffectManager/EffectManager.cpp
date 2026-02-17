@@ -11,47 +11,39 @@
 /// <param name="arg_pos"></param>
 void EffectManager::CreateEffect(const std::string& arg_key, sf::Vector2f arg_pos)
 {
-    // 各ローダーからデータを取得
     const auto* texture = TextureLoader::GetInstance().GetTextureID(arg_key);
-    if (!texture)
-    {
-        return;
-    }
+    if (!texture) return;
 
     const EffectData& data = EffectDataLoder::GetInstance().GetConfig(arg_key);
-    if(!data.key.empty())
-    {
-        ConsoleView::GetInstance().Add("Effect Created: " + data.key);
-	}
 
-    // PositionType に基づく座標決定
-    sf::Vector2f finalPos;
+    sf::Vector2f finalPos = arg_pos;
+    sf::Vector2f finalScale = { 1.0f, 1.0f };
+
     switch (data.positionType) {
-    case PositionType::Target:
-        finalPos = arg_pos;
+    case PositionType::WIndowScenter:
+        // 画面中央（解像度に合わせて調整）
+        finalPos = sf::Vector2f(1920.0f / 2.0f, 1080.0f / 2.0f);
         break;
 
     case PositionType::PlayerSide:
-        // 味方側の基準座標（例）
-        finalPos = { windowSize.x * 0.25f, windowSize.y * 0.7f };
+    case PositionType::EnemySize:
+        // 全体演出：渡された基準座標（一番左のキャラ等）を使用し、サイズを大きくする
+        finalPos = arg_pos;
+        finalScale = { 2.5f, 2.5f }; // 全体を覆う程度の倍率（任意調整）
         break;
 
-    case PositionType::EnemySide:
-        // 敵側の基準座標（例）
-        finalPos = { windowSize.x * 0.75f, windowSize.y * 0.3f };
-        break;
-
-    case PositionType::WindowCenter:
-        // ウィンドウの中央
-        finalPos = { windowSize.x / 2.0f, windowSize.y / 2.0f };
+    case PositionType::PlayerChara:
+    case PositionType::EnemyChara:
+    default:
+        // 単体演出：渡された座標そのまま
+        finalPos = arg_pos;
         break;
     }
 
-    // インスタンス生成と再生
     auto newEffect = std::make_unique<EffectAnimation>(data, *texture);
-	// エフェクトの中心を基準に位置を調整
-    newEffect->Play(finalPos);
-	// リストに追加
+    // スケールを適用して再生
+    newEffect->Play(finalPos, finalScale);
+
     m_effects.push_back(std::move(newEffect));
 }
 
