@@ -17,8 +17,12 @@ struct EffectData
 	std::string key;
 	PositionType positionType;		// エフェクトの位置タイプ
 	float frameDuration;			// フレームの切り替え時間
+	float offsetX;				// エフェクトのXオフセット
+	float offsetY;				// エフェクトのYオフセット
+	float scale;					// エフェクトのスケール
 	int xDivision;				// エフェクトのX分割数
 	int yDivision;				// エフェクトのY分割数
+	bool IsCenter;				// エフェクトの中心を基準にするかどうか
 };
 
 

@@ -1,13 +1,15 @@
 #include "EffectAnimetion.h"
+#include "GameMain/WindowSetting.h"
 
 EffectAnimation::EffectAnimation(const EffectData& config, const sf::Texture& texture)
-	: m_config(config), m_sprite(texture), m_isPlaying(false), m_currentFrame(0), m_elapsedTime(0.0f)
+    : m_config(config), m_sprite(texture), m_isPlaying(false), m_currentFrame(0), m_elapsedTime(0.0f)
 {
     // 画像サイズから1フレームあたりのサイズを計算 (Rectサイズ計算)
     sf::Vector2u texSize = texture.getSize();
     m_frameWidth = texSize.x / m_config.xDivision;
     m_frameHeight = texSize.y / m_config.yDivision;
 
+    m_sprite.setOrigin({m_frameWidth / 2.0f, m_frameHeight / 2.0f});
     // 初期フレームの設定
     UpdateTextureRect();
 }
@@ -62,9 +64,10 @@ bool EffectAnimation::IsPlaying() const
 
 void EffectAnimation::UpdateTextureRect()
 {
-	// 現在のフレームに基づいてテクスチャの表示領域を計算
+    // 現在のフレームに基づいてテクスチャの表示領域を計算
     int tx = (m_currentFrame % m_config.xDivision) * m_frameWidth;
-    int ty = (m_currentFrame / m_config.yDivision) * m_frameHeight;
-	// テクスチャの表示領域を更新
+    int ty = (m_currentFrame / m_config.xDivision) * m_frameHeight;
+
+    // テクスチャの表示領域を更新
     m_sprite.setTextureRect(sf::IntRect({ tx, ty }, { m_frameWidth, m_frameHeight }));
 }
