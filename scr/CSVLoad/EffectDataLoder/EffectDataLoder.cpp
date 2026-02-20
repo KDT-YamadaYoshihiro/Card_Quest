@@ -20,7 +20,7 @@ void EffectDataLoder::LoadCSV(const std::string& filePath)
         auto rows = Split(line);
 
         // 列数が足りているかチェック
-        if (rows.size() < 5)
+        if (rows.size() < 8)
         {
             continue;
         }
