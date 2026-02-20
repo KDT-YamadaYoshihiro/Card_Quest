@@ -189,8 +189,15 @@ private:
 	/// <param name="actor"></param>
 	/// <param name="targets"></param>
 	/// <param name="card"></param>
-	void ApplyAction(const std::shared_ptr<Character>& actor, const std::vector<std::shared_ptr<Character>>& targets, const CardData& card);
+	void ApplyAction(const std::shared_ptr<Character>& arg_actor, const std::vector<std::shared_ptr<Character>>& arg_targets, const CardData& arg_card);
 
+	/// <summary>
+	/// カード効果内容
+	/// </summary>
+	/// <param name="actor"></param>
+	/// <param name="targets"></param>
+	/// <param name="card"></param>
+	void HandleActionType(const std::shared_ptr<Character>& arg_actor, const std::shared_ptr<Character>& arg_target, const CardData& arg_card);
 };
 
 

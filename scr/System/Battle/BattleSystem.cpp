@@ -55,7 +55,6 @@ bool BattleSystem::Init(sf::RenderWindow& arg_window)
 		enemy->AddCard(COMMON_CARDID);
 		enemy->AddCard(UNIQUE_CARDID + id);
 		m_enemies.push_back(enemy);
-
 	}
 
 	// キャラ座標の初期化
@@ -148,7 +147,7 @@ void BattleSystem::Update(sf::RenderWindow& arg_window)
 		break;
 	default:
 		break;
-	}
+	} // switch(m_phase)
 
 	if (this->IsBattleEnd())
 	{
@@ -177,6 +176,7 @@ void BattleSystem::Update(sf::RenderWindow& arg_window)
 		ConsoleView::GetInstance().Reset();
 		m_phase = TurnPhase::Result;
 	}
+
 	// Animation更新のためのデルタタイム計測
 	float dt = m_clock.restart().asSeconds();
 	// キャラクター系の更新
@@ -312,7 +312,6 @@ void BattleSystem::CharaInitPosition()
 /// </summary>
 void BattleSystem::StartTurn()
 {
-
 	// コスト回復
 	CostManager::GetInstance().ResetCost();
 
@@ -421,7 +420,7 @@ void BattleSystem::UserTurn(sf::RenderWindow& window)
 		// エネミーターンへ
 		m_phase = TurnPhase::EnemyTurn;
 		break;
-	}
+	} // switch()
 }
 
 
@@ -430,7 +429,6 @@ void BattleSystem::UserTurn(sf::RenderWindow& window)
 /// </summary>
 void BattleSystem::EnemyTurn()
 {
-
 
 	switch (m_enemyPhase)
 	{
@@ -533,8 +531,7 @@ void BattleSystem::EnemyTurn()
 		break;
 	default:
 		break;
-	}
-
+	} // switch()
 
 }
 
@@ -650,113 +647,135 @@ void BattleSystem::ResultView(sf::RenderWindow& arg_window)
 //	カード使用時効果
 void BattleSystem::ApplyAction(const std::shared_ptr<Character>& actor, const std::vector<std::shared_ptr<Character>>& targets, const CardData& card)
 {
+	// アクターが存在しない、もしくは死んでいる場合は処理しない
 	if (!actor)
 	{
 		return;
 	}
 
+	// 全体ターゲットのエフェクト生成
+	const auto& effectData = EffectDataLoder::GetInstance().GetConfig(std::to_string(card.cardId));
+	if (effectData.positionType == PositionType::PlayerSide || effectData.positionType == PositionType::EnemySize) {
+
+		// プレイヤー側かエネミー側かでエフェクトの位置を変える
+		if (targets[0]->GetFaction() == Faction::Player)
+		{
+			sf::Vector2f basePos = m_context->GetPlayers()[0]->GetPosition();
+			EffectManager::GetInstance().CreateEffect(std::to_string(card.cardId), basePos);
+		}
+		else
+		{
+			sf::Vector2f basePos = m_context->GetEnemies()[0]->GetPosition();
+			EffectManager::GetInstance().CreateEffect(std::to_string(card.cardId), basePos);
+		}
+	}
+
+	// 単体ターゲットのエフェクト生成
+	for (auto& target : targets) {
+		if (effectData.positionType == PositionType::PlayerChara || effectData.positionType == PositionType::EnemyChara) {
+			EffectManager::GetInstance().CreateEffect(std::to_string(card.cardId), target->GetPosition());
+		}
+	}
+
+
 	// アクション効果
 	for (auto& target : targets)
 	{
-		// 生存判定
+		// 生存確認
 		if (!target || target->IsDead())
 		{
 			continue;
 		}
+		// カードの種類ごとの処理
+		HandleActionType(actor, target, card);
 
-		// 設定を取得
-		const auto& effectData = EffectDataLoder::GetInstance().GetConfig(std::to_string(card.cardId));
-		if (effectData.positionType == PositionType::PlayerSide || effectData.positionType == PositionType::EnemySize) {
-			// 【全体エフェクト】ループの外で1回だけ生成
-			// 一番左のキャラ（targets[0]など）の座標を基準に渡す
-			sf::Vector2f basePos = targets[0]->GetPosition();
-			EffectManager::GetInstance().CreateEffect(std::to_string(card.cardId), basePos);
-		}
+	} //for(auto& target : targets)
+}
 
-		for (auto& target : targets) {
-			if (effectData.positionType == PositionType::PlayerChara || effectData.positionType == PositionType::EnemyChara) {
-				// 【単体エフェクト】各ターゲットの頭上に出す
-				EffectManager::GetInstance().CreateEffect(std::to_string(card.cardId), target->GetPosition());
-			}
-		}
+/// <summary>
+/// カード効果内容
+/// </summary>
+/// <param name="actor"></param>
+/// <param name="targets"></param>
+/// <param name="card"></param>
+void BattleSystem::HandleActionType(const std::shared_ptr<Character>& arg_actor, const std::shared_ptr<Character>& arg_target, const CardData& arg_card)
+{
+	// カードの種類ごとに処理
+	switch (arg_card.actionType)
+	{
+	case ActionType::ATTCK:
+	{
+		arg_actor->SetAnimation(CharacterAnimState::ATTACK, 1.0f);
+		arg_target->SetAnimation(CharacterAnimState::DAMAGE, 0.8f);
 
+		int damage = Calculation::GetDamage(arg_actor->GetData().atk, arg_actor->GetBuffData().power, arg_card.power, arg_target->GetData().def);
+		arg_target->TakeDamage(damage);
+		// ダメージ表示
+		m_battleView->AddDamagePopup(m_battleView->CalcDamagePopupPos(arg_target), damage, false);
+		// 確認用ログ
+		ConsoleView::GetInstance().Add(arg_actor->GetData().name + "が" + arg_target->GetData().name + "に" + std::to_string(damage) + "与えた\n");
+		ConsoleView::GetInstance().Add(std::to_string(arg_target->GetData().maxHp) + "/" + std::to_string(arg_target->GetData().hp) + "\n");
+		ConsoleView::GetInstance().Add("ターンが" + std::to_string(arg_card.actionPlus) + "追加された\n");
+		// コストの増減
+		CostManager::GetInstance().AddCost(arg_card.actionPlus);
+		m_battleView->ShowCostGain(arg_card.actionPlus);
 
-		// カードの種類ごとに処理
-		switch (card.actionType)
-		{
-		case ActionType::ATTCK:
-		{
-			actor->SetAnimation(CharacterAnimState::ATTACK, 1.0f);
-			target->SetAnimation(CharacterAnimState::DAMAGE, 0.8f);
-
-			int damage = Calculation::GetDamage(actor->GetData().atk, actor->GetBuffData().power, card.power, target->GetData().def);
-			target->TakeDamage(damage);
-			// ダメージ表示
-			m_battleView->AddDamagePopup(m_battleView->CalcDamagePopupPos(target),damage,false);
-			// 確認用ログ
-			ConsoleView::GetInstance().Add(actor->GetData().name + "が" + target->GetData().name + "に" + std::to_string(damage) + "与えた\n");
-			ConsoleView::GetInstance().Add(std::to_string(target->GetData().maxHp) + "/" + std::to_string(target->GetData().hp) + "\n");
-			ConsoleView::GetInstance().Add("ターンが" + std::to_string(card.actionPlus) + "追加された\n");
-			// コストの増減
-			CostManager::GetInstance().AddCost(card.actionPlus);
-			m_battleView->ShowCostGain(card.actionPlus);
-
-			break;
-		}
-		case ActionType::MAGIC:
-		{
-			actor->SetAnimation(CharacterAnimState::MAGIC, 1.0f);
-			target->SetAnimation(CharacterAnimState::DAMAGE, 0.8f);
-
-			int damage = Calculation::GetDamage(actor->GetData().magicAtk, actor->GetBuffData().power, card.power, target->GetData().def);
-			target->TakeDamage(damage);
-			// ダメージ表示
-			m_battleView->AddDamagePopup(m_battleView->CalcDamagePopupPos(target),damage,false);
-			// 確認用ログ
-			ConsoleView::GetInstance().Add(actor->GetData().name + "が" + target->GetData().name + "に" + std::to_string(damage) + "与えた\n");
-			ConsoleView::GetInstance().Add(std::to_string(target->GetData().maxHp) + "/" + std::to_string(target->GetData().hp) + "\n");
-
-			// コストの増減
-			ConsoleView::GetInstance().Add("ターンが" + std::to_string(card.actionPlus) + "追加された\n");
-			CostManager::GetInstance().AddCost(card.actionPlus);
-			m_battleView->ShowCostGain(card.actionPlus);
-
-			break;
-		}
-		case ActionType::HEAL:
-		{
-			actor->SetAnimation(CharacterAnimState::MAGIC, 1.0f);
-			int heal = Calculation::GetMultiplicative(actor->GetData().maxHp, card.power);
-			target->TakeHeal(heal);
-			// ダメージ表示
-			m_battleView->AddDamagePopup(m_battleView->CalcDamagePopupPos(target),heal,true);
-			// 確認用ログ
-			ConsoleView::GetInstance().Add(actor->GetData().name + "が" + target->GetData().name + "に" + std::to_string(heal) + "回復させた\n");
-			ConsoleView::GetInstance().Add(std::to_string(target->GetData().maxHp) + "/" + std::to_string(target->GetData().hp) + "\n");
-
-			// コストの増減
-			ConsoleView::GetInstance().Add("ターンが" + std::to_string(card.actionPlus) + "追加された\n");
-			CostManager::GetInstance().AddCost(card.actionPlus);
-			m_battleView->ShowCostGain(card.actionPlus);
-
-			break;
-		}
-		case ActionType::BUFF:
-
-			actor->SetAnimation(CharacterAnimState::MAGIC, 1.0f);
-			target->TakeBuff(card.power, card.turn);
-			// コストの増減
-			ConsoleView::GetInstance().Add("ターンが" + std::to_string(card.actionPlus) + "追加された\n");
-			CostManager::GetInstance().AddCost(card.actionPlus);
-			m_battleView->ShowCostGain(card.actionPlus);
-
-			break;
-
-		case ActionType::ACTION_NONE:
-
-			ConsoleView::GetInstance().Add("ターンが" + std::to_string(card.actionPlus) + "追加された\n");
-			CostManager::GetInstance().AddCost(card.actionPlus);
-
-		}
+		break;
 	}
+	case ActionType::MAGIC:
+	{
+		arg_actor->SetAnimation(CharacterAnimState::MAGIC, 1.0f);
+		arg_target->SetAnimation(CharacterAnimState::DAMAGE, 0.8f);
+
+		int damage = Calculation::GetDamage(arg_actor->GetData().magicAtk, arg_actor->GetBuffData().power, arg_card.power, arg_target->GetData().def);
+		arg_target->TakeDamage(damage);
+		// ダメージ表示
+		m_battleView->AddDamagePopup(m_battleView->CalcDamagePopupPos(arg_target), damage, false);
+		// 確認用ログ
+		ConsoleView::GetInstance().Add(arg_actor->GetData().name + "が" + arg_target->GetData().name + "に" + std::to_string(damage) + "与えた\n");
+		ConsoleView::GetInstance().Add(std::to_string(arg_target->GetData().maxHp) + "/" + std::to_string(arg_target->GetData().hp) + "\n");
+
+		// コストの増減
+		ConsoleView::GetInstance().Add("ターンが" + std::to_string(arg_card.actionPlus) + "追加された\n");
+		CostManager::GetInstance().AddCost(arg_card.actionPlus);
+		m_battleView->ShowCostGain(arg_card.actionPlus);
+
+		break;
+	}
+	case ActionType::HEAL:
+	{
+		arg_actor->SetAnimation(CharacterAnimState::MAGIC, 1.0f);
+		int heal = Calculation::GetMultiplicative(arg_actor->GetData().maxHp, arg_card.power);
+		arg_target->TakeHeal(heal);
+		// ダメージ表示
+		m_battleView->AddDamagePopup(m_battleView->CalcDamagePopupPos(arg_target), heal, true);
+		// 確認用ログ
+		ConsoleView::GetInstance().Add(arg_actor->GetData().name + "が" + arg_target->GetData().name + "に" + std::to_string(heal) + "回復させた\n");
+		ConsoleView::GetInstance().Add(std::to_string(arg_target->GetData().maxHp) + "/" + std::to_string(arg_target->GetData().hp) + "\n");
+
+		// コストの増減
+		ConsoleView::GetInstance().Add("ターンが" + std::to_string(arg_card.actionPlus) + "追加された\n");
+		CostManager::GetInstance().AddCost(arg_card.actionPlus);
+		m_battleView->ShowCostGain(arg_card.actionPlus);
+
+		break;
+	}
+	case ActionType::BUFF:
+
+		arg_actor->SetAnimation(CharacterAnimState::MAGIC, 1.0f);
+		arg_target->TakeBuff(arg_card.power, arg_card.turn);
+		// コストの増減
+		ConsoleView::GetInstance().Add("ターンが" + std::to_string(arg_card.actionPlus) + "追加された\n");
+		CostManager::GetInstance().AddCost(arg_card.actionPlus);
+		m_battleView->ShowCostGain(arg_card.actionPlus);
+
+		break;
+
+	case ActionType::ACTION_NONE:
+
+		ConsoleView::GetInstance().Add("ターンが" + std::to_string(arg_card.actionPlus) + "追加された\n");
+		CostManager::GetInstance().AddCost(arg_card.actionPlus);
+
+	} // switch()
+
 }
