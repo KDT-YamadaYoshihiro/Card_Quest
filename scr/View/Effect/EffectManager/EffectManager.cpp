@@ -12,15 +12,16 @@
 void EffectManager::CreateEffect(const std::string& arg_key, sf::Vector2f arg_pos)
 {
     const auto* texture = TextureLoader::GetInstance().GetTextureID(arg_key);
-    if (!texture) return;
+    if (!texture)
+    {
+        return;
+    }
 
     const EffectData& data = EffectDataLoder::GetInstance().GetConfig(arg_key);
 
     // ベース座標の決定
     sf::Vector2f finalPos = arg_pos;
-    if (data.positionType == PositionType::WIndowScenter) {
-        finalPos = sf::Vector2f(1920.0f / 2.0f, 1080.0f / 2.0f);
-    }
+    sf::Vector2f windowSize = static_cast<sf::Vector2f>(WindowSetting::GetInstance().GetWindowSize());
 
     // CSVからのオフセットとスケールを適用 
     finalPos.x += data.offsetX;
@@ -62,4 +63,21 @@ void EffectManager::Draw(sf::RenderWindow& arg_window)
     for (auto& effect : m_effects) {
         effect->Draw(arg_window);
     }
+}
+
+/// <summary>
+/// エフェクトの再生中か判断
+/// </summary>
+/// <returns></returns>
+bool EffectManager::GetPlay() const
+{
+    for (auto& effect : m_effects)
+    {
+        if (effect->IsPlaying())
+        {
+            return true;
+        }
+    }
+
+    return false;
 }

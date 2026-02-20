@@ -415,10 +415,13 @@ void BattleSystem::UserTurn(sf::RenderWindow& window)
 		// 
 		ConsoleView::GetInstance().Add("UserTurnPhase::EndUserTurn\n");
 
-		// ユーザーフェーズのリセット
-		m_userPhase = UserTurnPhase::Start;
-		// エネミーターンへ
-		m_phase = TurnPhase::EnemyTurn;
+		// エフェクトが終了していたら
+		if (!EffectManager::GetInstance().GetPlay()) {
+			// ユーザーフェーズのリセット
+			m_userPhase = UserTurnPhase::Start;
+			// エネミーターンへ
+			m_phase = TurnPhase::EnemyTurn;
+		}
 		break;
 	} // switch()
 }
@@ -526,8 +529,14 @@ void BattleSystem::EnemyTurn()
 		break;
 	}
 	case BattleSystem::EnemyTurnPhase::End:
-		m_enemyPhase = EnemyTurnPhase::Start;
-		m_phase = TurnPhase::EndTurn;
+
+		// エフェクトが終了していたら
+		if (!EffectManager::GetInstance().GetPlay()) {
+			// エネミーフェーズをリセット
+			m_enemyPhase = EnemyTurnPhase::Start;
+			// フェーズ移行
+			m_phase = TurnPhase::EndTurn;
+		}
 		break;
 	default:
 		break;
@@ -625,7 +634,7 @@ void BattleSystem::ResultView(sf::RenderWindow& arg_window)
 	// 黒のベース（半透明)
 	sf::RectangleShape bgBox;
 	bgBox.setSize(static_cast<sf::Vector2f>(arg_window.getSize()));
-	bgBox.setFillColor(sf::Color(0, 0, 0, 150)); // 黒、少し透過
+	bgBox.setFillColor(sf::Color(0, 0, 0, 150));
 	arg_window.draw(bgBox);
 
 	// クリアかオーバーか
@@ -677,6 +686,12 @@ void BattleSystem::ApplyAction(const std::shared_ptr<Character>& actor, const st
 		}
 	}
 
+	// 画面中央
+	if (effectData.IsCenter)
+	{
+		sf::Vector2f windowSize = static_cast<sf::Vector2f>(WindowSetting::GetInstance().GetWindowSize());
+		EffectManager::GetInstance().CreateEffect(std::to_string(card.cardId), { windowSize.x / 2.0f, windowSize.y / 2.0f });
+	}
 
 	// アクション効果
 	for (auto& target : targets)

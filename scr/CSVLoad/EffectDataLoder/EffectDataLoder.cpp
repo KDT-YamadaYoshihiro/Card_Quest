@@ -35,7 +35,7 @@ void EffectDataLoder::LoadCSV(const std::string& filePath)
 			config.scale = std::stof(rows[5]);
             config.xDivision = std::stoi(rows[6]);
             config.yDivision = std::stoi(rows[7]);
-			config.IsCenter = (rows[8] == "true" || rows[8] == "1");
+            config.IsCenter = static_cast<bool>(std::stoi(rows[8]));
 
             m_configs[config.key] = config;
         }

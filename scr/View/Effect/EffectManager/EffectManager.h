@@ -34,5 +34,11 @@ public:
 	/// <param name="arg_window"></param>
 	void Draw(sf::RenderWindow& arg_window);
 
+	/// <summary>
+	/// エフェクトの再生中か判断
+	/// </summary>
+	/// <returns></returns>
+	bool GetPlay()const;
+
 };
 
