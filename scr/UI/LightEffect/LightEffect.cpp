@@ -50,8 +50,10 @@ void LightEffect::Update(float deltaTime) {
     }
 }
 
+
 void LightEffect::Draw(sf::RenderWindow& window) {
     for (const auto& light : m_lights) {
         window.draw(light.shape);
     }
 }
+

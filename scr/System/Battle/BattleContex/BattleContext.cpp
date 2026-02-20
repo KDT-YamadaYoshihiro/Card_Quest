@@ -271,14 +271,14 @@ int BattleContext::GetTurnPhase() const
      return m_currentTurnPhase;
 }
 
-void BattleContext::SetSelectedCardId(int cardId)
+void BattleContext::SetSelectedCardIndex(int cardId)
 {
-	m_selectedCardId = cardId;
+	m_selectedCardIndex = cardId;
 }
 
-int BattleContext::GetSelectedCardId() const
+int BattleContext::GetSelectedCardIndex() const
 {
-    return m_selectedCardId;
+    return m_selectedCardIndex;
 }
 
 

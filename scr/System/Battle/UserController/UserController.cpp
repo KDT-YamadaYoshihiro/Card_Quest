@@ -90,15 +90,15 @@ void UserController::UpdateSelectCard(sf::RenderWindow& window, const sf::Vector
     
     m_hoveredCardIndex = HitTestHandCard(mousePos);
 
-    int cardIdx = HitTestHandCard(mousePos);
-    m_hoveredCardIndex = cardIdx;
+    int cardIndex = HitTestHandCard(mousePos);
+    m_hoveredCardIndex = cardIndex;
 
     if (InPutMouseManager::GetInstance().IsLeftClicked())
     {
-        if (cardIdx != -1)
+        if (cardIndex != -1)
         {
             // カード選択処理の実行
-            SelectCard(cardIdx);
+            SelectCard(cardIndex);
         }
     }
 }
@@ -107,7 +107,7 @@ void UserController::SelectCard(int cardIdx)
 {
     m_selectedCardIndex = cardIdx;
     m_selectCardId = m_context.GetCardIdByGlobalIndex(cardIdx);
-	m_context.SetSelectedCardId(m_selectCardId);
+	m_context.SetSelectedCardIndex(m_selectedCardIndex);
     m_selectedActor = m_context.GetCharacterByCardId(m_selectCardId);
     if(!m_selectedActor) {
         ConsoleView::GetInstance().Add("Error: Actor not found for card ID: " + std::to_string(m_selectCardId));
@@ -242,6 +242,7 @@ void UserController::ConfirmAction(const std::vector<std::shared_ptr<Character>>
 
     m_context.ClearFocusTargets();
     m_context.SetPredictedCost(0);
+    m_context.SetSelectedCardIndex(-1);
 }
 
 /// <summary>

@@ -3,6 +3,7 @@
 #include "CSVLoad/CharacterLoader.h"
 #include "CSVLoad/CardLoader.h"
 #include "CSVLoad/StageLoader/StageLoader.h"
+#include "CSVLoad/EffectDataLoder/EffectDataLoder.h"
 #include "Scene/Scenemanager/SceneManager.h"
 #include "View/CameraManager/CameraManager.h"
 #include "WindowSetting.h"
@@ -56,6 +57,8 @@ bool GameMain::Init()
 	CharacterLoader::GetInstance().LoadCSV("data/CSV/CharacterData.csv");
     CardLoader::GetInstance().LoadCSV("data/CSV/CardData.csv");
     StageLoader::GetInstance().LoadCSV("data/CSV/StageData.csv");
+	EffectDataLoder::GetInstance().LoadCSV("data/CSV/EffectData.csv");
+    
     // ÉtÉHÉìÉgì«Ç›çûÇ›
     FontManager::GetInstance().FontLoad();
 
