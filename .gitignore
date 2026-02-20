@@ -21,6 +21,7 @@ mono_crash.*
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/
+# binファイルの毎度の追加防止
 !x64/
 x86/
 [Ww][Ii][Nn]32/
