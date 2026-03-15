@@ -46,12 +46,22 @@ void CardRenderer::DrawSingleCard(const sf::Font& arg_font, sf::RenderWindow& wi
 {
 
     std::string baseTextureKey;
-    if (cardData.actionType == ActionType::MAGIC || cardData.actionType == ActionType::HEAL)
+
+    switch (cardData.actionType)
     {
-        baseTextureKey = "cardMgc";
-    }
-    else {
+    case ActionType::ATTCK:
         baseTextureKey = "cardAtk";
+        break;
+    case ActionType::MAGIC:
+        baseTextureKey = "cardMgc";
+        break;
+    case ActionType::HEAL:
+        baseTextureKey = "cardHeal";
+        break;
+    case ActionType::BUFF:
+    default:
+        baseTextureKey = "cardBuff";
+        break;
     }
 
     sf::Vector2f cardSize(120.f, 160.f); // デフォルトサイズ
@@ -62,7 +72,7 @@ void CardRenderer::DrawSingleCard(const sf::Font& arg_font, sf::RenderWindow& wi
     {
         sf::Sprite baseSprite(*baseTex);
         baseSprite.setPosition(pos);
-        baseSprite.setScale({ 0.25f, 0.25f }); 
+        baseSprite.setScale({ 0.7f, 0.6f }); 
         window.draw(baseSprite);
         cardSize.x = baseSprite.getGlobalBounds().size.x;
         cardSize.y = baseSprite.getGlobalBounds().size.y;
