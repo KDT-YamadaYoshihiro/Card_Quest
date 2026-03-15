@@ -32,8 +32,7 @@ void CardRenderer::DrawDeck(const sf::Font& arg_font, sf::RenderWindow& window, 
 /// <param name="count">枚数</param>
 void CardRenderer::DrawGrave(const sf::Font& arg_font, sf::RenderWindow& window, sf::Vector2f pos, int count)
 {
-    DrawDeck(arg_font,window, pos, count); // 今回は同じ見た目
-
+    DrawDeck(arg_font,window, pos, count); 
 }
 
 /// <summary>
@@ -47,6 +46,7 @@ void CardRenderer::DrawSingleCard(const sf::Font& arg_font, sf::RenderWindow& wi
 
     std::string baseTextureKey;
 
+    // テクスチャーキーの設定
     switch (cardData.actionType)
     {
     case ActionType::ATTCK:
@@ -94,7 +94,7 @@ void CardRenderer::DrawSingleCard(const sf::Font& arg_font, sf::RenderWindow& wi
     nameText.setCharacterSize(14);
     nameText.setFillColor(sf::Color::Black);
 
-    // テキストのサイズ（境界）を取得
+    // テキストのサイズを取得
     sf::FloatRect textRect = nameText.getLocalBounds();
     // 原点をテキストの中心に設定する
     nameText.setOrigin({textRect.position.x + textRect.size.x / 2.0f,textRect.position.y + textRect.size.y / 2.0f});
@@ -143,7 +143,7 @@ sf::String CardRenderer::WarpText(const sf::String& arg_src, const sf::Font& arg
 
     for (std::size_t i = 0; i < arg_src.getSize(); ++i)
     {
-        char32_t c = arg_src[i];  // ← SFML3ではこれ
+        char32_t c = arg_src[i];
 
         // 明示的な改行
         if (c == U'\n')
