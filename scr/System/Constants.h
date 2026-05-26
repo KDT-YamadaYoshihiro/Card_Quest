@@ -44,7 +44,6 @@ constexpr sf::Vector2f DEFAULT_BUTTON_SIZE{ BUTTON_WIDTH, BUTTON_HEIGHT };
 // --- UI・配置位置 (UI & Positioning) ---
 constexpr float HAND_START_X = 200.f;      // ハンド開始 X 座標 [px]
 constexpr float HAND_START_Y = 520.0f;     // ハンド開始 Y 座標 [px]
-constexpr sf::Vector2f HAND_START{ HAND_START_X, HAND_START_Y };
 
 // --- ドローコスト表示位置 (Draw Cost Position) ---
 constexpr float DRAW_COST_OFFSET_X = 110.f;   // センターからの X オフセット [px]
@@ -79,5 +78,10 @@ constexpr float CARD_SPACING = 160.f;
 constexpr int COMMON_CARD_ID = 1000;
 constexpr int UNIQUE_CARD_ID = 1100;
 constexpr int MAX_PARTY_SIZE = 6;            // パーティ最大人数
+
+// --- 補完定数 (Backward Compatibility) ---
+// これらの古い名前は新しい名前へのエイリアスとして機能します
+constexpr float PADDING_X = 20.f;    // UI パディング X [px]
+constexpr float PADDING_Y = 10.f;    // UI パディング Y [px]
 
 } // namespace Constants
