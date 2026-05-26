@@ -2,20 +2,20 @@
 #include <vector>
 #include <memory>
 #include "System/Singleton/Singleton.h"
-#include "View/Effect/EffectAnimetion/EffectAnimetion.h"
+#include "View/Effect/EffectAnimation/EffectAnimation.h"
 
 class EffectManager : public Singleton<EffectManager>
 {
 private:
 
 	friend class Singleton<EffectManager>;
-	// ƒGƒtƒFƒNƒg‚ÌƒŠƒXƒg
+	// ï¿½Gï¿½tï¿½Fï¿½Nï¿½gï¿½Ìƒï¿½ï¿½Xï¿½g
 	std::vector<std::unique_ptr<EffectAnimation>> m_effects;
 
 public:
 
 	/// <summary>
-	/// ƒGƒtƒFƒNƒg‚ğì¬‚µ‚ÄÄ¶
+	/// ï¿½Gï¿½tï¿½Fï¿½Nï¿½gï¿½ï¿½ï¿½ì¬ï¿½ï¿½ï¿½ÄÄï¿½
 	/// </summary>
 	/// <param name="arg_data"></param>
 	/// <param name="arg_texture"></param>
@@ -23,19 +23,19 @@ public:
 	void CreateEffect(const std::string& arg_key, sf::Vector2f arg_pos);
 
 	/// <summary>
-	/// ‘SƒGƒtƒFƒNƒg‚ÌXV
+	/// ï¿½Sï¿½Gï¿½tï¿½Fï¿½Nï¿½gï¿½ÌXï¿½V
 	/// </summary>
 	/// <param name="arg_dt"></param>
 	void Update(float arg_dt);
 
 	/// <summary>
-	/// ‘SƒGƒtƒFƒNƒg‚Ì•`‰æ
+	/// ï¿½Sï¿½Gï¿½tï¿½Fï¿½Nï¿½gï¿½Ì•`ï¿½ï¿½
 	/// </summary>
 	/// <param name="arg_window"></param>
 	void Draw(sf::RenderWindow& arg_window);
 
 	/// <summary>
-	/// ƒGƒtƒFƒNƒg‚ÌÄ¶’†‚©”»’f
+	/// ï¿½Gï¿½tï¿½Fï¿½Nï¿½gï¿½ÌÄï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½f
 	/// </summary>
 	/// <returns></returns>
 	bool GetPlay()const;
