@@ -89,7 +89,7 @@ void BattleView::Update(float dt)
             for (auto& p : m_popups)
             {
                 p.lifeTime -= dt;
-                p.position.y -= 30.f * dt; // �ɕ�������
+                p.position.y -= Constants::SELECT_OFFSET_Y * dt; // 選択時のオフセット分移動
             }
 
             m_popups.erase(
