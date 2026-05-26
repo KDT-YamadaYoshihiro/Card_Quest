@@ -1,16 +1,17 @@
 #include "CardRenderer.h"
 #include "CSVLoad/TextureLoader/TextureLoader.h"
+#include "System/Constants.h"
 
 #include <iostream>
 /// <summary>
-/// RD‚Ì•`‰æ
+/// ï¿½Rï¿½Dï¿½Ì•`ï¿½ï¿½
 /// </summary>
 /// <param name="window"></param>
-/// <param name="pos">À•W</param>
-/// <param name="count">–‡”</param>
+/// <param name="pos">ï¿½ï¿½ï¿½W</param>
+/// <param name="count">ï¿½ï¿½ï¿½ï¿½</param>
 void CardRenderer::DrawDeck(const sf::Font& arg_font, sf::RenderWindow& window, sf::Vector2f pos, int count)
 {
-    sf::RectangleShape rect({ 80.f, 120.f });
+    sf::RectangleShape rect({ 80.f, Constants::CARD_HEIGHT });
     rect.setFillColor(sf::Color(160, 160, 160));
     rect.setOutlineColor(sf::Color::Black);
     rect.setOutlineThickness(2.f);
@@ -18,35 +19,35 @@ void CardRenderer::DrawDeck(const sf::Font& arg_font, sf::RenderWindow& window, 
     window.draw(rect);
 
     sf::Text text(arg_font,std::to_string(count));
-    text.setCharacterSize(20);
+    text.setCharacterSize(Constants::FONT_SIZE_SMALL);
     text.setFillColor(sf::Color::White);
     text.setPosition({ pos.x + 30.0f, pos.y + 45.0f });
     window.draw(text);
 }
 
 /// <summary>
-/// •æ’n‚Ì•`‰æ
+/// ï¿½ï¿½nï¿½Ì•`ï¿½ï¿½
 /// </summary>
 /// <param name="window"></param>
-/// <param name="pos">À•W</param>
-/// <param name="count">–‡”</param>
+/// <param name="pos">ï¿½ï¿½ï¿½W</param>
+/// <param name="count">ï¿½ï¿½ï¿½ï¿½</param>
 void CardRenderer::DrawGrave(const sf::Font& arg_font, sf::RenderWindow& window, sf::Vector2f pos, int count)
 {
     DrawDeck(arg_font,window, pos, count); 
 }
 
 /// <summary>
-/// ’P‘ÌƒJ[ƒh•`‰æ
+/// ï¿½Pï¿½ÌƒJï¿½[ï¿½hï¿½`ï¿½ï¿½
 /// </summary>
 /// <param name="window"></param>
-/// <param name="pos">À•W</param>
-/// <param name="card">ƒJ[ƒh</param>
+/// <param name="pos">ï¿½ï¿½ï¿½W</param>
+/// <param name="card">ï¿½Jï¿½[ï¿½h</param>
 void CardRenderer::DrawSingleCard(const sf::Font& arg_font, sf::RenderWindow& window, sf::Vector2f pos, const CardData& cardData, const std::string& IconKey)
 {
 
     std::string baseTextureKey;
 
-    // ƒeƒNƒXƒ`ƒƒ[ƒL[‚Ìİ’è
+    // ï¿½eï¿½Nï¿½Xï¿½`ï¿½ï¿½ï¿½[ï¿½Lï¿½[ï¿½Ìİ’ï¿½
     switch (cardData.actionType)
     {
     case ActionType::ATTCK:
@@ -64,9 +65,9 @@ void CardRenderer::DrawSingleCard(const sf::Font& arg_font, sf::RenderWindow& wi
         break;
     }
 
-    sf::Vector2f cardSize(120.f, 160.f); // ƒfƒtƒHƒ‹ƒgƒTƒCƒY
+    sf::Vector2f cardSize{ Constants::CARD_WIDTH, Constants::CARD_HEIGHT }; // ï¿½fï¿½tï¿½Hï¿½ï¿½ï¿½gï¿½Tï¿½Cï¿½Y
 
-    // ƒJ[ƒhƒx[ƒXiƒeƒNƒXƒ`ƒƒj‚Ì•`‰æ
+    // ï¿½Jï¿½[ï¿½hï¿½xï¿½[ï¿½Xï¿½iï¿½eï¿½Nï¿½Xï¿½`ï¿½ï¿½ï¿½jï¿½Ì•`ï¿½ï¿½
     auto baseTex = TextureLoader::GetInstance().GetTextureID(baseTextureKey);
     if (baseTex)
     {
@@ -79,8 +80,8 @@ void CardRenderer::DrawSingleCard(const sf::Font& arg_font, sf::RenderWindow& wi
     }
     else
     {
-        // ƒJ[ƒh‚Ìƒx[ƒXi”’’nj
-        sf::RectangleShape rect({ 120.f, 160.f });
+        // ï¿½Jï¿½[ï¿½hï¿½Ìƒxï¿½[ï¿½Xï¿½iï¿½ï¿½ï¿½nï¿½j
+        sf::RectangleShape rect{ Constants::CARD_WIDTH, Constants::CARD_HEIGHT };
         rect.setFillColor(sf::Color(230, 230, 230));
         rect.setOutlineColor(sf::Color::Black);
         rect.setOutlineThickness(2.0f);
@@ -89,22 +90,22 @@ void CardRenderer::DrawSingleCard(const sf::Font& arg_font, sf::RenderWindow& wi
     }
 
 
-    // ‹Z–¼
+    // ï¿½Zï¿½ï¿½
     sf::Text nameText(arg_font, sf::String::fromUtf8(cardData.name.begin(), cardData.name.end()));
     nameText.setCharacterSize(14);
     nameText.setFillColor(sf::Color::Black);
 
-    // ƒeƒLƒXƒg‚ÌƒTƒCƒY‚ğæ“¾
+    // ï¿½eï¿½Lï¿½Xï¿½gï¿½ÌƒTï¿½Cï¿½Yï¿½ï¿½ï¿½æ“¾
     sf::FloatRect textRect = nameText.getLocalBounds();
-    // Œ´“_‚ğƒeƒLƒXƒg‚Ì’†S‚Éİ’è‚·‚é
+    // ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½eï¿½Lï¿½Xï¿½gï¿½Ì’ï¿½ï¿½Sï¿½Éİ’è‚·ï¿½ï¿½
     nameText.setOrigin({textRect.position.x + textRect.size.x / 2.0f,textRect.position.y + textRect.size.y / 2.0f});
     nameText.setPosition({pos.x + (cardSize.x / 2.0f),pos.y + 20.0f});
     window.draw(nameText);
 
 
-    // à–¾
+    // ï¿½ï¿½ï¿½ï¿½
     sf::String desc = sf::String::fromUtf8(cardData.description.begin(), cardData.description.end());
-    // ‰üsˆ—
+    // ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½
     desc = WarpText(desc, arg_font, 12, 100.0f);
 
     sf::Text descText(arg_font,desc);
@@ -113,26 +114,26 @@ void CardRenderer::DrawSingleCard(const sf::Font& arg_font, sf::RenderWindow& wi
     descText.setPosition({ pos.x + 30.0f, pos.y + 50.0f });
     window.draw(descText);
 
-    // ŠƒLƒƒƒ‰ƒNƒ^[‚ÌƒAƒCƒRƒ“•\¦
+    // ï¿½ï¿½ï¿½ï¿½ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½^ï¿½[ï¿½ÌƒAï¿½Cï¿½Rï¿½ï¿½ï¿½\ï¿½ï¿½
     auto tex = TextureLoader::GetInstance().GetTextureID(IconKey);
     if (!tex)
     {
-        // ƒAƒCƒRƒ“‚ªŒ©‚Â‚©‚ç‚È‚¢‚Æ‚«‰½‚à‚µ‚È‚¢
+        // ï¿½Aï¿½Cï¿½Rï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â‚ï¿½ï¿½ï¿½È‚ï¿½ï¿½Æ‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
         return;
     }
     sf::Sprite icon(*tex);
     icon.setPosition({pos.x, pos.y + 100.0f});
     icon.setOrigin({ icon.getLocalBounds().size.x, 0.0f });
-    icon.setScale(sf::Vector2f(-0.7f, 0.7f));
+    icon.setScale(sf::Vector2f(UI_SCALE_INVERTED, -UI_SCALE_INVERTED));
     window.draw(icon);
 }
 
 
 /// <summary>
-/// ‰üsˆ—
+/// ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½
 /// </summary>
 /// <param name="arg_src"></param>
-/// <param name="arg_font">ƒtƒHƒ“ƒg</param>
+/// <param name="arg_font">ï¿½tï¿½Hï¿½ï¿½ï¿½g</param>
 /// <param name="arg_charSize"></param>
 /// <param name="arg_maxWidth"></param>
 /// <returns></returns>
@@ -145,7 +146,7 @@ sf::String CardRenderer::WarpText(const sf::String& arg_src, const sf::Font& arg
     {
         char32_t c = arg_src[i];
 
-        // –¾¦“I‚È‰üs
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½È‰ï¿½ï¿½s
         if (c == U'\n')
         {
             result += U'\n';

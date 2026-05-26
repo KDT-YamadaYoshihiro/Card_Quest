@@ -8,7 +8,7 @@
 #include "Scene/StageBuildScene/StageBulidScene.h"
 
 /// <summary>
-/// ‰Šú‰»
+/// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 /// </summary>
 PartyBuildScene::PartyBuildScene()
 	:SceneBase()
@@ -18,7 +18,7 @@ PartyBuildScene::PartyBuildScene()
 }
 
 /// <summary>
-/// ‰Šú‰»
+/// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 /// </summary>
 /// <param name="arg_window"></param>
 bool PartyBuildScene::Init(sf::RenderWindow& arg_window)
@@ -31,7 +31,7 @@ bool PartyBuildScene::Init(sf::RenderWindow& arg_window)
 	}
 
     std::vector<std::shared_ptr<Character>> allChars;
-    for (int i = 1; i <= 6; ++i)
+    for (int i = 1; i <= MAX_PARTY_SIZE; ++i)
     {
         allChars.push_back(CharacterFactory::GetInstance().CreateCharacter<PlayerCharacter>(i, 1));
     }
@@ -57,15 +57,15 @@ bool PartyBuildScene::Init(sf::RenderWindow& arg_window)
         return false;
     }
 
-	// ƒ{ƒ^ƒ“
-    m_nextButton = std::make_unique<BoxButton>(sf::Vector2f(200.f, 50.f), sf::Vector2f(1000.f, 680.f), FontManager::GetInstance().GetFont(), "NEXT");
+	// ï¿½{ï¿½^ï¿½ï¿½
+    m_nextButton = std::make_unique<BoxButton>(sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), sf::Vector2f(1000.f, 680.f), FontManager::GetInstance().GetFont(), "NEXT");
     if(!m_nextButton)
     {
         ConsoleView::GetInstance().Add("PartyBuildScene/m_nextButton:nullptr\n");
         return false;
 	}
 
-    m_backButton = std::make_unique<BoxButton>(sf::Vector2f(200.f, 50.f), sf::Vector2f(200.f, 680.f), FontManager::GetInstance().GetFont(), "BACK");
+    m_backButton = std::make_unique<BoxButton>(sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), sf::Vector2f(200.f, 680.f), FontManager::GetInstance().GetFont(), "BACK");
     if (!m_backButton)
     {
         ConsoleView::GetInstance().Add("PartyBuildScene/m_backButton:nullptr\n");
@@ -76,7 +76,7 @@ bool PartyBuildScene::Init(sf::RenderWindow& arg_window)
 }
 
 /// <summary>
-/// ƒCƒxƒ“ƒgˆ—
+/// ï¿½Cï¿½xï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½
 /// </summary>
 /// <param name="event"></param>
 void PartyBuildScene::handleEvent(const sf::Event& event)
@@ -84,7 +84,7 @@ void PartyBuildScene::handleEvent(const sf::Event& event)
 }
 
 /// <summary>
-/// XVˆ—
+/// ï¿½Xï¿½Vï¿½ï¿½ï¿½ï¿½
 /// </summary>
 /// <param name="arg_window"></param>
 void PartyBuildScene::Update(sf::RenderWindow& arg_window, float dt)
@@ -92,20 +92,20 @@ void PartyBuildScene::Update(sf::RenderWindow& arg_window, float dt)
     m_view->Update(m_context);
     m_controller->Update(m_render->GetWindow());
     
-    // “ü—ÍXV
+    // ï¿½ï¿½ï¿½ÍXï¿½V
     auto& input = InPutMouseManager::GetInstance();
     input.Update(arg_window);
 
-    // ƒ}ƒEƒXÀ•Wæ“¾
+    // ï¿½}ï¿½Eï¿½Xï¿½ï¿½ï¿½Wï¿½æ“¾
     sf::Vector2f mousePos = input.GetMousePosition(arg_window);
     float wheel = input.GetWheelDelta();
 
-    // ƒ‰ƒCƒgƒGƒtƒFƒNƒgXV
+    // ï¿½ï¿½ï¿½Cï¿½gï¿½Gï¿½tï¿½Fï¿½Nï¿½gï¿½Xï¿½V
     m_lightEffect->Update(dt);
 
 
-	// ƒ{ƒ^ƒ“‚ÌƒJ[ƒ\ƒ‹‚ª‡‚Á‚½‚çF‚ğ•Ï‚¦‚é
-	// Š®—¹ƒ{ƒ^ƒ“
+	// ï¿½{ï¿½^ï¿½ï¿½ï¿½ÌƒJï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Fï¿½ï¿½Ï‚ï¿½ï¿½ï¿½
+	// ï¿½ï¿½ï¿½ï¿½ï¿½{ï¿½^ï¿½ï¿½
     if(m_nextButton->IsHovered(mousePos))
     {
         m_nextButton->SetColor(sf::Color::Yellow);
@@ -114,7 +114,7 @@ void PartyBuildScene::Update(sf::RenderWindow& arg_window, float dt)
     {
         m_nextButton->SetColor(sf::Color::White);
     }
-	// –ß‚éƒ{ƒ^ƒ“
+	// ï¿½ß‚ï¿½{ï¿½^ï¿½ï¿½
     if(m_backButton->IsHovered(mousePos))
     {
         m_backButton->SetColor(sf::Color::Yellow);
@@ -125,15 +125,15 @@ void PartyBuildScene::Update(sf::RenderWindow& arg_window, float dt)
 	}
 
 
-	// –ß‚éƒ{ƒ^ƒ“ˆ—
+	// ï¿½ß‚ï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     if (m_backButton->IsClicked(mousePos, input.IsLeftClicked()))
     {
-        // Console‚ÌƒŠƒZƒbƒg
+        // Consoleï¿½Ìƒï¿½ï¿½Zï¿½bï¿½g
         ConsoleView::GetInstance().Reset();
         SceneManager::GetInstance().ChangeScreen<StageBulidScene>(arg_window);
         return;
 	}
-	// Ÿ‚Öƒ{ƒ^ƒ“ˆ—
+	// ï¿½ï¿½ï¿½Öƒ{ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     if (m_nextButton->IsClicked(mousePos, input.IsLeftClicked()))
     {
         if (!m_context.GetParty().empty()) {
@@ -144,12 +144,12 @@ void PartyBuildScene::Update(sf::RenderWindow& arg_window, float dt)
 }
 
 /// <summary>
-/// •`‰æ
+/// ï¿½`ï¿½ï¿½
 /// </summary>
 /// <param name="arg_window"></param>
 void PartyBuildScene::Render(sf::RenderWindow& arg_window)
 {
-    // ”wŒi
+    // ï¿½wï¿½i
     auto tex = TextureLoader::GetInstance().GetTextureID("bg");
     if (tex)
     {
@@ -159,36 +159,36 @@ void PartyBuildScene::Render(sf::RenderWindow& arg_window)
         arg_window.draw(sprite);
     }
     
-	// ƒ‰ƒCƒgƒGƒtƒFƒNƒg•`‰æ
+	// ï¿½ï¿½ï¿½Cï¿½gï¿½Gï¿½tï¿½Fï¿½Nï¿½gï¿½`ï¿½ï¿½
     m_lightEffect->Draw(arg_window);
-	// ƒp[ƒeƒB[•Ò¬‰æ–Ê•`‰æ
+	// ï¿½pï¿½[ï¿½eï¿½Bï¿½[ï¿½Òï¿½ï¿½ï¿½Ê•`ï¿½ï¿½
     m_view->Draw(m_context);
-	// ƒ{ƒ^ƒ“•`‰æ
+	// ï¿½{ï¿½^ï¿½ï¿½ï¿½`ï¿½ï¿½
     m_nextButton->Draw(arg_window);
     m_backButton->Draw(arg_window);
 
 }
 
 /// <summary>
-/// I—¹ˆ—
+/// ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 /// </summary>
 void PartyBuildScene::End()
 {
 }
 
 /// <summary>
-/// ƒfƒbƒL•Ò¬‰æ–Ê‚ÉˆÚs
+/// ï¿½fï¿½bï¿½Lï¿½Òï¿½ï¿½ï¿½Ê‚ÉˆÚs
 /// </summary>
 void PartyBuildScene::StartDeckBulid(sf::RenderWindow& arg_window)
 {
-    // ƒp[ƒeƒB[î•ñ‚ğƒZƒbƒg
+    // ï¿½pï¿½[ï¿½eï¿½Bï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½bï¿½g
     auto& session = SceneManager::GetInstance().GetSession();
 
     session.battleContext->SetPlayers(m_context.GetParty());
 
-    // Console‚ÌƒŠƒZƒbƒg
+    // Consoleï¿½Ìƒï¿½ï¿½Zï¿½bï¿½g
     ConsoleView::GetInstance().Reset();
 
-    // ƒV[ƒ“‚ÌØ‚è‘Ö‚¦
+    // ï¿½Vï¿½[ï¿½ï¿½ï¿½ÌØ‚ï¿½Ö‚ï¿½
     SceneManager::GetInstance().ChangeScreen<DeckBuildingScene>(arg_window);
 }

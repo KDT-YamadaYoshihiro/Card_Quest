@@ -1,24 +1,24 @@
 #include "Character.h"
 #include "entity/Card/CardManager/CardManager.h"
 
-// ŠƒJ[ƒh”
+// ï¿½ï¿½ï¿½ï¿½ï¿½Jï¿½[ï¿½hï¿½ï¿½
 int Character::GetCardCount() const
 {
     return static_cast<int>(m_cardIds.size());
 }
 
-// cardId æ“¾
+// cardId ï¿½æ“¾
 int Character::GetHeldCardId(int index) const
 {
     if (index < 0 || index >= static_cast<int>(m_cardIds.size()))
     {
-        std::cout << "–³Œø‚ÈƒJ[ƒh index\n";
+        std::cout << "ï¿½ï¿½ï¿½ï¿½ï¿½ÈƒJï¿½[ï¿½h index\n";
         return -1;
     }
     return m_cardIds[index];
 }
 
-// CardData æ“¾
+// CardData ï¿½æ“¾
 const CardData& Character::GetCardData(int index) const
 {
     int cardId = m_cardIds[index];
@@ -30,24 +30,24 @@ bool Character::CanDrawCard() const
     return static_cast<int>(m_cardIds.size()) < m_maxCardSlot;
 }
 
-// ƒJ[ƒh’Ç‰Á
+// ï¿½Jï¿½[ï¿½hï¿½Ç‰ï¿½
 void Character::AddCard(int cardId)
 {
     if (static_cast<int>(m_cardIds.size()) >= m_maxCardSlot)
     {
-        std::cout << "ƒJ[ƒhƒXƒƒbƒgãŒÀ\n";
+        std::cout << "ï¿½Jï¿½[ï¿½hï¿½Xï¿½ï¿½ï¿½bï¿½gï¿½ï¿½ï¿½\n";
         return;
     }
     m_cardIds.push_back(cardId);
 }
 
-// ƒJ[ƒh”jŠü
+// ï¿½Jï¿½[ï¿½hï¿½jï¿½ï¿½
 int Character::DiscardCard(int index)
 {
-    // ƒJ[ƒhŠm”F
+    // ï¿½Jï¿½[ï¿½hï¿½mï¿½F
     if (index < 0 || index >= static_cast<int>(m_cardIds.size()))
     {
-        std::cout << "”jŠü¸”sF–³Œø index\n";
+        std::cout << "ï¿½jï¿½ï¿½ï¿½ï¿½ï¿½sï¿½Fï¿½ï¿½ï¿½ï¿½ index\n";
         return -1;
     }
 
@@ -56,13 +56,13 @@ int Character::DiscardCard(int index)
     return cardId;
 }
 
-// ‘S”jŠü
+// ï¿½Sï¿½jï¿½ï¿½
 void Character::ClearCards()
 {
     m_cardIds.clear();
 }
 
-// ‘S”jŠü‚µ‚ÄID•Ô‹p
+// ï¿½Sï¿½jï¿½ï¿½ï¿½ï¿½ï¿½ï¿½IDï¿½Ô‹p
 std::vector<int> Character::ClearAndReturnCards()
 {
     std::vector<int> discardedIds = m_cardIds;
@@ -72,7 +72,7 @@ std::vector<int> Character::ClearAndReturnCards()
 
 bool Character::DrawCard()
 {
-    // æ‚ÉèD‚Ì‹ó‚«‚ğŠm”F
+    // ï¿½ï¿½Éï¿½Dï¿½Ì‹ó‚«‚ï¿½ï¿½mï¿½F
     if (!CanDrawCard())
     {
         return false;
@@ -95,7 +95,7 @@ int Character::GetHeldCardById(int cardId) const
 
     if (it == m_cardIds.end())
     {
-        std::cout << "Chracter/GetHeldCardById/–³Œø‚ÈID‚Å‚·" << std::endl;
+        std::cout << "Chracter/GetHeldCardById/ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½IDï¿½Å‚ï¿½" << std::endl;
         return -1;
     }
 
@@ -108,7 +108,7 @@ int Character::DiscardCardById(int cardId)
     auto it = std::find(m_cardIds.begin(), m_cardIds.end(), cardId);
     if (it == m_cardIds.end())
     {
-        std::cout << "Chracter/DiscardCardById/–³Œø‚ÈID‚Å‚·" << std::endl;
+        std::cout << "Chracter/DiscardCardById/ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½IDï¿½Å‚ï¿½" << std::endl;
         return -1;
     }
 
@@ -139,35 +139,35 @@ sf::Vector2f Character::GetVisualPosition() const
 {
     sf::Vector2f offset(0.f, 0.f);
 
-    // ‘Ò‹@‚Ìã‰º—h‚ê (í‚É“K—p)
+    // ï¿½Ò‹@ï¿½ï¿½ï¿½Ìã‰ºï¿½hï¿½ï¿½ (ï¿½ï¿½É“Kï¿½p)
     if (m_animState == CharacterAnimState::WAIT && !IsDead()) {
-        offset.y = sin(m_totalTime * 2.0f) * 2.0f; // ‘¬“x3.0, U•5px
+        offset.y = sin(m_totalTime * 2.0f) * 2.0f; // ï¿½ï¿½ï¿½x3.0, ï¿½Uï¿½ï¿½5px
     }
 
-    // ƒAƒNƒVƒ‡ƒ“’†‚Ì“ÁêˆÚ“®
+    // ï¿½Aï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì“ï¿½ï¿½ï¿½Ú“ï¿½
     if (m_animTimer > 0.0f) {
-        float progress = 1.0f - (m_animTimer / m_animDuration); // 0.0 ` 1.0
-        float dir = (m_faction == Faction::Player) ? 1.0f : -1.0f; // Œü‚«
+        float progress = 1.0f - (m_animTimer / m_animDuration); // 0.0 ï¿½` 1.0
+        float dir = (m_faction == Faction::Player) ? 1.0f : -1.0f; // ï¿½ï¿½ï¿½ï¿½
 
         if (m_animState == CharacterAnimState::ATTACK) {
-            // ‰E‚Ö“¥‚İ‚İ(30px) { ¬‚İ‚È—h‚ê(10px)
+            // ï¿½Eï¿½Ö“ï¿½ï¿½İï¿½ï¿½ï¿½(30px) ï¿½{ ï¿½ï¿½ï¿½ï¿½ï¿½İ‚È—hï¿½ï¿½(10px)
             float moveX = 30.0f * sin(progress * 3.14f);
-            float shake = 10.0f * sin(progress * 20.0f);
+            float shake = SHAKE_INTENSITY * sin(progress * 20.0f);
             offset.x = (moveX + shake) * dir;
         }
         else if (m_animState == CharacterAnimState::MAGIC) {
-            // ã‚Ö‚Ó‚í‚Á‚Æ•‚‚­(20px)
+            // ï¿½ï¿½Ö‚Ó‚ï¿½ï¿½ï¿½Æ•ï¿½ï¿½ï¿½(20px)
             offset.y = -20.0f * sin(progress * 3.14f);
         }
         else if (m_animState == CharacterAnimState::DAMAGE) {
-            // Œã‚ë‚Ö‚Ì‚¯‚¼‚é
+            // ï¿½ï¿½ï¿½Ö‚Ì‚ï¿½ï¿½ï¿½ï¿½ï¿½
             offset.x = -15.0f * sin(progress * 3.14f) * dir;
         }
     }
     return m_pos + offset;
 }
 
-// ƒ_ƒ[ƒW
+// ï¿½_ï¿½ï¿½ï¿½[ï¿½W
 void Character::TakeDamage(int damage)
 {
     m_data.hp -= damage;
@@ -178,7 +178,7 @@ void Character::TakeDamage(int damage)
     }
 }
 
-// ‰ñ•œ
+// ï¿½ï¿½
 void Character::TakeHeal(int heal)
 {
     m_data.hp += heal;
@@ -188,14 +188,14 @@ void Character::TakeHeal(int heal)
     }
 }
 
-// ƒoƒt
+// ï¿½oï¿½t
 void Character::TakeBuff(float power, int arg_turn)
 {
     m_buff.power += power;
 	m_buff.turn = arg_turn; 
 }
 
-// ƒoƒtXV
+// ï¿½oï¿½tï¿½Xï¿½V
 void Character::UpdateBuff()
 {
     if (m_buff.turn > 0)
@@ -208,14 +208,14 @@ void Character::UpdateBuff()
     }
 }
 
-// ƒoƒtƒŠƒZƒbƒg
+// ï¿½oï¿½tï¿½ï¿½ï¿½Zï¿½bï¿½g
 void Character::ResetBuff()
 {
     m_buff.power = 1.0f;
     m_buff.turn = 0;
 }
 
-// ƒŒƒxƒ‹ƒAƒbƒv
+// ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½Aï¿½bï¿½v
 void Character::LevelUp()
 {
     m_data.lv++;
@@ -227,7 +227,7 @@ void Character::LevelUp()
     m_data.magicAtk = static_cast<int>(m_data.magicAtk * 1.3f);
 }
 
-// ƒoƒgƒ‹ŠJnƒŠƒZƒbƒg
+// ï¿½oï¿½gï¿½ï¿½ï¿½Jï¿½nï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½bï¿½g
 void Character::ResetBattleStatus()
 {
     m_data.hp = m_data.maxHp;
@@ -235,7 +235,7 @@ void Character::ResetBattleStatus()
     ResetBuff();
 }
 
-// ‰Šú‰»
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 Character::Character(CharacterData& data, Faction faction, int maxCardSlot)
     : m_data(data),
     m_buff(1.0f,0),
