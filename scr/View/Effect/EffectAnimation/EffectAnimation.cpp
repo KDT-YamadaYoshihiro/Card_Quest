@@ -1,16 +1,16 @@
-#include "EffectAnimetion.h"
+#include "EffectAnimation.h"
 #include "GameMain/WindowSetting.h"
 
 EffectAnimation::EffectAnimation(const EffectData& config, const sf::Texture& texture)
     : m_config(config), m_sprite(texture), m_isPlaying(false), m_currentFrame(0), m_elapsedTime(0.0f)
 {
-    // ‰æ‘œƒTƒCƒY‚©‚ç1ƒtƒŒ[ƒ€‚ ‚½‚è‚ÌƒTƒCƒY‚ğŒvZ (RectƒTƒCƒYŒvZ)
+    // ï¿½æ‘œï¿½Tï¿½Cï¿½Yï¿½ï¿½ï¿½ï¿½1ï¿½tï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÌƒTï¿½Cï¿½Yï¿½ï¿½ï¿½vï¿½Z (Rectï¿½Tï¿½Cï¿½Yï¿½vï¿½Z)
     sf::Vector2u texSize = texture.getSize();
     m_frameWidth = texSize.x / m_config.xDivision;
     m_frameHeight = texSize.y / m_config.yDivision;
 
     m_sprite.setOrigin({m_frameWidth / 2.0f, m_frameHeight / 2.0f});
-    // ‰ŠúƒtƒŒ[ƒ€‚Ìİ’è
+    // ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Ìİ’ï¿½
     UpdateTextureRect();
 }
 
@@ -28,17 +28,17 @@ void EffectAnimation::Play(sf::Vector2f position, sf::Vector2f scale)
 
 void EffectAnimation::Update(float deltaTime)
 {
-	// Ä¶’†‚Å‚È‚¯‚ê‚ÎXV‚µ‚È‚¢
+	// ï¿½Äï¿½ï¿½ï¿½ï¿½Å‚È‚ï¿½ï¿½ï¿½ÎXï¿½Vï¿½ï¿½ï¿½È‚ï¿½
     if (!m_isPlaying)
     {
         return;
     }
 
-	// Œo‰ßŠÔ‚ğXV
+	// ï¿½oï¿½ßï¿½ï¿½Ô‚ï¿½ï¿½Xï¿½V
     m_elapsedTime += deltaTime;
 
     if (m_elapsedTime >= m_config.frameDuration) {
-		//@ƒtƒŒ[ƒ€‚ği‚ß‚é
+		//ï¿½@ï¿½tï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½iï¿½ß‚ï¿½
         m_elapsedTime = 0.0f;
         m_currentFrame++;
 
@@ -64,10 +64,10 @@ bool EffectAnimation::IsPlaying() const
 
 void EffectAnimation::UpdateTextureRect()
 {
-    // Œ»İ‚ÌƒtƒŒ[ƒ€‚ÉŠî‚Ã‚¢‚ÄƒeƒNƒXƒ`ƒƒ‚Ì•\¦—Ìˆæ‚ğŒvZ
+    // ï¿½ï¿½ï¿½İ‚Ìƒtï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ÉŠï¿½Ã‚ï¿½ï¿½Äƒeï¿½Nï¿½Xï¿½`ï¿½ï¿½ï¿½Ì•\ï¿½ï¿½ï¿½Ìˆï¿½ï¿½ï¿½vï¿½Z
     int tx = (m_currentFrame % m_config.xDivision) * m_frameWidth;
     int ty = (m_currentFrame / m_config.xDivision) * m_frameHeight;
 
-    // ƒeƒNƒXƒ`ƒƒ‚Ì•\¦—Ìˆæ‚ğXV
+    // ï¿½eï¿½Nï¿½Xï¿½`ï¿½ï¿½ï¿½Ì•\ï¿½ï¿½ï¿½Ìˆï¿½ï¿½ï¿½Xï¿½V
     m_sprite.setTextureRect(sf::IntRect({ tx, ty }, { m_frameWidth, m_frameHeight }));
 }
