@@ -35,21 +35,20 @@ constexpr float WHEEL_SCROLL_MULTIPLIER = 40.f;  // スクロールホイール�
 // --- アニメーション・物理値 (Animation & Physics) ---
 constexpr float PI = 3.14159265f;           // 円周率
 constexpr float DEFAULT_ALPHA_SPEED = 200.f;  // デフォルトアルファ変化速度 [ms]
-constexpr float FRAME_TIME = 1.0f / 60.0f;   // フレーム時間 (60fps)
 
 // --- UI・ボタンサイズ (UI & Button Sizes) ---
 constexpr float BUTTON_WIDTH = 200.f;      // ボタン幅 [px]
-constexpr float BUTTON_HEIGHT = 50.f;      // ボタン高さ [px]
+constexpr float BUTTON_HEIGHT = 50.0f;     // ボタン高さ [px]
 constexpr sf::Vector2f DEFAULT_BUTTON_SIZE{ BUTTON_WIDTH, BUTTON_HEIGHT };
 
 // --- UI・配置位置 (UI & Positioning) ---
 constexpr float HAND_START_X = 200.f;      // ハンド開始 X 座標 [px]
-constexpr float HAND_START_Y = 520.f;      // ハンド開始 Y 座標 [px]
+constexpr float HAND_START_Y = 520.0f;     // ハンド開始 Y 座標 [px]
 constexpr sf::Vector2f HAND_START{ HAND_START_X, HAND_START_Y };
 
 // --- ドローコスト表示位置 (Draw Cost Position) ---
 constexpr float DRAW_COST_OFFSET_X = 110.f;   // センターからの X オフセット [px]
-constexpr float DRAW_COST_OFFSET_Y = 130.f;   // Y 座標 [px]
+constexpr float DRAW_COST_OFFSET_Y = 130.0f; // Y 座標 [px]
 
 // --- フォントサイズ (Font Sizes) ---
 constexpr int FONT_SIZE_SMALL = 20;      // 小文字 [pt]
@@ -79,5 +78,6 @@ constexpr float CARD_SPACING = 160.f;
 // --- カード ID (Card IDs) ---
 constexpr int COMMON_CARD_ID = 1000;
 constexpr int UNIQUE_CARD_ID = 1100;
+constexpr int MAX_PARTY_SIZE = 6;            // パーティ最大人数
 
 } // namespace Constants
