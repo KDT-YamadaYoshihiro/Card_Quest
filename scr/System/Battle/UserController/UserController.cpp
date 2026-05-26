@@ -301,10 +301,7 @@ void UserController::UpdateCharacterRects(
 
         sf::Vector2f pos = c->GetPosition();
 
-        constexpr float SPRITE_W = 165.f; 
-        constexpr float SPRITE_H = 150.f;
-
-        m_characterRects.emplace_back(sf::FloatRect({ pos.x,pos.y }, { SPRITE_W, SPRITE_H }));
+        m_characterRects.emplace_back(sf::FloatRect({ pos.x,pos.y }, { Constants::CARD_W, Constants::CHAR_H }));
     }
 }
 
