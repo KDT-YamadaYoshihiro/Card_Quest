@@ -6,6 +6,7 @@
 #include "View/Font/FontManager.h"
 #include "Scene/PartyBuildScene/PartyBuildScene.h"
 #include "UI/BoxButton.h"
+#include "System/Constants.h"
 
 DeckBuildingScene::DeckBuildingScene()
     : SceneBase()
@@ -30,7 +31,7 @@ bool DeckBuildingScene::Init(sf::RenderWindow& arg_window)
     }
 
     ConsoleView::GetInstance().Add("DeckBuildingScene\n");
-    // ƒJ[ƒhƒv[ƒ‹\’z
+    // ï¿½Jï¿½[ï¿½hï¿½vï¿½[ï¿½ï¿½ï¿½\ï¿½z
     CardBuildPool::GetInstance().Build();
     m_deckBuildSystem.Init();
 
@@ -45,20 +46,20 @@ void DeckBuildingScene::handleEvent(const sf::Event& event)
 void DeckBuildingScene::Update(sf::RenderWindow& arg_window, float dt)
 {
 
-    // ƒ‰ƒCƒgƒGƒtƒFƒNƒgXV
+    // ï¿½ï¿½ï¿½Cï¿½gï¿½Gï¿½tï¿½Fï¿½Nï¿½gï¿½Xï¿½V
     m_lightEffect->Update(dt);
 
-	// “ü—ÍXV
+	// ï¿½ï¿½ï¿½ÍXï¿½V
     auto& input = InPutMouseManager::GetInstance();
     input.Update(arg_window);
 
-	// ƒ}ƒEƒXÀ•Wæ“¾
+	// ï¿½}ï¿½Eï¿½Xï¿½ï¿½ï¿½Wï¿½æ“¾
     sf::Vector2f mousePos = input.GetMousePosition(arg_window);
     float wheel = input.GetWheelDelta();
 
 
-	// ƒ{ƒ^ƒ“‚ÌƒJ[ƒ\ƒ‹‚ª‡‚Á‚½‚çF‚ğ•Ï‚¦‚é
-	// Š®—¹ƒ{ƒ^ƒ“
+	// ï¿½{ï¿½^ï¿½ï¿½ï¿½ÌƒJï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Fï¿½ï¿½Ï‚ï¿½ï¿½ï¿½
+	// ï¿½ï¿½ï¿½ï¿½ï¿½{ï¿½^ï¿½ï¿½
 	if(m_nextButton->IsHovered(mousePos))
     {
         m_nextButton->SetColor(sf::Color::Yellow);
@@ -67,7 +68,7 @@ void DeckBuildingScene::Update(sf::RenderWindow& arg_window, float dt)
     {
         m_nextButton->SetColor(sf::Color::White);
 	}
-	// –ß‚éƒ{ƒ^ƒ“
+	// ï¿½ß‚ï¿½{ï¿½^ï¿½ï¿½
     if(m_backButton->IsHovered(mousePos))
     {
         m_backButton->SetColor(sf::Color::Yellow);
@@ -77,18 +78,18 @@ void DeckBuildingScene::Update(sf::RenderWindow& arg_window, float dt)
         m_backButton->SetColor(sf::Color::White);
     }
 
-	// ƒfƒbƒL•Ò¬ƒVƒXƒeƒ€XV
+	// ï¿½fï¿½bï¿½Lï¿½Òï¿½ï¿½Vï¿½Xï¿½eï¿½ï¿½ï¿½Xï¿½V
     m_deckBuildSystem.Update(mousePos, input.IsLeftClicked(),input.IsDragging(),input.IsLeftReleased(), wheel);
-    // •Ò¬Š®—¹ƒ{ƒ^ƒ“(ƒfƒbƒL–‡”‚ª30–‡ˆÈã‚Ì)
+    // ï¿½Òï¿½ï¿½ï¿½ï¿½ï¿½ï¿½{ï¿½^ï¿½ï¿½(ï¿½fï¿½bï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½30ï¿½ï¿½ï¿½Èï¿½Ìï¿½)
     if (m_nextButton->IsClicked(mousePos, input.IsLeftClicked()))
     {
         if (m_deckBuildSystem.IsComplete())
         {
-			// CardManager ‚ÉƒfƒbƒL‚ğƒZƒbƒg
+			// CardManager ï¿½Éƒfï¿½bï¿½Lï¿½ï¿½ï¿½Zï¿½bï¿½g
             CardManager::GetInstance().InitDeck(m_deckBuildSystem.TakeDeck());
-            // Console‚ÌƒŠƒZƒbƒg
+            // Consoleï¿½Ìƒï¿½ï¿½Zï¿½bï¿½g
             ConsoleView::GetInstance().Reset();
-			// ƒV[ƒ“Ø‚è‘Ö‚¦
+			// ï¿½Vï¿½[ï¿½ï¿½ï¿½Ø‚ï¿½Ö‚ï¿½
 			SceneManager::GetInstance().ChangeScreen<IngameScene>(arg_window);
 
             return;
@@ -97,14 +98,14 @@ void DeckBuildingScene::Update(sf::RenderWindow& arg_window, float dt)
     }
 
 
-	// –ß‚éƒ{ƒ^ƒ“
+	// ï¿½ß‚ï¿½{ï¿½^ï¿½ï¿½
 	if (m_backButton->IsClicked(mousePos, input.IsLeftClicked()))
 	{
-        // CardManager ‚ÉƒfƒbƒL‚ğƒZƒbƒg
+        // CardManager ï¿½Éƒfï¿½bï¿½Lï¿½ï¿½ï¿½Zï¿½bï¿½g
         CardManager::GetInstance().InitDeck(m_deckBuildSystem.TakeDeck());
-		// Console‚ÌƒŠƒZƒbƒg
+		// Consoleï¿½Ìƒï¿½ï¿½Zï¿½bï¿½g
 		ConsoleView::GetInstance().Reset();
-		// ƒV[ƒ“Ø‚è‘Ö‚¦
+		// ï¿½Vï¿½[ï¿½ï¿½ï¿½Ø‚ï¿½Ö‚ï¿½
 		SceneManager::GetInstance().ChangeScreen<PartyBuildScene>(arg_window);
 
         return;
@@ -114,7 +115,7 @@ void DeckBuildingScene::Update(sf::RenderWindow& arg_window, float dt)
 
 void DeckBuildingScene::Render(sf::RenderWindow& arg_window)
 {
-    // ”wŒi
+    // ï¿½wï¿½i
     auto tex = TextureLoader::GetInstance().GetTextureID("bg");
     if (tex)
     {
@@ -125,34 +126,34 @@ void DeckBuildingScene::Render(sf::RenderWindow& arg_window)
     }
 
 
-	// ƒ‰ƒCƒgƒGƒtƒFƒNƒg•`‰æ
+	// ï¿½ï¿½ï¿½Cï¿½gï¿½Gï¿½tï¿½Fï¿½Nï¿½gï¿½`ï¿½ï¿½
 	m_lightEffect->Draw(arg_window);
 
-    // --- ƒfƒbƒL & ƒv[ƒ‹•`‰æ ---
+    // --- ï¿½fï¿½bï¿½L & ï¿½vï¿½[ï¿½ï¿½ï¿½`ï¿½ï¿½ ---
 	m_deckBuildSystem.Draw(arg_window, FontManager::GetInstance().GetFont());
 
-    // ƒp[ƒeƒB‚Ì•`‰æ
+    // --- ãƒ‘ãƒ¼ãƒ†ã‚£ãƒ¡ãƒ³ãƒãƒ¼æç”» ---
     auto& session = SceneManager::GetInstance().GetSession();
-	const auto& party = session.battleContext->GetPlayers();
-	float posX = 850.f;
+    const auto& party = session.battleContext->GetPlayers();
+    float posX = 850.f;
     for (auto& member : party)
     {
-		auto tex = TextureLoader::GetInstance().GetTextureID(member->GetData().iconKey);
+        auto tex = TextureLoader::GetInstance().GetTextureID(member->GetData().iconKey);
         if (!tex)
         {
             return;
         }
 
         sf::Sprite sprite(*tex);
-        sprite.setPosition({ posX, 20.f });
+        sprite.setPosition({ posX, Constants::PADDING_Y * 2 });
         sprite.setOrigin({ sprite.getLocalBounds().size.x, 0.0f });
         sprite.setScale({ -0.8f, 0.8f });
         arg_window.draw(sprite);
 
-		posX += 100.f;
+        posX += Constants::PADDING_X;
     }
 
-     // --- Š®—¹ƒ{ƒ^ƒ“ ---
+     // --- ï¿½ï¿½ï¿½ï¿½ï¿½{ï¿½^ï¿½ï¿½ ---
     m_nextButton->Draw(arg_window);
 	m_backButton->Draw(arg_window);
 }
