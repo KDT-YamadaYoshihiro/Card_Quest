@@ -5,21 +5,19 @@
 #include "System/Battle/Cost/CostManager.h"
 #include "CSVLoad/StageLoader/StageLoader.h"
 #include "GameMain/WindowSetting.h"
+#include "System/Constants.h"
 
-// À•WŒn
-namespace
+// ï¿½ï¿½ï¿½Wï¿½n
+namespace BattleViewConstants
 {
-    // UI”z’ui‰æ‘œƒCƒ[ƒW€‹’j
-    constexpr sf::Vector2f DECK_POS{ 50.f, 120.f };
-    constexpr sf::Vector2f GRAVE_POS{ 150.f, 520.f };
-
+    // ãƒãƒ³ãƒ‰é…ç½®å®šæ•° (Constants.h ã¨é‡è¤‡ã™ã‚‹ãŸã‚ã‚³ãƒ¡ãƒ³ãƒˆã‚¢ã‚¦ãƒˆ)
     constexpr sf::Vector2f HAND_START{ 200.f, 520.f };
-    constexpr float HAND_SPACING = 180.f;
-    constexpr float SELECT_OFFSET_Y = 50.f;
+    constexpr float HAND_SPACING = Constants::HAND_SPACING;
+    constexpr float SELECT_OFFSET_Y = Constants::SELECT_OFFSET_Y;
 }
 
 /// <summary>
-/// ‰Šú‰»
+/// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 /// </summary>
 /// <param name="context"></param>
 BattleView::BattleView(BattleContext& context, RenderSystem& render)
@@ -32,7 +30,7 @@ BattleView::BattleView(BattleContext& context, RenderSystem& render)
 }
 
 /// <summary>
-/// ƒtƒF[ƒY‚Ìİ’è
+/// ï¿½tï¿½Fï¿½[ï¿½Yï¿½Ìİ’ï¿½
 /// </summary>
 /// <param name="phase"></param>
 void BattleView::SetPhase(BattleViewPhase phase)
@@ -41,7 +39,7 @@ void BattleView::SetPhase(BattleViewPhase phase)
 }
 
 /// <summary>
-/// XV
+/// ï¿½Xï¿½V
 /// </summary>
 /// <param name="dt"></param>
 void BattleView::Update(float dt)
@@ -50,448 +48,495 @@ void BattleView::Update(float dt)
 
     for (auto& p : m_popups)
     {
-        p.lifeTime -= dt;
-        p.position.y -= 30.f * dt; // ã‚É•‚‚©‚¹‚é
-    }
-
-    m_popups.erase(
-        std::remove_if(m_popups.begin(), m_popups.end(),
-            [](const DamagePopup& p) { return p.lifeTime <= 0.f; }),
-        m_popups.end());
-}
-
-/// <summary>
-///  ƒAƒNƒVƒ‡ƒ“ƒLƒƒƒ‰İ’è
-/// </summary>
-/// <param name="index"></param>
-void BattleView::SetSelectedActor(const std::shared_ptr<Character>& actor)
-{
-    m_selectedActor = actor;
-}
-
-/// <summary>
-///  ‘I‘ğƒJ[ƒhİ’è
-/// </summary
-void BattleView::SetSelectedCard(int index)
-{
-    m_selectedCardId = index;
-}
-
-/// <summary>
-/// ƒ^[ƒQƒbƒgİ’è
-/// </summary>
-void BattleView::SetTargetIndices(const std::vector<std::shared_ptr<Character>>& arg_target)
-{
-    m_targets = arg_target;
-}
-
-
-/// <summary>
-/// ƒRƒXƒgİ’è
-/// </summary>
-/// <param name="value"></param>
-void BattleView::ShowCostGain(int value)
-{
-    m_costGain = value;
-}
-
-/// <summary>
-/// î•ñƒŠƒZƒbƒg
-/// </summary>
-void BattleView::ResetTransientView()
-{
-    ClearTargets();
-    ClearCostGain();
-    m_selectedCardId = -1;
-}
-
-/// <summary>
-/// Œø‰Ê—Ê‚Ìİ’è
-/// </summary>
-/// <param name="arg_pos"></param>
-/// <param name="arg_value"></param>
-/// <param name="arg_isHeal"></param>
-void BattleView::AddDamagePopup(const sf::Vector2f& arg_pos, int arg_value, bool arg_isHeal)
-{
-    DamagePopup p;
-    p.position = arg_pos;
-    p.value = arg_value;
-    p.isHeal = arg_isHeal;
-    p.lifeTime = 1.0f;
-
-    m_popups.push_back(p);
-}
-
-/// <summary>
-/// •`‰æ
-/// </summary>
-/// <param name="window"></param>
-void BattleView::Render(sf::RenderWindow& arg_window)
-{
-    // ƒJƒƒ‰‹@”\ON
-    //m_render.ApplyCamera();
-
-    // ƒLƒƒƒ‰ƒNƒ^[•`‰æ
-    DrawCharacters();
-
-    // ƒ^[ƒQƒbƒgƒtƒH[ƒJƒX‚Ì•`‰æ
-    if (!m_context.GetFocusTargets().empty())
-    {
-        DrawFocus(arg_window);
-    }
-
-    // ƒ_ƒ[ƒW‚â‰ñ•œ—Ê‚Ì•\¦
-    for (auto& p : m_popups)
-    {
-        sf::Text text(FontManager::GetInstance().GetFont(), "");
-        text.setFont(FontManager::GetInstance().GetFont()); // Šù‘¶‚ÌƒtƒHƒ“ƒgŠÇ—
-        text.setString((p.isHeal ? "+" : "-") + std::to_string(p.value));
-        text.setCharacterSize(24);
-        text.setPosition(p.position);
-        text.setFillColor(p.isHeal ? sf::Color::Green : sf::Color::Red);
-
-        arg_window.draw(text);
-    }
-    // ƒ^[ƒQƒbƒg‚ÌƒT[ƒNƒ‹
-    DrawFocus(arg_window);
-
-    // ƒJƒƒ‰‹@”\OFF
-    //m_render.ResetCamera();
-    // ƒJ[ƒh
-    DrawCards(arg_window);
-    // s“®”
-    DrawCost(arg_window);
-    // ‘‰Ás“®”
-    if (m_context.GetFocusDraw()) {
-        DrawCostGain(arg_window);
-    }
-    // ƒo[ƒi[
-    DrawTurnBanner(arg_window);
-    // ƒXƒe[ƒW–¼
-    DrawStageName(arg_window);
-}
-
-/// <summary>
-/// ƒLƒƒƒ‰ƒNƒ^[•`‰æ
-/// </summary>
-/// <param name="window"></param>
-void BattleView::DrawCharacters()
-{
-
-    auto drawList = [&](const auto& list)
+        namespace BattleViewConstants
         {
-            for (auto& c : list)
-            {
-                if (!c) continue;
-
-                // ===== Sprite¶¬i‰‰ñ‚Ì‚İj=====
-                if (!m_spriteTable.contains(c.get()))
-                {
-                    auto sprite = std::make_unique<CharacterSprite>(c->GetData().textureKey);
-                    sprite->Init(c->GetData().textureKey);
-                    m_spriteTable[c.get()] = std::move(sprite);
-                }
-
-                auto& sprite = m_spriteTable[c.get()];
-
-                // ===== ó‘ÔŒˆ’è =====
-                CharacterAnimState state = CharacterAnimState::WAIT;
-
-                // Animation
-                if (c->IsDead())
-                {
-                    sprite->SetState(CharacterAnimState::DEAD);
-                }
-                else {
-                    sprite->SetState(c->GetAnimState());
-                }
-
-                // ‰‰oÀ•W‚ğæ“¾‚µ‚ÄƒZƒbƒg
-                sprite->SetPosition(c->GetVisualPosition());
-
-                if (c->GetFaction() == Faction::Player)
-                {
-                    sprite->SetSpriteWidthMirror();
-                }
-
-                sprite->Draw(m_render,c->GetData(),true);
-            }
-        };
-
-    drawList(m_context.GetPlayers());
-    drawList(m_context.GetEnemies());
-}
-
-/// <summary>
-/// ƒJ[ƒh•`‰æ
-/// </summary>
-/// <param name="window"></param>
-void BattleView::DrawCards(sf::RenderWindow& arg_window)
-{
-    // ===== RD =====
-    m_cardRenderer->DrawDeck(m_font, m_render.GetWindow(), DECK_POS, CardManager::GetInstance().GetDeckCount());
-
-
-    // ===== èD =====
-    sf::Vector2f pos = HAND_START;
-
-    // èD‘S‘Ì‚Å‚Ì’Ê‚µ”Ô†‚ğƒJƒEƒ“ƒg‚·‚é•Ï”
-    int globalCardIdx = 0;
-
-    // ‘I‘ğ’†‚ÌƒOƒ[ƒoƒ‹ƒCƒ“ƒfƒbƒNƒX‚ğæ“¾
-    int selectedCardGlobalIdx = m_context.GetSelectedCardIndex();
-
-    for (auto& p : m_context.GetAlivePlayers())
-    {
-        const int cardCount = p->GetCardCount();
-
-        for (int i = 0; i < cardCount; ++i)
-        {
-            sf::Vector2f drawPos = pos;
-
-            // ƒ[ƒJƒ‹‚È i ‚Å‚Í‚È‚­AèD‘S‘Ì‚Å‚Ì’Ê‚µ”Ô†‚Å”äŠr‚·‚é
-            if (globalCardIdx == selectedCardGlobalIdx)
-            {
-                drawPos.y -= SELECT_OFFSET_Y;
-            }
-
-            // ƒJ[ƒhƒf[ƒ^æ“¾
-            const CardData& data = p->GetCardData(i);
-
-            // •`‰æ
-            m_cardRenderer->DrawSingleCard(m_font, m_render.GetWindow(), drawPos, data, p->GetData().iconKey);
-
-            // Ÿ‚ÌƒJ[ƒh‚ÖÀ•W‚Æ’Ê‚µ”Ô†‚ği‚ß‚é
-            pos.x += HAND_SPACING;
-            globalCardIdx++;
-        }
-    }
-}
-
-/// <summary>
-/// ƒ^[ƒQƒbƒg‚É‰~•\¦
-/// </summary>
-/// <param name="window"></param>
-void BattleView::DrawFocus(sf::RenderWindow& arg_window)
-{
-
-    const auto& focusTargets = m_context.GetFocusTargets();
-
-    for (const auto& target : focusTargets)
-    {
-        if (!target)
-        {
-            continue;
+            // ãƒãƒ³ãƒ‰é…ç½®å®šæ•° (Constants.h ã¨é‡è¤‡ã™ã‚‹ãŸã‚ã‚³ãƒ¡ãƒ³ãƒˆã‚¢ã‚¦ãƒˆ)
+            constexpr sf::Vector2f HAND_START{ 200.f, 520.f };
+            constexpr float HAND_SPACING = Constants::HAND_SPACING;
+            constexpr float SELECT_OFFSET_Y = Constants::SELECT_OFFSET_Y;
         }
 
-		auto tex = TextureLoader::GetInstance().GetTextureID("targetFrame");
-		sf::Sprite sprite(*tex);
-		sprite.setOrigin(sf::Vector2f(tex->getSize().x / 2.f, tex->getSize().y / 2.f));
-		// ƒLƒƒƒ‰ƒNƒ^[‚Ì’†SÀ•W‚ğæ“¾‚µ‚Äİ’è
-		sf::Vector2f centerPos = GetCharacterCenter(target);
-		sprite.setScale({ 0.1f,0.1f });
-        sprite.setPosition({ centerPos.x, centerPos.y + 10.f });
-		arg_window.draw(sprite);
+        /// <summary>
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        /// </summary>
+        /// <param name="context"></param>
+        BattleView::BattleView(BattleContext& context, RenderSystem& render)
+            : m_context(context),
+            m_render(render),
+            m_font(FontManager::GetInstance().GetFont()),
+            m_clearBannerText(m_font, "")
+        {
+            m_cardRenderer = std::make_shared<CardRenderer>();
+        }
 
-    }
+        /// <summary>
+        /// ï¿½tï¿½Fï¿½[ï¿½Yï¿½Ìİ’ï¿½
+        /// </summary>
+        /// <param name="phase"></param>
+        void BattleView::SetPhase(BattleViewPhase phase)
+        {
+            m_phase  = phase;
+        }
 
-}
+        /// <summary>
+        /// ï¿½Xï¿½V
+        /// </summary>
+        /// <param name="dt"></param>
+        void BattleView::Update(float dt)
+        {
+            UpdateCamera(dt);
 
-/// <summary>
-/// ƒRƒXƒg•\¦
-/// </summary>
-/// <param name="arg_window"></param>
-void BattleView::DrawCost(sf::RenderWindow& arg_window)
-{
-    auto tex = TextureLoader::GetInstance().GetTextureID("CostFrame");
-    sf::Sprite sprite(*tex);
-    sprite.setPosition(sf::Vector2f(550.0f, 100.0f));
-    sprite.setScale({0.13f, 0.08f});
-    arg_window.draw(sprite);
+            for (auto& p : m_popups)
+            {
+                p.lifeTime -= dt;
+                p.position.y -= 30.f * dt; // ï¿½É•ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            }
 
-    sf::Text text(m_font, "");
-    int cost = CostManager::GetInstance().GetCurrentCost();
-    text.setString({"AP / " +  std::to_string(cost)});
-    auto pos = sprite.getPosition();
-    text.setPosition({ pos.x + 55 , pos.y + 30 });
-    arg_window.draw(text);
-}
+            m_popups.erase(
+                std::remove_if(m_popups.begin(), m_popups.end(),
+                    [](const DamagePopup& p) { return p.lifeTime <= 0.f; }),
+                m_popups.end());
+        }
+
+        /// <summary>
+        /// ï¿½Aï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½
+        /// </summary>
+        /// <param name="index"></param>
+        void BattleView::SetSelectedActor(const std::shared_ptr<Character>& actor)
+        {
+            m_selectedActor = actor;
+        }
+
+        /// <summary>
+        /// ï¿½Iï¿½ï¿½ï¿½Jï¿½[ï¿½hï¿½ÌƒCï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½Xï¿½İ’ï¿½
+        /// </summary>
+        /// <param name="arg_index"></param>
+        void BattleView::SetSelectedCard(int arg_index)
+        {
+            m_selectedCardId = index;
+        }
+
+        /// <summary>
+        /// ï¿½^ï¿½[ï¿½Qï¿½bï¿½gï¿½ï¿½ï¿½ÌƒCï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½Xï¿½İ’ï¿½
+        /// </summary>
+        void BattleView::SetTargetIndices(const std::vector<std::shared_ptr<Character>>& arg_target)
+        {
+            m_targets = arg_target;
+        }
 
 
-/// <summary>
-/// ’Ç‰ÁƒRƒXƒg•\¦
-/// </summary>
-/// <param name="window"></param>
-void BattleView::DrawCostGain(sf::RenderWindow& arg_window)
-{
-	// ƒtƒH[ƒJƒX•\¦‚ª—LŒø‚Èê‡‚Ì‚İ•`‰æ
-    if (!m_context.GetFocusDraw()) {
-        return;
-    }
+        /// <summary>
+        /// ï¿½Rï¿½Xï¿½gï¿½ÌƒCï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½Xï¿½İ’ï¿½
+        /// </summary>
+        /// <param name="value"></param>
+        void BattleView::ShowCostGain(int value)
+        {
+            m_costGain = value;
+        }
 
-    int val = m_context.GetPredictedCost();
+        /// <summary>
+        /// ï¿½ï¿½ñƒŠƒZï¿½bï¿½g
+        /// </summary>
+        void BattleView::ResetTransientView()
+        {
+            ClearTargets();
+            ClearCostGain();
+            m_selectedCardId = -1;
+        }
 
-    sf::Text gainText(m_font,"");
-    gainText.setFont(m_font);
-    gainText.setCharacterSize(36);
-    gainText.setOutlineColor(sf::Color::Black);
-    gainText.setOutlineThickness(2.f);
+        /// <summary>
+        /// ï¿½ï¿½ï¿½Ê—Ê‚Ìİ’ï¿½
+        /// </summary>
+        /// <param name="arg_pos"></param>
+        /// <param name="arg_value"></param>
+        /// <param name="arg_isHeal"></param>
+        void BattleView::AddDamagePopup(const sf::Vector2f& arg_pos, int arg_value, bool arg_isHeal)
+        {
+            DamagePopup p;
+            p.position = arg_pos;
+            p.value = arg_value;
+            p.isHeal = arg_isHeal;
+            p.lifeTime = 1.0f;
 
-    if (val == 0)
-    {
-        // --- •Ï‰»‚È‚µF”’F‚Å "0" •\¦ ---
-        gainText.setFillColor(sf::Color::White);
-        gainText.setString(" + 0");
-    }
-	else if (val > 0)
-	{
-        // --- ƒRƒXƒgŠl“¾F—ÎF‚Å "+" •\¦ ---
-		gainText.setFillColor(sf::Color::Green);
-		gainText.setString(" + " + std::to_string(val));
-	}
-    else
-    {
-        // --- ƒRƒXƒgÁ”ïFÔF‚Å "-" •\¦ ---
-        gainText.setFillColor(sf::Color::Red);
-        gainText.setString(" - " + std::to_string(std::abs(val)));
-    }
+            m_popups.push_back(p);
+        }
 
-    // •\¦ˆÊ’uFŒ»İ‚ÌAP•\¦‚Ì‰E‘¤‚É”z’u
-    // (DrawCost‚ÌÀ•W 50.f, 650.f ‚É‘Î‚µ‚Ä’²®)
-    gainText.setPosition(sf::Vector2f(750.0f, 130.0f));
+        /// <summary>
+        /// ï¿½`ï¿½ï¿½
+        /// </summary>
+        /// <param name="window"></param>
+        void BattleView::Render(sf::RenderWindow& arg_window)
+        {
+            // ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½@ï¿½\\ON
+            //m_render.ApplyCamera();
 
-    arg_window.draw(gainText);
-}
+            // ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½^ï¿½[ï¿½`ï¿½ï¿½
+            DrawCharacters();
 
-/// <summary>
-/// ƒXƒe[ƒW–¼‘O‚Ì•\¦
-/// </summary>
-/// <param name="arg_window"></param>
-void BattleView::DrawStageName(sf::RenderWindow& arg_window)
-{
+            // ï¿½^ï¿½[ï¿½Qï¿½bï¿½gï¿½tï¿½Hï¿½[ï¿½Jï¿½Xï¿½Ì•`ï¿½ï¿½
+            if (!m_context.GetFocusTargets().empty())
+            {
+                DrawFocus(arg_window);
+            }
 
-    // ƒXƒe[ƒWID‚Ìæ“¾
-    int stageId = m_context.GetStageId();
+            // ï¿½_ï¿½ï¿½ï¿½[ï¿½Wï¿½ï¿½ñ•œ—Ê‚Ì•\\ï¿½ï¿½
+            for (auto& p : m_popups)
+            {
+                sf::Text text(FontManager::GetInstance().GetFont(), "");
+                text.setFont(FontManager::GetInstance().GetFont()); // ï¿½ï¿½ï¿½ï¿½ï¿½Ìƒtï¿½Hï¿½ï¿½ï¿½gï¿½Ç—ï¿½
+                text.setString((p.isHeal ? "+" : "-") + std::to_string(p.value));
+                text.setCharacterSize(24);
+                text.setPosition(p.position);
+                text.setFillColor(p.isHeal ? sf::Color::Green : sf::Color::Red);
 
-    const auto& stageData = StageLoader::GetInstance().GetStageData(stageId);
+                arg_window.draw(text);
+            }
+            // ï¿½^ï¿½[ï¿½Qï¿½bï¿½gï¿½ÌƒTï¿½[ï¿½Nï¿½ï¿½
+            DrawFocus(arg_window);
 
-    if (!stageData)
-    {
-        return;
-    }
-    // ƒXƒe[ƒW–¼
-    sf::Text stageText(m_font, "");
-    // UTF8‚É‘Î‰‚³‚¹‚é
-    sf::String unicodeString = sf::String::fromUtf8(stageData->name.begin(), stageData->name.end());
-    stageText.setString(unicodeString);
-    stageText.setCharacterSize(30);
-    stageText.setFillColor(sf::Color::White);
-    stageText.setOutlineColor(sf::Color::Black); 
-    stageText.setOutlineThickness(2.f);
-    stageText.setPosition({ 20.0f, 50.0f });
+            // ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½@ï¿½\\OFF
+            //m_render.ResetCamera();
+            // ï¿½Jï¿½[ï¿½h
+            DrawCards(arg_window);
+            // ï¿½sï¿½ï¿½ï¿½ï¿½
+            DrawCost(arg_window);
+            // ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½
+            if (m_context.GetFocusDraw()) {
+                DrawCostGain(arg_window);
+            }
+            // ï¿½oï¿½[ï¿½iï¿½[
+            DrawTurnBanner(arg_window);
+            // ï¿½Xï¿½eï¿½[ï¿½Wï¿½ï¿½
+            DrawStageName(arg_window);
+        }
 
-    // ‰º’n
-    sf::FloatRect textBounds = stageText.getGlobalBounds();
-    sf::RectangleShape bgBox;
+        /// <summary>
+        /// ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½^ï¿½[ï¿½`ï¿½ï¿½
+        /// </summary>
+        /// <param name="window"></param>
+        void BattleView::DrawCharacters()
+        {
 
-    // ƒ{ƒbƒNƒX‚ÌƒTƒCƒYFƒeƒLƒXƒg‚Ì”ÍˆÍ‚æ‚è­‚µ‘å‚«‚­‚·‚éiƒpƒfƒBƒ“ƒOj
-    float paddingX = 20.f;
-    float paddingY = 10.f;
-    bgBox.setSize({ textBounds.size.x + paddingX * 2, textBounds.size.y + paddingY * 2 });
+            auto drawList = [&](const auto& list)
+                {
+                    for (auto& c : list)
+                    {
+                        if (!c) continue;
 
-    // ƒ{ƒbƒNƒX‚ÌFİ’èi”¼“§–¾‚ÌÂ‚É‚·‚é‚Æ‰æ–Ê‚É“éõ‚İ‚â‚·‚¢‚Å‚·j
-    bgBox.setFillColor(sf::Color(0, 50, 150, 180)); // ˆÃ‚ß‚ÌÂA­‚µ“§‰ß
-    bgBox.setOutlineColor(sf::Color::Cyan);        // ˜gü‚É–¾‚é‚¢Â
-    bgBox.setOutlineThickness(2.f);
+                        // ===== Spriteï¿½ï¿½ï¿½ï¿½ï¿½iï¿½ï¿½ï¿½ï¿½Ì‚İj=====
+                        if (!m_spriteTable.contains(c.get()))
+                        {
+                            auto sprite = std::make_unique<CharacterSprite>(c->GetData().textureKey);
+                            sprite->Init(c->GetData().textureKey);
+                            m_spriteTable[c.get()] = std::move(sprite);
+                        }
 
-    // ƒ{ƒbƒNƒX‚ÌˆÊ’uFƒeƒLƒXƒg‚ğ•ï‚Ş‚æ‚¤‚É”z’u
-    bgBox.setPosition({ textBounds.position.x - paddingX, textBounds.position.y - paddingY });
+                        auto& sprite = m_spriteTable[c.get()];
 
-    // 4. •`‰æiæ‚Éƒ{ƒbƒNƒXA‚»‚ÌŒã‚ÉƒeƒLƒXƒg‚ğd‚Ë‚éj
-    arg_window.draw(bgBox);
-    arg_window.draw(stageText);
-}
+                        // ===== ï¿½ï¿½ÔŒï¿½ï¿½ï¿½ =====
+                        CharacterAnimState state = CharacterAnimState::WAIT;
 
-/// <summary>
-/// ƒ^[ƒ“‚Ìƒoƒi[•\¦
-/// </summary>
-/// <param name="window"></param>
-void BattleView::DrawTurnBanner(sf::RenderWindow& window)
-{
-    // BattleSystem.h ‚Ì TurnPhase ’è‹`‚Æ‡‚í‚¹‚é
-    // 0: StartTurn, 1: UserTurn, 2: EnemyTurn ... 
-    int phase = m_context.GetTurnPhase();
+                        // Animation
+                        if (c->IsDead())
+                        {
+                            sprite->SetState(CharacterAnimState::DEAD);
+                        }
+                        else {
+                            sprite->SetState(c->GetAnimState());
+                        }
 
-    std::string turnStr = "";
-    sf::Color textColor = sf::Color::White;
+                        // ï¿½ï¿½ï¿½oï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ÄƒZï¿½bï¿½g
+                        sprite->SetPosition(c->GetVisualPosition());
 
-    if (phase == 1) { // UserTurn
-        turnStr = "PLAYER TURN";
-        textColor = sf::Color::Cyan; // ÂŒn
-    }
-    else if (phase == 2) { // EnemyTurn
-        turnStr = "ENEMY TURN";
-        textColor = sf::Color(255, 100, 100); // ÔŒn
-    }
-    else {
-        return; // ‚»‚êˆÈŠO‚ÌƒtƒF[ƒYiStart“™j‚Å‚Í•\¦‚µ‚È‚¢A‚Ü‚½‚Í•Ê‚Ì•\¦
-    }
+                        if (c->GetFaction() == Faction::Player)
+                        {
+                            sprite->SetSpriteWidthMirror();
+                        }
 
-    sf::Text text(m_font, "");
-    text.setString(turnStr);
-    text.setCharacterSize(50); // ‘å‚«‚ß‚É•\¦
-    text.setFillColor(textColor);
-    text.setOutlineColor(sf::Color::Black);
-    text.setOutlineThickness(4.f);
+                        sprite->Draw(m_render,c->GetData(),true);
+                    }
+                };
 
-    // ‰æ–Ê’†‰›‚É”z’u
-    sf::FloatRect textRect = text.getLocalBounds();
-    text.setOrigin({ textRect.position.x + textRect.size.x / 2.0f,textRect.position.y + textRect.size.y / 2.0f });
+            drawList(m_context.GetPlayers());
+            drawList(m_context.GetEnemies());
+        }
 
-    // ƒEƒBƒ“ƒhƒEƒTƒCƒY‚ğæ“¾‚µ‚Ä’†‰›‚Ö
-    sf::Vector2u windowSize = WindowSetting::GetInstance().GetWindowSize();
-    text.setPosition({ windowSize.x / 2.0f, 50.f }); 
+        /// <summary>
+        /// ï¿½Jï¿½[ï¿½hï¿½`ï¿½ï¿½
+        /// </summary>
+        /// <param name="window"></param>
+        void BattleView::DrawCards(sf::RenderWindow& arg_window)
+        {
+            // ===== ï¿½Rï¿½D =====
+            m_cardRenderer->DrawDeck(m_font, m_render.GetWindow(), DECK_POS, CardManager::GetInstance().GetDeckCount());
 
-    window.draw(text);
-}
 
-/// <summary>
-/// ƒ^[ƒQƒbƒgî•ñ‚ÌƒŠƒZƒbƒg
-/// </summary>
-void BattleView::ClearTargets()
-{
-    m_targets.clear();
-}
+            // ===== ï¿½ï¿½D =====
+            sf::Vector2f pos = HAND_START;
 
-/// <summary>
-/// s“®{”‚Ì‘‰Á’lƒŠƒZƒbƒg
-/// </summary>
-void BattleView::ClearCostGain()
-{
-    m_costGain = 0;
-}
+            // ï¿½ï¿½Dï¿½Sï¿½Ì‚Å‚Ì’Ê‚ï¿½ï¿½Ôï¿½ï¿½ï¿½ï¿½Jï¿½Eï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½Ïï¿½
+            int globalCardIdx = 0;
 
-/// <summary>
-/// ƒLƒƒƒ‰ƒNƒ^[‚Ì’†SÀ•W‚Ìæ“¾
-/// </summary>
-/// <param name="c"></param>
-/// <returns></returns>
-sf::Vector2f BattleView::GetCharacterCenter(const std::shared_ptr<Character>& c)
-{
-    constexpr float CHAR_W = 165.f;
-    constexpr float CHAR_H = 150.f;
+            // ï¿½Iï¿½ğ’†‚ÌƒOï¿½ï¿½ï¿½[ï¿½oï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½Xï¿½ï¿½ï¿½æ“¾
+            int selectedCardGlobalIdx = m_context.GetSelectedCardIndex();
 
-    // ƒLƒƒƒ‰ƒNƒ^[‚Ì¶ãÀ•W‚ğæ“¾
-    sf::Vector2f pos = c->GetPosition();
+            for (auto& p : m_context.GetAlivePlayers())
+            {
+                const int cardCount = p->GetCardCount();
 
-    // ‹éŒ`ƒTƒCƒYiCHAR_W, CHAR_Hj‚Ì”¼•ª‚ğ‘«‚µ‚Ä’†S‚ğŒvZ
-    return { pos.x + (CHAR_W * 0.5f), pos.y + (CHAR_H * 0.5f) };
-}
+                for (int i = 0; i < cardCount; ++i)
+                {
+                    sf::Vector2f drawPos = pos;
 
-/// <summary>
-/// ƒJƒƒ‰XV
-/// </summary>
-/// <param name="dt"></param>
+                    // ï¿½ï¿½ï¿½[ï¿½Jï¿½ï¿½ï¿½ï¿½ i ï¿½Å‚Í‚È‚ï¿½ï¿½Aï¿½ï¿½Dï¿½Sï¿½Ì‚Å‚Ì’Ê‚ï¿½ï¿½Ôï¿½ï¿½Å”ï¿½rï¿½ï¿½ï¿½ï¿½
+                    if (globalCardIdx == selectedCardGlobalIdx)
+                    {
+                        drawPos.y -= SELECT_OFFSET_Y;
+                    }
+
+                    // ï¿½Jï¿½[ï¿½hï¿½fï¿½[ï¿½^ï¿½æ“¾
+                    const CardData& data = p->GetCardData(i);
+
+                    // ï¿½`ï¿½ï¿½
+                    m_cardRenderer->DrawSingleCard(m_font, m_render.GetWindow(), drawPos, data, p->GetData().iconKey);
+
+                    // ï¿½ï¿½ï¿½ÌƒJï¿½[ï¿½hï¿½Öï¿½ï¿½Wï¿½Æ’Ê‚ï¿½ï¿½Ôï¿½ï¿½ï¿½iï¿½ß‚ï¿½
+                    pos.x += HAND_SPACING;
+                    globalCardIdx++;
+                }
+            }
+        }
+
+        /// <summary>
+        /// ï¿½^ï¿½[ï¿½Qï¿½bï¿½gï¿½tï¿½Hï¿½[ï¿½Jï¿½Xï¿½iï¿½~ï¿½ï¿½\\ï¿½ï¿½ï¿½j
+        /// </summary>
+        /// <param name="window"></param>
+        void BattleView::DrawFocus(sf::RenderWindow& arg_window)
+        {
+
+            const auto& focusTargets = m_context.GetFocusTargets();
+
+            for (const auto& target : focusTargets)
+            {
+                if (!target)
+                {
+                    continue;
+                }
+
+        	auto tex = TextureLoader::GetInstance().GetTextureID("targetFrame");
+        	sf::Sprite sprite(*tex);
+        	sprite.setOrigin(sf::Vector2f(tex->getSize().x / 2.f, tex->getSize().y / 2.f));
+        	// ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½^ï¿½[ï¿½Ì’ï¿½ï¿½Sï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½Äİ’ï¿½
+        	sf::Vector2f centerPos = GetCharacterCenter(target);
+        	sprite.setScale({ 0.1f,0.1f });
+        	sprite.setPosition({ centerPos.x, centerPos.y + 10.f });
+        	arg_window.draw(sprite);
+
+            }
+
+        }
+
+        /// <summary>
+        /// ï¿½Rï¿½Xï¿½gï¿½\\ï¿½ï¿½
+        /// </summary>
+        /// <param name="arg_window"></param>
+        void BattleView::DrawCost(sf::RenderWindow& arg_window)
+        {
+            auto tex = TextureLoader::GetInstance().GetTextureID("CostFrame");
+            sf::Sprite sprite(*tex);
+            sprite.setPosition(sf::Vector2f(550.0f, 100.0f));
+            sprite.setScale({0.13f, 0.08f});
+            arg_window.draw(sprite);
+
+            sf::Text text(m_font, "");
+            int cost = CostManager::GetInstance().GetCurrentCost();
+            text.setString({"AP / " +  std::to_string(cost)});
+            auto pos = sprite.getPosition();
+            text.setPosition({ pos.x + 55 , pos.y + 30 });
+            arg_window.draw(text);
+        }
+
+
+        /// <summary>
+        /// ï¿½Ç‰ï¿½ï¿½Rï¿½Xï¿½gï¿½\\ï¿½ï¿½
+        /// </summary>
+        /// <param name="window"></param>
+        void BattleView::DrawCostGain(sf::RenderWindow& arg_window)
+        {
+        	// ï¿½tï¿½Hï¿½[ï¿½Jï¿½Xï¿½\\ï¿½ï¿½ï¿½ï¿½ï¿½Lï¿½ï¿½ï¿½Èê‡ï¿½Ì‚İ•`ï¿½ï¿½
+            if (!m_context.GetFocusDraw()) {
+                return;
+            }
+
+            int val = m_context.GetPredictedCost();
+
+            sf::Text gainText(m_font,"");
+            gainText.setFont(m_font);
+            gainText.setCharacterSize(36);
+            gainText.setOutlineColor(sf::Color::Black);
+            gainText.setOutlineThickness(2.f);
+
+            if (val == 0)
+            {
+                // --- ï¿½Ï‰ï¿½ï¿½È‚ï¿½ï¿½Fï¿½ï¿½ï¿½Fï¿½ï¿½ "0" ï¿½\\ï¿½ï¿½ ---
+                gainText.setFillColor(sf::Color::White);
+                gainText.setString(" + 0");
+            }
+        	else if (val > 0)
+        	{
+                // --- ï¿½Rï¿½Xï¿½gï¿½lï¿½ï¿½ï¿½Fï¿½ÎFï¿½ï¿½ "+" ï¿½\\ï¿½ï¿½ ---
+        		gainText.setFillColor(sf::Color::Green);
+        		gainText.setString(" + " + std::to_string(val));
+        	}
+            else
+            {
+                // --- ï¿½Rï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½Fï¿½ÔFï¿½ï¿½ "-" ï¿½\\ï¿½ï¿½ ---
+                gainText.setFillColor(sf::Color::Red);
+                gainText.setString(" - " + std::to_string(std::abs(val)));
+            }
+
+            // ï¿½\\ï¿½ï¿½ï¿½Ê’uï¿½Fï¿½ï¿½ï¿½İ‚ï¿½APï¿½\\ï¿½ï¿½ï¿½Ì‰Eï¿½ï¿½ï¿½É”zï¿½u
+            // (DrawCostï¿½Ìï¿½ï¿½W 50.f, 650.f ï¿½É‘Î‚ï¿½ï¿½Ä’ï¿½ï¿½ï¿½)
+            gainText.setPosition(sf::Vector2f(750.0f, 130.0f));
+
+            arg_window.draw(gainText);
+        }
+
+        /// <summary>
+        /// ï¿½Xï¿½eï¿½[ï¿½Wï¿½ï¿½ï¿½Ì•\\ï¿½ï¿½
+        /// </summary>
+        /// <param name="arg_window"></param>
+        void BattleView::DrawStageName(sf::RenderWindow& arg_window)
+        {
+
+            // ï¿½Xï¿½eï¿½[ï¿½WIDï¿½Ìæ“¾
+            int stageId = m_context.GetStageId();
+
+            const auto& stageData = StageLoader::GetInstance().GetStageData(stageId);
+
+            if (!stageData)
+            {
+                return;
+            }
+            // ï¿½Xï¿½eï¿½[ï¿½Wï¿½ï¿½
+            sf::Text stageText(m_font, "");
+            // UTF8ï¿½É‘Î‰ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            sf::String unicodeString = sf::String::fromUtf8(stageData->name.begin(), stageData->name.end());
+            stageText.setString(unicodeString);
+            stageText.setCharacterSize(30);
+            stageText.setFillColor(sf::Color::White);
+            stageText.setOutlineColor(sf::Color::Black); 
+            stageText.setOutlineThickness(2.f);
+            stageText.setPosition({ 20.0f, 50.0f });
+
+            // ï¿½ï¿½ï¿½n
+            sf::FloatRect textBounds = stageText.getGlobalBounds();
+            sf::RectangleShape bgBox;
+
+            // ï¿½{ï¿½bï¿½Nï¿½Xï¿½ÌƒTï¿½Cï¿½Yï¿½Fï¿½eï¿½Lï¿½Xï¿½gï¿½Ì”ÍˆÍ‚ï¿½è­ï¿½ï¿½ï¿½å‚«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½iï¿½pï¿½fï¿½Bï¿½ï¿½ï¿½Oï¿½j
+            float paddingX = Constants::PADDING_X;
+            float paddingY = Constants::PADDING_Y;
+            bgBox.setSize({ textBounds.size.x + paddingX * 2, textBounds.size.y + paddingY * 2 });
+
+            // ï¿½{ï¿½bï¿½Nï¿½Xï¿½ÌFï¿½İ’ï¿½iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÌÂ‚É‚ï¿½ï¿½ï¿½Æ‰ï¿½Ê‚É“ï¿½ï¿½ï¿½İ‚â‚·ï¿½ï¿½ï¿½Å‚ï¿½ï¿½j
+            bgBox.setFillColor(sf::Color(0, 50, 150, 180)); // ï¿½Ã‚ß‚ÌÂAï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            bgBox.setOutlineColor(sf::Color::Cyan);        // ï¿½gï¿½ï¿½ï¿½É–ï¿½ï¿½é‚¢ï¿½ï¿½
+            bgBox.setOutlineThickness(2.f);
+
+            // ï¿½{ï¿½bï¿½Nï¿½Xï¿½ÌˆÊ’uï¿½Fï¿½eï¿½Lï¿½Xï¿½gï¿½ï¿½ï¿½Ş‚æ‚¤ï¿½É”zï¿½u
+            bgBox.setPosition({ textBounds.position.x - paddingX, textBounds.position.y - paddingY });
+
+            // 4. ï¿½`ï¿½ï¿½iï¿½ï¿½Éƒ{ï¿½bï¿½Nï¿½Xï¿½Aï¿½ï¿½ï¿½ÌŒï¿½Éƒeï¿½Lï¿½Xï¿½gï¿½ï¿½ï¿½dï¿½Ë‚ï¿½j
+            arg_window.draw(bgBox);
+            arg_window.draw(stageText);
+        }
+
+        /// <summary>
+        /// ï¿½^ï¿½[ï¿½ï¿½ï¿½Ìƒoï¿½iï¿½[ï¿½\\ï¿½ï¿½
+        /// </summary>
+        /// <param name="window"></param>
+        void BattleView::DrawTurnBanner(sf::RenderWindow& window)
+        {
+            // BattleSystem.h ï¿½ï¿½ TurnPhase ï¿½ï¿½`ï¿½Æï¿½ï¿½í‚¹ï¿½ï¿½
+            // 0: StartTurn, 1: UserTurn, 2: EnemyTurn ... 
+            int phase = m_context.GetTurnPhase();
+
+            std::string turnStr = "";
+            sf::Color textColor = sf::Color::White;
+
+            if (phase == 1) { // UserTurn
+                turnStr = "PLAYER TURN";
+                textColor = sf::Color::Cyan; // ï¿½ÂŒn
+            }
+            else if (phase == 2) { // EnemyTurn
+                turnStr = "ENEMY TURN";
+                textColor = sf::Color(255, 100, 100); // ï¿½ÔŒn
+            }
+            else {
+                return; // ï¿½ï¿½ï¿½ï¿½ÈŠOï¿½Ìƒtï¿½Fï¿½[ï¿½Yï¿½iStartï¿½ï¿½ï¿½jï¿½Å‚Í•\\ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½Aï¿½Ü‚ï¿½ï¿½Í•Ê‚Ì•\\ï¿½ï¿½
+            }
+
+            sf::Text text(m_font, "");
+            text.setString(turnStr);
+            text.setCharacterSize(50); // ï¿½å‚«ï¿½ß‚É•\\ï¿½ï¿½
+            text.setFillColor(textColor);
+            text.setOutlineColor(sf::Color::Black);
+            text.setOutlineThickness(4.f);
+
+            // ï¿½ï¿½Ê’ï¿½ï¿½ï¿½ï¿½É”zï¿½u
+            sf::FloatRect textRect = text.getLocalBounds();
+            text.setOrigin({ textRect.position.x + textRect.size.x / 2.0f,textRect.position.y + textRect.size.y / 2.0f });
+
+            // ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Eï¿½Tï¿½Cï¿½Yï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½Ä’ï¿½ï¿½ï¿½ï¿½ï¿½
+            sf::Vector2u windowSize = WindowSetting::GetInstance().GetWindowSize();
+            text.setPosition({ windowSize.x / 2.0f, 50.f }); 
+
+            window.draw(text);
+        }
+
+        /// <summary>
+        /// ï¿½^ï¿½[ï¿½Qï¿½bï¿½gï¿½ï¿½ï¿½Ìƒï¿½ï¿½Zï¿½bï¿½g
+        /// </summary>
+        void BattleView::ClearTargets()
+        {
+            m_targets.clear();
+        }
+
+        /// <summary>
+        /// ï¿½sï¿½ï¿½ï¿½{ï¿½ï¿½ï¿½Ì‘ï¿½ï¿½ï¿½ï¿½lï¿½ï¿½ï¿½Zï¿½bï¿½g
+        /// </summary>
+        void BattleView::ClearCostGain()
+        {
+            m_costGain = 0;
+        }
+
+        /// <summary>
+        /// ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½^ï¿½[ï¿½Ì’ï¿½ï¿½Sï¿½ï¿½ï¿½Wï¿½Ìæ“¾
+        /// </summary>
+        /// <param name="c"></param>
+        /// <returns></returns>
+        sf::Vector2f BattleView::GetCharacterCenter(const std::shared_ptr<Character>& c)
+        {
+            constexpr float CHAR_W = Constants::CHAR_W;
+            constexpr float CHAR_H = Constants::CHAR_H;
+
+            // ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½^ï¿½[ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½æ“¾
+            sf::Vector2f pos = c->GetPosition();
+
+            // ï¿½ï¿½`ï¿½Tï¿½Cï¿½Yï¿½iCHAR_W, CHAR_Hï¿½jï¿½Ì”ï¿½ï¿½ï¿½ï¿½ğ‘«‚ï¿½ï¿½Ä’ï¿½ï¿½Sï¿½ï¿½ï¿½vï¿½Z
+            return { pos.x + (CHAR_W * 0.5f), pos.y + (CHAR_H * 0.5f) };
+        }
+
+        /// <summary>
+        /// ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½V
+        /// </summary>
+        /// <param name="dt"></param>
+        void BattleView::UpdateCamera(float dt)
+        {
+
+            auto& camera = CameraManager::GetInstance();
+
+            switch (m_phase)
 void BattleView::UpdateCamera(float dt)
 {
 
@@ -502,7 +547,7 @@ void BattleView::UpdateCamera(float dt)
     case BattleViewPhase::SelectPlayer:
     case BattleViewPhase::SelectCard:
     {
-        // ‘SƒvƒŒƒCƒ„[‚ªû‚Ü‚é’†S“_‚ğŒvZ
+        // ï¿½Sï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚é’†ï¿½Sï¿½_ï¿½ï¿½ï¿½vï¿½Z
         const auto& players = m_context.GetPlayers();
         if (players.empty()) break;
 
@@ -534,13 +579,13 @@ void BattleView::UpdateCamera(float dt)
 
         targetCenter /= static_cast<float>(m_targets.size());
 
-        // ƒ^[ƒQƒbƒg‘I‘ğ‚Í­‚µƒY[ƒ€ƒCƒ“‚µ‚Ä’–Ú‚³‚¹‚é
+        // ï¿½^ï¿½[ï¿½Qï¿½bï¿½gï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½Íï¿½ï¿½ï¿½ï¿½Yï¿½[ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Ä’ï¿½ï¿½Ú‚ï¿½ï¿½ï¿½ï¿½ï¿½
         camera.SetMove(targetCenter, 6.0f);
         camera.SetZoom(0.7f, 3.0f);
         break;
     }
     case BattleViewPhase::Default:
-        // ‰ŠúˆÊ’u‚É–ß‚é
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Ê’uï¿½É–ß‚ï¿½
         camera.SetMove({ 640.0f, 360.0f }, 4.0f);
         camera.SetZoom(1.0f, 2.0f);
         break;
@@ -550,19 +595,19 @@ void BattleView::UpdateCamera(float dt)
 }
 
 /// <summary>
-/// ƒ_ƒ[ƒWƒ|ƒbƒvƒAƒbƒvˆÊ’uŒvZ
+/// ï¿½_ï¿½ï¿½ï¿½[ï¿½Wï¿½|ï¿½bï¿½vï¿½Aï¿½bï¿½vï¿½Ê’uï¿½vï¿½Z
 /// </summary>
 /// <param name="c"></param>
 /// <returns></returns>
 sf::Vector2f BattleView::CalcDamagePopupPos(const std::shared_ptr<Character>& c)
 {
     auto center = GetCharacterCenter(c);
-    center.y -= 40.f; // “ªã‚É•‚‚©‚¹‚é
+    center.y -= 40.f; // ï¿½ï¿½ï¿½ï¿½É•ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     return center;
 }
 
 /// <summary>
-/// ƒQ[ƒ€ƒNƒŠƒAƒoƒi[‚Ì•`‰æ
+/// ï¿½Qï¿½[ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Aï¿½oï¿½iï¿½[ï¿½Ì•`ï¿½ï¿½
 /// </summary>
 /// <param name="arg_window"></param>
 void BattleView::DrawClearBanner(sf::RenderWindow& arg_window)
@@ -570,16 +615,16 @@ void BattleView::DrawClearBanner(sf::RenderWindow& arg_window)
 
 	m_clearBannerText = sf::Text(m_font, "GAME CLEAR!");
 
-	// ƒoƒi[•¶š—ñİ’è
+	// ï¿½oï¿½iï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½
 	m_clearBannerText.setString("STAGE CLEAR!");
 	m_clearBannerText.setCharacterSize(60);
 	m_clearBannerText.setFillColor(sf::Color::Green);
 	m_clearBannerText.setOutlineColor(sf::Color::Black);
 	m_clearBannerText.setOutlineThickness(4.f);
-	// ‰æ–Ê’†‰›‚É”z’u
+	// ï¿½ï¿½Ê’ï¿½ï¿½ï¿½ï¿½É”zï¿½u
 	sf::FloatRect textRect = m_clearBannerText.getLocalBounds();
 	m_clearBannerText.setOrigin({ textRect.position.x + textRect.size.x / 2.0f,textRect.position.y + textRect.size.y / 2.0f });
-	// ƒEƒBƒ“ƒhƒEƒTƒCƒY‚ğæ“¾‚µ‚Ä’†‰›‚Ö
+	// ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Eï¿½Tï¿½Cï¿½Yï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½Ä’ï¿½ï¿½ï¿½ï¿½ï¿½
 	sf::Vector2u windowSize = WindowSetting::GetInstance().GetWindowSize();
 	m_clearBannerText.setPosition({ windowSize.x / 2.0f, windowSize.y / 2.0f });
 	arg_window.draw(m_clearBannerText);
@@ -588,7 +633,7 @@ void BattleView::DrawClearBanner(sf::RenderWindow& arg_window)
 }
 
 /// <summary>
-/// ƒQ[ƒ€ƒI[ƒo[ƒoƒi[‚Ì•`‰æ
+/// ï¿½Qï¿½[ï¿½ï¿½ï¿½Iï¿½[ï¿½oï¿½[ï¿½oï¿½iï¿½[ï¿½Ì•`ï¿½ï¿½
 /// </summary>
 /// <param name="arg_window"></param>
 void BattleView::DrawGameOverBanner(sf::RenderWindow& arg_window)
@@ -597,16 +642,16 @@ void BattleView::DrawGameOverBanner(sf::RenderWindow& arg_window)
     m_clearBannerText = sf::Text(m_font, "GAME OVER");
 
 
-	// ƒoƒi[•¶š—ñİ’è
+	// ï¿½oï¿½iï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½
 	m_clearBannerText.setString("GAME OVER");
 	m_clearBannerText.setCharacterSize(60);
 	m_clearBannerText.setFillColor(sf::Color::Red);
 	m_clearBannerText.setOutlineColor(sf::Color::Black);
 	m_clearBannerText.setOutlineThickness(4.f);
-	// ‰æ–Ê’†‰›‚É”z’u
+	// ï¿½ï¿½Ê’ï¿½ï¿½ï¿½ï¿½É”zï¿½u
 	sf::FloatRect textRect = m_clearBannerText.getLocalBounds();
 	m_clearBannerText.setOrigin({ textRect.position.x + textRect.size.x / 2.0f,textRect.position.y + textRect.size.y / 2.0f });
-	// ƒEƒBƒ“ƒhƒEƒTƒCƒY‚ğæ“¾‚µ‚Ä’†‰›‚Ö
+	// ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Eï¿½Tï¿½Cï¿½Yï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½Ä’ï¿½ï¿½ï¿½ï¿½ï¿½
 	sf::Vector2u windowSize = WindowSetting::GetInstance().GetWindowSize();
 	m_clearBannerText.setPosition({ windowSize.x / 2.0f, windowSize.y / 2.0f });
 	arg_window.draw(m_clearBannerText);

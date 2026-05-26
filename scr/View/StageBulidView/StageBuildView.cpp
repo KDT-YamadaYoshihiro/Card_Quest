@@ -1,4 +1,5 @@
 #include "StageBuildView.h"
+#include "System/Constants.h"
 #include "CSVLoad/StageLoader/StageLoader.h"
 #include "CSVLoad/CharacterLoader.h"
 #include "CSVLoad//TextureLoader/TextureLoader.h"
@@ -9,7 +10,7 @@
 #include <cmath>
 
 /// <summary>
-/// ‰Šú‰»
+/// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 /// </summary>
 /// <param name="render"></param>
 StageBuildView::StageBuildView(RenderSystem& render)
@@ -19,27 +20,27 @@ StageBuildView::StageBuildView(RenderSystem& render)
 }
 
 /// <summary>
-/// XV
+/// ï¿½Xï¿½V
 /// </summary>
 /// <param name="window"></param>
 /// <param name="context"></param>
 void StageBuildView::Update(sf::RenderWindow& window, const StageBulidContext& context)
 {
     const auto* stage = context.GetSelectedStage();
-	// ‘I‘ğƒXƒe[ƒW‚È‚µ‚Ì‚Íˆ—‚µ‚È‚¢
+	// ï¿½Iï¿½ï¿½ï¿½Xï¿½eï¿½[ï¿½Wï¿½È‚ï¿½ï¿½Ìï¿½ï¿½Íï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
     if (!stage)
     {
         return;
     }
 
     const auto& allIds = context.GetStageIds();
-	// ƒXƒe[ƒWIDƒŠƒXƒg‚ª‹ó‚Ìê‡‚àˆ—‚µ‚È‚¢
+	// ï¿½Xï¿½eï¿½[ï¿½WIDï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½Ìê‡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
     if (allIds.empty())
     {
         return;
     }
 
-    // ƒXƒe[ƒWØ‚è‘Ö‚¦ŒŸ’m‚ÆƒXƒ‰ƒCƒh•ûŒü‚ÌŒˆ’è
+    // ï¿½Xï¿½eï¿½[ï¿½Wï¿½Ø‚ï¿½Ö‚ï¿½ï¿½ï¿½ï¿½mï¿½ÆƒXï¿½ï¿½ï¿½Cï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ÌŒï¿½ï¿½ï¿½
     if (stage->stageId != m_currentStageId)
     {
         if (m_currentStageId != -1)
@@ -49,15 +50,15 @@ void StageBuildView::Update(sf::RenderWindow& window, const StageBulidContext& c
 
             if (m_currentStageId == firstId && stage->stageId == lastId)
             {
-                // 1ƒy[ƒW–Ú‚©‚çÅIƒy[ƒW‚Ö
-                m_currentOffsetX = -800.f; // ¶‚©‚çƒXƒ‰ƒCƒh
+                // 1ï¿½yï¿½[ï¿½Wï¿½Ú‚ï¿½ï¿½ï¿½ÅIï¿½yï¿½[ï¿½Wï¿½ï¿½
+                m_currentOffsetX = -800.f; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½Cï¿½h
             }
             else if (m_currentStageId == lastId && stage->stageId == firstId)
             {
-                // ÅIƒy[ƒW‚©‚ç1ƒy[ƒW–Ú‚Ö
-                m_currentOffsetX = 800.f;  // ‰E‚©‚çƒXƒ‰ƒCƒh
+                // ï¿½ÅIï¿½yï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½1ï¿½yï¿½[ï¿½Wï¿½Ú‚ï¿½
+                m_currentOffsetX = 800.f;  // ï¿½Eï¿½ï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½Cï¿½h
             }
-            // ’Êí‚Ì‘OŒã”»’è
+            // ï¿½Êï¿½Ì‘Oï¿½ã”»ï¿½ï¿½
             else
             {
                 m_currentOffsetX = (stage->stageId > m_currentStageId) ? 800.f : -800.f;
@@ -66,14 +67,14 @@ void StageBuildView::Update(sf::RenderWindow& window, const StageBulidContext& c
         m_currentStageId = stage->stageId;
     }
 
-    // 2. À•W‚ğ 0 (’†S) ‚ÉŒü‚©‚Á‚Ä•âŠÔi•ÏX‚È‚µj
+    // 2. ï¿½ï¿½ï¿½Wï¿½ï¿½ 0 (ï¿½ï¿½ï¿½S) ï¿½ÉŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä•ï¿½Ôiï¿½ÏXï¿½È‚ï¿½ï¿½j
     m_currentOffsetX += (0.f - m_currentOffsetX) * SLIDE_SPEED;
 
     UpdateScroll(window, allIds.size());
 }
 
 /// <summary>
-/// •`‰æ
+/// ï¿½`ï¿½ï¿½
 /// </summary>
 /// <param name="context"></param>
 void StageBuildView::Draw(const StageBulidContext& context)
@@ -81,10 +82,10 @@ void StageBuildView::Draw(const StageBulidContext& context)
     const auto* stage = context.GetSelectedStage();
     if (!stage) return;
 
-    // ŒvZ‚³‚ê‚½ƒIƒtƒZƒbƒg‚ğ“n‚µ‚Ä•`‰æ
+    // ï¿½vï¿½Zï¿½ï¿½ï¿½ê‚½ï¿½Iï¿½tï¿½Zï¿½bï¿½gï¿½ï¿½nï¿½ï¿½ï¿½Ä•`ï¿½ï¿½
     DrawStageContent(stage, m_currentOffsetX);
 
-    // ƒ{ƒ^ƒ“—Ş‚ÍƒXƒ‰ƒCƒh‚³‚¹‚È‚¢iŒÅ’èˆÊ’uj
+    // ï¿½{ï¿½^ï¿½ï¿½ï¿½Ş‚ÍƒXï¿½ï¿½ï¿½Cï¿½hï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½iï¿½Å’ï¿½Ê’uï¿½j
     if (auto* left = context.GetLeftArrow())
     {
         left->Draw(m_render.GetWindow());
@@ -104,33 +105,33 @@ void StageBuildView::Draw(const StageBulidContext& context)
 }
 
 /// <summary>
-/// ƒXƒe[ƒW“à—e•`‰æ
+/// ï¿½Xï¿½eï¿½[ï¿½Wï¿½ï¿½ï¿½eï¿½`ï¿½ï¿½
 /// </summary>
 /// <param name="stage"></param>
 /// <param name="offsetX"></param>
 void StageBuildView::DrawStageContent(const StageData* stage, float offsetX)
 {
-    // ‰æ–Ê’†‰›(640) + ƒIƒtƒZƒbƒg
+    // ï¿½ï¿½Ê’ï¿½ï¿½ï¿½(640) + ï¿½Iï¿½tï¿½Zï¿½bï¿½g
     float centerX = 640.f + offsetX;
 
-    // ”wŒiƒpƒlƒ‹
+    // ï¿½wï¿½iï¿½pï¿½lï¿½ï¿½
     sf::RectangleShape detailPanel({ PANEL_WIDTH, 400.f });
     detailPanel.setOrigin({ PANEL_WIDTH / 2.f, 200.f });
     detailPanel.setPosition({ centerX, 350.f });
     detailPanel.setFillColor(sf::Color(100, 149, 237, 200));
     m_render.Draw(detailPanel);
 
-    // ƒXƒe[ƒWƒ^ƒCƒgƒ‹
+    // ï¿½Xï¿½eï¿½[ï¿½Wï¿½^ï¿½Cï¿½gï¿½ï¿½
     sf::Text title(m_font, sf::String::fromUtf8(stage->name.begin(), stage->name.end()));
     title.setCharacterSize(36);
-    // ƒpƒlƒ‹“à‚Ì‘Š‘ÎˆÊ’u‚É”z’u
+    // ï¿½pï¿½lï¿½ï¿½ï¿½ï¿½ï¿½Ì‘ï¿½ï¿½ÎˆÊ’uï¿½É”zï¿½u
     title.setPosition({ centerX - 300.f, 180.f });
     m_render.Draw(title);
 
-    // ƒ‚ƒ“ƒXƒ^[•\¦
+    // ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½^ï¿½[ï¿½\ï¿½ï¿½
     DrawStageMonsters(stage, offsetX);
 
-    // ƒeƒLƒXƒgî•ñ
+    // ï¿½eï¿½Lï¿½Xï¿½gï¿½ï¿½ï¿½
     sf::Text info(m_font, std::to_string(stage->enemyIds.size()) + " Enemies\nSpecial Rules: None");
     info.setCharacterSize(24);
     info.setPosition({ centerX - 300.f, 450.f });
@@ -138,14 +139,14 @@ void StageBuildView::DrawStageContent(const StageData* stage, float offsetX)
 }
 
 /// <summary>
-/// oŒ»ƒ‚ƒ“ƒXƒ^[•\¦
+/// ï¿½oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½^ï¿½[ï¿½\ï¿½ï¿½
 /// </summary>
 /// <param name="data"></param>
 /// <param name="offsetX"></param>
 void StageBuildView::DrawStageMonsters(const StageData* data, float offsetX)
-{
-    constexpr float MONSTER_Y = 320.f;
-    constexpr float SPACING = 160.f;
+// ã‚¹ãƒ†ãƒ¼ã‚¸ãƒ“ãƒ«ãƒ‰å®šæ•° (Constants.h ã¨é‡è¤‡ã™ã‚‹ãŸã‚ã‚³ãƒ¡ãƒ³ãƒˆã‚¢ã‚¦ãƒˆ)
+constexpr float MONSTER_Y = Constants::MONSTER_Y;
+constexpr float SPACING = Constants::SPACING;
     constexpr sf::Vector2f ICON_SIZE{ 120.f, 120.f };
 
     float centerX = 640.f + offsetX;
@@ -169,14 +170,14 @@ void StageBuildView::DrawStageMonsters(const StageData* data, float offsetX)
         sprite.setScale({ ICON_SIZE.x / size.x, ICON_SIZE.y / size.y });
         sprite.setOrigin({ ICON_SIZE.x / 2.f, ICON_SIZE.y / 2.f });
 
-        // ƒAƒCƒRƒ“‚ğ‰¡•À‚Ñ‚É”z’u
+        // ï¿½Aï¿½Cï¿½Rï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ‚É”zï¿½u
         sprite.setPosition({ centerX - SPACING + (i * SPACING), MONSTER_Y });
         m_render.Draw(sprite);
     }
 }
 
 /// <summary>
-/// ƒXƒNƒ[ƒ‹—p‚ÌXVƒƒ\ƒbƒh
+/// ï¿½Xï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½pï¿½ÌXï¿½Vï¿½ï¿½ï¿½\ï¿½bï¿½h
 /// </summary>
 /// <param name="window"></param>
 /// <param name="stageCount"></param>
@@ -185,7 +186,7 @@ void StageBuildView::UpdateScroll(sf::RenderWindow& window, size_t stageCount)
     auto& input = InPutMouseManager::GetInstance();
     m_scrollOffsetY += input.GetWheelDelta() * 30.f;
 
-    // ƒXƒNƒ[ƒ‹§ŒÀ (ƒŠƒXƒg•\¦‚ğ•œŠˆ‚³‚¹‚éê‡‚Ég—p)
+    // ï¿½Xï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½Xï¿½gï¿½\ï¿½ï¿½ï¿½ğ•œŠï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½Égï¿½p)
     float minY = -(stageCount * ITEM_HEIGHT);
     if (m_scrollOffsetY < minY)
     {

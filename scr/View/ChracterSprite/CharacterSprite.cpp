@@ -1,4 +1,5 @@
 #include "CharacterSprite.h"
+#include "System/Constants.h"
 
 
 CharacterSprite::CharacterSprite(const std::string& arg_textureKey)
@@ -7,9 +8,9 @@ CharacterSprite::CharacterSprite(const std::string& arg_textureKey)
 }
 
 /// <summary>
-/// ‰Šú‰»
+/// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 /// </summary>
-/// <param name="arg_textureKey">ƒeƒNƒXƒ`ƒƒƒL[</param>
+/// <param name="arg_textureKey">ï¿½eï¿½Nï¿½Xï¿½`ï¿½ï¿½ï¿½Lï¿½[</param>
 void CharacterSprite::Init(const std::string& arg_textureKey)
 {
 
@@ -22,8 +23,8 @@ void CharacterSprite::Init(const std::string& arg_textureKey)
 
     const sf::Vector2u texSize = tex->getSize();
 
-    constexpr int DIV_X = 9;
-    constexpr int DIV_Y = 6;
+    constexpr int DIV_X = Constants::DIV_X;
+    constexpr int DIV_Y = Constants::DIV_Y;
 
     m_cellSize.x = texSize.x / DIV_X;
     m_cellSize.y = texSize.y / DIV_Y;
@@ -31,9 +32,9 @@ void CharacterSprite::Init(const std::string& arg_textureKey)
     const int W = m_cellSize.x;
     const int H = m_cellSize.y;
 
-    // ===== ó‘Ô‚²‚Æ‚Ì Rect ’è‹` =====
-    // ¦ ”’l‚Íu¶ã x, y, ‰¡, cv
-    // ÀÛ‚Ì‰æ‘œ‚É‡‚í‚¹‚Ä’²®‚µ‚ÄOK
+    // ===== ï¿½ï¿½Ô‚ï¿½ï¿½Æ‚ï¿½ Rect ï¿½ï¿½` =====
+    // ï¿½ï¿½ ï¿½ï¿½ï¿½lï¿½Íuï¿½ï¿½ï¿½ï¿½ x, y, ï¿½ï¿½, ï¿½cï¿½v
+    // ï¿½ï¿½ï¿½Û‚Ì‰æ‘œï¿½Éï¿½ï¿½í‚¹ï¿½Ä’ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½OK
 
     m_rectTable[CharacterAnimState::WAIT] = sf::IntRect(sf::Vector2i{ W*0, H*0 }, sf::Vector2i{ W, H });
     m_rectTable[CharacterAnimState::ATTACK] = sf::IntRect(sf::Vector2i{ W*3, H*0 }, sf::Vector2i{ W, H });
@@ -46,9 +47,9 @@ void CharacterSprite::Init(const std::string& arg_textureKey)
 }
 
 /// <summary>
-/// À•Wİ’è
+/// ï¿½ï¿½ï¿½Wï¿½İ’ï¿½
 /// </summary>
-/// <param name="arg_pos">İ’èÀ•W</param>
+/// <param name="arg_pos">ï¿½İ’ï¿½ï¿½ï¿½W</param>
 void CharacterSprite::SetPosition(const sf::Vector2f& arg_pos)
 {
     m_sprite.setPosition(arg_pos);
@@ -57,7 +58,7 @@ void CharacterSprite::SetPosition(const sf::Vector2f& arg_pos)
 }
 
 /// <summary>
-/// …•½•ûŒü‚Ì‰æ‘œ”½“]
+/// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì‰æ‘œï¿½ï¿½ï¿½]
 /// </summary>
 void CharacterSprite::SetSpriteWidthMirror()
 {
@@ -66,7 +67,7 @@ void CharacterSprite::SetSpriteWidthMirror()
 }
 
 /// <summary>
-/// ‚’¼•ûŒü‚Ì‰æ‘œ”½“]
+/// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì‰æ‘œï¿½ï¿½ï¿½]
 /// </summary>
 void CharacterSprite::SetSpriteHeightMirror()
 {
@@ -75,9 +76,9 @@ void CharacterSprite::SetSpriteHeightMirror()
 }
 
 /// <summary>
-/// ƒAƒjƒ[ƒVƒ‡ƒ“ƒXƒe[ƒgİ’è
+/// ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½eï¿½[ï¿½gï¿½İ’ï¿½
 /// </summary>
-/// <param name="arg_state">İ’èƒAƒjƒ[ƒVƒ‡ƒ“ƒXƒe[ƒg</param>
+/// <param name="arg_state">ï¿½İ’ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½eï¿½[ï¿½g</param>
 void CharacterSprite::SetState(CharacterAnimState arg_state)
 {
 
@@ -91,21 +92,21 @@ void CharacterSprite::SetState(CharacterAnimState arg_state)
 }
 
 /// <summary>
-/// •`‰æ
+/// ï¿½`ï¿½ï¿½
 /// </summary>
-/// <param name="arg_render">ƒŒƒ“ƒ_[ƒVƒXƒeƒ€</param>
+/// <param name="arg_render">ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½[ï¿½Vï¿½Xï¿½eï¿½ï¿½</param>
 void CharacterSprite::Draw(RenderSystem& arg_render, const CharacterData& arg_data, bool hpDrawFlag)
 {
     arg_render.Draw(m_sprite);
     if (hpDrawFlag)
     {
-        // HP‚Ì•`‰æ
-        // --- “h‚è‚Â‚Ô‚µƒQ[ƒW ---
+        // HPï¿½Ì•`ï¿½ï¿½
+        // --- ï¿½hï¿½ï¿½Â‚Ô‚ï¿½ï¿½Qï¿½[ï¿½W ---
         float ratio = static_cast<float>(arg_data.hp) / arg_data.maxHp;
         m_fill.setSize({ 100.0f * ratio, 10.0f });
         m_fill.setFillColor(sf::Color::Green);
 
-        // --- ˜gü ---
+        // --- ï¿½gï¿½ï¿½ ---
         m_frame.setSize({ 100.0f, 10.0f });
         m_frame.setFillColor(sf::Color::Transparent);
         m_frame.setOutlineColor(sf::Color::White);

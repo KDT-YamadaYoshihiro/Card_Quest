@@ -1,4 +1,5 @@
 #include "UserController.h"
+#include "System/Constants.h"
 #include "System/InPutManager/InPutMouseManager.h"
 #include "System/Battle/BattleContex/BattleContext.h"
 #include "View/BattleView/BattleView.h"
@@ -6,18 +7,18 @@
 #include "Entity/Card/Card.h"
 #include "Entity/Card/CardManager/CardManager.h"
 #include "View/ConsoleView/ConsoleView.h"
-namespace
+namespace UserControllerConstants
 {
-    constexpr float CHAR_W = 165.f;
-    constexpr float CHAR_H = 150.f;
-
-    constexpr float CARD_W = 120.f;
-    constexpr float CARD_H = 160.f;
-
+    // UI é…ç½®å®šæ•° (Constants.h ã¨é‡è¤‡ã™ã‚‹ãŸã‚ã‚³ãƒ¡ãƒ³ãƒˆã‚¢ã‚¦ãƒˆ)
     constexpr sf::Vector2f HAND_START{ 200.f, 520.f };
-    constexpr float HAND_SPACING = 180.f;
+    constexpr float HAND_SPACING = Constants::HAND_SPACING;
+    constexpr float SELECT_OFFSET_Y = Constants::SELECT_OFFSET_Y;
 }
 
+/// <summary>
+/// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+/// </summary>
+/// <param name="context"></param>
 UserController::UserController(BattleContext& context,BattleView& battleView)
     : m_context(context),
     m_battleView(battleView)
@@ -32,22 +33,22 @@ void UserController::Update(sf::RenderWindow& window)
     {
     case PlayerSelectPhase::SELECT_CARD:
 
-        ConsoleView::GetInstance().Add("ƒJ[ƒh‘I‘ğ’†\n");
-        // À•WŒn‚ÌXV
+        ConsoleView::GetInstance().Add("ï¿½Jï¿½[ï¿½hï¿½Iï¿½ï¿½\n");
+        // ï¿½ï¿½ï¿½Wï¿½nï¿½ÌXï¿½V
         UpdateHandCardRects();
-        // ‘I‘ğXV
+        // ï¿½Iï¿½ï¿½ï¿½Xï¿½V
         UpdateSelectCard(window, mousePos);
         break;
     case PlayerSelectPhase::CREATE_TARGETS:
-        ConsoleView::GetInstance().Add("ƒ^[ƒQƒbƒgŒó•âì¬\n");
-        // Œó•âì¬
+        ConsoleView::GetInstance().Add("ï¿½^ï¿½[ï¿½Qï¿½bï¿½gï¿½ï¿½ï¿½ì¬\n");
+        // ï¿½ï¿½ï¿½ì¬
         UpdateCreateTargets();
         break;
     case PlayerSelectPhase::SELECT_TARGET:
-        ConsoleView::GetInstance().Add("ƒ^[ƒQƒbƒg‘I‘ğ’†\n");
-        // À•WŒn‚ÌXV
+        ConsoleView::GetInstance().Add("ï¿½^ï¿½[ï¿½Qï¿½bï¿½gï¿½Iï¿½ï¿½\n");
+        // ï¿½ï¿½ï¿½Wï¿½nï¿½ÌXï¿½V
         UpdateCharacterRects(m_targetCandidates);
-        // ‘I‘ğXV
+        // ï¿½Iï¿½ï¿½ï¿½Xï¿½V
         UpdateSelectTarget(window);
         break;
     case PlayerSelectPhase::DONE:
@@ -67,7 +68,7 @@ UserAction UserController::ConsumeAction()
     UserAction result = *m_confirmedAction;
     m_confirmedAction.reset();
 
-    // Ÿ‚Ì“ü—Í‚É”õ‚¦‚ÄƒŠƒZƒbƒg
+    // ï¿½ï¿½ï¿½Ì“ï¿½ï¿½Í‚É”ï¿½ï¿½ï¿½ï¿½Äƒï¿½ï¿½Zï¿½bï¿½g
     m_phase = PlayerSelectPhase::SELECT_CARD;
     m_selectedActor.reset();
     m_selectedCardIndex = -1;
@@ -77,11 +78,11 @@ UserAction UserController::ConsumeAction()
     return result;
 }
 
-// ================= ‘I‘ğˆ— =================
+// ================= ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ =================
 
 
 /// <summary>
-/// ƒJ[ƒh‘I‘ğ
+/// ï¿½Jï¿½[ï¿½hï¿½Iï¿½ï¿½
 /// </summary>
 /// <param name="window"></param>
 /// <param name="mousePos"></param>
@@ -97,7 +98,7 @@ void UserController::UpdateSelectCard(sf::RenderWindow& window, const sf::Vector
     {
         if (cardIndex != -1)
         {
-            // ƒJ[ƒh‘I‘ğˆ—‚ÌÀs
+            // ï¿½Jï¿½[ï¿½hï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½ï¿½s
             SelectCard(cardIndex);
         }
     }
@@ -123,17 +124,17 @@ void UserController::SelectCard(int cardIdx)
 
     if (!m_targetCandidates.empty())
     {
-        // ƒ^[ƒQƒbƒgƒ^ƒCƒv‚É‚æ‚éƒtƒH[ƒJƒX•ªŠò
-        if (cardData.targetType == TargetType::ALLY_ALL || cardData.targetType == TargetType::OPPONENT_ALL) // ‘S‘Ì‘ÎÛ‚Ìê‡
+        // ï¿½^ï¿½[ï¿½Qï¿½bï¿½gï¿½^ï¿½Cï¿½vï¿½É‚ï¿½ï¿½tï¿½Hï¿½[ï¿½Jï¿½Xï¿½ï¿½ï¿½ï¿½
+        if (cardData.targetType == TargetType::ALLY_ALL || cardData.targetType == TargetType::OPPONENT_ALL) // ï¿½Sï¿½Ì‘ÎÛ‚Ìê‡
         {
-            // ‘Sˆõ‚ğƒtƒH[ƒJƒX
+            // ï¿½Sï¿½ï¿½ï¿½ï¿½ï¿½tï¿½Hï¿½[ï¿½Jï¿½X
             m_context.SetFocusTargets(m_targetCandidates);
             
             m_preSelectedTarget = nullptr;
         }
-        else // ’P‘Ì‘ÎÛ‚Ìê‡iƒfƒtƒHƒ‹ƒgj
+        else // ï¿½Pï¿½Ì‘ÎÛ‚Ìê‡ï¿½iï¿½fï¿½tï¿½Hï¿½ï¿½ï¿½gï¿½j
         {
-            // 0”Ô–Ú‚ğƒfƒtƒHƒ‹ƒgƒtƒH[ƒJƒX
+            // 0ï¿½Ô–Ú‚ï¿½ï¿½fï¿½tï¿½Hï¿½ï¿½ï¿½gï¿½tï¿½Hï¿½[ï¿½Jï¿½X
             m_preSelectedTarget = m_targetCandidates[0];
             m_context.SetFocusTargets({ m_preSelectedTarget });
         }
@@ -145,54 +146,54 @@ void UserController::SelectCard(int cardIdx)
 
 
 /// <summary>
-/// ƒ^[ƒQƒbƒgŒó•â‚Ìæ“¾
+/// ï¿½^ï¿½[ï¿½Qï¿½bï¿½gï¿½ï¿½ï¿½Ìæ“¾
 /// </summary>
 void UserController::UpdateCreateTargets()
 {
-    // ƒJ[ƒhIDAî•ñ‚Ìæ“¾
+    // ï¿½Jï¿½[ï¿½hIDï¿½Aï¿½ï¿½ï¿½Ìæ“¾
     const CardData& card = CardManager::GetInstance().GetCardData(m_selectCardId);
 
-    // ƒ^[ƒQƒbƒgŒó•â‚Ìæ“¾
+    // ï¿½^ï¿½[ï¿½Qï¿½bï¿½gï¿½ï¿½ï¿½Ìæ“¾
     m_targetCandidates = m_context.CreateTargetCandidates(card.targetType,m_selectedActor->GetFaction(),m_selectedActor);
 
-    // ƒ^[ƒQƒbƒg‚ª‹ó‚Å‚È‚¢‚©Šm”F
+    // ï¿½^ï¿½[ï¿½Qï¿½bï¿½gï¿½ï¿½ï¿½ï¿½Å‚È‚ï¿½ï¿½ï¿½ï¿½mï¿½F
     if (m_targetCandidates.empty()) {
         m_phase = PlayerSelectPhase::SELECT_CARD;
         return;
     }
 
-    // ƒ^[ƒQƒbƒg‘I‘ğƒtƒF[ƒYˆÚs‚Ì‰Šúİ’è
+    // ï¿½^ï¿½[ï¿½Qï¿½bï¿½gï¿½Iï¿½ï¿½ï¿½tï¿½Fï¿½[ï¿½Yï¿½Úsï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½İ’ï¿½
     if (card.targetType == TargetType::OPPONENT_ALL || card.targetType == TargetType::ALLY_ALL) {
-        // ‘Sˆõ‚ğƒtƒH[ƒJƒX
+        // ï¿½Sï¿½ï¿½ï¿½ï¿½ï¿½tï¿½Hï¿½[ï¿½Jï¿½X
         m_context.SetFocusTargets(m_targetCandidates);
     }
     else {
-        // ƒfƒtƒH‚Å0”Ô–Ú‚ğ‰¼‘I‘ğEƒtƒH[ƒJƒX
+        // ï¿½fï¿½tï¿½Hï¿½ï¿½0ï¿½Ô–Ú‚ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½Eï¿½tï¿½Hï¿½[ï¿½Jï¿½X
         m_preSelectedTarget = m_targetCandidates[0];
         m_context.SetFocusTargets({ m_preSelectedTarget });
     }
 
-    // Focus•\¦
+    // Focusï¿½\ï¿½ï¿½
     m_context.SetFocusDraw(true);
 
     m_phase = PlayerSelectPhase::SELECT_TARGET;
 }
 
 /// <summary>
-/// ƒ^[ƒQƒbƒg‘I‘ğ
+/// ï¿½^ï¿½[ï¿½Qï¿½bï¿½gï¿½Iï¿½ï¿½
 /// </summary>
 /// <param name="window"></param>
 void UserController::UpdateSelectTarget(sf::RenderWindow& window)
 {
 	sf::Vector2f mousePos = InPutMouseManager::GetInstance().GetMousePosition(window);
 
-    // --- ’Ç‰Ád—lFƒ^[ƒQƒbƒg‘I‘ğ’†‚àƒJ[ƒh‚ÌƒNƒŠƒbƒN‚ğƒ`ƒFƒbƒN ---
+    // --- ï¿½Ç‰ï¿½ï¿½dï¿½lï¿½Fï¿½^ï¿½[ï¿½Qï¿½bï¿½gï¿½Iï¿½ğ’†‚ï¿½ï¿½Jï¿½[ï¿½hï¿½ÌƒNï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½`ï¿½Fï¿½bï¿½N ---
     int cardIdx = HitTestHandCard(mousePos);
     if (InPutMouseManager::GetInstance().IsLeftClicked() && cardIdx != -1)
     {
-        // •Ê‚ÌƒJ[ƒhi‚Ü‚½‚Í“¯‚¶ƒJ[ƒhj‚ªƒNƒŠƒbƒN‚³‚ê‚½‚çAƒJ[ƒh‘I‘ğ‚ğ‚â‚è’¼‚·
+        // ï¿½Ê‚ÌƒJï¿½[ï¿½hï¿½iï¿½Ü‚ï¿½ï¿½Í“ï¿½ï¿½ï¿½ï¿½Jï¿½[ï¿½hï¿½jï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½ê‚½ï¿½ï¿½Aï¿½Jï¿½[ï¿½hï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è’¼ï¿½ï¿½
         SelectCard(cardIdx);
-        return; // ˆÈ~‚Ìƒ^[ƒQƒbƒg”»’è‚ÍƒXƒLƒbƒv
+        return; // ï¿½È~ï¿½Ìƒ^ï¿½[ï¿½Qï¿½bï¿½gï¿½ï¿½ï¿½ï¿½ÍƒXï¿½Lï¿½bï¿½v
     }
 
     int targetIdx = HitTestCharacter(mousePos, m_targetCandidates);
@@ -205,24 +206,24 @@ void UserController::UpdateSelectTarget(sf::RenderWindow& window)
             auto clickedTarget = m_targetCandidates[targetIdx];
             auto cardData = CardManager::GetInstance().GetCardData(m_selectCardId);
 
-            // --- d—l•ÏXF‘S‘ÌUŒ‚‚Æ’P‘ÌUŒ‚‚ÅŒˆ’èƒƒWƒbƒN‚ğ•ª‚¯‚é ---
+            // --- ï¿½dï¿½lï¿½ÏXï¿½Fï¿½Sï¿½ÌUï¿½ï¿½ï¿½Æ’Pï¿½ÌUï¿½ï¿½ï¿½ÅŒï¿½ï¿½èƒï¿½Wï¿½bï¿½Nï¿½ğ•ª‚ï¿½ï¿½ï¿½ ---
             if (cardData.targetType == TargetType::ALLY_ALL || cardData.targetType == TargetType::OPPONENT_ALL)
             {
-                // ‘Sˆõƒ^[ƒQƒbƒg
+                // ï¿½Sï¿½ï¿½ï¿½^ï¿½[ï¿½Qï¿½bï¿½gï¿½ï¿½
                 ConfirmAction(m_targetCandidates);
                 m_context.SetFocusDraw(false);
 
             }
             else if (m_preSelectedTarget == clickedTarget)
             {
-                // 2‰ñ–ÚFŒˆ’è
+                // 2ï¿½ï¿½ÚFï¿½ï¿½ï¿½ï¿½
                 std::vector<std::shared_ptr<Character>> targets = { clickedTarget };
                 ConfirmAction(targets);
                 m_context.SetFocusDraw(false);
             }
             else
             {
-                // 1‰ñ–ÚFƒtƒH[ƒJƒXXV
+                // 1ï¿½ï¿½ÚFï¿½tï¿½Hï¿½[ï¿½Jï¿½Xï¿½Xï¿½V
                 m_preSelectedTarget = clickedTarget;
                 m_context.ClearFocusTargets();
                 m_context.SetFocusTargets({ m_preSelectedTarget });
@@ -246,7 +247,7 @@ void UserController::ConfirmAction(const std::vector<std::shared_ptr<Character>>
 }
 
 /// <summary>
-/// ƒLƒƒƒ‰ƒNƒ^[ƒNƒŠƒbƒN”»’è
+/// ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½^ï¿½[ï¿½Nï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½
 /// </summary>
 /// <param name="mousePos"></param>
 /// <param name="list"></param>
@@ -266,7 +267,7 @@ int UserController::HitTestCharacter(
 }
 
 /// <summary>
-/// ƒJ[ƒhƒNƒŠƒbƒN”»’è
+/// ï¿½Jï¿½[ï¿½hï¿½Nï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½
 /// </summary>
 /// <param name="mousePos"></param>
 /// <returns></returns>
@@ -283,7 +284,7 @@ int UserController::HitTestHandCard(const sf::Vector2f& mousePos) const
 }
 
 /// <summary>
-/// ƒLƒƒƒ‰ƒNƒ^[ƒNƒŠƒbƒN”ÍˆÍ
+/// ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½^ï¿½[ï¿½Nï¿½ï¿½ï¿½bï¿½Nï¿½Íˆï¿½
 /// </summary>
 /// <param name="list"></param>
 void UserController::UpdateCharacterRects(
@@ -308,7 +309,7 @@ void UserController::UpdateCharacterRects(
 }
 
 /// <summary>
-/// ƒJ[ƒhƒNƒŠƒbƒN”»’è
+/// ï¿½Jï¿½[ï¿½hï¿½Nï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½
 /// </summary>
 /// <param name="actor"></param>
 void UserController::UpdateHandCardRects()
@@ -324,41 +325,41 @@ void UserController::UpdateHandCardRects()
 
     for (int i = 0; i < cardCount; ++i)
     {
-        // •`‰æ(BattleView)‚Æ“¯‚¶ŒvZ®‚ÅRect‚ğì¬
+        // ï¿½`ï¿½ï¿½(BattleView)ï¿½Æ“ï¿½ï¿½ï¿½ï¿½vï¿½Zï¿½ï¿½ï¿½ï¿½Rectï¿½ï¿½ï¿½ì¬
         sf::Vector2f pos = HAND_START;
         pos.x += i * HAND_SPACING;
 
-        // ƒJ[ƒh‚Ì‹éŒ`‚ğ“o˜^
+        // ï¿½Jï¿½[ï¿½hï¿½Ì‹ï¿½`ï¿½ï¿½oï¿½^
         m_handCardRects.push_back(sf::FloatRect({ pos.x, pos.y }, { CARD_W, CARD_H }));
     }
 }
 
-// ================= •â• =================
+// ================= ï¿½â• =================
 
 /// <summary>
-/// ƒ}ƒEƒX‚Ìuƒ[ƒ‹ƒhÀ•Wv‚ğæ“¾iƒLƒƒƒ‰ƒNƒ^[”»’è—pj
+/// ï¿½}ï¿½Eï¿½Xï¿½Ìuï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½Wï¿½vï¿½ï¿½ï¿½æ“¾ï¿½iï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½^ï¿½[ï¿½ï¿½ï¿½ï¿½pï¿½j
 /// </summary>
 sf::Vector2f UserController::GetWorldMousePos(sf::RenderWindow& window) const
 {
-    // Œ»İ‚ÌƒEƒBƒ“ƒhƒE“à‚Ìƒ}ƒEƒXƒsƒNƒZƒ‹ˆÊ’u‚ğæ“¾
+    // ï¿½ï¿½ï¿½İ‚ÌƒEï¿½Bï¿½ï¿½ï¿½hï¿½Eï¿½ï¿½ï¿½Ìƒ}ï¿½Eï¿½Xï¿½sï¿½Nï¿½Zï¿½ï¿½ï¿½Ê’uï¿½ï¿½ï¿½æ“¾
     sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
 
-    // Œ»İ‚ÌƒJƒƒ‰iViewj‚Ìİ’è‚ÉŠî‚Ã‚¢‚ÄAƒ[ƒ‹ƒhÀ•W‚É•ÏŠ·
-    // ‚±‚ê‚É‚æ‚èAƒY[ƒ€‚âƒXƒNƒ[ƒ‹‚Ìó‘Ô‚ª”½‰f‚³‚ê‚½À•W‚ª•Ô‚è‚Ü‚·
+    // ï¿½ï¿½ï¿½İ‚ÌƒJï¿½ï¿½ï¿½ï¿½ï¿½iViewï¿½jï¿½Ìİ’ï¿½ÉŠï¿½Ã‚ï¿½ï¿½ÄAï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½Wï¿½É•ÏŠï¿½
+    // ï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½Aï¿½Yï¿½[ï¿½ï¿½ï¿½ï¿½Xï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Ìï¿½Ô‚ï¿½ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½ê‚½ï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½Ô‚ï¿½Ü‚ï¿½
     return window.mapPixelToCoords(pixelPos);
 }
 
 /// <summary>
-/// ƒ}ƒEƒX‚ÌuƒXƒNƒŠ[ƒ“À•Wv‚ğæ“¾iUI/ƒJ[ƒh”»’è—pj
+/// ï¿½}ï¿½Eï¿½Xï¿½Ìuï¿½Xï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Wï¿½vï¿½ï¿½ï¿½æ“¾ï¿½iUI/ï¿½Jï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½pï¿½j
 /// </summary>
 sf::Vector2f UserController::GetScreenMousePos(sf::RenderWindow& window) const
 {
     sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
 
-    // UI‚ÍƒJƒƒ‰‚Ì‰e‹¿‚ğó‚¯‚È‚¢‚½‚ßAƒfƒtƒHƒ‹ƒgViewi‰æ–Ê‚»‚Ì‚Ü‚Ü‚ÌÀ•Wj‚Å•ÏŠ·
+    // UIï¿½ÍƒJï¿½ï¿½ï¿½ï¿½ï¿½Ì‰eï¿½ï¿½ï¿½ï¿½ï¿½ó‚¯‚È‚ï¿½ï¿½ï¿½ï¿½ßAï¿½fï¿½tï¿½Hï¿½ï¿½ï¿½gViewï¿½iï¿½ï¿½Ê‚ï¿½ï¿½Ì‚Ü‚Ü‚Ìï¿½ï¿½Wï¿½jï¿½Å•ÏŠï¿½
     return window.mapPixelToCoords(pixelPos, window.getDefaultView());
 }
-// ƒfƒoƒbƒO—p•`‰æ
+// ï¿½fï¿½oï¿½bï¿½Oï¿½pï¿½`ï¿½ï¿½
 void UserController::DrawDebug(sf::RenderWindow& window)
 {
     sf::RectangleShape r;
