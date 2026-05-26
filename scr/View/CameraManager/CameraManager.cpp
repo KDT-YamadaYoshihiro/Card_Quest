@@ -11,13 +11,13 @@ void CameraManager::ViewInit(const sf::Vector2f& center, const sf::Vector2f& siz
 
 void CameraManager::ViewUpdate(float arg_dt)
 {
-	// ƒY[ƒ€
+	// ï¿½Yï¿½[ï¿½ï¿½
 	ViewZoomTo(arg_dt);
-	// ˆÚ“®
+	// ï¿½Ú“ï¿½
 	ViewMoveTo(arg_dt);
-	// ’Ç”ö
+	// ï¿½Ç”ï¿½
 	ViewFollow(arg_dt);
-	// ƒVƒFƒCƒN
+	// ï¿½Vï¿½Fï¿½Cï¿½N
 	ViewShake(arg_dt);
 }
 
@@ -46,7 +46,7 @@ void CameraManager::ViewZoomTo(float arg_dt)
 		}
 
 		sf::Vector2f baseSize = { m_view.getSize().x / (m_view.getSize().x / m_view.getSize().x), m_view.getSize().y }; 
-		m_view.setSize(sf::Vector2f(1280.0f * m_currentZoom, 720.0f * m_currentZoom)); 
+		m_view.setSize(sf::Vector2f(1280.f * m_currentZoom, 720.f * m_currentZoom)); \
 	
 	}
 }

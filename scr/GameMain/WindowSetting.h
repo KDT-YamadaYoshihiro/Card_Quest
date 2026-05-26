@@ -11,12 +11,12 @@ class WindowSetting : public Singleton<WindowSetting>
 	sf::Vector2u m_windowSize; // window size
     std::string m_windowTitle;  // window title
 
-    WindowSetting() : m_windowMode(true), m_windowSize({ 1280,720 }), m_windowTitle("Card_Quest") {}
+    WindowSetting() : m_windowMode(true), m_windowSize({ Constants::WINDOW_WIDTH, Constants::WINDOW_HEIGHT }), m_windowTitle("Card_Quest") {}
     ~WindowSetting() {}
 
 public:
 
-    // ƒRƒs[‹Ö~A‘ã“ü‹Ö~
+    // ï¿½Rï¿½sï¿½[ï¿½Ö~ï¿½Aï¿½ï¿½ï¿½ï¿½Ö~
     WindowSetting(const WindowSetting&) = delete;
     WindowSetting& operator=(const WindowSetting&) = delete;
     static WindowSetting& GetInstance()
@@ -25,14 +25,14 @@ public:
         return instance;
     }
 
-    //@•\¦‚·‚éƒEƒBƒ“ƒhƒEƒ‚[ƒhifull , window‚ÌƒZƒbƒgƒQƒbƒgŠÖ”j
+    //ï¿½@ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Eï¿½ï¿½ï¿½[ï¿½hï¿½ifull , windowï¿½ÌƒZï¿½bï¿½gï¿½Qï¿½bï¿½gï¿½Öï¿½ï¿½j
     void SetWindowMode(bool isWindowed) { m_windowMode = isWindowed; }
     bool GetWindowMode() const { return m_windowMode; }
 
-    // ƒEƒBƒ“ƒhƒEƒTƒCƒY‚Ìæ“¾
+    // ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Eï¿½Tï¿½Cï¿½Yï¿½Ìæ“¾
 	const sf::Vector2u& GetWindowSize() const { return m_windowSize; }
 
-    // ƒEƒBƒ“ƒhƒEƒ^ƒCƒgƒ‹‚Ìæ“¾
+    // ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Eï¿½^ï¿½Cï¿½gï¿½ï¿½ï¿½Ìæ“¾
     const std::string& GetWindowTitle() const { return m_windowTitle; }
 
 };

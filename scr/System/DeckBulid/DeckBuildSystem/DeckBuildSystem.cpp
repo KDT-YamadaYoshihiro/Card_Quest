@@ -9,12 +9,12 @@ void DeckBuildSystem::LoadDeckFromManager()
 
     m_deckCards.clear();
 
-    // CardManager ‚©‚çŒ»İ‚ÌƒfƒbƒL ID ƒŠƒXƒg‚ğæ“¾
+    // CardManager ï¿½ï¿½ï¿½çŒ»ï¿½İ‚Ìƒfï¿½bï¿½L ID ï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½æ“¾
     const auto& currentDeckIds = CardManager::GetInstance().GetCardMasterIds();
 
     for (int id : currentDeckIds)
     {
-        // ID ‚©‚ç Card ƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬‚µ‚ÄŠi”[
+        // ID ï¿½ï¿½ï¿½ï¿½ Card ï¿½Nï¿½ï¿½ï¿½Xï¿½ÌƒCï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Xï¿½ğ¶ï¿½ï¿½ï¿½ï¿½ÄŠiï¿½[
         auto card = CardFactory::GetInstance().CreateCard(id);
         if (card)
         {
@@ -23,7 +23,7 @@ void DeckBuildSystem::LoadDeckFromManager()
     }
 }
 
-// ‰Šú‰»
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 void DeckBuildSystem::Init()
 {
 
@@ -34,18 +34,18 @@ void DeckBuildSystem::Init()
     RebuildDisplayDeck();
 }
 
-// XV
+// ï¿½Xï¿½V
 void DeckBuildSystem::Update(sf::Vector2f mousePos, bool isClick, bool isDragging, bool released, float wheelDelta)
 {
 
-    // ƒzƒC[ƒ‹
+    // ï¿½zï¿½Cï¿½[ï¿½ï¿½
     if (wheelDelta != 0.f)
     {
         m_poolScrollX += wheelDelta * 40.f;
         ClampPoolScroll();
     }
 
-    // ‰Ÿ‚µ‚½uŠÔ
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½uï¿½ï¿½
     if (isClick && !m_prevClick)
     {
         m_mouseDownPos = mousePos;
@@ -55,12 +55,12 @@ void DeckBuildSystem::Update(sf::Vector2f mousePos, bool isClick, bool isDraggin
         m_deckDragging = false;
     }
 
-    // ƒhƒ‰ƒbƒO”»’è
+    // ï¿½hï¿½ï¿½ï¿½bï¿½Oï¿½ï¿½ï¿½ï¿½
     if (isDragging)
     {
         float dragDist = std::abs(mousePos.x - m_mouseDownPos.x);
 
-        if (dragDist > 5.f) // © ƒNƒŠƒbƒN/ƒhƒ‰ƒbƒO•ª—£è‡’l
+        if (dragDist > 5.f) // ï¿½ï¿½ ï¿½Nï¿½ï¿½ï¿½bï¿½N/ï¿½hï¿½ï¿½ï¿½bï¿½Oï¿½ï¿½ï¿½ï¿½è‡’l
         {
             m_dragStarted = true;
 
@@ -74,7 +74,7 @@ void DeckBuildSystem::Update(sf::Vector2f mousePos, bool isClick, bool isDraggin
         }
     }
 
-    // ƒhƒ‰ƒbƒO’†
+    // ï¿½hï¿½ï¿½ï¿½bï¿½Oï¿½ï¿½
     if (m_dragStarted)
     {
         float deltaX = mousePos.x - m_lastMouseX;
@@ -93,7 +93,7 @@ void DeckBuildSystem::Update(sf::Vector2f mousePos, bool isClick, bool isDraggin
         }
     }
 
-    // —£‚µ‚½uŠÔ
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½uï¿½ï¿½
     if (released)
     {
         if (!m_dragStarted)
@@ -114,176 +114,172 @@ void DeckBuildSystem::Update(sf::Vector2f mousePos, bool isClick, bool isDraggin
     m_prevClick = isClick;
 }
 
-// •`‰æ
+// ï¿½`ï¿½ï¿½
 void DeckBuildSystem::Draw(sf::RenderWindow& window, const sf::Font& font)
 {
 
-	// Scene ‚ÌˆÄ“à•¶š
+	// ã‚·ãƒ¼ãƒ³ã‚¿ã‚¤ãƒˆãƒ«
 	sf::Text titleText(font, "Deck Build");
-	titleText.setCharacterSize(50);
+	titleText.setCharacterSize(ui_font_sizes::TITLE_SIZE);
 	titleText.setFillColor(sf::Color::White);
-	titleText.setPosition({ 50.f, 10.f });
+	titleText.setPosition({ 50.f, ui_layout::DECK_X_START });
 	window.draw(titleText);
 
-    // ˆÄ“à•¶š
-	sf::Text instructionText(font, "-Please select the cards.-");
-	instructionText.setCharacterSize(30);
-	instructionText.setFillColor(sf::Color::White);
-	instructionText.setPosition({ 430.f, 80.f });
+    // æŒ‡ç¤ºãƒ†ã‚­ã‚¹ãƒˆ
+    sf::Text instructionText(font, "-Please select the cards.-");
+    instructionText.setCharacterSize(ui_font_sizes::INSTRUCTION_SIZE);
+    instructionText.setFillColor(sf::Color::White);
+    instructionText.setPosition({ ui_layout::INSTRUCTION_TEXT_X, 80.f });
 	window.draw(instructionText);
 
 
-    // ===== ƒfƒbƒL‘¤iã’ij =====
+    // ===== ï¿½fï¿½bï¿½Lï¿½ï¿½ï¿½iï¿½ï¿½iï¿½j =====
 
-     //@”wŒi•`‰æ
+     //ï¿½@ï¿½wï¿½iï¿½`ï¿½ï¿½
     sf::RectangleShape deckBG({ 1500.f, 250.f });
     deckBG.setPosition({ 0.f, m_deckStartPos.y - 40.f });
-    deckBG.setFillColor(sf::Color(20, 20, 20, 200)); // ”¼“§–¾‚Ì•
+    deckBG.setFillColor(sf::Color(20, 20, 20, 200)); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½
     window.draw(deckBG);
 
-	// •¶š•`‰æ
+    // ãƒ‡ãƒƒã‚­ãƒ©ãƒ™ãƒ«
     sf::Text deckText(font, "Deck");
-    deckText.setCharacterSize(24);
+    deckText.setCharacterSize(ui_font_sizes::LABEL_SIZE);
     deckText.setFillColor(sf::Color::White);
-    deckText.setPosition({ 10.f, m_deckStartPos.y - 35.f });
-	window.draw(deckText);
+    deckText.setPosition({ ui_layout::DECK_X_START, ui_layout::DECK_LABEL_RELATIVE_Y_OFFSET });
 
-    // –‡”•\¦
-    sf::Text countText(font, std::to_string(m_deckCards.size()) + " / 30");
-    countText.setCharacterSize(20);
-    countText.setFillColor(sf::Color::White);
-    countText.setPosition({ 100.f,  m_deckStartPos.y - 35.f });
-    window.draw(countText);
-
+    // ã‚«ãƒ¼ãƒ‰æ•°è¡¨ç¤º
 
     for (size_t i = 0; i < m_displayDeck.size(); ++i)
     {
         sf::Vector2f pos = m_deckStartPos + sf::Vector2f(i * m_cardSpacing + m_deckScrollX, 0.f);
 
-        // ƒJ[ƒh–{‘Ì‚Ì•`‰æ
-        m_renderer->DrawSingleCard(font, window, pos,m_displayDeck[i].card->GetCardState(),"");
-
-        // –‡”•\¦ (*n)
+        // ã‚«ãƒ¼ãƒ‰æ•°è¡¨ç¤º (*n)
         if (m_displayDeck[i].count > 1)
         {
             sf::Text countText(font, "x" + std::to_string(m_displayDeck[i].count));
-            countText.setCharacterSize(20);
-            countText.setFillColor(sf::Color::Yellow);
+            countText.setCharacterSize(ui_font_sizes::DECK_COUNTER_SIZE);
+            countText.setFillColor(sf::Color::White);
             countText.setOutlineColor(sf::Color::Black);
             countText.setOutlineThickness(2.f);
-            countText.setPosition(pos + sf::Vector2f(80.f, 130.f)); // ‰E‰º•t‹ß
+            countText.setPosition(pos + sf::Vector2f(80.f, ui_layout::CARD_COUNT_Y_OFFSET)); // ã‚«ãƒ¼ãƒ‰æ•°è¡¨ç¤ºä½ç½®
             window.draw(countText);
+        }
         }
     }
 
-    // ===== ƒv[ƒ‹‘¤i‰º’ij =====
+    // ===== ï¿½vï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½iï¿½ï¿½ï¿½iï¿½j =====
 
-	//@”wŒi•`‰æ
+	//ï¿½@ï¿½wï¿½iï¿½`ï¿½ï¿½
     sf::RectangleShape poolBG({ 1500.f, 250.f });
     poolBG.setPosition({ 0.f,m_poolStartPos.y - 40.f });
-    poolBG.setFillColor(sf::Color(20, 20, 20, 200)); // ”¼“§–¾‚Ì•
+    poolBG.setFillColor(sf::Color(20, 20, 20, 200)); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½
     window.draw(poolBG);
+	window.draw(deckBG);
 
+	// ãƒ‡ãƒƒã‚­ãƒ©ãƒ™ãƒ«
+	sf::Text deckText(font, "Deck");
+	deckText.setCharacterSize(ui_font_sizes::LABEL_SIZE);
+	deckText.setFillColor(sf::Color::White);
+	deckText.setPosition({ ui_layout::DECK_X_START, ui_layout::DECK_LABEL_RELATIVE_Y_OFFSET });
 
-	// •¶š•`‰æ
-	sf::Text poolText(font, "Card");
-	poolText.setCharacterSize(24);
-	poolText.setFillColor(sf::Color::White);
-	poolText.setPosition({ 10.f, m_poolStartPos.y - 35.f });
-	window.draw(poolText);
+	// ã‚«ãƒ¼ãƒ‰æ•°è¡¨ç¤º
 
-	// ƒv[ƒ‹“àƒJ[ƒh•`‰æ
-    const auto& pool = CardBuildPool::GetInstance().GetPoolCards();
+	const auto& pool = CardBuildPool::GetInstance().GetPoolCards();
     for (size_t i = 0; i < m_displayPool.size(); ++i)
     {
         sf::Vector2f pos = { m_poolStartPos.x + m_cardSpacing * i + m_poolScrollX, m_poolStartPos.y };
 
         m_renderer->DrawSingleCard(font, window, pos, m_displayPool[i].card->GetCardState(),"");
 
-        // ~n •\¦
-        sf::Text countText(font, "x" + std::to_string(m_displayPool[i].count));
-        countText.setCharacterSize(18);
-        countText.setFillColor(sf::Color::Black);
-        countText.setPosition({ pos.x + 85.f, pos.y + 130.f });
-        window.draw(countText);
-    }
+        // ãƒ‡ãƒƒã‚­ãƒ©ãƒ™ãƒ«
+        sf::Text deckText(font, "Deck");
+        deckText.setCharacterSize(ui_font_sizes::LABEL_SIZE);
+        deckText.setFillColor(sf::Color::White);
+        deckText.setPosition({ ui_layout::DECK_X_START, ui_layout::DECK_LABEL_RELATIVE_Y_OFFSET });
 
+        // ã‚«ãƒ¼ãƒ‰æ•°è¡¨ç¤º
+
+        sf::Text countText(font, "x" + std::to_string(m_displayPool[i].count));
+        countText.setCharacterSize(ui_font_sizes::DECK_COUNTER_SIZE);
+        countText.setFillColor(sf::Color::White);
+        countText.setPosition({ pos.x + 85.f, pos.y + ui_layout::CARD_COUNT_Y_OFFSET });
+        window.draw(countText);
 }
 
-// ƒv[ƒ‹‚©‚çƒfƒbƒL‚É’Ç‰Á
+// ï¿½vï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½fï¿½bï¿½Lï¿½É’Ç‰ï¿½
 bool DeckBuildSystem::AddFromPool(int poolIndex)
 {
     if (m_deckCards.size() >= MAX_DECK_SIZE)
     {
-        ConsoleView::GetInstance().Add("ƒfƒbƒL‚ÌãŒÀ–‡”‚É’B‚µ‚Ä‚¢‚Ü‚·\n");
+        ConsoleView::GetInstance().Add("ï¿½fï¿½bï¿½Lï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É’Bï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½\n");
 
         return false;
     }
 
     int targetId = m_displayPool[poolIndex].card->GetCardState().cardId;
-	// ƒv[ƒ‹‚©‚çƒJ[ƒh‚ğæ“¾    
+	// ï¿½vï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Jï¿½[ï¿½hï¿½ï¿½ï¿½æ“¾    
     auto card = CardBuildPool::GetInstance().TakeCard(targetId);
 
     if (!card)
     {
-        ConsoleView::GetInstance().Add("ƒv[ƒ‹‚©‚çƒJ[ƒh‚ğæ“¾‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½: " + std::to_string(targetId) + "\n");
+        ConsoleView::GetInstance().Add("ï¿½vï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Jï¿½[ï¿½hï¿½ï¿½ï¿½æ“¾ï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½: " + std::to_string(targetId) + "\n");
         return false;
     }
 
     m_deckCards.emplace_back(std::move(card));
 
-    // •\¦—pƒŠƒXƒg‚ğXV
+    // ï¿½fï¿½bï¿½Lï¿½ï¿½ï¿½ï¿½vï¿½[ï¿½ï¿½ï¿½É–ß‚ï¿½
     RebuildDisplayPool();
     RebuildDisplayDeck();
 
     return true;
 }
 
-// ƒfƒbƒL‚©‚çƒv[ƒ‹‚É–ß‚·
+// ï¿½fï¿½bï¿½Lï¿½ï¿½ï¿½ï¿½vï¿½[ï¿½ï¿½ï¿½É–ß‚ï¿½
 bool DeckBuildSystem::RemoveFromPool(int deckIndex)
 {
     if (deckIndex >= m_deckCards.size())
     {
-        ConsoleView::GetInstance().Add("w’èindex‚ª”ÍˆÍŠO‚Å‚·:"  +  std::to_string(deckIndex) + "\n");
+        ConsoleView::GetInstance().Add("ï¿½wï¿½ï¿½indexï¿½ï¿½ï¿½ÍˆÍŠOï¿½Å‚ï¿½:"  +  std::to_string(deckIndex) + "\n");
         return false;
     }
 
-	// ƒfƒbƒL‚©‚çƒJ[ƒh‚ğæ‚èo‚·
+	// ï¿½fï¿½bï¿½Lï¿½ï¿½ï¿½ï¿½Jï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½oï¿½ï¿½
     auto card = std::move(m_deckCards[deckIndex]);
-	// ƒfƒbƒL‚©‚çíœ
+	// ï¿½fï¿½bï¿½Lï¿½ï¿½ï¿½ï¿½íœ
     m_deckCards.erase(m_deckCards.begin() + deckIndex);
 
-	// ƒJ[ƒh‚ğƒv[ƒ‹‚É–ß‚·
+	// ï¿½Jï¿½[ï¿½hï¿½ï¿½ï¿½vï¿½[ï¿½ï¿½ï¿½É–ß‚ï¿½
     CardBuildPool::GetInstance().ReturnCard(std::move(card));
 
     return true;
 }
 
-// ƒfƒbƒL“àƒJ[ƒhæ“¾
+// ï¿½fï¿½bï¿½Lï¿½ï¿½ï¿½Jï¿½[ï¿½hï¿½æ“¾
 const std::vector<std::unique_ptr<Card>>& DeckBuildSystem::GetDeckCards() const
 {
 	return m_deckCards;
 }
 
-// ƒfƒbƒL“à–‡”æ“¾
+// ï¿½fï¿½bï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾
 int DeckBuildSystem::GetDeckSize() const
 {
 	return static_cast<int>(m_deckCards.size());
 }
 
-// ƒfƒbƒL•Ò¬ãŒÀ–‡”æ“¾
+// ï¿½fï¿½bï¿½Lï¿½Òï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾
 int DeckBuildSystem::GetMaxDeckSize() const
 {
 	return MAX_DECK_SIZE;
 }
 
-// ƒfƒbƒL•Ò¬Š®—¹”»’è
+// ï¿½fï¿½bï¿½Lï¿½Òï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 bool DeckBuildSystem::IsComplete() const
 {
 	return m_deckCards.size() == MAX_DECK_SIZE;
 }
 
-// ƒfƒbƒL‚ğˆø‚«“n‚·
+// ï¿½fï¿½bï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½nï¿½ï¿½
 std::vector<int> DeckBuildSystem::TakeDeck()
 {
     std::vector<int> result;
@@ -294,15 +290,15 @@ std::vector<int> DeckBuildSystem::TakeDeck()
     return result;
 }
 
-// ƒv[ƒ‹ƒNƒŠƒbƒNˆ—
+// ï¿½vï¿½[ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½
 bool DeckBuildSystem::HandlePoolClick(sf::Vector2f mousePos)
 {
-    // ƒhƒ‰ƒbƒO’†‚ÍƒNƒŠƒbƒNˆ—‚µ‚È‚¢
+    // ï¿½hï¿½ï¿½ï¿½bï¿½Oï¿½ï¿½ï¿½ÍƒNï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
     if (m_poolDragging || m_deckDragging)
     {
         return false;
     }
-	// ƒfƒbƒLãŒÀƒ`ƒFƒbƒN
+	// ï¿½fï¿½bï¿½Lï¿½ï¿½ï¿½ï¿½`ï¿½Fï¿½bï¿½N
     if (m_deckCards.size() >= MAX_DECK_SIZE)
     {
         return false;
@@ -325,10 +321,10 @@ bool DeckBuildSystem::HandlePoolClick(sf::Vector2f mousePos)
 
 }
 
-// ƒfƒbƒLƒNƒŠƒbƒNˆ—
+// ï¿½fï¿½bï¿½Lï¿½Nï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½
 bool DeckBuildSystem::HandleDeckClick(sf::Vector2f mousePos)
 {
-    // ƒhƒ‰ƒbƒO’†‚ÍƒNƒŠƒbƒNˆ—‚µ‚È‚¢
+    // ï¿½hï¿½ï¿½ï¿½bï¿½Oï¿½ï¿½ï¿½ÍƒNï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
     if (m_poolDragging || m_deckDragging)
     {
         return false;
@@ -340,23 +336,23 @@ bool DeckBuildSystem::HandleDeckClick(sf::Vector2f mousePos)
 
         if (rect.contains(mousePos))
         {
-            // ƒNƒŠƒbƒN‚³‚ê‚½•\¦ã‚ÌƒJ[ƒhID‚ğ“Á’è
+            // ï¿½Nï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½ê‚½ï¿½\ï¿½ï¿½ï¿½ï¿½ÌƒJï¿½[ï¿½hIDï¿½ï¿½ï¿½ï¿½ï¿½
             int targetId = m_displayDeck[i].card->GetCardState().cardId;
 
-            // Àƒf[ƒ^(m_deckCards)‚©‚ç‚»‚ÌID‚ğ1‚Â‚¾‚¯’T‚µ‚Äíœ
+            // ï¿½ï¿½ï¿½fï¿½[ï¿½^(m_deckCards)ï¿½ï¿½ï¿½ç‚»ï¿½ï¿½IDï¿½ï¿½1ï¿½Â‚ï¿½ï¿½ï¿½ï¿½Tï¿½ï¿½ï¿½Äíœ
             for (auto it = m_deckCards.begin(); it != m_deckCards.end(); ++it)
             {
                 if ((*it)->GetCardState().cardId == targetId)
                 {
-                    // ƒv[ƒ‹(CardBuildPool)‚ÉÀ‘Ì‚ğ–ß‚·
+                    // ï¿½vï¿½[ï¿½ï¿½(CardBuildPool)ï¿½Éï¿½ï¿½Ì‚ï¿½ß‚ï¿½
                     CardBuildPool::GetInstance().ReturnCard(std::move(*it));
-                    // ƒŠƒXƒg‚©‚çœ‹
+                    // ï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½çœï¿½ï¿½
                     m_deckCards.erase(it);
                     break;
                 }
             }
 
-            // •\¦‚ğÄ\’z
+            // ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½Ä\ï¿½z
             RebuildDisplayDeck();
             RebuildDisplayPool();
             return true;
@@ -365,7 +361,7 @@ bool DeckBuildSystem::HandleDeckClick(sf::Vector2f mousePos)
 	return false;
 }
 
-// ƒhƒ‰ƒbƒOˆ—
+// ï¿½hï¿½ï¿½ï¿½bï¿½Oï¿½ï¿½ï¿½ï¿½
 void DeckBuildSystem::HandleDrag(sf::Vector2f mousePos, bool isClick)
 {
 
@@ -377,14 +373,14 @@ void DeckBuildSystem::HandleDrag(sf::Vector2f mousePos, bool isClick)
     float deltaX = mousePos.x - m_lastMouseX;
     m_lastMouseX = mousePos.x;
 
-    // ƒv[ƒ‹ƒhƒ‰ƒbƒO
+    // ï¿½vï¿½[ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½bï¿½O
     if (m_poolDragging)
     {
         m_poolScrollX += deltaX;
         ClampPoolScroll();
     }
 
-    // ƒfƒbƒLƒhƒ‰ƒbƒO
+    // ï¿½fï¿½bï¿½Lï¿½hï¿½ï¿½ï¿½bï¿½O
     if (m_deckDragging)
     {
         m_deckScrollX += deltaX;
@@ -393,36 +389,36 @@ void DeckBuildSystem::HandleDrag(sf::Vector2f mousePos, bool isClick)
 
 }
 
-// ƒv[ƒ‹Ä\’z
+// ï¿½vï¿½[ï¿½ï¿½ï¿½Ä\ï¿½z
 void DeckBuildSystem::RebuildDisplayPool()
 {
-	// ƒNƒŠƒA
+	// ï¿½Nï¿½ï¿½ï¿½A
     m_displayPool.clear();
-	// ƒJƒEƒ“ƒgƒ}ƒbƒvì¬
+	// ï¿½Jï¿½Eï¿½ï¿½ï¿½gï¿½}ï¿½bï¿½vï¿½ì¬
     std::unordered_map<int, int> countMap;
-	// Å‰‚ÌoŒ»indexƒ}ƒbƒvì¬
+	// ï¿½Åï¿½ï¿½Ìoï¿½ï¿½indexï¿½}ï¿½bï¿½vï¿½ì¬
     std::unordered_map<int, size_t> firstIndexMap;
-	// ƒv[ƒ‹“àƒJ[ƒhæ“¾
+	// ï¿½vï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Jï¿½[ï¿½hï¿½æ“¾
     const auto& pool = CardBuildPool::GetInstance().GetPoolCards();
 
     for (size_t i = 0; i < pool.size(); ++i)
     {
-		// ƒJ[ƒhIDæ“¾
+		// ï¿½Jï¿½[ï¿½hIDï¿½æ“¾
         int id = pool[i]->GetCardState().cardId;
         countMap[id]++;
 
         if (!firstIndexMap.contains(id))
         {
-			// Å‰‚ÌoŒ»index•Û‘¶
+			// ï¿½Åï¿½ï¿½Ìoï¿½ï¿½indexï¿½Û‘ï¿½
             firstIndexMap[id] = i;
         }
     }
 
     for (const auto& [id, count] : countMap)
     {
-		// ƒJ[ƒh¶¬
+		// ï¿½Jï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½
         auto card = CardFactory::GetInstance().CreateCard(id);
-		// ƒv[ƒ‹•\¦—p‚É’Ç‰Á
+		// ï¿½vï¿½[ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½pï¿½É’Ç‰ï¿½
         m_displayPool.push_back({ std::move(card),count});
     }
 }
@@ -437,7 +433,7 @@ void DeckBuildSystem::RebuildDisplayDeck()
     }
 
     std::unordered_map<int, int> countMap;
-    std::vector<int> idOrder; // ’Ç‰Á‚³‚ê‚½‡˜‚ğˆÛ‚µ‚½‚¢ê‡
+    std::vector<int> idOrder; // ï¿½Ç‰ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ûï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡
 
     for (const auto& card : m_deckCards)
     {
@@ -455,27 +451,27 @@ void DeckBuildSystem::RebuildDisplayDeck()
     }
 }
 
-// ƒXƒNƒ[ƒ‹§ŒÀ
+// ï¿½Xï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 void DeckBuildSystem::ClampPoolScroll()
 {
-	// ƒv[ƒ‹‘¤ƒXƒNƒ[ƒ‹§ŒÀ
-	// ƒv[ƒ‹“àƒJ[ƒh”‚ÉŠî‚Ã‚­Å‘å•ŒvZ
+	// ï¿½vï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	// ï¿½vï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Jï¿½[ï¿½hï¿½ï¿½ï¿½ÉŠï¿½Ã‚ï¿½ï¿½Å‘å•ï¿½vï¿½Z
     float maxWidth = static_cast<float>(m_displayPool.size()) * m_cardSpacing;
     float viewWidth = 800.f;
-	// Å¬ƒXƒNƒ[ƒ‹ˆÊ’uŒvZ
+	// ï¿½Åï¿½ï¿½Xï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Ê’uï¿½vï¿½Z
     float minScroll = std::min(0.f, viewWidth - maxWidth);
-	// ƒXƒNƒ[ƒ‹ˆÊ’u§ŒÀ
+	// ï¿½Xï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Ê’uï¿½ï¿½ï¿½ï¿½
     m_poolScrollX = std::clamp(m_poolScrollX, minScroll, 0.f);
 }
 
 void DeckBuildSystem::ClampDeckScroll()
 {
-	// ƒfƒbƒL‘¤ƒXƒNƒ[ƒ‹§ŒÀ
-	// ƒfƒbƒL“àƒJ[ƒh”‚ÉŠî‚Ã‚­Å‘å•ŒvZ
+	// ï¿½fï¿½bï¿½Lï¿½ï¿½ï¿½Xï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	// ï¿½fï¿½bï¿½Lï¿½ï¿½ï¿½Jï¿½[ï¿½hï¿½ï¿½ï¿½ÉŠï¿½Ã‚ï¿½ï¿½Å‘å•ï¿½vï¿½Z
     float maxWidth = static_cast<float>(m_deckCards.size()) * m_cardSpacing;
     float viewWidth = 800.f;
-	// Å¬ƒXƒNƒ[ƒ‹ˆÊ’uŒvZ
+	// ï¿½Åï¿½ï¿½Xï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Ê’uï¿½vï¿½Z
     float minScroll = std::min(0.f, viewWidth - maxWidth);
-	// ƒXƒNƒ[ƒ‹ˆÊ’u§ŒÀ
+	// ï¿½Xï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Ê’uï¿½ï¿½ï¿½ï¿½
     m_deckScrollX = std::clamp(m_deckScrollX, minScroll, 0.f);
 }

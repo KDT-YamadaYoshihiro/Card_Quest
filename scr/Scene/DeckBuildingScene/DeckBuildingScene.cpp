@@ -16,14 +16,14 @@ DeckBuildingScene::DeckBuildingScene()
 
 bool DeckBuildingScene::Init(sf::RenderWindow& arg_window)
 {
-    m_nextButton = std::make_unique<BoxButton>(sf::Vector2f(200.f, 50.f), sf::Vector2f(1000.f, 680.f), FontManager::GetInstance().GetFont(), "BATTLE START");
+    m_nextButton = std::make_unique<BoxButton>(sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), sf::Vector2f(1000.f, 680.f), FontManager::GetInstance().GetFont(), "BATTLE START");
     if(!m_nextButton)
     {
         ConsoleView::GetInstance().Add("DeckBuildingScene/m_nextButton:nullptr\n");
         return false;
 	}
 
-    m_backButton = std::make_unique<BoxButton>(sf::Vector2f(200.f, 50.f), sf::Vector2f(200.f, 680.f), FontManager::GetInstance().GetFont(), "BACK");
+    m_backButton = std::make_unique<BoxButton>(sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), sf::Vector2f(200.f, 680.f), FontManager::GetInstance().GetFont(), "BACK");
     if (!m_backButton)
     {
         ConsoleView::GetInstance().Add("DeckBuildingScene/m_backButton:nullptr\n");

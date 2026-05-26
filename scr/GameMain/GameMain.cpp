@@ -9,6 +9,7 @@
 #include "WindowSetting.h"
 #include "View/Font/FontManager.h"
 #include "View/ConsoleView/ConsoleView.h"
+#include "System/Constants.h"
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Sleep.hpp>
@@ -23,7 +24,7 @@
 #endif // _DEBUG
 
 GameMain::GameMain() :
-    m_window(sf::VideoMode({ 1280, 720 }),"Card Quest")
+    m_window(sf::VideoMode({ Constants::WINDOW_WIDTH, Constants::WINDOW_HEIGHT }), "Card Quest")
 {
 
 }
@@ -31,11 +32,11 @@ GameMain::GameMain() :
 bool GameMain::Init()
 {
 
-    m_window.setFramerateLimit(60);
+    m_window.setFramerateLimit(Constants::TARGET_FPS);
 
 #ifdef _DEBUG
-    // ƒfƒoƒbƒO‚Í WindowSetting ‚É•Û‘¶‚³‚ê‚Ä‚¢‚éƒTƒCƒY‚ÅƒEƒBƒ“ƒhƒE•\¦
-    m_window.create(sf::VideoMode({ 1280, 720 }), "Card Quest");
+    // ï¿½fï¿½oï¿½bï¿½Oï¿½ï¿½ï¿½ï¿½ WindowSetting ï¿½É•Û‘ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Tï¿½Cï¿½Yï¿½ÅƒEï¿½Bï¿½ï¿½ï¿½hï¿½Eï¿½\\ï¿½ï¿½
+    m_window.create(sf::VideoMode({ Constants::WINDOW_WIDTH, Constants::WINDOW_HEIGHT }), "Card Quest");
 #else
     m_window.create(
         sf::VideoMode::getDesktopMode(),
@@ -46,20 +47,20 @@ bool GameMain::Init()
 
 
     sf::Vector2f size = sf::Vector2f(m_window.getSize());
-    sf::View view(sf::FloatRect({ 0.f, 0.f }, { 1280.f, 720.f }));
+    sf::View view(sf::FloatRect({ 0.f, 0.f }, { Constants::WINDOW_WIDTH.f, Constants::WINDOW_HEIGHT.f }));
     m_window.setView(view);
 
     SceneManager::GetInstance().Init(m_window);
     CameraManager::GetInstance().ViewInit({ 0.0f, 0.0f }, static_cast<sf::Vector2f>( WindowSetting::GetInstance().GetWindowSize()));
 
-    // CSV‚Ì“Ç‚İ‚İ
+    // CSVï¿½Ì“Ç‚İï¿½ï¿½ï¿½
 	TextureLoader::GetInstance().LoadTextures("data/CSV/TextureData.csv");
 	CharacterLoader::GetInstance().LoadCSV("data/CSV/CharacterData.csv");
     CardLoader::GetInstance().LoadCSV("data/CSV/CardData.csv");
     StageLoader::GetInstance().LoadCSV("data/CSV/StageData.csv");
 	EffectDataLoder::GetInstance().LoadCSV("data/CSV/EffectData.csv");
     
-    // ƒtƒHƒ“ƒg“Ç‚İ‚İ
+    // ï¿½tï¿½Hï¿½ï¿½ï¿½gï¿½Ç‚İï¿½ï¿½ï¿½
     FontManager::GetInstance().FontLoad();
 
 
@@ -81,7 +82,7 @@ void GameMain::Run()
 
         if (dt <= 0.0f)
         {
-			dt = 1.0f / 60.0f;
+            dt = Constants::FRAME_TIME;
         }
 
         ProcessEvents();

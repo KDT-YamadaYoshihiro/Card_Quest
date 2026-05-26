@@ -11,7 +11,7 @@
 namespace BattleViewConstants
 {
     // ハンド配置定数 (Constants.h と重複するためコメントアウト)
-    constexpr sf::Vector2f HAND_START{ 200.f, 520.f };
+    constexpr sf::Vector2f HAND_START{ Constants::HAND_START_X, Constants::HAND_START_Y };
     constexpr float HAND_SPACING = Constants::HAND_SPACING;
     constexpr float SELECT_OFFSET_Y = Constants::SELECT_OFFSET_Y;
 }
@@ -51,7 +51,7 @@ void BattleView::Update(float dt)
         namespace BattleViewConstants
         {
             // ハンド配置定数 (Constants.h と重複するためコメントアウト)
-            constexpr sf::Vector2f HAND_START{ 200.f, 520.f };
+            constexpr sf::Vector2f HAND_START{ Constants::HAND_START_X, Constants::HAND_START_Y };
             constexpr float HAND_SPACING = Constants::HAND_SPACING;
             constexpr float SELECT_OFFSET_Y = Constants::SELECT_OFFSET_Y;
         }
@@ -396,8 +396,8 @@ void BattleView::Update(float dt)
             }
 
             // �\\���ʒu�F���݂�AP�\\���̉E���ɔz�u
-            // (DrawCost�̍��W 50.f, 650.f �ɑ΂��Ē���)
-            gainText.setPosition(sf::Vector2f(750.0f, 130.0f));
+            // (DrawCost�̍��W: センター + Constants::DRAW_COST_OFFSET_X, Y = Constants::DRAW_COST_OFFSET_Y)
+            gainText.setPosition(sf::Vector2f(arg_window.getSize().x / 2.0f + Constants::DRAW_COST_OFFSET_X, Constants::DRAW_COST_OFFSET_Y));
 
             arg_window.draw(gainText);
         }

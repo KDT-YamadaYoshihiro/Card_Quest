@@ -131,9 +131,9 @@ void StageBuildView::DrawStageContent(const StageData* stage, float offsetX)
     // �����X�^�[�\��
     DrawStageMonsters(stage, offsetX);
 
-    // �e�L�X�g���
+    // 情報テキスト表示
     sf::Text info(m_font, std::to_string(stage->enemyIds.size()) + " Enemies\nSpecial Rules: None");
-    info.setCharacterSize(24);
+    info.setCharacterSize(ui_font_sizes::INFO_TEXT_SIZE);
     info.setPosition({ centerX - 300.f, 450.f });
     m_render.Draw(info);
 }
@@ -147,7 +147,7 @@ void StageBuildView::DrawStageMonsters(const StageData* data, float offsetX)
 // ステージビルド定数 (Constants.h と重複するためコメントアウト)
 constexpr float MONSTER_Y = Constants::MONSTER_Y;
 constexpr float SPACING = Constants::SPACING;
-    constexpr sf::Vector2f ICON_SIZE{ 120.f, 120.f };
+    constexpr sf::Vector2f ICON_SIZE{ Constants::CARD_WIDTH, Constants::CARD_HEIGHT };
 
     float centerX = 640.f + offsetX;
 

@@ -10,23 +10,23 @@ private:
    sf::Text m_text;  
 
 public:  
-   // ƒRƒ“ƒXƒgƒ‰ƒNƒ^FƒTƒCƒYAˆÊ’uAƒtƒHƒ“ƒgA•\¦•¶š—ñ  
+   // ï¿½Rï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½^ï¿½Fï¿½Tï¿½Cï¿½Yï¿½Aï¿½Ê’uï¿½Aï¿½tï¿½Hï¿½ï¿½ï¿½gï¿½Aï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  
    BoxButton(sf::Vector2f arg_size, sf::Vector2f arg_pos, const sf::Font& arg_font, const std::string& arg_label)  
        : m_font(arg_font),  
          m_text(arg_font, "")  
    {  
-       // 1. ƒ{ƒ^ƒ“–{‘Ì‚Ìİ’èiƒTƒCƒYAÀ•WAFj  
+       // 1. ï¿½{ï¿½^ï¿½ï¿½ï¿½{ï¿½Ì‚Ìİ’ï¿½iï¿½Tï¿½Cï¿½Yï¿½Aï¿½ï¿½ï¿½Wï¿½Aï¿½Fï¿½j  
        m_shape.setSize(arg_size);  
        m_shape.setOrigin(arg_size / 2.0f);  
        m_shape.setPosition(arg_pos);  
        m_shape.setFillColor(sf::Color(200, 200, 200));  
 
-       // 2. ƒeƒLƒXƒg‚Ìİ’èi•¶š‰»‚¯‘Îô‚İj  
-       m_text.setString(sf::String::fromUtf8(arg_label.begin(), arg_label.end()));  
-       m_text.setCharacterSize(20);  
+       // --- ï¿½eï¿½Lï¿½Xï¿½gï¿½Ìİ’ï¿½iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îô‚İj ---
+       m_text.setString(sf::String::fromUtf8(arg_label.begin(), arg_label.end()));
+       m_text.setCharacterSize(Constants::FONT_SIZE_MEDIUM);
        m_text.setFillColor(sf::Color::Black);  
 
-       // 3. ƒeƒLƒXƒg•`‰æi’†‰›‘µ‚¦‚ÌŒvZj  
+       // 3. ï¿½eï¿½Lï¿½Xï¿½gï¿½`ï¿½ï¿½iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÌŒvï¿½Zï¿½j  
        sf::FloatRect textRect = m_text.getLocalBounds();  
        m_text.setOrigin({  
            textRect.position.x + textRect.size.x / 2.0f,  
@@ -35,26 +35,26 @@ public:
        m_text.setPosition(arg_pos);  
    }  
 
-   // •`‰æ  
+   // ï¿½`ï¿½ï¿½  
    void Draw(sf::RenderWindow& window) const  
    {  
        window.draw(m_shape);  
        window.draw(m_text);  
    }  
 
-   // ƒzƒo[‚µ‚Ä‚¢‚é‚©  
+   // ï¿½zï¿½oï¿½[ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½é‚©  
    bool IsHovered(sf::Vector2f mousePos) const  
    {  
        return m_shape.getGlobalBounds().contains(mousePos);  
    }  
 
-   // ƒNƒŠƒbƒN‚³‚ê‚½‚©  
+   // ï¿½Nï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½ê‚½ï¿½ï¿½  
    bool IsClicked(sf::Vector2f mousePos, bool mousePressed) const  
    {  
        return mousePressed && IsHovered(mousePos);  
    }  
 
-   // ƒeƒLƒXƒg‚Ì“à—e‚ğŒã‚©‚ç•ÏX‚µ‚½‚¢ê‡  
+   // ï¿½eï¿½Lï¿½Xï¿½gï¿½Ì“ï¿½ï¿½eï¿½ï¿½ï¿½ã‚©ï¿½ï¿½ÏXï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡  
    void SetString(const std::string& label)  
    {  
        m_text.setString(label);  
@@ -62,7 +62,7 @@ public:
        m_text.setOrigin({ textRect.position.x + textRect.size.x / 2.0f, textRect.position.y + textRect.size.y / 2.0f });  
    }  
 
-   //@ƒ{ƒ^ƒ“‚ÌF‚ğ•ÏX‚µ‚½‚¢ê‡
+   //ï¿½@ï¿½{ï¿½^ï¿½ï¿½ï¿½ÌFï¿½ï¿½ÏXï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡
    void SetColor(const sf::Color& color)  
    {  
        m_shape.setFillColor(color);  

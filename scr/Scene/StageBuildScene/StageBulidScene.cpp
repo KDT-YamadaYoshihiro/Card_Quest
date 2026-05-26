@@ -26,7 +26,7 @@ bool StageBulidScene::Init(sf::RenderWindow& arg_window)
         return false;
 	}
 
-    // Context ‰Šú‰»
+    // Context ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     m_context.Init();
 
     // View / Controller
@@ -43,14 +43,14 @@ bool StageBulidScene::Init(sf::RenderWindow& arg_window)
         return false;
     }
 
-	// ƒ{ƒ^ƒ“
-    m_nextButton = std::make_unique<BoxButton>(sf::Vector2f(200.f, 50.f), sf::Vector2f(1000.f, 680.f), FontManager::GetInstance().GetFont(), "NEXT");
+	// ï¿½{ï¿½^ï¿½ï¿½
+    m_nextButton = std::make_unique<BoxButton>(sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), sf::Vector2f(1000.f, 680.f), FontManager::GetInstance().GetFont(), "NEXT");
     if (!m_nextButton)
     {
         ConsoleView::GetInstance().Add("StageBulidScene/m_nextButton:nullptr\n");
         return false;
     }
-    m_backButton = std::make_unique<BoxButton>(sf::Vector2f(200.f, 50.f), sf::Vector2f(200.f, 680.f), FontManager::GetInstance().GetFont(), "BACK");
+    m_backButton = std::make_unique<BoxButton>(sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT), sf::Vector2f(200.f, 680.f), FontManager::GetInstance().GetFont(), "BACK");
     if(!m_backButton)
     {
         ConsoleView::GetInstance().Add("StageBulidScene/m_backButton:nullptr\n");
@@ -69,7 +69,7 @@ bool StageBulidScene::Init(sf::RenderWindow& arg_window)
         return false;
 	}
 
-	// Context‚Éƒ{ƒ^ƒ“‚ğ“o˜^
+	// Contextï¿½Éƒ{ï¿½^ï¿½ï¿½ï¿½ï¿½oï¿½^
     m_context.SetNavigationButtons(std::move(m_leftArrow), std::move(m_rightArrow));
 	m_context.SetSceneButton(std::move(m_nextButton), std::move(m_backButton)); 
 
@@ -78,7 +78,7 @@ bool StageBulidScene::Init(sf::RenderWindow& arg_window)
 
 void StageBulidScene::handleEvent(const sf::Event& event)
 {
-    // ƒzƒC[ƒ‹“™‚ÌƒCƒxƒ“ƒg‚Í InputManager ‚É—¬‚·
+    // ï¿½zï¿½Cï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ÌƒCï¿½xï¿½ï¿½ï¿½gï¿½ï¿½ InputManager ï¿½É—ï¿½ï¿½ï¿½
     InPutMouseManager::GetInstance().HandleEvent(event);
 }
 
@@ -86,20 +86,20 @@ void StageBulidScene::Update(sf::RenderWindow& arg_window, float dt)
 {
     auto& input = InPutMouseManager::GetInstance();
     auto mousePos = input.GetMousePosition(arg_window);
-    // “ü—ÍXV
+    // ï¿½ï¿½ï¿½ÍXï¿½V
     input.Update(arg_window);
 
-	// ƒ‰ƒCƒgƒGƒtƒFƒNƒgXV
+	// ï¿½ï¿½ï¿½Cï¿½gï¿½Gï¿½tï¿½Fï¿½Nï¿½gï¿½Xï¿½V
     m_lightEffect->Update(dt);
 
-    // ‘I‘ğˆ—i¶ƒŠƒXƒgj
+    // ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½iï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½gï¿½j
     m_controller->Update(arg_window);
 
-    // View XViƒXƒNƒ[ƒ‹EÚ×ƒXƒ‰ƒCƒhj
+    // View ï¿½Xï¿½Vï¿½iï¿½Xï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Eï¿½Ú×ƒXï¿½ï¿½ï¿½Cï¿½hï¿½j
     m_view->Update(arg_window, m_context);
 
-	// ƒ{ƒ^ƒ“‚ÌƒJ[ƒ\ƒ‹‚ª‡‚Á‚½‚çF‚ğ•Ï‚¦‚é
-	// Ÿ‚Öƒ{ƒ^ƒ“
+	// ï¿½{ï¿½^ï¿½ï¿½ï¿½ÌƒJï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Fï¿½ï¿½Ï‚ï¿½ï¿½ï¿½
+	// ï¿½ï¿½ï¿½Öƒ{ï¿½^ï¿½ï¿½
 	if (m_context.GetNextButton()->IsHovered(mousePos))
 	{
 		m_context.GetNextButton()->SetColor(sf::Color::Yellow);
@@ -108,7 +108,7 @@ void StageBulidScene::Update(sf::RenderWindow& arg_window, float dt)
 	{
 		m_context.GetNextButton()->SetColor(sf::Color::White);
 	}
-	// –ß‚éƒ{ƒ^ƒ“
+	// ï¿½ß‚ï¿½{ï¿½^ï¿½ï¿½
 	if (m_context.GetBackButton()->IsHovered(mousePos))
 	{
 		m_context.GetBackButton()->SetColor(sf::Color::Yellow);
@@ -118,7 +118,7 @@ void StageBulidScene::Update(sf::RenderWindow& arg_window, float dt)
 		m_context.GetBackButton()->SetColor(sf::Color::White);
 	}
 
-	// ƒXƒe[ƒWØ‚è‘Ö‚¦ƒ{ƒ^ƒ“
+	// ï¿½Xï¿½eï¿½[ï¿½Wï¿½Ø‚ï¿½Ö‚ï¿½ï¿½{ï¿½^ï¿½ï¿½
     if(m_context.GetLeftArrow()->IsHovered(mousePos))
     {
        m_context.GetLeftArrow()->SetColor(sf::Color::Yellow);
@@ -137,13 +137,13 @@ void StageBulidScene::Update(sf::RenderWindow& arg_window, float dt)
     }
 
 
-    // ƒNƒŠƒbƒN‚µ‚Ä‚¢‚È‚¯‚ê‚Îˆ—‚µ‚È‚¢
+    // ï¿½Nï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½Îï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
     if (!input.IsLeftClicked())
     {
         return;
     }
 
-	// ƒV[ƒ“Ø‚è‘Ö‚¦
+	// ï¿½Vï¿½[ï¿½ï¿½ï¿½Ø‚ï¿½Ö‚ï¿½
 	if (m_context.GetNextButton()->IsClicked(input.GetMousePosition(arg_window), input.IsLeftClicked()))
 	{
         DecideStage(arg_window);
@@ -160,7 +160,7 @@ void StageBulidScene::Update(sf::RenderWindow& arg_window, float dt)
 
 void StageBulidScene::Render(sf::RenderWindow& arg_window)
 {
-    // ”wŒi
+    // ï¿½wï¿½i
     auto tex = TextureLoader::GetInstance().GetTextureID("bg");
     if (tex)
     {
@@ -170,10 +170,10 @@ void StageBulidScene::Render(sf::RenderWindow& arg_window)
         arg_window.draw(sprite);
     }
 
-	// ƒ‰ƒCƒgƒGƒtƒFƒNƒg
+	// ï¿½ï¿½ï¿½Cï¿½gï¿½Gï¿½tï¿½Fï¿½Nï¿½g
     m_lightEffect->Draw(arg_window);
 
-	// ƒrƒ…[•`‰æ
+	// ï¿½rï¿½ï¿½ï¿½[ï¿½`ï¿½ï¿½
     m_view->Draw(m_context);
 }
 
@@ -191,7 +191,7 @@ void StageBulidScene::DecideStage(sf::RenderWindow& arg_window)
     session.battleContext = std::make_shared<BattleContext>();
     session. battleContext->SetStageId(stage->stageId);
 
-    // vector<int>‚É•ÏŠ·
+    // vector<int>ï¿½É•ÏŠï¿½
     std::vector<int> vec(stage->enemyIds.begin(), stage->enemyIds.end());
     session.battleContext->SetEnemyIds(vec); // std::array<int,3>
 

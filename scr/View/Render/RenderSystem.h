@@ -15,24 +15,24 @@ public:
 		:m_window(arg_window)
 	{
 		CameraManager::GetInstance().ViewInit(
-			{ 640.0f, 360.0f },
+		    { Constants::WINDOW_CENTER_X, Constants::WINDOW_CENTER_Y },
 			{ static_cast<float>(arg_window.getSize().x), static_cast<float>(arg_window.getSize().y) });
 	}
 
-	// •`‰æŠÖ˜A
-	// ƒJƒƒ‰“K—p
+	// ï¿½`ï¿½ï¿½Ö˜A
+	// ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½Kï¿½p
 	void ApplyCamera();
-	// ƒJƒƒ‰ƒŠƒZƒbƒg
+	// ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½bï¿½g
 	void ResetCamera();
-	// •`‰æ
+	// ï¿½`ï¿½ï¿½
 	void Draw(const sf::Drawable& drawable);
-	// •`‰æiˆÊ’uE‰ñ“]j
+	// ï¿½`ï¿½ï¿½iï¿½Ê’uï¿½Eï¿½ï¿½]ï¿½j
 	void Draw(const sf::Drawable& drawable, const sf::RenderStates& states);
-	// ‰æ–ÊƒNƒŠƒA
+	// ï¿½ï¿½ÊƒNï¿½ï¿½ï¿½A
 	void Clear(const sf::Color& color = sf::Color::Black);
-	// ‰æ–Ê•\¦
+	// ï¿½ï¿½Ê•\ï¿½ï¿½
 	void Display();
 
-	// Window‚Ö‚ÌƒAƒNƒZƒX
+	// Windowï¿½Ö‚ÌƒAï¿½Nï¿½Zï¿½X
 	sf::RenderWindow& GetWindow() { return m_window; }
 };

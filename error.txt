@@ -1,0 +1,369 @@
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+識別子 "SHAKE_INTENSITY" が定義されていません
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_WIDTH': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_HEIGHT': 定義されていない識別子です。
+'sf::Vector2<unsigned int>::Vector2': オーバーロードされた関数ですべての引数の型を変換できませんでした
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_WIDTH': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_HEIGHT': 定義されていない識別子です。
+'sf::Vector2<unsigned int>::Vector2': オーバーロードされた関数ですべての引数の型を変換できませんでした
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_X': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_Y': 定義されていない識別子です。
+'void CameraManager::ViewInit(const sf::Vector2f &,const sf::Vector2f &)': 引数 1 を 'initializer list' から 'const sf::Vector2f &' へ変換できません。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_X': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_Y': 定義されていない識別子です。
+'void CameraManager::ViewInit(const sf::Vector2f &,const sf::Vector2f &)': 引数 1 を 'initializer list' から 'const sf::Vector2f &' へ変換できません。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_X': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_Y': 定義されていない識別子です。
+'void CameraManager::ViewInit(const sf::Vector2f &,const sf::Vector2f &)': 引数 1 を 'initializer list' から 'const sf::Vector2f &' へ変換できません。
+'Constants::HAND_START': 再定義されています。2 回以上初期化されています。
+'const sf::Vector2f Constants::HAND_START': 再定義されました。
+'DIV_X': 'Constants' のメンバーではありません
+式は定数に評価されませんでした
+'DIV_Y': 'Constants' のメンバーではありません
+式は定数に評価されませんでした
+'ui_font_sizes': 識別子がクラス名でも名前空間名でもありません。
+'TITLE_SIZE': 定義されていない識別子です。
+'ui_layout': 識別子がクラス名でも名前空間名でもありません。
+'DECK_X_START': 定義されていない識別子です。
+'void sf::Transformable::setPosition(sf::Vector2f)': 引数 1 を 'initializer list' から 'sf::Vector2f' へ変換できません。
+'ui_font_sizes': 識別子がクラス名でも名前空間名でもありません。
+'INSTRUCTION_SIZE': 定義されていない識別子です。
+'ui_layout': 識別子がクラス名でも名前空間名でもありません。
+'INSTRUCTION_TEXT_X': 定義されていない識別子です。
+'ui_font_sizes': 識別子がクラス名でも名前空間名でもありません。
+'LABEL_SIZE': 定義されていない識別子です。
+'ui_layout': 識別子がクラス名でも名前空間名でもありません。
+'DECK_X_START': 定義されていない識別子です。
+'ui_layout': 識別子がクラス名でも名前空間名でもありません。
+'DECK_LABEL_RELATIVE_Y_OFFSET': 定義されていない識別子です。
+'void sf::Transformable::setPosition(sf::Vector2f)': 引数 1 を 'initializer list' から 'sf::Vector2f' へ変換できません。
+'ui_font_sizes': 識別子がクラス名でも名前空間名でもありません。
+'DECK_COUNTER_SIZE': 定義されていない識別子です。
+'ui_layout': 識別子がクラス名でも名前空間名でもありません。
+'CARD_COUNT_Y_OFFSET': 定義されていない識別子です。
+'->': 後続の戻り値の型は、関数以外の宣言子の後に許可されていません
+構文エラー: 戻り値の型の前に '->' が必要です
+'->' の後に戻り型が指定されていません ('int' と見なされます)
+型指定子がありません - int と仮定しました。メモ: C++ は int を既定値としてサポートしていません
+'poolBG': 再定義されています。異なる基本型です。
+構文エラー: ';' が、識別子 'setPosition' の前に必要です。
+構文エラー: ';' が '{' の前にありません。
+構文エラー: ')' が ';' の前にありません。
+'{': 対応する関数ヘッダーがありません (旧形式の仮引数リスト?)
+構文エラー: ')'
+'->': 後続の戻り値の型は、関数以外の宣言子の後に許可されていません
+構文エラー: 戻り値の型の前に '->' が必要です
+'->' の後に戻り型が指定されていません ('int' と見なされます)
+型指定子がありません - int と仮定しました。メモ: C++ は int を既定値としてサポートしていません
+'poolBG': 再定義されています。異なる基本型です。
+構文エラー: ';' が、識別子 'setFillColor' の前に必要です。
+'->': 後続の戻り値の型は、関数以外の宣言子の後に許可されていません
+構文エラー: 戻り値の型の前に '->' が必要です
+'->' の後に戻り型が指定されていません ('int' と見なされます)
+型指定子がありません - int と仮定しました。メモ: C++ は int を既定値としてサポートしていません
+構文エラー: ';' が、識別子 'draw' の前に必要です。
+'->': 後続の戻り値の型は、関数以外の宣言子の後に許可されていません
+構文エラー: 戻り値の型の前に '->' が必要です
+'->' の後に戻り型が指定されていません ('int' と見なされます)
+型指定子がありません - int と仮定しました。メモ: C++ は int を既定値としてサポートしていません
+'int window': 再定義されました。
+構文エラー: ';' が、識別子 'draw' の前に必要です。
+'font': 定義されていない識別子です。
+'->': 後続の戻り値の型は、関数以外の宣言子の後に許可されていません
+構文エラー: 戻り値の型の前に '->' が必要です
+'->' の後に戻り型が指定されていません ('int' と見なされます)
+型指定子がありません - int と仮定しました。メモ: C++ は int を既定値としてサポートしていません
+'deckText': 再定義されています。異なる基本型です。
+構文エラー: ';' が、識別子 'setCharacterSize' の前に必要です。
+'ui_font_sizes': 識別子がクラス名でも名前空間名でもありません。
+'->': 後続の戻り値の型は、関数以外の宣言子の後に許可されていません
+構文エラー: 戻り値の型の前に '->' が必要です
+'->' の後に戻り型が指定されていません ('int' と見なされます)
+型指定子がありません - int と仮定しました。メモ: C++ は int を既定値としてサポートしていません
+'deckText': 再定義されています。異なる基本型です。
+構文エラー: ';' が、識別子 'setFillColor' の前に必要です。
+'->': 後続の戻り値の型は、関数以外の宣言子の後に許可されていません
+構文エラー: 戻り値の型の前に '->' が必要です
+'->' の後に戻り型が指定されていません ('int' と見なされます)
+型指定子がありません - int と仮定しました。メモ: C++ は int を既定値としてサポートしていません
+'deckText': 再定義されています。異なる基本型です。
+構文エラー: ';' が、識別子 'setPosition' の前に必要です。
+構文エラー: ';' が '{' の前にありません。
+構文エラー: ')' が ';' の前にありません。
+'{': 対応する関数ヘッダーがありません (旧形式の仮引数リスト?)
+構文エラー: ')'
+構文エラー: 'for'
+構文エラー: ')' が ';' の前にありません。
+'m_displayPool': 定義されていない識別子です。
+構文エラー: '>' が ';' の前にありません。
+想定される関数テンプレート 'i' の後に引数リストがありません
+構文エラー: '++'
+構文エラー: ')'
+構文エラー: ';' が '{' の前にありません。
+'{': 対応する関数ヘッダーがありません (旧形式の仮引数リスト?)
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_X': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_Y': 定義されていない識別子です。
+'void CameraManager::ViewInit(const sf::Vector2f &,const sf::Vector2f &)': 引数 1 を 'initializer list' から 'const sf::Vector2f &' へ変換できません。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_WIDTH': 定義されていない識別子です。
+'WINDOW_HEIGHT': 定義されていない識別子です。
+'sf::Vector2<unsigned int>::Vector2': オーバーロードされた関数ですべての引数の型を変換できませんでした
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'FONT_SIZE_MEDIUM': 定義されていない識別子です。
+'Constants::HAND_START': 再定義されています。2 回以上初期化されています。
+'const sf::Vector2f Constants::HAND_START': 再定義されました。
+'BUTTON_WIDTH': 定義されていない識別子です。
+'BUTTON_HEIGHT': 定義されていない識別子です。
+'std::make_unique': 一致するオーバーロードされた関数が見つかりませんでした。
+'BUTTON_WIDTH': 定義されていない識別子です。
+'BUTTON_HEIGHT': 定義されていない識別子です。
+'std::make_unique': 一致するオーバーロードされた関数が見つかりませんでした。
+'PADDING_Y': 'Constants' のメンバーではありません
+'PADDING_Y': 定義されていない識別子です。
+'void sf::Transformable::setPosition(sf::Vector2f)': 引数 1 を 'initializer list' から 'sf::Vector2f' へ変換できません。
+'PADDING_X': 'Constants' のメンバーではありません
+'PADDING_X': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_X': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_Y': 定義されていない識別子です。
+'void CameraManager::ViewInit(const sf::Vector2f &,const sf::Vector2f &)': 引数 1 を 'initializer list' から 'const sf::Vector2f &' へ変換できません。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_X': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_Y': 定義されていない識別子です。
+'void CameraManager::ViewInit(const sf::Vector2f &,const sf::Vector2f &)': 引数 1 を 'initializer list' から 'const sf::Vector2f &' へ変換できません。
+'Constants::HAND_START': 再定義されています。2 回以上初期化されています。
+'const sf::Vector2f Constants::HAND_START': 再定義されました。
+'CARD_W': 'Constants' のメンバーではありません
+'CARD_W': 定義されていない識別子です。
+'CHAR_H': 'Constants' のメンバーではありません
+'CHAR_H': 定義されていない識別子です。
+'<function-style-cast>': 'initializer list' から 'sf::FloatRect' に変換できません。
+'std::vector<sf::FloatRect,std::allocator<sf::FloatRect>>::emplace_back': 一致するオーバーロードされた関数が見つかりませんでした。
+'HAND_START': 定義されていない識別子です。
+'HAND_SPACING': 定義されていない識別子です。
+'CARD_W': 定義されていない識別子です。
+'CARD_H': 定義されていない識別子です。
+'<function-style-cast>': 'initializer list' から 'sf::FloatRect' に変換できません。
+'Constants::HAND_START': 再定義されています。2 回以上初期化されています。
+'const sf::Vector2f Constants::HAND_START': 再定義されました。
+'初期化中': 'initializer list' から 'sf::RectangleShape' に変換できません。
+'UI_SCALE_INVERTED': 定義されていない識別子です。
+'UI_SCALE_INVERTED': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_X': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_Y': 定義されていない識別子です。
+'void CameraManager::ViewInit(const sf::Vector2f &,const sf::Vector2f &)': 引数 1 を 'initializer list' から 'const sf::Vector2f &' へ変換できません。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_WIDTH': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_HEIGHT': 定義されていない識別子です。
+'sf::Vector2<unsigned int>::Vector2': オーバーロードされた関数ですべての引数の型を変換できませんでした
+'Constants::HAND_START': 再定義されています。2 回以上初期化されています。
+'const sf::Vector2f Constants::HAND_START': 再定義されました。
+'BattleViewConstants': 名前空間定義はファイル スコープ、または他の名前空間定義の中に置かなければなりません。
+'BattleViewConstants::HAND_START': 再定義されています。2 回以上初期化されています。
+'const sf::Vector2f BattleViewConstants::HAND_START': 再定義されました。
+'BattleViewConstants::HAND_SPACING': 再定義されています。2 回以上初期化されています。
+'const float BattleViewConstants::HAND_SPACING': 再定義されました。
+'BattleViewConstants::SELECT_OFFSET_Y': 再定義されています。2 回以上初期化されています。
+'const float BattleViewConstants::SELECT_OFFSET_Y': 再定義されました。
+'context': 定義されていない識別子です。
+'BattleContext': 型の代わりに式が必要です
+'render': 定義されていない識別子です。
+'RenderSystem': 型の代わりに式が必要です
+構文エラー: ';' が ':' の前にありません。
+構文エラー: ':'
+構文エラー: ';' が '{' の前にありません。
+直前のエラーを修復できません。コンパイルを中止します。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_X': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_Y': 定義されていない識別子です。
+'void CameraManager::ViewInit(const sf::Vector2f &,const sf::Vector2f &)': 引数 1 を 'initializer list' から 'const sf::Vector2f &' へ変換できません。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_X': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_Y': 定義されていない識別子です。
+'void CameraManager::ViewInit(const sf::Vector2f &,const sf::Vector2f &)': 引数 1 を 'initializer list' から 'const sf::Vector2f &' へ変換できません。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'FONT_SIZE_MEDIUM': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_WIDTH': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_HEIGHT': 定義されていない識別子です。
+'sf::Vector2<unsigned int>::Vector2': オーバーロードされた関数ですべての引数の型を変換できませんでした
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_X': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_Y': 定義されていない識別子です。
+'void CameraManager::ViewInit(const sf::Vector2f &,const sf::Vector2f &)': 引数 1 を 'initializer list' から 'const sf::Vector2f &' へ変換できません。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_X': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_Y': 定義されていない識別子です。
+'void CameraManager::ViewInit(const sf::Vector2f &,const sf::Vector2f &)': 引数 1 を 'initializer list' から 'const sf::Vector2f &' へ変換できません。
+'SHAKE_INTENSITY': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_X': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_Y': 定義されていない識別子です。
+'void CameraManager::ViewInit(const sf::Vector2f &,const sf::Vector2f &)': 引数 1 を 'initializer list' から 'const sf::Vector2f &' へ変換できません。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_X': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_Y': 定義されていない識別子です。
+'void CameraManager::ViewInit(const sf::Vector2f &,const sf::Vector2f &)': 引数 1 を 'initializer list' から 'const sf::Vector2f &' へ変換できません。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_X': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_Y': 定義されていない識別子です。
+'void CameraManager::ViewInit(const sf::Vector2f &,const sf::Vector2f &)': 引数 1 を 'initializer list' から 'const sf::Vector2f &' へ変換できません。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_WIDTH': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_HEIGHT': 定義されていない識別子です。
+'sf::Vector2<unsigned int>::Vector2': オーバーロードされた関数ですべての引数の型を変換できませんでした
+'Constants::HAND_START': 再定義されています。2 回以上初期化されています。
+'const sf::Vector2f Constants::HAND_START': 再定義されました。
+'FRAME_TIME': 'Constants' のメンバーではありません
+'FRAME_TIME': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_X': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_Y': 定義されていない識別子です。
+'void CameraManager::ViewInit(const sf::Vector2f &,const sf::Vector2f &)': 引数 1 を 'initializer list' から 'const sf::Vector2f &' へ変換できません。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_WIDTH': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_HEIGHT': 定義されていない識別子です。
+'sf::Vector2<unsigned int>::Vector2': オーバーロードされた関数ですべての引数の型を変換できませんでした
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'FONT_SIZE_MEDIUM': 定義されていない識別子です。
+'MAX_PARTY_SIZE': 定義されていない識別子です。
+'BUTTON_WIDTH': 定義されていない識別子です。
+'BUTTON_HEIGHT': 定義されていない識別子です。
+'std::make_unique': 一致するオーバーロードされた関数が見つかりませんでした。
+'BUTTON_WIDTH': 定義されていない識別子です。
+'BUTTON_HEIGHT': 定義されていない識別子です。
+'std::make_unique': 一致するオーバーロードされた関数が見つかりませんでした。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_X': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_Y': 定義されていない識別子です。
+'void CameraManager::ViewInit(const sf::Vector2f &,const sf::Vector2f &)': 引数 1 を 'initializer list' から 'const sf::Vector2f &' へ変換できません。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_X': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_Y': 定義されていない識別子です。
+'void CameraManager::ViewInit(const sf::Vector2f &,const sf::Vector2f &)': 引数 1 を 'initializer list' から 'const sf::Vector2f &' へ変換できません。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_X': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_Y': 定義されていない識別子です。
+'void CameraManager::ViewInit(const sf::Vector2f &,const sf::Vector2f &)': 引数 1 を 'initializer list' から 'const sf::Vector2f &' へ変換できません。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_WIDTH': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_HEIGHT': 定義されていない識別子です。
+'sf::Vector2<unsigned int>::Vector2': オーバーロードされた関数ですべての引数の型を変換できませんでした
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'FONT_SIZE_MEDIUM': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_X': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_Y': 定義されていない識別子です。
+'void CameraManager::ViewInit(const sf::Vector2f &,const sf::Vector2f &)': 引数 1 を 'initializer list' から 'const sf::Vector2f &' へ変換できません。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_WIDTH': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_HEIGHT': 定義されていない識別子です。
+'sf::Vector2<unsigned int>::Vector2': オーバーロードされた関数ですべての引数の型を変換できませんでした
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_X': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_Y': 定義されていない識別子です。
+'void CameraManager::ViewInit(const sf::Vector2f &,const sf::Vector2f &)': 引数 1 を 'initializer list' から 'const sf::Vector2f &' へ変換できません。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_WIDTH': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_HEIGHT': 定義されていない識別子です。
+'sf::Vector2<unsigned int>::Vector2': オーバーロードされた関数ですべての引数の型を変換できませんでした
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_X': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_Y': 定義されていない識別子です。
+'void CameraManager::ViewInit(const sf::Vector2f &,const sf::Vector2f &)': 引数 1 を 'initializer list' から 'const sf::Vector2f &' へ変換できません。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_WIDTH': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_HEIGHT': 定義されていない識別子です。
+'sf::Vector2<unsigned int>::Vector2': オーバーロードされた関数ですべての引数の型を変換できませんでした
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'FONT_SIZE_MEDIUM': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'FONT_SIZE_MEDIUM': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_X': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_Y': 定義されていない識別子です。
+'void CameraManager::ViewInit(const sf::Vector2f &,const sf::Vector2f &)': 引数 1 を 'initializer list' から 'const sf::Vector2f &' へ変換できません。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_WIDTH': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_HEIGHT': 定義されていない識別子です。
+'sf::Vector2<unsigned int>::Vector2': オーバーロードされた関数ですべての引数の型を変換できませんでした
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'FONT_SIZE_MEDIUM': 定義されていない識別子です。
+'BUTTON_WIDTH': 定義されていない識別子です。
+'BUTTON_HEIGHT': 定義されていない識別子です。
+'std::make_unique': 一致するオーバーロードされた関数が見つかりませんでした。
+'BUTTON_WIDTH': 定義されていない識別子です。
+'BUTTON_HEIGHT': 定義されていない識別子です。
+'std::make_unique': 一致するオーバーロードされた関数が見つかりませんでした。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'FONT_SIZE_MEDIUM': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_X': 定義されていない識別子です。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'WINDOW_CENTER_Y': 定義されていない識別子です。
+'void CameraManager::ViewInit(const sf::Vector2f &,const sf::Vector2f &)': 引数 1 を 'initializer list' から 'const sf::Vector2f &' へ変換できません。
+'Constants': 識別子がクラス名でも名前空間名でもありません。
+'FONT_SIZE_MEDIUM': 定義されていない識別子です。
+'Constants::HAND_START': 再定義されています。2 回以上初期化されています。
+'const sf::Vector2f Constants::HAND_START': 再定義されました。
+'ui_font_sizes': 識別子がクラス名でも名前空間名でもありません。
+'INFO_TEXT_SIZE': 定義されていない識別子です。
+構文エラー: 'float' は ';' によって先行されなければなりません。
+'void StageBuildView::DrawStageMonsters(const StageData *,float)': メンバーの再宣言はできません
+'SPACING': 'Constants' のメンバーではありません
+式は定数に評価されませんでした
+'offsetX': 定義されていない識別子です。
+構文エラー: 'for'
+構文エラー: ')' が ';' の前にありません。
+'data': 定義されていない識別子です。
+構文エラー: '>' が ';' の前にありません。
+想定される関数テンプレート 'i' の後に引数リストがありません
+型 '<error type>' は不要です。
+構文エラー: '++'
+構文エラー: ')'
+構文エラー: ';' が '{' の前にありません。
+'{': 対応する関数ヘッダーがありません (旧形式の仮引数リスト?)
+構文エラー: '}'
+構文エラー: ';' が '}' の前にありません。
+構文エラー: ';' が '{' の前にありません。
+'{': 対応する関数ヘッダーがありません (旧形式の仮引数リスト?)
